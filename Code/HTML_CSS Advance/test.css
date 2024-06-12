@@ -1,0 +1,42 @@
+/* Xử lý image */
+#myImg { 
+    filter: sepia(100%);
+}
+
+/* Basic */
+#blueDIV {
+    width:100px;
+    background:lightblue;
+    clip-path: circle(40%);
+    /* Thẻ ta cắt kích thước phải đủ lớn, ở đây ta cho fix width nhỏ để nó đủ height */
+}
+
+/* Responsive css */
+@media only screen and (max-width: 768px){
+    #sidebar{
+        width: 100%
+    }
+}
+@media only screen and (min-width: 769px){
+    #sidebar{
+        width: 300px
+    }
+}
+/* Dùng JS để responsive */
+.left, .right{
+    height: 400px;
+}
+.left{
+    background: blue;
+    float: left;
+    width: 70%;
+}
+.right{
+    background: red;
+    float: right;
+    width: 30%;
+}
+.responsive_768{
+    width: 100%;
+    float: none
+}

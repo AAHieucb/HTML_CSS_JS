@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Website</title>
+  <link rel="stylesheet" type="text/css" href="./index.css">
+</head>
+<body>
+
+  <!-- Hover to move -->
+  <!-- Khi chèn quảng cáo vào web, nó yêu cầu kích thước và độ phân giải của ad phải đủ mới được. Áp dụng cách dưới cho thẻ a bao ảnh quảng cáo kiểu hover sẽ giúp tiết kiệm không gian lại giúp quảng cáo trông fancy hơn -->
+  <div class="container">
+  </div>
+
+  <!-- Hover to zoom -->
+  <!-- Magnifier ý tưởng là thêm 1 thẻ div mới vào trong thẻ container rồi cho di chuyển theo chuột kèm background image có kích thước riêng rồi chặn các vị trí trong sự kiện onmousemove là xong -->
+  <!-- Tức cái magnifier thực chất là 1 thẻ hiển thị ảnh khác với độ phân giải lớn hơn mà thôi -->
+  <div class="container2"></div>
+
+  <!-- K thể animation chuyển ảnh với thẻ img, nhưng ta có thể dùng nhiều thẻ rồi animation với opacity được. Tạo animation chuyển ảnh như video -->
+  <div class="stage">
+    <div class="actor"></div>
+    <div class="actor"></div>
+    <div class="actor"></div>
+  </div>
+  
+  <!-- Tạo animation cho button bằng cách tạo animation cho background -->
+  <div class="containerButton">
+    <button>Animation button</button>
+  </div>
+
+  <script src="./index.js"></script>
+</body>
+</html>

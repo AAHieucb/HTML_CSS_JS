@@ -1,0 +1,119 @@
+/* switcher */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+.theme-switch input {
+    display: none;
+}
+.slider {
+    background-color: #999;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+.slider:before {
+    background-color: white;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+input:checked+.slider {
+    background-color: #eee;
+}
+input:checked+.slider:before {
+    transform: translateX(26px);
+}
+.slider.round {
+    border-radius: 34px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ribbon */
+.ribbon{
+    margin: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #eee;
+    border-radius: 30px;
+    position: relative;
+}
+.ribbon:before{
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    /* vị trí ribbon */
+    left: 50px;
+    border-top: 10px solid #eee;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+}
+
+/* animation by keyframe */
+.movingBlock {
+    width: 100px;
+    height: 100px;
+    background: red;
+    position: relative;
+    animation: mymove 5s infinite;
+}
+@keyframes mymove {
+    from {
+        top: 0px;
+    }
+    to {
+        top: 200px;
+    }
+}
+
+/* list chồng list */
+.li1{
+    position: relative;
+    width: fit-content;
+    white-space: nowrap; /* Thẻ li tràn sẽ k xuống dòng */
+}
+.li2{
+    position: relative;
+    width: fit-content;
+    white-space: nowrap;
+}
+.ul1{
+    position: absolute;
+    display: none;
+    list-style: none;
+    left: 50px;
+    top: 0px;
+}
+.li1:hover .ul1{
+    display: block;
+}
+.ul2{
+    position: absolute;
+    display: none;
+    left: 50px;
+    top: 0px;
+    list-style: none;
+}
+.li2:hover .ul2{
+    display: block;
+}

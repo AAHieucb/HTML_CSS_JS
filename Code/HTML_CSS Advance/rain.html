@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/rain.css">
+</head>
+<body>
+    <!-- # Đám mây mưa -->
+
+    <!-- Đám mây tạo hay bằng cách vẽ 3 hình ra -->
+    <div class="cloud">
+        <div class="c1"></div>
+        <div class="c2"></div>
+        <div class="c3"></div>
+    </div>
+    <!-- Giọt mưa khi gần rơi xuống sẽ biến đổi hình dạng và rơi chậm lại -->
+    <div class="drop d1"></div>
+    <div class="drop d2"></div>
+    <div class="drop d3"></div>
+    <div class="drop d4"></div>
+    <div class="drop d5"></div>
+    <div class="drop2 d1"></div>
+    <div class="drop2 d2"></div>
+    <div class="drop2 d3"></div>
+    <div class="drop2 d4"></div>
+    <div class="drop2 d5"></div>
+
+    <!-- Để tạo hình giọt mưa từng hình vuông, ta cho border 3 góc là hình tròn, 1 góc còn lại sẽ để bth sau đó xoay
+    cho góc nhọn đó hướng lên trên là xong. Điều đặc biệt ở đây là nó dùng selector after chứ k dùng trực tiếp luôn 
+    trong hình. Đây là PP hay dùng khi muốn dùng position absolute trên 1 thẻ. Nếu k dùng after mà dùng TT thì phải
+    bao nó bằng 1 thẻ position relative ở ngoài. Nhưng nhờ after mà chỉ cần 1 thẻ con bên trong after mới viết position
+    absolute thì after nằm trong thẻ gốc position relative là xong r. after ở đây có content rỗng thì vai trò của
+    nó chỉ có thế, style nó y hệt style thẻ gốc -->
+    <div class="test d3"></div>
+
+    <!-- Để tạo hiệu ứng mưa rơi lúc gần rơi xuống bị chậm lại thì ta đặt 95% và 100% cụ thể rồi dùng ease cho
+    vị trí dịch xuống dưới và hình ảnh to dần là xong. -->
+    <!-- Để tạo rơi hàng loạt loạn xạ thì ta dùng các class d1 - d5. Chú ý khi 1 thẻ có class A và B thì A::after và
+    B::after đều như 1 thẻ nằm bên trong thẻ mang class A. Tức A có position relative thì B::after có position
+    absolute thì thuộc tính đó sẽ theo A chứ kp theo body ngoài. Chú ý ở đây ta thắc mắc là 1 thẻ có thể có 2
+    cái after để làm 2 công việc after riêng được k vì sợ dùng r là k dùng đc nx => quá ez dùng 2 class cho nó như 
+    này là được. Để tạo rơi loạn xạ, ta cho animation delay mỗi cái khác nhau và position left mỗi cái lệch 1 tí -->
+    
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <div class="FancyInput">
+    <input type="text" class="FancyInput-input" />
+    <svg class="FancyInput-line FancyInput-line--left">
+      <path d="M.067 2.085h105.936c20.008 2.491 30.013 13.784 30.013 33.88 0 20.094-10.005 31.387-30.013 33.878H.067" stroke="#E46071" stroke-width="5" fill="none" />
+    </svg>
+    <svg class="FancyInput-line FancyInput-line--right">
+      <path d="M.067 2.085h105.936c20.008 2.491 30.013 13.784 30.013 33.88 0 20.094-10.005 31.387-30.013 33.878H.067" stroke="#E46071" stroke-width="5" fill="none" />
+    </svg>
+    <div class="FancyInput-caret"></div>
+    <div class="FancyInput-placeholder">SEARCH</div>
+  </div>  
+  <script lang="javascript">
+    // hide place holder div if there is value in input
+    const input = document.querySelector('.FancyInput-input');
+    const placeholder = document.querySelector('.FancyInput-placeholder');
+    input.addEventListener('blur', () => {
+      if (input.value.trim().length > 0) {
+        placeholder.style.display = 'none';
+      } else {
+        placeholder.style.display = null;
+      }
+    });
+  </script>
+</body>
+</html>

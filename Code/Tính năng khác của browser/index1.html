@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test2</title>
+  <link rel="icon" href="./favicon-32x32.be48395e.png" type="image/png">
+</head>
+<body>
+  <span>Bạn đang: <span id="status"></span></span>
+  <script>
+    const statusTag = document.getElementById("status")
+    statusTag.textContent = navigator.onLine ? "Online" : "Offline";
+    window.addEventListener("offline", e => {
+      statusTag.textContent = "Offline";
+    });
+    window.addEventListener("online", e => {
+      statusTag.textContent = "Online";
+    })
+  </script>
+
+  <div></div>
+  <span id="devtool"></span>
+  <script>
+    // Cơ chế để check devtool open là ta dùng lệnh console.log 1 class Error ra. Hàm console.log khi được gọi sẽ chạy ngay, nếu là class sẽ in nội dung trong toString(). Khi in ra 1 error cũng tương tự nhưng có 1 tc là khi error được in trên console.log, nó tự động lấy message và stacktrace chỉ khi devtool được mở (k cần biet có in ra hay k). Nên ta tận dụng để gán cho biến báo ra bên ngoài
+    // K bắt được khi devtool đóng
+    const devtool = document.getElementById("devtool")
+    function onDevToolsOpen() {
+      devtool.textContent = "DevTools Open";
+      setTimeout(console.clear.bind(console));
+      setTimeout(() => console.log("Devtool is open"), 10);
+    }
+    class DevToolsChecker extends Error {
+      toString(){ }
+      get message () {
+        onDevToolsOpen();
+      }
+    }
+    console.log(new DevToolsChecker());
+  </script>
+
+  <script>
+    document.addEventListener("visibilitychange", () => {
+      console.log(document.visibilityState);
+    })
+    window.addEventListener("blur", () => {
+      document.title = "Test";
+
+      var link = document.createElement('link');
+      link.rel = 'icon';
+      link.type = 'image/png';
+      link.href = './favicon.12035673d43a.png';
+      var currentFavicon = document.querySelector('link[rel="icon"]');
+      if (currentFavicon) {
+        document.head.removeChild(currentFavicon);
+      }
+      document.head.appendChild(link);
+    })
+
+    window.addEventListener("focus", () => {
+      // Ảnh load từ remote sẽ lâu, nên cho tải trước 2 logo từ đầu
+      document.title = "Test2";
+      var link = document.createElement('link');
+      link.rel = 'icon';
+      link.type = 'image/png';
+      link.href = './favicon-32x32.be48395e.png';
+      var currentFavicon = document.querySelector('link[rel="icon"]');
+      if (currentFavicon) {
+        document.head.removeChild(currentFavicon);
+      }
+      document.head.appendChild(link);
+    })
+  </script>
+
+  <!-- Lấy tình trạng pin bằng JS -->
+  <div>Pin: <span id="battery"></span></div>
+  <div>Charging: <span id="charge"></span></div>
+  <script>
+    const batteryTag = document.getElementById("battery");
+    const chargeTag = document.getElementById("charge");
+    navigator.getBattery()
+      .then(battery => {
+        batteryTag.textContent = battery.level * 100 + "%";
+        chargeTag.textContent = battery.charging? "Yes" : "No";
+        battery.addEventListener("levelchange", () => {
+          console.log(battery.level);
+        });
+        battery.addEventListener("chargingchange", () => {
+          console.log(battery.charging);
+        })
+      })
+  </script>
+</body>
+</html>

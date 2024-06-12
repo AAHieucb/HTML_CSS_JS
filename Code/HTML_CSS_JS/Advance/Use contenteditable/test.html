@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORM3</title>
+  <style>
+    body{
+      font-family: 'Arial Narrow Bold', sans-serif;
+    }
+  </style>
+  <script src="./jqueryscript.js"></script>
+  <script src="./exportJs.js"></script>
+  <script src="./html2canvas.js"></script>
+</head>
+<body>
+  <div id="bigcontainer" style="display: flex; flex-direction: column; gap: 20px;">
+    <div style="text-align: center; font-weight: bold; font-size: larger; padding-top: 20px; padding-bottom: 20px;">Thông tin cá nhân <button id="generate-pdf">Export pdf</button></div>
+    <div style="border: 2px solid orange; margin: 0 auto; width: 50%; min-width: 500px; min-height: 50px; position: relative; padding-top: 30px; padding-bottom: 20px;" id="ttsvcontainer">
+      <div style="display: flex; gap: 15px; background-color: white; position: absolute; top: -10px; left: 10px;">
+        <div>Thông tin sinh viên_20194761</div>
+        <button id="ttsvAII">Add Info Item</button>
+        <button id="ttsvGroup">Add Group Item</button>
+        <div></div>
+      </div>
+    </div>
+    <div style="padding-top: 30px;"></div>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $('#generate-pdf').click(function() {
+        var doc = new jsPDF();
+        let data = "Thông tin sinh viên_20194761: \n";
+        if($('div[id^="test1_"]').length > 0) {
+          $('div[id^="test1_"]').each(function() {
+            let id = $(this).attr('id');
+            id = id.slice(6);
+            data += $(this).text() + ": " + ($("#input1_" + id.toString()).val() == "" ? "No data" : $("#input1_" + id.toString()).val()) + "\n";
+          });
+        } 
+        data += "\n";
+        data += "Group data: \n";
+        if($('div[id^="ttsvcontainer_"]').length > 0) {
+          $('div[id^="ttsvcontainer_"]').each(function() {
+            data += "Group Item 20194761: \n";
+            let id = $(this).attr('id');
+            id = id.slice(14);
+
+            if($('div[id^="test2_' + id + '"]').length > 0) {
+              $('div[id^="test2_' + id + '"]').each(function() {
+                var id2 = $(this).attr("id").split("_").pop();
+                data += $(this).text() + ": " + ($("#input2_" + id.toString() + "_" + id2.toString()).val() == "" ? "No data" : $("#input2_" + id.toString() + "_" + id2.toString()).val()) + "\n";
+              });
+            }
+            data += "\n";
+          });
+        }
+
+        doc.text(data, 20, 30);
+        doc.save('Export_TTSV_Nguyen Thu Hieu_20194761.pdf');
+      });
+
+      // $('#generate-pdf').click(function() {
+      //   html2canvas(document.body).then(function(canvas) {
+      //     var imgData = canvas.toDataURL('image/png');
+      //     var doc = new jsPDF('p', 'mm', 'a4');
+      //     var width = doc.internal.pageSize.getWidth();
+      //     var height = doc.internal.pageSize.getHeight();
+      //     doc.addImage(imgData, 'PNG', 0, 0, width, height);
+      //     doc.save('my-pdf.pdf');
+      //   });
+      // });
+      
+      let index = 0;
+      $('#ttsvAII').click(function() {
+        var test1 = `<div id="test1_${index}">Item Name</div>`;
+        var test2 = `<input type="text" id="input1_${index}">`;
+        var test3 = `<img id="remove_${index}" src="./bin.png" height="21px"/>`
+        var test = $(`\
+          <div style="display: flex; gap: 20px; justify-content: center; padding-bottom: 5px;" id="container1_${index}">\
+            ${test1}\
+            ${test2}\
+            ${test3}\
+          </div>\
+        `);
+        $("#ttsvcontainer").append(test);
+        $(`#test1_${index}`).dblclick(function() {
+          $(this).attr('contentEditable', true);
+        });
+        $(`#input1_${index}`).dblclick(function() {
+          $(this).removeAttr('readonly');
+        });
+        $(`#input1_${index}`).focusout(function() {
+          $(this).attr('readonly', true);
+        });
+        $(`#remove_${index}`).click(function() {
+          $(this).parent().remove();
+        })
+        index++;
+      });
+
+      let index2 = 0;
+      let index3 = 0;
+      $('#ttsvGroup').click(() => {
+        var testx = $(`\
+          <div style="border: 2px solid orange; margin: 0 auto; width: 50%; min-width: 500px; min-height: 50px; position: relative; padding-top: 30px; padding-bottom: 20px;" id="ttsvcontainer_${index2}">
+            <div style="display: flex; gap: 15px; background-color: white; position: absolute; top: -10px; left: 10px;">
+              <div id="groupname_${index2}">Group Item_20194761</div>
+              <img id="removegroup_${index2}" src="./bin.png" height="21px"/>
+              <button id="ok_${index2}">Add Info Item</button>
+              <div></div>
+            </div>
+          </div>
+        `);
+        $("#bigcontainer").append(testx);
+        $(`#groupname_${index2}`).dblclick(function() {
+          if($(this).text().endsWith("_20194761")){
+            $(this).text($(this).text().slice(0, -9));
+          }
+          $(this).attr('contentEditable', true);
+          $(this).focus();
+        });
+        
+        $(`#groupname_${index2}`).on('keydown', function(e) {
+          if (e.keyCode === 13) {
+            $(this).attr('contentEditable', false);
+          }
+        });
+        $(`#groupname_${index2}`).focusout(function() {
+          if(!$(this).text().endsWith("_20194761")){
+            $(this).text($(this).text() + "_20194761");
+          }
+          $(this).attr('contentEditable', false);
+        });
+        
+        $(`#ok_${index2}`).click(function() {
+          let idx = $(this).attr('id');
+          idx = idx.slice(3);
+          var test1 = `<div id="test2_${idx}_${index3}">Item Name</div>`;
+          var test2 = `<input type="text" id="input2_${idx}_${index3}">`;
+          var test3 = `<img id="remove1_${idx}_${index3}" src="./bin.png" height="21px"/>`
+          var testy = $(`\
+            <div style="display: flex; gap: 20px; justify-content: center; padding-bottom: 5px;" id="container2_${idx}_${index3}">\
+              ${test1}\
+              ${test2}\
+              ${test3}\
+            </div>\
+          `);
+          $(this).parent().parent().append(testy);
+          $(`#test2_${idx}_${index3}`).dblclick(function() {
+            $(this).attr('contentEditable', true);
+          });
+          $(`#input2_${idx}_${index3}`).dblclick(function() {
+            $(this).removeAttr('readonly');
+          });
+          $(`#input2_${idx}_${index3}`).focusout(function() {
+            $(this).attr('readonly', true);
+          });
+          $(`#remove1_${idx}_${index3}`).click(function() {
+            $(this).parent().remove();
+          })
+          index3++;
+        });
+
+        $(`#removegroup_${index2}`).click(function() {
+          const testV = confirm("Name: Nguyen Thu Hieu\nID: 20194761");
+          if(testV == true){
+            $(this).parent().parent().remove();
+          }
+        })
+        index2++;
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+

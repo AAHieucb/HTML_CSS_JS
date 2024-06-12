@@ -1,0 +1,125 @@
+/* Setup trong html/css */
+:root, html, body {
+    all: initial;
+}
+
+/* Tạo animation */
+h1 {
+    animation: fadeOut 2s ease;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1.5; /* dừng giữa chừng */
+}
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 3D 2D transform */
+#div1 {
+    height: 150px;
+    width: 150px;
+    border: 1px solid blue;
+    perspective: 100px; /* để tầm 1000px là thấy div2 thành hcn luôn */
+}
+#div2 {
+    padding: 50px;
+    background: rgba(100,100,100,0.5); 
+    transform: rotateX(45deg);
+}
+/* Dùng transform-style */
+.div3 {
+    background-color: red;
+    transform: rotateY(60deg);
+    transform-style: preserve-3d; 
+}
+.div4{
+    background-color: yellow;
+    transform: rotateY(-60deg);
+}
+/* Tạo cube */
+.ex1 {
+    perspective: 800px;
+}
+.ex2 {
+    perspective: 150px;
+}
+.cube {
+    font-size: 4em;
+    width: 2em;
+    margin: 1.5em auto;
+    transform-style: preserve-3d;
+    transform: rotateX(-45deg) rotateY(30deg);
+}
+.side {
+    position: absolute;
+    width: 2em;
+    height: 2em;
+    background: rgba(100,100,100,0.5);
+    border: 1px solid red;
+    text-align: center;
+    line-height: 2em;
+}
+.front {transform: translateZ(1em);}
+.top {transform: rotateX(90deg) translateZ(1em);}
+.right {transform: rotateY(90deg) translateZ(1em);}
+.left {transform: rotateY(-90deg) translateZ(1em);}
+.bottom {transform: rotateX(-90deg) translateZ(1em);}
+.back {transform: rotateY(-180deg) translateZ(1em);}
+
+
+/* Tạo animation / Component hay / Tạo spinning card */
+/* Cơ chế: Ta dùng 2 thẻ với 2 animation để spin hiện 2 mặt, thẻ này xoay mặt trước thì thẻ kia xoay mặt sau và 
+dùng ẩn mặt sau là xong. 
+Cách khác là ta có thể dùng 1 chu kỳ 0->50 là 0->0.5 turn và 50->100 vẫn giữ 0.5 turn là cx được. Tùy biến chu kỳ. */
+.container {
+    position: relative;
+    width: 100px;
+    /* perspective: 10px; nhìn gần vào như cc */
+}
+.card {
+    position: absolute;
+    animation: spin 2s ease;
+    animation-iteration-count: infinite;
+    background-color: red;
+    backface-visibility: hidden;
+    animation-direction: alternate;
+}
+@keyframes spin {
+    from {
+        transform: rotateY(0);
+    }
+    to {
+        transform: rotateY(0.5turn);
+    }
+}
+.green{
+    transform: rotateY(0.5turn);
+    animation: spin2 2s ease;
+    animation-iteration-count: infinite;
+    position: absolute;
+    background-image: linear-gradient(-144deg, #6AEEC6 0%, #698D28 100%);
+    width: 100px;
+    height: 18px;
+    backface-visibility: hidden;
+    animation-direction: alternate;
+}
+@keyframes spin2 {
+    from {
+        transform: rotateY(0.5turn);
+    }
+    to {
+        transform: rotateY(0);
+    }
+}
+
+/* Xử lý image */
+body{
+    background-image: url("https://www.w3schools.com/cssref/img_tree.gif"), url("https://www.w3schools.com/cssref/paper.gif");    
+    background-repeat: no-repeat;
+    background-blend-mode: difference; 
+    background-attachment: fixed;
+}

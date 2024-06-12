@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./darkmode.css">
+</head>
+
+<body>
+    <!-- Tạo darkmode -->
+    <div class="wrapper">
+        <div class="box">
+            <div class="image">
+                <img src="https://bit.ly/3bT21Ik" alt="">
+            </div>
+            <div class="content">
+                <h2 class="title">CSS is Awesome</h2>
+                <p>Let's get started</p>
+            </div>
+        </div>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </div>
+    <div data-theme="dark" style="color: var(--gray);">Test</div>
+    <!-- Đã từng load qua khai báo r thì sẽ dùng được biến -->
+
+    <script src="./darkmode.js"></script>
+</body>
+
+</html>

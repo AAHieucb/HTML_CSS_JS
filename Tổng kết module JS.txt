@@ -1,0 +1,558 @@
+JS: 
+
+=> Code mẫu fetch API qua console luôn:
+fetch('https://backend-nft-app.trava.finance/v1/cores/meta').then(res => {return res.text()}).then(d => console.log(d))
+
+
+
+# Basic
+script tới file js ở cuối page để đảm bảo mọi component đã load xongs
+
+Có vài keyword vô dụng như void(<>) và javascript: <>
+Dùng eval tính toán được bằng chuỗi string
+
+-> Các thao tác cơ bản
+Thao tác với chuột có clientX, clientY
+
+-> Thao tác với các biến global
+BOM(Browser Object Model) trong javascript: nó là thứ cho phép ta thao tác với browser như xem lịch sử lướt web. Mấy cái cookies, history, window, screen, navigator,.. là BOM đó.
+Ví dụ: window.document là chuẩn nhưng ta có thể gọi tắt là document cx ok
+
+--> document.lưu các thứ liên quan đến cái tài liệu như các thẻ DOM, lần chỉnh sửa cuối, trạng thái load của tài liệu. 
+VD: window.scrollTo(x-coor, y-coor); và document.body.scrollHeight là vị trí cuối của body
+Dùng window.scrollTo(0, document.body.scrollHeight); có thể scroll xuống vị trí dưới cùng của thẻ body
+
+--> window quản lý các thứ ảnh hưởng đến cửa số như innerWidth, alert. Có navigator, location,...
+onerror để handle window error
+
+navigator lưu các thứ liên quan đến web và cả cái browser này như tên app, engine, nền tảng, mimetype browser, plugin
+location lưu các thứ về tên vị trí như hostname
+
+--> Các kiểu lấy kích thước
+Muốn lấy chiều dài, rộng của bất cứ thẻ nào thì dùng clientHeight, clientWidth từ DOM thẻ đó. 
+window.innerWidth là width màn hình chuẩn hiện tại -> nên dùng cái này. GT tự đổi khi resize kích thước
+window.screen.width 
+window.screen.availWidth -> width tổng mà có thể dùng, khi resize window kích thước vẫn k đổi
+
+-> Thao tác với string
+--> Search bằng RegExp test, search
+Search bằng string lastIndexOf và indexOf
+
+--> Compare với: localCompare, match, matchAll, ==, 
+--> slice, padEnd, includes
+
+-> Thao tác với thư viện Math
+--> Làm tròn số, lấy random
+
+-> Thao tác với số
+-> Dùng logic
+-> Dialog cơ bản
+-> Bignumber trong JS
+-> with keyword
+
+
+
+# Giá trị đặc biệt
+if(undefined/0/false/null/"") => ra false
+if(1/bất kỳ cái gì khác/[]) => ra true
+
+-> Phân biệt: null là trống, undefined là không tồn tại. Nhiều cái bị lỗi với chỉ 1 trong 2.
+VD trong axios url ta get với trường params ta dùng trường undefined nó sẽ k hiện gì cả nhưng nếu null VD limit=null thì url nó ghi là &limit&... thì bị lỗi còn gì. 
+VD null ta dùng được map nhưng undefined thì k vì null có typeof object giống với mảng nhưng undefined thì typeof undefined là 1 kiểu khác
+
+
+
+# Set, Map và Symbol 
+Set và map giống như mảng và có thể được tạo từ mảng
+Symbol thường dùng làm key cho Map vì tính duy nhất. Khai báo symbol k có new
+
+
+
+# Cơ chế dọn rác với WeakMap
+Trong browser cũng có GC tự thu gom rác trong bộ nhớ. Cơ chế là tất cả các biến mà k thể truy cập được or k thể sử dụng được sẽ tự động bi loại bỏ. VD:
+let user = { name: "John" }; user = null; thì object {name: "John"} k còn được reference bởi biến nào khác nên k thể truy cập được và tự bị giải phóng khỏi vùng nhớ
+Vc có thể truy cập hay có thể sử dụng hay không bao gồm tất cả các loại reference lồng nhau. Các object hay mảng trong JS đều là tham chiếu
+
+-> Garbage collector
+Dọn mọi thứ khi k còn được referenced bất kể object hay biến new hay mảng đều được tự động. Chỉ có duy nhất các thứ gắn với window global object sẽ kbh được dọn. 
+Vd ta đang có 1 object rất lớn lưu trong biến, đột nhiên ta gán biến đó là null thì object đó tự được dọn mà k bị mem leak. Nó schedule GC và GC sẽ collect vào leisure time
+
+--> Cách để clear 1 object trong JS: 2 case là biến const và biến let
+
+--> WeakMap và WeakSet
+Do cơ chế dọn rác, nếu mảng có 1 phần tử là 1 object chẳng hạn thì dù object mất reference nhưng mảng vẫn còn phần tử đó thì object vẫn k bị giải phóng vì vẫn refer được với array[index]. Điều này là đúng nhưng trong TH dùng map với set, có thể ta muốn nó tự động bị xóa với WeakMap, WeakSet
+---> WeakMap thì key buộc là object và khi reference đến object bởi 1 biến khác k còn thì sẽ tự bị xóa.
+Do GC có thể chạy ngay, có thể chờ 1 vài thao tác nữa mới chạy nên k cố định, do đó người ta cấm k truy cập vào số lượng phần tử hay duyệt các phần tử của WeakMap để tránh sai sót. Chỉ có has delete get set. 
+---> WeakSet giống set nhưng chỉ nhận object, tự bị xóa khi k còn reference từ ngoài, k hỗ trợ size, keys hay các kiểu duyệt
+
+=> Weak rất hay khi dùng làm cache chẳng hạn, dùng làm bất cứ 1 cái gì lưu kiểu tạm thời, khi đối tượng bị xóa thì cx xóa luôn data đi kèm. VD 1 biến weak map lưu thông tin của người dùng, khi người dùng leave thì tự xóa, nếu dùng map bth phải xóa thủ công
+
+
+
+## Biến this => refer tới "### Module JS / Biến this" của React
+Trong mọi TH dùng this trong arrow function, nó sẽ trỏ vào đúng cái hiện tại or cái bao ngoài cái hiện tại
+
+this mặc định global là window
+(Cấp cao nhất) Trong mọi TH, dùng arrow function thì this sẽ trỏ cái bao ngoài cái hiện tại(object, class, window,..)
+(Cao nhì)bind call apply sẽ xác định rõ biến this nhưng vẫn cùi hơn arrow function
+this dùng bth trong hàm or class sẽ trỏ vào đối tượng đó như 1 object có constructor, trong JS thì nên dùng chuẩn keyword class là ES6
+Truyền this vào sự kiện trong code html thì this là code thẻ tag đó
+Khác với React, trong JS thì truyền event hay biến phải chuẩn chứ k có kiểu truyền mặc định như React
+
+-> Dùng call bind
+bind trả lại 1 function mới với giá trị biến this xác định, tái sử dụng gọi function đó nhiều lần
+call và apply giống nhau chỉ khác cú pháp: o.call(this, args1, args2) và o.apply(this, [args1, args2]); là khi gọi mới gán giá trị this là gì. Cũng chỉ là 1 cách gọi hàm thêm cái là đồng thời gán this mà thôi
+
+
+
+# Closure function
+Là function được return trong 1 function trong 1 class. Nó cũng làm biến this k còn trỏ vào đúng class bao ngoài nữa
+Fix bằng cách dùng arrow function thì biến this trong function sẽ tự chuẩn bám sát với thứ bao nó
+
+
+
+# Dùng sự kiện JS
+Các sự kiện hay dùng bao gồm cả bàn phím và chuột, có cả onblur, oncopy, xem full: https://freetuts.net/su-kien-event-trong-javascript-368.html
+
+Có thể dùng: ở tag html; code js là element.onclick = () => {<>}; element.addEventListener("click",() => {})
+
+-> Dùng useCapture: ở đối số 3 của addEventListener, ngược với bubbling
+Khi 1 action kích hoạt thực hiện nhiều event listener thì capture và bubbling là 2 thứ tự thực hiện khác nhau. Nếu có cả capture và bubbling thì mọi capture event sẽ thực hiện trước rồi mới đến bubbling
+-> refer tới "# Dùng sự kiện JS / Dùng useCapture" của React
+
+-> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
+
+
+
+# Mảng và object và hàm
+Có thể tạo mảng từ mảng khác, object từ object khác. 
+Bản chất gán = là gán địa chỉ. Biến thì vẫn là copy như C++
+
+-> Dùng [] làm key của object => hay
+
+-> Chuyển từ string sang array: [..."Hello"] vì ... dùng với mọi iterator sẽ lấy từng cái
+Cách gán rỗng cho arr chuẩn và cả object
+Xóa trùng lặp phần tử mảng -> chuyển sang Set r chuyển về
+VD ta có thể check tất cả các số trong mảng đều lớn hơn 0 với every or check xem some có số nào âm không cũng được
+cast tất cả phần tử của mảng về 1 kiểu dữ liệu nhanh nhất với .map(Number/String/...);
+Hàm Array.from(mảng, function); giúp tạo array cực mạnh => nên dùng mọi lúc thế hoàn toàn cách ta tạo array bth là k chuẩn
+
+-> Các hàm thg dùng:
+includes
+slice
+
+-> Để sort 1 array trong JS:
+- sort 1 mảng string hay mảng số ta dùng TT const arr = [1,5,2,3,1,9,6];
+thì arr.sort(); và arr.reverse(); để sort giảm dần sẽ tự thay đổi trên mảng gốc or dùng arr.sort(function(a, b){return b-a}); để sort giảm dần
+Cách nhớ: tức function(a,b) thì a (return of function) b => nếu return dương tức a > b phải đảo ngược lại vì mặc định nó sort a < b mà 
+- Nhưng thực tế ta thg sort mảng object theo 1 trường cơ nên mở rộng cách 2 là arr.sort(function(a,b){return b.field - a.field});
+
+-> Cách so sánh 2 array trong JS
+
+-> Còn có Function() constructor giúp tạo function nhưng cũng gặp các vấn đề về bảo mật và hiệu suất như eval nhưng ít hơn. Điểm khác biệt so với eval là nó chỉ execute trong phạm vi global scope 
+
+-> Dùng set get của object
+
+-> refer tới "Garbage collector"
+
+-> Destructuring assignment:
+Lấy phần tử của mảng thì theo thứ tự, của object thì trùng tên ms lấy, k thì bỏ qua
+Lấy rest parameter truyền vào function với ... or lấy các thuộc tính của object với {field1, field2}
+
+Cách khác lấy params của function ít dùng là dùng for(var x of arguments) {<>}
+
+-> flat 1 mảng:
+--> Hàm flat có sẵn của js
+--> Dùng recursive thuần: mảng có phần tử bth thì add vào mảng, còn phần từ là array thì gọi đệ quy. Có thể dùng với hàm reduce 
+--> Dùng spread operator + concat:
+Hàm concat của 1 array nếu nhận về 1 số sẽ thêm số vào mảng, nếu nhận về 1 array sẽ nối 2 array lại với nhau
+VD: [].concat(1,2,[3,4]); sẽ thành [1,2,3,4] => lợi dụng điều này ta gọi liên tục [].concat(...arr); để tách dần từng lớp của array.
+
+-> Shuffle 1 array
+Biến const array có thể thay đổi k vấn đề gì vì nó chỉ cản reference đổi chứ giá trị bên trong đổi thoải mái. Nhưng nếu làm việc với React kiểu data nhận về từ redux là const array và show ra màn hình bản shuffle của nó. Do lấy từ redux k được đổi trong component nên phải dùng lodash cloneDeep nó trước r mới shuffle
+C1: sort với 0.5 - Math.random() k hoàn toàn random nhưng có thể dùng nếu k yêu cầu khắt khe
+C2: Dùng Fisher-Yates algorith hoàn toàn random và implement cũng dễ
+
+-> Dùng object descriptor:
+descriptor của object property: getOwnPropertyDescriptors, defineProperty, getOwnPropertyDescriptor => ít dùng
+Ta chỉ có thể đổi các thứ mà chắc chắn sẽ đổi đc, VD toString là 1 hàm sẽ k đổi đc các thuộc tính 
+
+
+
+# Các kiểu duyệt:
+Các kiểu duyệt được đều có values và entries như array, object, map
+Dùng được object.values() or Object.values(object)
+map có thêm keys()
+
+Các kiểu iterator được ta đều có thể quy về kiểu mảng or object. VD map ta có thể coi như 1 mảng mà mỗi phần tử là 1 mảng 2 phần tử, nên ta dùng map hay fiter cho nó ok hết
+
+-> Vòng for of chỉ dùng với các biến iterable. Vd nó k dùng được TT với biến object vì object không iterable, phải dùng hàm Object.entries, yield function là iterable nên có thể duyệt được
+-> Vòng for in dùng được với biến và mảng bình thường, 1 số kiểu IterableIterator như entries, values của Map hay Set lại k dùng được => tức hơi ngược với for...of
+Khi nói duyệt object thuần, ta duyệt các key or cả cặp key-val của object đều được
+-> forEach chỉ dùng cho mảng vì nó thuộc Array.prototype luôn
+
+-> Các hàm thao tác duyệt mảng có sẵn: some, every, filter, map, sort, reverse, reduce, copyWithin, flat
+--> Hàm map mặc định tạo ra 1 mảng mới và k thay đổi trên mảng cũ nên phải gán bằng. 
+Hàm đầy đủ có 2 tham số: 1 là function(currentValue, index, array), 2 là thisValue(mặc định là undefined) là giá trị pass vào function để dùng từ khóa this. Tuy nhiên để dùng được đối số 2 thì đối số 1 k được dùng arrow function, nếu k this sẽ luôn là cái bao ngoài hàm. VD:
+var object = { id: 1 };
+const item = [1,2,3].map(function(currentVal, index, arr){
+  return currentVal + this.id + arr[index];
+}, object); // [3, 5, 7]
+
+
+
+
+# Thao tác thẻ DOM
+DOM sử dụng trong javascript để thay đổi mọi thứ trong trang web. Giống với ta thao tác trong qt. Nó phân cấp trang html theo cây thư mục thẻ html->head/body->... lo 4 thứ element, property, method, event. DOM có nhiều loại trong javascript: DOM HTML, DOM Event, DOM CSS,.. 
+DOM có nhiều phiên bản: Legacy Dom(cũ, hỗ trợ mọi trình duyệt, bị hạn chế), W3C DOM(trình duyệt hiện đại), IE4 DOM.
+
+-> Chỉ có vài hàm cơ bản:
+createElement  querySelector  getElementsByClassName  getElementById  createTextNode
+appendChild
+
+Hàm focus của thẻ thì cả trang chỉ được 1 thẻ focus, có nhiều thì lấy cái được gọi sau
+
+-> Các lệnh khác
+.nodeType trả ra loại node theo số: 1 là element node, 2 là attribute node, 3 là text node, 4 là comment node
+.nodeValue trả ra giá trị text của Node nào đó, nếu đó kp text node thì sẽ ra null
+
+.classList.toggle("classname") => classList có 3 hàm add, remove, toggle. Toggle là dùng class gì khi chưa có và nếu có r thì xóa đi => rất hay dùng trong style DOM
+
+Nếu cần import chỉ 1 node của 1 frame thì dùng importNode. Nhưng nếu import node mà của page này thì phải đặt trong hàm onload của window vì chính page này còn chưa load xong thì lấy thẻ img ra sẽ undefine k import đc
+
+submit form với JS
+
+fragment nhóm nhiều thẻ
+
+
+
+# Dùng promise 
+Cơ chế với then catch: chạy liên tiếp theo thứ tự đến khi hết then catch, lỗi thì chỉ bắt catch tiếp theo, thành công thì chỉ bắt then tiếp theo. 
+Lỗi là khi gọi reject or có error, thành công là khi gọi return or resolve như bth. Message được truyền liên tục.
+
+Để gọi tiếp resolve hay reject thì trong then catch lại phải return 1 biến promise mới
+Gọi new Promise(<>) thì bên trong promise sẽ thực hiện ngay trên 1 luồng riêng khi được gọi tới. Chú ý phân biệt điều này với var a = function() và bên trong function mới return new Promise thì promise sẽ k thực hiện ngay vì function k được thực hiện thì làm sao promise thực hiện. Nó chỉ nhanh hơn trong TH khi cái hàm đi liền với nó được gọi thì nó mới được thực hiện như return Promise phải được chạy tới thì Promise mới được thực hiện. 
+Promise khác function vì bth ta gọi return 1 function thì function có thực hiện ngay đâu. 
+
+Có thể tách hàm then lưu sang 1 biến số riêng thay vì .then liên tiếp
+Khi dùng then catch thì nên luôn có 1 cái catch ở cuối tránh báo error uncaught
+
+Trap: Khi bao 1 lệnh gọi promise bằng try catch mà trong promise ta cũng dùng .then .catch thì chú ý trong catch ta return thì try catch ở ngoài sẽ kbh bắt được. Nếu ta resolve thì nó coi là thành công còn reject thì có lỗi và try catch ở ngoài sẽ bắt được. Khi dùng như v hoặc là trong catch lại reject, hoặc là bỏ catch đi vì có try catch khác bao ngoài rồi => Thực tế chả bh gặp nx vì toàn dùng async await bh thôi
+
+=> refer tới "NodeJS / NodeJS Advance / Test server"
+
+-> Dùng các hàm của promise như promise.all([<>])
+Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào
+
+-> Dùng async await: có thể kết hợp với promise thì k cần .then .catch nữa => phiên bản mới nên dùng async await mà bỏ hẳn then catch luôn
+
+-> Dùng promise với map: 2 chiều
+Tạo hàm sleep
+
+Trong Promise.all() là 1 mảng chứa các lời gọi thực hiện hàm. Dùng data.map() cũng là gọi thực hiện hàm với params là các phần tử trong a rồi chứ kp chỉ khai báo
+
+-> Promise với function lồng function () => () => {}
+
+-> Mảng Promise race tìm ra cái đầu tiên trả về true là lấy
+
+
+
+# Các hàm async với thời gian
+setTimeout, setInterval, setImmediate
+
+Nếu truyền đối số 2 là delay lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1, tự động làm tròn delay sang int
+
+-> Dùng setInterval di chuyển vật
+Thay đổi position left hay right nó chỉ nhận số nguyên và tự làm tròn sang số nguyên nên tốc độ chậm nhất với mức frame mượt nhìn rất nhanh, vì 10.1 nó làm tròn lên 11 luôn, ta nên dùng margin-left or các thông số tương tự mới chạy được số thập phân
+
+-> Dùng setTimeout để sort:
+const arr = [10, 50, 100, 500, 0, 200]; var arr1 = [];
+function sortIt() {
+  for (let i of arr) {
+    setTimeout(()=> console.log(i), i);
+    setTimeout(()=> {	
+      arr1.push(i);
+      arr.splice(arr.indexOf(i), 1);
+      if(arr.length === 0)
+        console.log(arr1);
+     }, i);
+  }
+}
+sortIt();
+=> Nếu kc giữa giá trị min và max đủ lớn or quá nhỏ or array có quá nhiều phần tử thì cách này k hiệu quả. Thêm vào đó các thứ trong setTimeout được thực hiện bất đồng bộ nên nếu dít quá thì ta k chắc các function đc nhét vào queue đúng thứ tự đâu, còn tùy vào độ lag của máy. Đúng hơn thì để tận dùng tính async, nên dùng sort trong setTimeout tốt hơn.
+
+setTimeout(function(){
+    alert("Chào mừng bạn đến với freetuts.net");
+});
+=> Thực hiện bất đồng bộ hàm sau 0s => Thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
+
+-> Dùng setImmediate:
+setImmediate(<function>);
+process.nextTick(<function>); => chỉ có trong NodeJS
+=> Về cơ bản 2 hàm này tương tự setTimeout với 0s
+
+=> refer tới "Event loop của NodeJS"
+
+
+
+# Xử lý errror
+-> Class error
+Khi muốn khai báo 1 object lỗi buộc dùng class vì nó phải kế thừa class Error chứ k đc là 1 function như C++
+Class kế thừa các class lỗi thì k đc khai báo các hàm khác bên trong mà chỉ dùng message trong constructor thôi
+
+
+
+# Dùng class JS
+Khởi tạo biến class mà k có new thì thuộc tính class đó lại được gán cho window
+
+Dùng super gọi hàm class cha, k gọi truy cập được trực tiếp vào thuộc tính mà chỉ vào hàm thôi. Còn truyền gọi super() tức là gọi constructor
+
+Nên mở debug ra xem từng class khi dùng. VD muốn dùng 1 thuộc tính cha ở trong con thì phải mở debug vì nó k là thuộc tính trực tiếp luôn đâu, xong còn prototype nx
+
+-> Phải dùng this với các thuộc tính của class trong class. Trừ khi có with(this){ <> }
+
+-> Tính trừu tượng
+-> Biến lưu class
+-> Biến/hàm static trong class
+-> Tạo singleton class
+
+-> Phân biệt 2 cách viết hướng đối tượng
+function Animal(){
+  this.name= "a";
+)
+Animal.prototype.test = () => {
+  console.log("test");
+}
+Tương đương với:
+class Animal {
+  constructor(){
+    this.name = "a";
+  }
+  test = () => {
+    console.log("test");
+  }
+}
+=> Bh người ta thg dùng class cho đỡ sai
+
+
+
+# Dùng yield
+Dùng yield chạy 1 hàm * nhiều lần thì chạy liên tiếp, chặt chẽ luôn vì yield k có * thì trả lấy được gì cả.
+Nếu function* có return thì nó sẽ kết thúc luôn nên có thể dùng return để dừng hàm function vĩnh viễn khi thỏa mãn đk gì nhưng giá trị return về sẽ k được lấy ra.
+
+function* gọi là generator function
+
+yield* dùng được với mọi type iterative
+
+Ta có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp mà k cần gọi next. Đây cũng là cơ chế của saga, k cần gọi next mà đưa vào loop duyệt liên tiếp
+
+
+
+# Export import
+Chỉ được export default 1 thứ trong 1 file
+Có thể dynamic import => refer tới "React Final / Cách tối ưu hóa 1 ứng dụng React"
+
+
+
+# Tạo extension browser bằng JS
+Có rất nhiều extension có sẵn trên store có thể tải về dùng, VD: Google Translate
+
+-> Để thêm extension vào browser: 
+- Chrome-> More Tools-> Extension-> bật developer mode-> load unpacked-> trỏ đến folder chứa cái extension(chứa file manifest) vừa rồi => Có thể tùy ý tắt or xóa, thêm extension vào chrome trên thanh công cụ
+- Edge-> 3 chấm-> Extension-> bật developer mode-> load unpacked-> trỏ đến folder chứa cái extension.
+
+-> Viết 1 extension cơ bản
+1 extension cho browser chỉ cần tối thiểu 1 file manifest.json cung cấp thông tin mà thôi: tối thiểu name, description, version, manifest_version
+=> Tuy nhiên như v thì extension này chưa làm gì cả, ta cần thêm các script cho nó thực hiện chức năng:
+Content script: là những đoạn mã sẽ chạy trên trang web đang xem -> dùng với "content_scripts"+"js"
+Background script: thực hiện ngầm extension, nhận message từ content script or extension khác => dùng bằng "background"+"scripts"
+UI Elements: thành phần giao diện người dùng thg là hộp thoại popup hiện ra khi ấn vào icon của extension => vd dùng với "browser_action"+"default_popup"
+
+persistent xđ trang background đc chạy như thế nào
+dùng "scripts":[".js"] or "page":".html" vói file html chỉ có 1 thẻ script thêm code js vào
+default_popup dùng để hiển thị file html khi mở extension
+js là danh sách các file js được inject vào trang web nên file js luôn trong 1 mảng còn html là ""
+matches xác định trang web muốn thêm nội dung vào => dùng regexp: "*://*/*" sẽ dùng với mọi trang web(tức trang web nào cx có conten-script này)
+
+background script bắt đầu thực hiện khi ta ấn vào biểu tượng extension, content script tự thực hiện khi ta load 1 trang web mới
+
+
+
+# Query API trong JS thuần
+-> Dùng XMLHttpRequest có sẵn của JS: onreadystatechange, readyState, status, responseText, onload, getResponseHeader, statusText, open, setRequestHeader, send
+
+-> Dùng fetch của JS được tích hợp sẵn trong browser: fetch -> lấy response: ok, status, json(), statusText, headers.get("<>"), type, url
+
+Có thể check fetch có dùng được k với: if(!('fetch' in window)){ }
+Khi viết code cho web site có hàng tá web APIs mà ta có thể sử dụng. Miễn là trình duyệt có hỗ trợ thì ta có thể dùng nó để viết code cho web. Các web APIs phần lớn đc dùng với js nên dùng js rất có lợi. VD hàm json hay fetch là web APIs mà ta có thể dùng mà k cần cài các thư viện khác như axios. Có thể dùng nó truy cập vào hê thống DOM, CSS, rest api với server. Lệnh fetch là 1 API thông dụng của web API, xử lý dễ dàng hơn thao tác cũ là XMLHttpRequest. Các API này có trong window của ta luôn nhưng đôi khi trình duyệt cũ k hỗ trợ, lúc đó ta phải viết các hàm của riêng ta or phải tải về polyfill-1 tập hợp đoạn mã js trên web. Khi ta tạo dự án bth cx đã tự có polyfill r, chỉ có IE ngày xưa ms phải cài polyfill thủ công thôi
+
+Hàm fetch('<link có dữ liệu cần xử lý>',{optional object}) trả ra 1 promise luôn là resolve(<response>), nó chỉ thất bại duy nhất khi k có kết nối mạng. response nhận đc ở then đầu tiên là 1 object lưu các thứ như response.ok, response.status, response.statusText, url để xem xét các TT của dữ liệu thành công hay k. Đối số 2 thg có { method: POST, headers: {"Content-Type:application/<>; charset=UTF-8"}, body: '<foo=bar&lorem=ipsum>' }
+=> Đó là gửi lên dữ liệu dạng string, gửi lên dạng json với JSON.stringify(<object>)
+Để xác thực thông tin: đối số 2 thêm { credentials: "include(same-origin/ omit)" } => là đi kèm cookie; same-origin là gửi request cùng nhà; omit thì k cho trình duyệt gửi thông tin xác thực. VD:
+fetch(url, {
+  credentials: 'include';//include gửi kèm thông tin xác thực cookie(user là ai)
+})
+
+Các response.type: basic nếu ứng dụng gửi request cho server cùng nhà. K có giới hạn vc xem thông tin trên response; cors: tức server và client cách xa nhau, lúc đó ta bị giới hạn, chỉ biết đc ít thông tin hơn opaque: cho các request ở xa nhưng lại k nhận cors, k xem đc dữ liệu, k xem đc status luôn. TH này xảy ra khi ng dùng server chủ động cấm cors chứ bth vẫn truy cập đc trả về cors, ta có thể truy cập vào các thành phần headers: Cache-Control, Content-Language, Content-Type, Expires, Last-Modified, Pragma với headers.get("<>")
+
+-> URL test API: có hàm fetch, muốn có 1 server API để test
+https://stackoverflow.com/questions/5725430/http-test-server-accepting-get-post-requests
+
+
+
+# Upload multiple file lên server
+Dùng thẻ <input type="file" multiple> ở html
+
+-> Đầu tiên nạp nội dung vào thẻ input -> tạo 1 form -> lấy nội dung files trong thẻ input -> nhét files đo vào form -> nhét nó vào phần body vói method POST lên server
+var formData = new FormData();
+var photos = document.querySelector("input[type='file'][multiple]");
+formData.append('title', 'My Vegas Vacation');
+formData.append('photos', photos.files);
+fetch('https://example.com/posts', {
+  method: 'POST',
+  body: formData
+})
+.then(response => response.json())
+.then(response => console.log('Success:', JSON.stringify(response))) // khi nó trả lại dữ liệu dạng string mà ta muốn json hóa
+.catch(error => console.error('Error:', error));
+=> refer tới "Projects / Tinkerbellgarden / Test"
+
+
+
+# Thao tác với JSON
+Có thể dùng JSON làm nguồn cung data, import vào file js dùng trực tiếp dưới dạng object
+Có thể dùng JSON lưu function bằng function constructor
+
+Để lưu dữ liệu json vào tất cả mọi thứ ta đều phải dùng JSON.stringify vì kp mọi nơi đều chấp nhận dạng string trực tiếp nhưng string thì lưu rất dễ
+VD: localStorage là lưu vào bằng JSON.stringify và lấy ra với JSON.parse
+
+
+
+# AJAX
+Asynchronous Javascript And XML là phương thức để trao đổi với máy chủ và cập nhập 1 hay nhiều phần của trang web, nó k request html, css, js như ngày xưa nữa mà chỉ request data (nền tảng của web2.0). Tức nó chỉ các phương thức mà ta dùng ở phía front end để gọi đến server và load dữ liệu vào 1 phần của trang web. Các hàm như v gọi là AJAX mà thôi. Nó gắn liền với xử lý bất đồng bộ trong JS chỉ hướng sự kiện khi thao tác và bất đồng bộ trong query tới server
+VD: trong jquery có hàm load để load 1 file html vào 1 thẻ nào đó tức update 1 phần thì nó là 1 hàm của AJAX; Các method get, post của jquery hay các hàm fetch hay dùng XmlHttpRequest đều là đang thao tác với AJAX 
+
+Bất đồng bộ tức là vẫn hoạt động các chức năng khác đến khi tải xong thì hiện lên luôn mà kp tải trang or loading đơ các chức năng khác ấy.
+
+Ngày xưa AJAX dùng window.XmlHttpRequest Object(XHR) để gọi request và trả về response dạng XML biểu diễn DOM element or HTML dạng string
+Cũ hơn nữa, người ta còn dùng window.ActiveXObject trước phiên bản IE11. ActiveX được phát triển bởi Microsoft để tạo các thành phần tái sử dụng trên web. 
+Hầu hết các website bh toàn ajax, hiếm có cái nào request page html. AJAX trong các trình duyệt hiện đại dùng HTML5 + modern js, fetch api thì có hàm fetch sẵn của webapi or axios, code AJAX kiểu cũ có thể k hoạt động.
+
+
+
+# Thao tác với console
+# Dùng cookie
+# Dùng storage
+
+
+
+# Thao tác với Date
+Date.now() tương đương new Date.getTime() trả ra milisecond từ epoch time => có thể dùng nó làm id nếu k quá khắt khe về id, VD dùng nó thêm prefix id cho 1 cái khác chẳng hạn. Vì vẫn có xs trùng khi dùng milisecond nếu quá nhiều người request id cùng 1 lúc
+
+Nên nhớ cái new Date(null) sẽ ra năm 1970 còn new Date() sẽ ra date hiện tại
+
+Khởi tạo new Date(2022, 6, 20) -> thực chất lại là tháng 5 vì nó cộng tháng lên 1 đó.
+Khi khởi tạo 1 biến Date như v tức là 0h sáng của ngày hôm đó. Khi khởi tạo biến Date cho - 10 chẳng hạn thì nó giảm 10 giây nhưng k còn là kiểu date nữa
+
+
+
+# ES6 snippet
+Các snippet thuần ES6 k dùng thư viện:
+URL: lấy base, check absolute, lấy params dạng object
+DOM: check 1 thẻ chứa thẻ khác, lấy mọi thẻ cha của 1 thẻ, scroll smoothly tới 1 thẻ, check chuột click ra ngoài 1 thẻ, thêm style vào thẻ nào
+Util: tự gen ra id ngẫu nhiên, lấy phần text được chọn
+Date: check biến giá trị Date có valid, lấy time từ date, lấy unix time từ Date
+Device: copy text vào clipboard, detect phím capslock có bật không, lấy language, dark mode color scheme trên ứng dụng người dùng, check device support touch event ko
+
+
+
+# Dùng debounce throttle
+-> ref tới "React / # Dùng debounce throttle"
+
+
+
+# Immutability code:
+Luôn dùng const khi khai báo dữ liệu. Nếu là mảng và object thì đổi thuộc tính được, nếu cần thêm thuộc tính thì lại tạo biến const mới. 
+Mọi lúc dùng let thì hầu hết đều có cách thay thế bằng const. Khi thay đổi mảng hay object luôn để ý có thể copy ra mảng object mới không
+
+
+
+# Sự phát triển của JS
+
+
+
+# Other
+-> Trong js có nhiều kiểu quái đản, ta có thể gõ trực tiếp vào browser kiểm chứng:
+{} + [] và [] + {} cho kết quả khác nhau
+1 + [] và 1 + {} vẫn được
+Với sự phong phú về syntax, nó chơi cả kiểu: ("b" + "a" + + "a" + "a").toLowerCase(); => banana
+=> Thực tế trong các dự án, k có ai chơi operator mà type khác nhau như này cả, hoặc chí ít họ dùng Typescript để tránh các thứ kiểu này nên k cần học
+
+-> Tất cả các trình duyệt hiện đại đều hỗ trợ javascript và ta có quyền tắt bật nó tùy ý. Tắt javascript thì chỉ còn html/css nên các tính năng âm thanh, quảng cáo,.. trong trang web sẽ bị vô hiệu hóa, từ đó vô hiệu hóa quảng cáo dẫn tới link có mã độc hay cản trở trang web lấy thông tin của người dùng. Tuy nhiên các lỗ hổng của javascript thường đc vá rất nhanh nên bị người ngoài tấn công qua javascript ít khi xảy ra. Để tắt javascript trong Microsoft Edge: 3 chấm-> setting->site permission->javascript-> ấn tắt
+Javascript frontend k có tính năng đọc ghi file tự động(vì bảo mật) và xử lý đa luông.
+Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình duyệt tắt javascript or k hỗ trợ 
+
+-> Polyfill là một đoạn mã (thường là JavaScript trên Web) được sử dụng để cung cấp chức năng hiện đại trên các trình duyệt cũ hơn vốn không hỗ trợ nó
+VD: dùng IE8 sẽ k có hàm Array.prototype.includes => ta phải tự viết polyfill riêng để thực hiện chức năng đó. VD:
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function includes(searchElement) {
+    return this.indexOf(searchElement) !== -1
+  }
+}
+Tương tự các hàm như Object.assign cũng nên check như v nếu ứng dụng yêu cầu tương thích nhiều trình duyệt rồi dùng như bth. Trên mạng đôi khi có thu viện polyfill để tải về dùng sẵn or nhờ chat GPT viết hộ
+
+-> JScript 
+Là Microsoft version of JS, dùng trong web. JScript được sử dụng chủ yếu trên nền tảng Windows và được tích hợp trong các ứng dụng như Internet Explorer và Windows Script Host.
+
+Code script k truy cập được client's hard drive vì lý do bảo mật
+
+VB Script là interpreted script lang của microsoft là 1 phần của Visual Basic programming language
+
+-> CDATA xuất hiện trong XML và HTMl để tránh lỗi parse error
+VD thay vì code JS trong html bth, ta thêm:
+ <body>
+    <script type="text/javascript">
+      // <![CDATA[
+      var myString = "<p>This is a string containing <em>HTML</em> tags.</p>";
+      console.log(myString);
+      // ]]>
+    </script>
+  </body>
+=> Tag CDATA(Character data) để tránh bị lỗi khi nội dung bên trong chứa ký tự đặc biệt. TH đơn giản k có nhưng myString chứa nhiều ký tự complex của html sẽ gây lỗi và CDATA đảm bảo phần code đó luôn được interpret đúng ở dạng literal
+
+-> RevealJS tạo slide đẹp nhưng éo dùng được với React18 (bỏ). Tạo online: https://slides.com
+
+-> Dùng Rx
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.4.0/Rx.js"></script>
+Rx.Observable hỗ trợ xử lý bất đồng bộ
+=> Thực chất nó vô dụng, chỉ là vc tách ra 1 hàm riêng mà thôi, ta gọi hàm bth cũng được. Hàm trong subscribe xử lý bất đồng bộ thực chất là đáp vào event queue và thực hiện sự kiện lần lượt thôi
+
+####
+# Basic
+# Các kiểu biến khác: 
+## Biến this
+# Closure function
+# Dùng call bind
+# Dùng sự kiện JS
+# Mảng và object và hàm
+# Các kiểu duyệt
+# Thao tác thẻ DOM
+# Dùng promise 
+# Các hàm async với thời gian
+# Các tính năng hay
+# Xử lý errror
+# Dùng class JS
+# Dùng yield
+# Export import
+# Dùng Rx
+# Tạo extension browser bằng JS
+# Query API trong JS thuần
+# Thao tác với JSON
+# AJAX
+# Thao tác với console
+# Dùng cookie
+# Dùng storage
+# Thao tác với Date
+# Other
+####
+

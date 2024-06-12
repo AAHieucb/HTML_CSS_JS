@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./test.css">
+</head>
+<body>
+    <!-- # Component hay / Tạo slider -->
+    <label class="label" for="checkbox2">
+        <input type="checkbox" id="checkbox2"> 
+        <div class="slider2"></div>
+    </label>
+    <div style="margin-top: 20px;"></div>
+    <!-- Cơ chế: Ta bt label thg dùng ngang hàng với input với for để dùng kết hợp text với input nhưng ở đây ta dùng 
+        label bao ngoài input để style nó với cơ chế: bao ngoài input và 1 thẻ div, cho input display none, khi toggle 
+        input thì style lại cái thẻ div bên trong dựa vào selector:checked -> thẻ div có trạng thái thay đổi đại diện 
+        cho cái input check box kia .
+        Ta buộc dùng for với id ở đây vì để ấn vào label cx kích hoạt input vì input dislay none rồi thì sao check bth
+        được -->
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round"></div> <!-- Bỏ class round sẽ ra hình vuông -->
+        </label>
+    </div>
+
+    <div style="margin-top: 60px;"></div>
+    <p class="test-selector"> is </p>
+
+    <!-- # Tạo animation -->
+    <h2>
+        Animation background
+    </h2>
+
+    <!-- # Basic / Tạo ribbon hình tam giác -->
+    <div class="ribbon"></div>
+
+    <!-- # Thao tác với border -->
+    <span class="test-border"></span>
+    <div class="test-before">abc</div>
+
+    <!-- CSS Selector và pseudo class và pseudo element -->
+    <div class="div">
+        <div>hello</div>
+        <span class="div test2class">world</span>
+    </div>
+    <div class="div">hello</div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- # Xử lý image / Xử lý vị trí backgroundImage -->
+
+    <!-- 
+    Handle vị trí cho ảnh nền: có vô số TH có thể xảy ra. Có thể dùng backgroundImage or img position absolute
+
+    TH1: Ảnh nền lớn là hình có thể co dãn thoải mái nhưng phải hiển đầy đủ k mất + nó có responsive kích thước theo màn hình và nội dung bên trong, nó luôn co dính theo nội dung bên trong và k cần giữ kích thước ban đầu 
+    
+    => Dùng thẻ div cha kích thước co theo con: thẻ div cha chứa thẻ img là ảnh đó dùng position absolute tại vị trí 0,0,0,0 và width height là 100% để theo cha, ngay dưới thẻ ảnh khai báo thẻ cho Con
+    Thêm 1 lượng padding cho con, ta có thể đảm bảo background luôn bao trọn con nên chỉ cần xử lý responsive cho con là xong. Mặc định để nó co dãn chứ k set object-fit gì cả. 
+    VD tờ giấy trong treasure map detail của trava, kích thước con nên hơi khớp với ảnh background tờ giấy chứ đừng quá lệch thì tờ giấy bóp méo bị nhận ra
+
+    TH2: Ảnh nhỏ fix cứng k co dãn là ảnh nền, vị trí thay đổi theo nội dung bên trong chỉ là 1 component nhỏ, bất chấp co dãn được hay không
+    
+    Ta bao component nhỏ bằng 1 thẻ box và dùng background image, ta set kích thước width height cho nó đúng theo tỉ lệ của image thì k sợ mất hình. Để responsive vị trí thay đổi ta style trực tiếp cho thẻ box đó. Nếu image đúng kích thước nhỏ thì set box with height fix cứng luôn, nếu không phải co nhỏ ảnh luôn hiển thị full
+    Bên trong nó nếu cần vị trí như thế nào thì có thể cho Box dùng display flex và căn các thứ bên trong. Nếu ảnh to thì vị trí phức tạp có thể k dùng được display flex như v. Dùng backgroundPosition căn ảnh ra center
+    VD: cái overview trong dự án front end SE phần statistics hay backgroundImage đẹp cho button
+
+    TH2.2: Nếu ảnh có dạng SVG export ra, với loại ảnh có thể co dãn tùy ý thì xóa width và height đi và thêm preserveAspectRatio="none" vào thẻ svg đầu tiên thì ảnh đó khi làm background image sẽ luôn co dãn theo kích thước content bên trong nhưng lại luôn hiện đầy đủ chứ k bị fix cứng width height như trước. Ta chỉ cần thêm padding cho container bao con ở trong là hiển thị luôn ok => nên dùng svg
+    Vd: phần Result trong Racing đua ngựa trava của Tuấn
+
+    TH3: Ảnh to, k thể co dãn, có thể hiển thị k đầy đủ, làm ảnh nền, responsive kích thước và vị trí theo màn hình và nội dung bên trong có vị trí phức tạp và cũng responsive được. Height của ảnh có thể fix cứng
+    Nó khác TH1 ở chỗ height fix cứng được và ảnh k thể co dãn. Chính vì ảnh k thể co dãn mà height cứng, width lại responsive nên ảnh mới k hiển thị đầy đủ, thực tế giống C1
+    Ta bao mọi thứ trong 1 thẻ relative, bên trong có thể làm như cách 1 nhưng ở đây ta dùng 1 cách khác là cho inset 0 với position absolute. 
+    Vd: Ảnh trong treasure map trava
+    
+    inset = 10px là short hand của top right left down 10px;
+    
+    => Tùy biến xử lý background image của 3 button trong horseracing file Racing.jsx có thể dùng cách nào cũng đc. Thêm position relative fix lỗi về z-index
+
+    -->
+
+    <style>
+        .test{
+            background-color: red;
+            position: absolute;
+            inset: 0;
+        }
+    </style>
+    <div style="position: relative; width: 100px; height: 500px;">
+        <div class="test">Hello</div>
+    </div>
+
+    <style>
+        .a .b{
+            background-color: red;
+        }
+    </style>
+    <div class="a">
+        <div>J
+            <div class="b">K</div>
+        </div>
+    </div>
+
+</body>
+</html>

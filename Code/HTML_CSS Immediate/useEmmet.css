@@ -1,0 +1,39 @@
+/* Dùng emmet */
+
+.wrapper{
+    /* pos, pos:s,... */
+    position: relative;
+    position: static;
+    position: relative;
+    position: absolute;
+    position: fixed;
+
+    /* d, d:n, d:if, d:ib,.. */
+    display: block;
+    display: none;
+    display: flex;
+    display: inline-flex;
+    display: inline;
+    display: inline-block;
+
+    /* c */
+    color: #000;
+
+    /* m:a, mt, ml, pb, ... */
+    margin: auto;
+    margin-top: 2px;
+    margin-left: 3px;
+    padding-bottom: 4px;
+
+    /* bxz */
+    box-sizing: border-box;
+    /* border-box là width chứa padding */
+
+    /* maw, mih, miw, mah */
+    max-width: 1px;
+    min-height: 2px;
+
+    /* bd, bd:n */
+    border: 1px solid #000;
+    border: none;
+}

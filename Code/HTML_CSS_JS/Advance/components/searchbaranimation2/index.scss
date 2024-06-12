@@ -1,0 +1,174 @@
+// Inspired by this mockup
+// https://uimovement.com/ui/6139/search-field/
+
+$svg-line-length: 314;
+$svg-height: 72px;
+$svg-width: 138px;
+
+$red: #E46071;
+
+$line-animation-duration: 500ms;
+$caret-animation-duration: 500ms;
+$caret-color-animation-duration: 300ms;
+$caret-color-animation-delay: $line-animation-duration + $caret-animation-duration;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #532394;
+  font-family: Verdana, Geneva, sans-serif;
+  padding: 60px 20px;
+}
+
+
+// Animation which fades in caret when line animation is complete
+@keyframes caret-color {
+  0% {
+    
+  }
+  100% {
+    caret-color: $red;
+  }
+}
+
+// Fake caret fly in animation
+@keyframes caret {
+  0% {
+    transform: translateY(-24px) scaleY(0);
+  }
+  50% {
+    transform: none;
+  }
+  100% {
+    transform: scaleX(0.2);
+  }
+}
+
+.FancyInput {
+  height: $svg-height;
+  margin: 0 auto;
+  position: relative;
+  width: $svg-width * 2;
+}
+
+.FancyInput-input {
+  background: none;
+  border: none;
+  caret-color: transparent;
+  color: $red;
+  display: block;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  height: 100%;
+  letter-spacing: 1px;
+  outline: 0;
+  padding: 15px 30px;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+  z-index: 10;
+}
+
+.FancyInput-line {
+  display: block;
+  height: $svg-height;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: $svg-width;
+
+  path {
+    stroke-dasharray: $svg-line-length $svg-line-length;
+    stroke-dashoffset: 1; // Hack for safari
+    transition: all $line-animation-duration;
+  }
+}
+
+.FancyInput-line--left {
+  left: 0;
+  transform: rotateX(0) rotateY(180deg);
+}
+
+.FancyInput-line--right {
+  right: 0;
+  transform: rotateX(0) rotateY(0);
+}
+
+.FancyInput-caret {
+  background: $red;
+  border-radius: 100px;
+  height: 24px;
+  left: 50%;
+  margin-left: -2px;
+  position: absolute;
+  top: 24px;
+  transform-origin: top center;
+  transform: translateY(-24px) scaleY(0);
+  width: 5px;
+}
+
+.FancyInput-placeholder {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: $red;
+  width: 200px;
+  line-height: 30px;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -100px;
+  position: absolute;
+  text-align: center;
+  transition: all $line-animation-duration;
+}
+
+
+// Focus state
+.FancyInput-input:focus {
+  animation: caret-color $caret-color-animation-duration;
+  animation-delay: $caret-color-animation-delay;
+  animation-fill-mode: forwards;
+  
+  & + svg path,
+  & + svg + svg path {
+    stroke-dasharray: 0 $svg-line-length;
+  }
+  
+  & + svg + svg + .FancyInput-caret {
+    animation: caret $caret-animation-duration;
+    animation-delay: $line-animation-duration;
+  }
+  
+  & + svg + svg + div + .FancyInput-placeholder {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+
+// Info
+
+.Info {
+  text-align: left;
+  color: rgba(white, 0.3);
+  font-size: 14px;
+  line-height: 22px;
+  max-width: 380px;
+  margin: 60px auto 0;
+  
+  a {
+    color: rgba(white, 0.3);
+    text-decoration: none;
+    border-bottom: thin solid rgba(white, 0.3);
+    
+    &:hover {
+      color: rgba(white, 0.5);
+      border-bottom-color: rgba(white, 0.5);
+    }
+  }
+}
+

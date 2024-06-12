@@ -1,0 +1,56 @@
+/* Responsive css */
+.abc{
+    display: flex;
+    width: 70%;
+    align-items: center;
+    height: 300px;
+}
+@media (max-width: 1000px) {
+    .abc{
+        background-color: red;
+    }
+}
+
+/* Tạo animation */
+/* Multi parallel animation */
+.move{
+    animation: move 4s infinite, blinker 1s infinite;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    transform: rotate(45deg);
+}
+@keyframes move {
+    from{
+        top: 0px;
+    }
+    to{
+        top: 100px;
+    }
+}
+@keyframes blinker {
+    50%{
+        opacity: 0;
+    }
+}
+.hoverTest:hover{
+    background-color: red;
+}
+
+/* CSS Selector */
+/* Người ta thường dùng :is(<>) để simplify câu lệnh css phức tạp */
+.themeSection.light:hover .middleTheme,
+.themeSection.light:focus-within .middleTheme,
+.themeSection.dark:hover .middleTheme,
+.themeSection.dark:focus-within .middleTheme,
+.themeSection.auto:hover .middleTheme,
+.themeSection.auto:focus-within .middleTheme {
+    color: red;
+}
+/* Co nhỏ thành */
+.themeSection:is(
+    .light, .dark, .auto
+):is(:hover, :focus-within) .middleTheme {
+    color: red;
+}

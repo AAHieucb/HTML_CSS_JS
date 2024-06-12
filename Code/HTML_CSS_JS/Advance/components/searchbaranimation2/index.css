@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Verdana, Geneva, sans-serif;
+  padding: 60px 20px;
+}
+
+@keyframes caret-color {
+  100% {
+    /* caret-color là vị trí cursor khi gõ từ */
+    caret-color: #E46071;
+  }
+}
+@keyframes caret {
+  0% {
+    transform: translateY(-24px) scaleY(0);
+  }
+  50% {
+    transform: none;
+  }
+  100% {
+    transform: scaleX(0.2);
+  }
+}
+.FancyInput {
+  height: 72px;
+  margin: 0 auto;
+  position: relative;
+  width: 276px;
+}
+
+.FancyInput-input {
+  background: none;
+  border: none;
+  caret-color: transparent;
+  color: #E46071;
+  display: block;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  height: 100%;
+  letter-spacing: 1px;
+  outline: 0;
+  padding: 15px 30px;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+  z-index: 10;
+}
+
+.FancyInput-line {
+  display: block;
+  height: 72px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 138px;
+}
+.FancyInput-line path {
+  stroke-dasharray: 314 314;
+  stroke-dashoffset: 1;
+  transition: all 500ms;
+}
+
+.FancyInput-line--left {
+  left: 0;
+  transform: rotateX(0) rotateY(180deg);
+}
+
+.FancyInput-line--right {
+  right: 0;
+  transform: rotateX(0) rotateY(0);
+}
+
+.FancyInput-caret {
+  background: #E46071;
+  border-radius: 100px;
+  height: 24px;
+  left: 50%;
+  margin-left: -2px;
+  position: absolute;
+  top: 24px;
+  transform-origin: top center;
+  transform: translateY(-24px) scaleY(0);
+  width: 5px;
+}
+
+.FancyInput-placeholder {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #E46071;
+  width: 200px;
+  line-height: 30px;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -100px;
+  position: absolute;
+  text-align: center;
+  transition: all 500ms;
+}
+
+.FancyInput-input:focus {
+  animation: caret-color 300ms;
+  animation-delay: 1000ms;
+  animation-fill-mode: forwards;
+}
+.FancyInput-input:focus + svg path, .FancyInput-input:focus + svg + svg path {
+  stroke-dasharray: 0 314;
+}
+.FancyInput-input:focus + svg + svg + .FancyInput-caret {
+  animation: caret 500ms;
+  animation-delay: 500ms;
+}
+.FancyInput-input:focus + svg + svg + div + .FancyInput-placeholder {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.Info {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  line-height: 22px;
+  max-width: 380px;
+  margin: 60px auto 0;
+}
+.Info a {
+  color: rgba(255, 255, 255, 0.3);
+  text-decoration: none;
+  border-bottom: thin solid rgba(255, 255, 255, 0.3);
+}
+.Info a:hover {
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+/*# sourceMappingURL=index.css.map */

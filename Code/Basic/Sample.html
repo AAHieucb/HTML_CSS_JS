@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Document</title>
+    <script src="./Sample.js"></script>
+    <link rel="stylesheet" href="./Sample.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <style type="text/css" media="all">
+        input {
+            border: 3px solid green;
+        }
+        input:invalid {
+            border: 3px solid red;
+        }
+    </style>
+</head>
+
+<body style="margin-top: 70px;">
+    <!-- ribbon -->
+    <div class="ribbon"></div>
+
+    <!-- switcher -->
+    <div style="position: relative;">
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </div>
+
+    <!-- video từ ngoài-->
+    <video width="320" height="240" controls preload="auto" autoplay="" muted loop>
+        <source src="https://www.w3schools.com/tags/movie.mp4" type="video/mp4">
+    </video>
+
+    <!-- video trong source và audio -->
+    <audio src="./sound/music_bkg.wav" controls></audio>
+    <video src="./video/dia quay.mp4" controls muted preload="auto" autoplay width="400px"></video>
+
+    <!-- gõ có gợi ý -->
+    <input list="browsers">
+    <datalist id="browsers">
+        <option value="Edge">
+        <option value="Firefox">
+        <option value="Chrome">
+    </datalist>
+
+    <!-- click ảnh là phóng to or download-->
+    <img src="./image/workplace.jpg" alt="Workplace" usemap="#workmap" width="400" height="379">
+    <map name="workmap">
+        <!-- có download thì click éo phóng to nx -->
+        <!-- với shape poly thì coords cứ là cặp 2 tọa độ liên tục là 1 đỉnh trong polygon -->
+        <area shape="rect" coords="34,44,270,350" alt="Computer" href="./image/mac.jpg" download="newname.jpg">
+        <area shape="rect" coords="290,172,333,250" alt="Phone" href="./image/cellphone.jpg" target="_blank">
+        <area shape="circle" coords="337,300,44" alt="Cup of coffee" href="./image/coffeehouse2.jpg">
+    </map>
+
+    <!-- animation -->
+    <div class="movingBlock"></div>
+
+    <!-- table -->
+    <table style="border: 3px solid black; border-style: double; margin-left: 10px;">
+        <colgroup>
+            <col span="1" style="background-color: gainsboro; width: 33%;">
+            <col span="2" style="background-color: khaki; width: 66%;">
+        </colgroup>
+        <thread>
+            <tr>
+                <th style="padding: 10px;"> Main header</th>
+                <td style="padding: 10px;"> Header without bold style </td>
+            </tr>
+            </thead>
+            <tbody>
+                <th style="padding: 10px;"> Main content</th>
+                <td style="padding: 10px;"> Content without bold style </td>
+            </tbody>
+    </table>
+
+    <!-- check input -->
+    <form action="#" method="GET">
+        <label for="web">Go to web:</label>
+        <input type="text" pattern="https?://[A-Za-z]{1,8}\.[a-z]+$" autocomplete placeholder="web" required
+            value="https://a.com">
+    </form>
+
+    <!-- list chồng list -->
+    <ul>
+        <li class="li1">Menu 1
+            <ul class="ul1">
+                <li class="li2">Item 1.1
+                    <ul class="ul2">
+                        <li>Item 1.1.1</li>
+                        <li>Item 1.1.2</li>
+                        <li>Item 1.1.3</li>
+                        <li>Item 1.1.4</li>
+                    </ul>
+                </li>
+                <li class="li2">Item 1.2
+                    <ul class="ul2">
+                        <li>Item 1.2.1</li>
+                        <li>Item 1.2.2</li>
+                        <li>Item 1.2.3</li>
+                        <li>Item 1.2.4</li>
+                    </ul>
+                </li>
+                <li class="li2">Item 1.3
+                    <ul class="ul2">
+                        <li>Item 1.3.1</li>
+                        <li>Item 1.3.2</li>
+                        <li>Item 1.3.3</li>
+                        <li>Item 1.3.4</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="li1">Menu 2
+            <ul class="ul1">
+                <li class="li2">Item 2.1
+                    <ul class="ul2">
+                        <li>Item 2.1.1</li>
+                        <li>Item 2.1.2</li>
+                        <li>Item 2.1.3</li>
+                        <li>Item 2.1.4</li>
+                    </ul>
+                </li>
+                <li class="li2">Item 2.2
+                    <ul class="ul2">
+                        <li>Item 2.2.1</li>
+                        <li>Item 2.2.2</li>
+                        <li>Item 2.2.3</li>
+                        <li>Item 2.2.4</li>
+                    </ul>
+                </li>
+                <li class="li2">Item 2.3
+                    <ul class="ul2">
+                        <li>Item 2.3.1</li>
+                        <li>Item 2.3.2</li>
+                        <li>Item 2.3.3</li>
+                        <li>Item 2.3.4</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li class="li1">Menu 3
+            <ul class="ul1">
+                <li class="li2">Item 3.1
+                    <ul class="ul2">
+                        <li>Item 3.1.1</li>
+                        <li>Item 3.1.2</li>
+                        <li>Item 3.1.3</li>
+                        <li>Item 3.1.4</li>
+                    </ul>
+                </li>
+                <li class="li2">Item 3.2
+                    <ul class="ul2">
+                        <li>Item 3.2.1</li>
+                        <li>Item 3.2.2</li>
+                        <li>Item 3.2.3</li>
+                        <li>Item 3.2.4</li>
+                    </ul>
+                </li>
+                <li class="li2">Item 3.3
+                    <ul class="ul2">
+                        <li>Item 3.3.1</li>
+                        <li>Item 3.3.2</li>
+                        <li>Item 3.3.3</li>
+                        <li>Item 3.3.4</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+</body>
+
+</html>

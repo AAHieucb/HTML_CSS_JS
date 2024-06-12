@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Parallax</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="parallax.css">
+    <script src="parallax.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="parallax">
+        <div class="shape">
+            <img src="https://freetuts.net/upload/tut_post/images/2019/03/16/1685/eagle.png">
+            <img src="https://freetuts.net/upload/tut_post/images/2019/03/16/1685/rhino.png">
+            <img src="https://freetuts.net/upload/tut_post/images/2019/03/16/1685/owl.png">
+            <img src="https://freetuts.net/upload/tut_post/images/2019/03/16/1685/lion.png">
+            <img src="https://freetuts.net/upload/tut_post/images/2019/03/16/1685/bear.png">
+        </div>
+        <audio src=".forest.mp3" controls autoplay muted>
+            <p>If you are reading this, it is because your browser does not support the audio element.</p>
+        </audio>
+        <div onclick="toggleMuteAudio()" class="volume">
+            <span>
+                <i class="fa fa-volume-off" aria-hidden="true"></i>
+            </span>
+        </div>
+        <div class="side-menu">
+            <ul>
+                <li class="forest" onclick="moveToImage('.forest')" >Forest</li>
+                <li class="eagle" onclick="moveToImage('.eagle')" >Eagle</li>
+                <li class="rhino" onclick="moveToImage('.rhino')" >Rhino</li>
+                <li class="owl" onclick="moveToImage('.owl')" >Owl</li>
+                <li class="lion" onclick="moveToImage('.lion')" >Lion</li>
+                <li class="bear" onclick="moveToImage('.bear')" >Bear</li>
+            </ul>
+        </div>
+        <div class="forest" ></div>
+        <div class="eagle">
+            <p>
+                <!-- tách từng dòng span để tạo animation từng dòng khác nhau -->
+                <span>Eagle is the common name for many large birds of prey of the family Accipitridae.</span>
+                <span>Eagles belong to several groups of genera, not all of which are closely related.</span> 
+                <span>Most of the 60 species of eagle are from Eurasia and Africa.</span>
+            </p>
+        </div>
+        <div class="rhino">
+            <p>
+                <span>A rhinoceros commonly abbreviated to rhino is one any of the numerous extinct species.</span>
+                <span>Two of the extant species are native to Africa and three to Southern Asia.</span>
+                <span>The term "rhinoceros" is often more broadly applied to now extinct relatives of the superfamily Rhinocerotoidea.</span>
+            </p>
+        </div>
+        <div class="owl">
+            <p>
+                <span>Owls are birds from the order Strigiformes.</span>
+                <span>Owls hunt mostly small mammals, insects, and other birds, although a few species specialize in hunting fish.</span>
+                <span>They are found in all regions of the Earth except polar ice caps and some remote islands.</span>
+            </p>
+        </div>
+        <div class="lion">
+            <p>
+                <span>The lion (Panthera leo) is a species in the family Felidae</span>
+                <span>A lion pride consists of a few adult males, related females and cubs.</span>
+                <span>Male lions have a prominent mane, which is the most recognisable feature of the species.</span>
+            </p>
+        </div>
+        <div class="bear">
+            <p>
+                <span>Bears are carnivoran mammals of the family Ursidae.</span>
+                <span>They are classified as caniforms, or doglike carnivorans.</span>
+                <span>Bears are found on the continents of North America, South America, Europe, and Asia.</span>
+            </p>
+        </div>
+        <div class="back">
+            <div onclick="goHome()">
+                <span><i class="fa fa-hand-pointer-o" aria-hidden="true"></i></span>
+            </div>
+        </div>
+    </div>
+    <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+</body>
+</html>

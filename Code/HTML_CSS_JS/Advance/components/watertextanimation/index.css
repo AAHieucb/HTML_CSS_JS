@@ -1,0 +1,32 @@
+body{
+	font-family: "montserrat", sans-serif;
+	background: url(https://res.cloudinary.com/drcrre4xg/image/upload/v1571101012/bg_v0tw74.png) no-repeat;
+	background-size: cover;
+}
+.middle{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+.middle h1{
+	font-size: 100px;
+	text-transform: uppercase;
+	font-weight: 900;
+	color: #2c3e5036; /* transparent */
+
+  /* Animation ez: cho bg image ẩn trong text với background-clip rồi cho background di chuyển là xong */
+  /* Điểm đặc biệt là background-repeat mặc định khiến nó bị quay vòng chứ k mất hình. Animation đáng lẽ bị giật cục về vị trí ban đầu nhưng 15s quá dài và clip text nên khó nhận ra. Có thể fix bằng cách cho chạy qua lại  */
+	background-image: url(https://res.cloudinary.com/drcrre4xg/image/upload/v1571101002/water_zvupjx.png);
+	-webkit-background-clip: text;
+	animation: water 15s infinite;
+  background-repeat: no-repeat;
+}
+@keyframes water {
+	from{
+		background-position: left 0 top 0;
+	}
+	to{
+		background-position: left 1000px top 0;
+	}
+}

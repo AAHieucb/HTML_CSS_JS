@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./test.css">
+</head>
+<body>
+    <!-- # Tạo animation -->
+    <h1>Fading out and keeping styling</h1>
+
+    <!-- # 3D 2D transform -->
+    <div id="div1">DIV1
+        <div id="div2">DIV2</div>
+    </div>
+
+    <div class="div3">A
+        <div class="div4">B</div>
+    </div>
+
+    <h2>perspective: 800px:</h2>
+    <div class="ex1">
+        <div class="cube">
+            <div class="side front">1</div>
+            <div class="side back">6</div>
+            <div class="side right">4</div>
+            <div class="side left">3</div>
+            <div class="side top">5</div>
+            <div class="side bottom">2</div>
+        </div>
+    </div>
+    <h2 style="margin-top:300px">perspective: 150px:</h2>
+    <div class="ex2">
+        <div class="cube">
+            <div class="side front">1</div>
+            <div class="side back">6</div>
+            <div class="side right">4</div>
+            <div class="side left">3</div>
+            <div class="side top">5</div>
+            <div class="side bottom">2</div>
+        </div>
+    </div>
+
+    <!-- # Tạo animation / Component hay -->
+    <div class="container">
+        <div class="card">Spinning card</div>
+    </div>
+
+    <div class="container">
+        <div class="card">Spinning card</div>
+        <div class="green"></div>
+    </div>
+
+    <!-- # Basic / Dùng box-decoration-break  -->
+    <style>
+        span {
+            border: 5px solid red;
+            padding:  0em 1em;
+            border-radius: 16px;
+            font-size: 24px;
+            line-height: 2;
+        }
+        span.ex { 
+            
+            -webkit-box-decoration-break: clone;
+            -o-box-decoration-break: clone;
+            box-decoration-break: clone;
+        }
+    </style>
+    <h2>box-decoration-break: clone:</h2>
+    <span class="ex">CSS<br>is<br>easy<br>to learn</span>
+    <h2>box-decoration-break: slice (default):</h2>
+    <span>CSS<br>is<br>easy<br>to learn</span>
+    
+</body>
+</html>

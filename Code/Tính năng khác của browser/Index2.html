@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>Hello World</div>
+
+  <script>
+    history.pushState({}, null, "./lndex2.html");
+    // history pushState chỉ thêm được relative url cùng domain. Nó đổi url mà k load lại trang nên phù hợp với SPA. Thg dùng kết hợp với popState
+    // View page source sẽ thấy source của trang kia nhưng k bị phát hiện vì chữ I và l giống hệt nhau
+
+    const devtool = document.getElementById("devtool")
+    function onDevToolsOpen() {
+      setTimeout(console.clear.bind(console));
+      document.documentElement.innerHTML = '<div>You cannot see the source code</div>';
+    }
+    class DevToolsChecker extends Error {
+      toString(){ }
+      get message () {
+        onDevToolsOpen();
+      }
+    }
+    console.log(new DevToolsChecker());
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,751 @@
+/* Dùng float */
+.group1:after {
+    clear: both;
+    content: ".";
+    display: "block";
+}
+.group1 {
+    border: solid 1px red;
+}
+
+/* Tạo Animation */
+button {
+    height: 100px;
+    width: 300px;
+    font-size: 28px;
+    color: white;
+    background-color: tomato;
+    border: none;
+    /* transition sử dụng 2 thuộc tính chủ yếu là transition-property và transition-duration */
+    /* transition-property: background-color; */
+    transition-property: all;
+    transition-duration: 1s;
+}
+button:hover {
+    background-color: wheat;
+}
+
+img .a {
+    width: 50px;
+    top: 100px;
+    left: 100px;
+    position: absolute;
+    z-index: 99;
+}
+img .a {
+    animation-name: pacman;
+    animation-duration: 4s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-delay: 1.9s;
+    animation-play-state: running;
+    animation-fill-mode: forwards;
+}
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: tomato;
+    position: absolute;
+}
+.dot-1 {
+    top: 125px;
+    left: 225px;
+    animation: eat 4s infinite;
+    animation-delay: 2s;
+}
+.dot-2 {
+    top: 125px;
+    left: 325px;
+    animation: eat 4s infinite;
+    animation-delay: 2.2s;
+}
+.dot-3 {
+    top: 125px;
+    left: 425px;
+    animation: eat 4s infinite;
+    animation-delay: 2.4s;
+}
+.dot-4 {
+    top: 125px;
+    left: 525px;
+    animation: eat 4s infinite;
+    animation-delay: 2.6s;
+}
+.dot-5 {
+    top: 125px;
+    left: 625px;
+    animation: eat 4s infinite;
+    animation-delay: 2.8s;
+}
+.dot-6 {
+    top: 225px;
+    left: 625px;
+    animation: eat 4s infinite;
+    animation-delay: 3s;
+}
+.dot-7 {
+    top: 325px;
+    left: 625px;
+    animation: eat 4s infinite;
+    animation-delay: 3.2s;
+}
+.dot-8 {
+    top: 425px;
+    left: 625px;
+    animation: eat 4s infinite;
+    animation-delay: 3.4s;
+}
+.dot-9 {
+    top: 525px;
+    left: 625px;
+    animation: eat 4s infinite;
+    animation-delay: 3.6s;
+}
+.dot-10 {
+    top: 625px;
+    left: 625px;
+    animation: eat 4s infinite;
+    animation-delay: 3.8s;
+}
+.dot-11 {
+    top: 625px;
+    left: 525px;
+    animation: eat 4s infinite;
+    animation-delay: 4s;
+}
+.dot-12 {
+    top: 625px;
+    left: 425px;
+    animation: eat 4s infinite;
+    animation-delay: 4.2s;
+}
+.dot-13 {
+    top: 625px;
+    left: 325px;
+    animation: eat 4s infinite;
+    animation-delay: 4.4s;
+}
+.dot-14 {
+    top: 625px;
+    left: 225px;
+    animation: eat 4s infinite;
+    animation-delay: 4.6s;
+}
+.dot-15 {
+    top: 625px;
+    left: 125px;
+    animation: eat 4s infinite;
+    animation-delay: 4.8s;
+}
+.dot-16 {
+    top: 525px;
+    left: 125px;
+    animation: eat 4s infinite;
+    animation-delay: 5s;
+}
+.dot-17 {
+    top: 425px;
+    left: 125px;
+    animation: eat 4s infinite;
+    animation-delay: 5.2s;
+}
+.dot-18 {
+    top: 325px;
+    left: 125px;
+    animation: eat 4s infinite;
+    animation-delay: 5.4s;
+}
+.dot-19 {
+    top: 225px;
+    left: 125px;
+    animation: eat 4s infinite;
+    animation-delay: 5.6s;
+}
+.dot-20 {
+
+    top: 125px;
+    left: 125px;
+    animation: eat 4s infinite;
+    animation-delay: 5.8s;
+}
+
+@keyframes pacman {
+    0% {
+        top: 100px;
+        left: 100px;
+    }
+    25% {
+        top: 100px;
+        left: 600px;
+        transform: rotate(0deg);
+    }
+    25.1% {
+        top: 100px;
+        left: 600px;
+        transform: rotate(90deg);
+    }
+    50% {
+        top: 600px;
+        left: 600px;
+        transform: rotate(90deg);
+    }
+    50.1% {
+        bottom: 600px;
+        left: 600px;
+        transform: rotate(180deg);
+    }
+    75% {
+        top: 600px;
+        left: 100px;
+        transform: rotate(180deg);
+    }
+    75.1% {
+        top: 600px;
+        left: 100px;
+        transform: rotate(270deg);
+    }
+    100% {
+        top: 100px;
+        left: 100px;
+        transform: rotate(270deg);
+    }
+}
+@keyframes eat {
+    0% {
+        opacity: 1;
+    }
+    1% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* CSS Selector */
+/* pseudo element cũng bị giới hạn chỉ được dùng 1 vài attribute css */
+.abc{
+    word-spacing: "100vw";
+}
+.abc::first-line{
+    color: yellow;
+}
+.abc::first-letter{
+    color: red;
+}
+.abc::selection{ /* khi bôi đen để select */
+    color: cyan;
+}
+
+/* Thao tác với border */
+.test{
+    border: 15px solid;
+	padding: 15px;
+    border-image: url(https://freetuts.net/upload/tut_post/images/2019/01/20/1636/border-image.GIF) 30 round;
+    border-image-repeat: stretch round;
+    /* border-image thực hiện thực tế là các bức ảnh liên tục nhau từ trái qua, từ trên xuống. border-image thực tế
+    là rút gọn theo thứ tự truyền vào của: */
+    /* border-image-source */
+    /* border-image-slice là độ dày đặc. Dùng border-image-slice: 10% fill; sẽ thấy bản chất. Giảm hay tăng cái phần 
+    trăm là thấy được độ dày đặc của các bức ảnh con so với ảnh gốc, càng lớn thì phần fill càng mất, nhưng border k mất*/
+    /*border-image-width: là độ dày cạnh của border*/
+    /*border-image-outset: lượng image area mở rộng ra bên ngoài box. Dùng cái này có thể khiến border-image che đi
+    phần border thực hình chữ nhật của cạnh or nằm bên trong or nằm bên ngoài tùy chỉnh */
+    /*border-image-repeat: space, stretch, repeat, round. Cái round luôn fit, cái repeat k fit, stretch dãn phần
+    giữa, space tương tự như round nhưng k co nhỏ để fit mà các tile ảnh chồng đè lên nhau. Cái round luôn fit nhưng
+    khi màn hình co nhỏ thì từng cục bị co dít lại nhìn xấu */
+    /* Ta có thể dùng kiểu border-image: url(...) 27 round repeat; tức round vertical và repeat horizontal */
+}
+
+
+/* Xử lý ảnh */
+.backgroundTest{
+    background: 
+        url(https://freetuts.net/upload/tut_post/images/2015/10/23/478/house.png) no-repeat center center,
+        url(https://freetuts.net/upload/tut_post/images/2015/10/23/478/background.jpg);
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, right bottom;
+    background-origin: content-box, content-box;
+    padding: 100px;
+    width: 620px;
+    border: 5px solid red;
+    height: 350px;
+    background-size: cover, 300px 300px;
+
+    /* vừa dùng background color và background image */
+    background-color: cyan;
+    background-clip: content-box; 
+}
+.backgroundTestText{
+    font-size: large;
+    font-weight: bold;
+    background: url(http://i.giphy.com/fsULJFFGv8X3G.gif);
+    background-size: cover;
+    background-position: center;
+    -webkit-background-clip: text; /* background clip ít browser hỗ trợ */
+    text-align: center;
+    color: transparent; /* phải có */
+}
+
+
+/* Xử lý màu */
+.gradientTest1{
+    width: 200px;
+    height: 100px;
+    background: linear-gradient(red, yellow);/*gradient dùng với background chứ kp là background-color*/
+}
+.gradientTest2{
+    width: 200px;
+    height: 100px;
+    background: linear-gradient(45deg, red, yellow, pink, blue, green);
+}
+.gradientTest3{
+    width: 200px;
+    height: 100px;
+    background : repeating-linear-gradient(to bottom, rgba(255,0,0,0.5) 10%, blue 20%);/*hsla(0, 100%, 10%, 0.3);*/
+    /* dùng rgba tạo độ trong suốt cho màu */
+    /* repeating cho phép các màu chiếm 1 lượng nào đó và lặp lại, dùng thêm phần trăm */
+}
+.gradientTest4{
+    width: 200px;
+    height: 100px;
+    background : radial-gradient(circle farthest-side at 50px 50px, red 10%, blue 90%);
+}
+.gradientTest5{
+    width: 200px;
+    height: 100px;
+    background : repeating-radial-gradient(circle closest-side, red 10%, blue 20%);
+}
+
+
+/* Tạo animation */
+.animationTest {
+    width: 100px;
+    height: 100px;
+    background-color: blueviolet;
+    border-radius: 50%;
+    animation: toReg 5s 0.5s ease-in-out infinite;
+}
+
+@keyframes toReg {
+    40% {
+        width: 200px;
+        border-radius: 80%;
+        background-color: red;
+    }
+    70% {
+        width: 50px;
+        border-radius: 30%;
+        background-color: forestgreen;
+    }
+    100% {
+        width: 100px;
+        border-radius: 0%;
+        background-color: aquamarine;
+    }
+}
+
+/* Dùng shadow */
+.textShadowTest {
+    text-align: center;
+    text-shadow: 
+        0px 5px 10px red,
+        0px 15px 10px blue,
+        0px 25px 10px yellow,
+        0px 35px 10px pink;
+}
+.boxShadowTest{
+    width: 50px;
+    height: 50px;
+    box-shadow: 
+        0px 0px 12px 10px red inset, 
+        0px 0px 5px 10px blue,
+        0px 0px 5px 15px pink;
+}
+
+/* Tạo animation / Hiệu ứng khói */
+.smokeClass {
+    font-size: 50px;
+    letter-spacing: -5px;
+}
+
+.s {
+    position: relative;
+    animation: smoke 10s ease infinite;
+    display: inline-block;
+    transition: 2s ease-in-out;
+}
+
+.s1 {
+    animation-delay: 0;
+}
+
+.s2 {
+    animation-delay: 0.5s;
+}
+
+.s3 {
+    animation-delay: 1s;
+}
+
+.s4 {
+    animation-delay: 1.5s;
+}
+
+.s5 {
+    animation-delay: 2s;
+}
+
+@keyframes smoke {
+    0% {
+        transform: translate(0, 0) scale(1, 1) rotate(0deg);
+        filter: blur(0);
+    }
+    20% {
+        filter: blur(5px);
+        text-shadow: 5px 10px;
+    }
+    40% {
+        filter: blur(35px);
+        text-shadow: 15px 20px;
+    }
+    60% {
+        filter: blur(55px);
+        text-shadow: 25px 30px;
+    }
+    80% {
+        filter: blur(75px);
+        text-shadow: 35px 40px;
+    }
+    100% {
+        transform: translate(-70px, -300px) scale(2, 4) rotate(360deg);
+        filter: blur(100px);
+        text-shadow: 45px 50px;
+    }
+}
+
+/* Tạo animation / Menu mờ */
+.wrappermenu {
+    /*để menu k bị chiếm khoảng trống chiều dọc khi hover vào to ra sẽ đẩy các thẻ khác*/
+    float: left;
+}
+.menu {
+    position: relative;
+    padding: 0;/*phải bỏ hết padding thẻ ul mặc định có*/
+    list-style: none;
+    background-color: transparent;
+}
+.menu:hover .item {
+    filter: blur(10px);
+    /* hover vào menu thì mọi item bị mờ đi */
+}
+.item {
+    text-align: center;
+    width: fit-content;
+    display: inline-block;/*li là thẻ block, muốn dùng nó inline thành 1 cục thì thêm inline-block*/
+    transition: 0.5s ease;
+    padding: 20px;
+    text-transform: uppercase;
+    /* vừa dùng transition để mọi chuyển đổi với thẻ kiểu hover đều mất 0.5s */
+}
+.menu .item:hover {
+    font-size: 32px;
+    animation: bg 2s ease-in-out forwards;
+    border-radius: 10px;
+    filter: blur(0);
+    cursor: pointer;
+}
+/* Thực chất xàm lol, màu chữ hay font hay màu background đều dùng transition chuyển đổi được hết mà éo cần
+keyframe, chỉ có background image mới ép buộc thôi. Transition cx mặc định có forwards nên k dùng keyframe cx đc */
+@keyframes bg {
+    0% {
+        background-color: transparent;
+        color: black;
+    }
+    100% {
+        background-color: darkcyan;
+        color: whitesmoke;
+    }
+}
+
+/* Tạo animation / Thanh search co giãn */
+/* Đơn giản là width của thẻ input như nào khi hover này nọ, cho thêm transition cho nó */
+.box {
+    height: 60px;
+    background-color: darkcyan;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+input {
+    background: none;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    width: 0px;
+    transition: 0.8s ease;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+input::placeholder {/*màu chữ của hover text*/
+    color: antiquewhite;
+}
+a {
+    color: whitesmoke;
+    text-align: center;
+    width: 60px;
+    font-size: 18px;
+}
+.box:hover input {
+    width: 200px;
+    margin: 0 20px;
+    border-bottom: 2px solid red;
+}
+/* Nếu k set focus thì khi k hover nữa nó ẩn ngay */
+input:focus {
+    width: 200px;
+    margin: 0 20px;
+    border-bottom: 2px solid red;
+}
+
+/* Tạo animation / Pacman */
+.main {
+    position: relative;
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clear: left;
+}
+.main > div {
+    position: relative;
+    top: -50px;
+    left: 0;
+    animation: move 10s ease-in-out infinite;
+}
+.pacman1 {
+    position: absolute;
+    border-radius: 50px;
+    border: 50px solid darkcyan;
+    border-right: 50px solid transparent;
+    animation: eat1 0.8s ease infinite;
+}
+.pacman2 {
+    position: absolute;
+    border-radius: 50px;
+    border: 50px solid darkcyan;
+    border-right: 50px solid transparent;
+    animation: eat2 0.8s ease infinite;
+}
+@keyframes move {
+    0% {
+        left: 0px;
+    }
+    100% {
+        left: 400px;
+    }
+}
+@keyframes eat1 {
+    0% {
+        transform: rotate(-45deg);
+    }
+    25% {
+        transform: rotate(0);
+    }
+    50% {
+        transform: rotate(-45deg);
+    }
+    75% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(-45deg);
+    }
+}
+@keyframes eat2 {
+    0% {
+        transform: rotate(45deg);
+    }
+    25% {
+        transform: rotate(0);
+    }
+    50% {
+        transform: rotate(45deg);
+    }
+    75% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(45deg);
+    }
+}
+.dot {
+    position: relative;
+    left: 100px;
+    margin: 20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: darkcyan;
+    animation: hide 10s ease-in infinite;
+}
+.d1 {
+    animation-delay: 1s;
+}
+.d2 {
+    animation-delay: 2s;
+}
+.d3 {
+    animation-delay: 3s;
+}
+.d4 {
+    animation-delay: 4s;
+}
+.d5 {
+    animation-delay: 5s;
+}
+.d6 {
+    animation-delay: 6s;
+}
+@keyframes hide {
+    20%, 40%, 80%, 100% {
+        opacity: 0;
+    }
+}
+
+.testHalf{
+    border-radius: 50px;
+    border: 50px solid darkcyan;
+    border-right: 50px solid transparent;
+    /* Bởi vì border thực chất là 1 hình cắt tam giác ở 1 phía(khi content width là 0) */
+}
+
+/* Cách dòng */
+.textOverflowTest {
+    white-space: nowrap; 
+    width: 100px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.wordWrapTest{
+    word-break: keep-all;
+    /* word-wrap: break-word; */
+    width: 100px;
+    border: 1px solid black;
+}
+
+/* Component hay / Tạo thanh loading ngang với scaleX */
+/*  CSS Selector */
+div.loading {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 23;
+}
+div.bar {
+    position: relative;
+    height: 50px;
+    width: 500px;
+    border: 2px solid green;
+    background-color: transparent;  
+}
+div.bar::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: left; 
+    background-color: black;
+    animation: progress 5s infinite;
+}
+@keyframes progress {
+    0% {
+        transform: scaleX(0);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+div.bar::after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    content: 'Please Wait ...';
+    text-align: center;
+    mix-blend-mode: difference; /* Đổi màu ngay lập tức */
+    color: white;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+/* Tạo animation */
+/* Component hay / Tạo thanh loading xoay */
+/* Cơ chế: để tạo cục xoay xoay đơn giản vl. Cho border hình tròn, 1 cái top có màu còn lại là màu trắng, thêm animation 
+cho nó rotate liên tục quay tâm */
+.spiner {
+    margin-top: 50px;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    border: 10px solid black;
+    border-radius: 50%;
+    border-top: 10px solid #ff8000;
+    animation: spiner 1.5s linear infinite;
+}
+@keyframes spiner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.bar5 {
+    margin-top: 50px;
+    display: inline-block;
+    width: 100%;
+}
+.bar5 > span {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ff8000;
+    display: inline-block;
+    animation: dot 1.5s ease-in-out infinite both;
+}
+.bar5 span.dot12 {
+    animation-delay: -0.3s; /* Time chơi cả âm */
+}
+.bar5 span.dot22 {
+    animation-delay: -0.15s; 
+}
+.bar5 span.dot32 {
+    animation-delay: 0s;
+}
+/* Ta muốn scale từ 0 đến 1 xong 1 về 0 nhưng k thực hiện tiếp luôn mà scale(0) bị giữ 1 khoảng thời gian rồi lặp
+lại => ta phải hiểu là 1 lần keyframe từ 0% -> 100% là 1 chu kỳ để các hành động lặp lại nên ta k thể để từ
+scale(0) -> scale(1) được mà phải bao cả 0->1->0->delay->0 trong 1 lần keyframe 0% -> 100% */
+@keyframes dot {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}

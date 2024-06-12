@@ -1,0 +1,251 @@
+// ## SCSS
+
+// # Dùng kế thừa
+.floatLeft{
+    float: left;
+    width: 50%;
+}
+.columnLeft{
+    @extend .floatLeft;
+    width: 60%;
+    background-color: #ffffff;
+}
+.boxLeft{
+    @extend .columnLeft; // kế thừa nhiều cấp
+    color: #000;
+}
+// Dùng placeholder
+// Usecase VD dùng 3 loại thông báo giống nhau chỉ khác màu nền
+$blackcolor: #000000;
+%message{
+    border: solid 1px;
+    text-align: center;
+    font-size: 16px;
+    padding: 20px 10px;
+    color: $blackcolor;
+}
+.error{
+    @extend %message;
+    background: red;
+}
+.success{
+    @extend %message;
+    background: blue;
+}
+.warning{
+    @extend %message;
+    background: yellow;
+}
+
+// # Basic / Nested selector
+.wrapper
+{
+    #header {
+        .top-menu {
+            background: red
+        }
+        .logo {
+            background: red
+        }
+    }
+    #content {
+        .left-sidebar {
+            background: red
+        }
+        .main-content {
+            background: red
+        }
+        .right-sidebar {
+            background: red
+        }
+    }
+}
+
+div{
+    & p{
+        color: black;
+    }
+}
+
+// # Dùng biến và mixin
+// K truyền tham số thì k cần ngoặc
+@mixin menu{
+    #menu 
+    {
+        a {
+            background: #333;
+            text-decoration: none;
+        }
+        
+        li {
+            height: 30px;
+            line-height: 30px;
+        }
+    }
+}
+@include menu;
+
+// Giá trị mặc định luôn ở cuối
+$color: red;
+@mixin my-border($color, $redColor: red) {
+    border: 1px solid $color;
+    color: $redColor
+}
+body {
+    background: $color;
+    @include my-border(green);
+}
+
+// Truyền phải đúng thứ tự trừ khi specific rõ
+@mixin nav($background, $color){
+    background: $background;
+    color: $color;
+}
+
+.nav{
+    @include nav($color : blue, $background : red);
+    border: solid 1px;
+}
+
+// Dùng @content để bổ sung content cho mixin
+@mixin nav2($border){
+    border: $border;
+    @content;
+}
+.nav2{
+    @include nav2(solid 1px red 1231){
+        padding: 20px;
+    };
+}
+
+// # Basic / Dùng câu điều kiện if else
+$with-nav: 500px;
+@if($with-nav < 280px) {
+    h1 {
+        display: none;
+    }
+} @else if($with-nav > 280px and $with-nav < 600px) {
+    @if($with-nav >= 500px){
+        h1 {
+            display: block;
+        }
+    }
+} @else {
+    h1 {
+        display: flex;
+    }
+}
+
+// # Basic 
+// Dùng vòng loop for
+@for $i from 1 through 4 { // từ 1 -> 4
+    #item-#{$i}{
+        background: red
+    }
+}
+// or
+$begin_value: 1;
+@for $i from $begin_value to 4 { // từ 1 -> 3
+    #itemx-#{$i}{
+        background: red
+    }
+}
+// Dùng với mixin bởi vì bản thân cái $i nó như 1 biến bth dùng trong vòng for trực tiếp, vói tên class mới có thêm #{$i}
+@mixin grid($i){
+    @if ($i == 1){
+        background: red;
+    }
+    @else if ($i == 2){
+        background: blue;
+    }
+    @else if ($i == 3){
+        background: yellow;
+    }
+    @else{
+        background: pink;
+    }
+}
+@for $i from 1 through 4 {
+    .grid-#{$i} {
+        @include grid($i);
+    }
+}
+// Dùng các loại toán tử
+.nav{
+    // Sử dụng toán tử cơ bản với 2 TH là số or cùng đơn vị. Với * / % thì cũng có thể thực hiện được nếu 
+    // toán tử thứ 2 là con số, phải kẹp trong ngoặc () để bao biểu thức tính toán nếu k nó hiểu là string
+    width: 30px + 60px;
+    height: 30% - 20%;
+    width: (30px * 2);
+}
+$padding : 200px;
+@if ($padding > 200px or $padding <= 200px){ // có and/or/not
+    h1{
+        background: blue;
+    }
+}
+// Toán tử cộng 2 chuỗi
+// Kết quả cuối cùng có dấu nháy đơn or kép phụ thuộc vào toán hạng bên trái
+h1{
+    font-family: "Arial " + sans-serif; // font-family: "Arial sans-serif"; 
+}
+h2{
+    font-family: Arial  + "sans-serif"; // font-family: Arialsans-serif; 
+}
+
+// Dùng loop while
+$index : 1;
+@while $index <= 10
+{
+    @if ($index % 3 == 0) or ($index % 5 == 0)
+    {
+        .col-xs-#{$index}{
+            background: blue;
+        }
+    }
+    $index : ($index + 1); /* K lặp vô hạn */
+}
+
+// Dùng loop each
+$class-name : col-xs-1 col-xs-2 col-xs-3;
+@each $name in $class-name {
+    .#{$name} {
+        background: red;
+    }
+}
+// Khi có nhiều giá trị phải tách bằng ""
+$borders : "solid 2px" "solid 3px";
+@each $border in $borders {
+    .h2{
+        border: #{$border};
+    }
+}
+
+// # Dùng function
+@function width_wrapper($value: 20)
+{
+    @return ($value + 20px);
+}
+.wrapper{
+    width: width_wrapper(80px);
+    height: width_wrapper();
+}
+
+// # Xử lý chuỗi
+.Xulychuoi-#{to-upper-case("Hello")}{ // k dùng được 2 cái # trong cùng 1 thứ được
+    font-family: quote($string: "Arial sans-serif");
+    border: unquote(str-slice("XsolidX", 2, 6)) 3px;
+    font-family: str-insert($string: "abcd", $insert: "X", $index: 1); // mặc định là có "" khi thao tác với string
+    top: str-length($string: "foo");
+    left: str-index($string: abcd, $substring: b);
+}
+
+// # Xử lý số
+.Xulyso{
+    width: percentage(0.2);
+    width: percentage(100px / 50px);
+    width: round(10.4px); // ceil, floor
+    width: abs(-10.4px);
+    width: min(5em, 3em, 4em);// max
+    width: random($limit: 9) + px; // thiếu dấu cộng là sai
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/meoCSS.css">
+</head>
+<body>
+    <!-- # Mẹo CSS -->
+
+    <!-- padding top 100% thực chất lấy 1/3 height thẻ cha -->
+    <div class="container">
+        <div class="khoi1">
+            <span>padding-top: 100%<br> width: 100%</span>
+        </div>
+        <span>height: 600px<br> width: 200px</span>
+    </div>
+
+    <!-- opacity làm giảm z-index của thẻ bên trong nó -->
+    <div id="ontop" >
+        <span class="red">z-index:10</span>
+    </div>
+    <div>
+        <span class="green">z-index:2</span>
+    </div>
+    <div>
+        <span class="blue">z-index:1</span>
+    </div>
+
+    <!-- # Biến trong css -->
+    <p>anchor outside header</p>
+    <header id="header">
+        <p>anchor inside header</p>
+    </header>
+    <button id="foo">Change color</button>
+    <script>
+        document.getElementById('foo').onclick = function(){    
+            document.getElementById('header').style.setProperty('--primary-color', 'green');
+        }
+    </script>
+    
+    <!-- # Cách dòng -->
+    <div style="margin-top: 150px;"></div>
+    In this <span style="vertical-align: super; background:lightblue; position: unset">blue span</span> change value
+
+</body>
+</html>

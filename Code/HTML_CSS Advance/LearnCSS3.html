@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS nâng cao</title>
+    <link rel="stylesheet" href="LearnCSS3.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" 
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+<body>
+    <!-- # Mẹo CSS -->
+    <!-- translateZ với position fixed -->
+    <div style="background-color: red; width: 100px; height: 100px; transform: translateZ(0);">
+        <div style="background-color: green; width: 50px; height: 50px; position: fixed;"></div>        
+    </div>
+
+    <!-- # Dùng float -->
+    <div style="width: 100px; float: left">Hello1</div>
+    <div style="float: left">Hello2</div>
+    <div>Test1</div>
+
+    <!-- Dùng clear -->
+    <div style="width: 100px; float: left">Hello3</div>
+    <div style="float: left">Hello4</div>
+    <div style="clear: both"></div>
+    <div>Test</div>
+
+    <!-- height thẻ cha là 0 nếu k có dấu chấm -->
+    <div>
+        <div style="float: left;">Hello</div>
+        <div>.</div>
+    </div>
+
+    <!-- Kỹ thuật ClearFix trong CSS cx chỉ là chỉnh thẻ cha group1 có kích thước bằng với các con của nó bên trong
+    Ở đây dùng clear kết hợp after là xong, thì gọi là clearFix -->
+    <div class="group1">
+        <div style="float: left; background-color: red;">
+            Nội dung bên trái
+        </div>
+        <div style="float: right; background-color: yellow;">
+            Nội dung bên phải
+        </div>
+    </div>
+    <div>
+        Nội dung bên dưới
+    </div>
+
+
+    <!-- # Tạo Animation -->
+    <!-- Transition -->
+    <button>Button 1</button>
+
+    <!-- # Pacman di chuyển -->
+    <img class="a" src="https://upload.wikimedia.org/wikipedia/commons/4/49/Pacman.svg">
+    <div class="dot dot-1"></div>
+    <div class="dot dot-2"></div>
+    <div class="dot dot-3"></div>
+    <div class="dot dot-4"></div>
+    <div class="dot dot-5"></div>
+    <div class="dot dot-6"></div>
+    <div class="dot dot-7"></div>
+    <div class="dot dot-8"></div>
+    <div class="dot dot-9"></div>
+    <div class="dot dot-10"></div>
+    <div class="dot dot-11"></div>
+    <div class="dot dot-12"></div>
+    <div class="dot dot-13"></div>
+    <div class="dot dot-14"></div>
+    <div class="dot dot-15"></div>
+    <div class="dot dot-16"></div>
+    <div class="dot dot-17"></div>
+    <div class="dot dot-18"></div>
+    <div class="dot dot-19"></div>
+    <div class="dot dot-20"></div>
+
+    
+    <!-- # Mẹo CSS -->
+    <!-- margin collapse case1 lấy margin lớn hơn khi margin 2 thẻ block đụng nhau -->
+    <div style="margin-bottom: 30px;">TEXT 1</div>
+    <div style="margin-top: 20px;">TEXT 2</div>
+    <!-- fix bằng display: inline-block; cho 1 trong 2 thẻ vì thuộc tính này phân định thẻ đó thành 1 
+        block riêng có margin chuẩn k collapse được. Thuộc tính display inline-block rất hay được dùng
+        ở thẻ block để áp dụng chức năng
+        Dùng position absolute cx fix được nhưng sai thuộc tính -->
+
+    <!--  Margin âm sẽ lùi về nhưng k nên để margin âm vì nó lấy tổng margin âm nhỏ nhất và dương lớn nhất 
+        làm giá trị cho margin -->
+    <div style="margin-bottom: 30px;">TEXT 1</div>
+    <div style="margin-top: -20px;">TEXT 2</div>
+
+    <!-- margin collapse case2 cha con thì vẫn lấy margin riêng k lỗi -->
+    <div style="margin-top: 20px; border: 1px red solid;">
+        <div style="margin-top: 30px; border: 1px red solid;">TEXT 3</div>
+    </div>
+
+    <!-- Cách fix chuẩn nhất cho margin collapse là bao nó bằng 1 thẻ khác và biến thành padding -->
+    <div style="padding-bottom: 30px;">
+        <div>Hello</div>
+    </div>
+    <div style="padding-top: 20px;">
+        <div>World</div>
+    </div>
+
+
+    <!-- # CSS Selector -->
+    <p class="abc">
+        test
+        test
+        <p>Hello</p>
+    </p>
+
+
+    <!-- # Thao tác với border -->
+    <div class="test">Test</div>
+
+
+    <!-- # Xử lý ảnh -->
+    <div class="backgroundTest"></div>
+    <div class="backgroundTestText">background-clip có thể dùng dính vào chữ</div>
+
+    
+    <!-- # Xử lý màu -->
+    <!-- gradient -->
+    <div class="gradientTest1"></div>
+    <div class="gradientTest2"></div>
+    <div class="gradientTest3"></div>
+    <div class="gradientTest4"></div>
+    <div class="gradientTest5"></div>
+
+
+    <!-- # Basic -->
+    <!-- Emphasis marks -->
+    <p>W<span style="text-emphasis-style: double-circle filled; text-emphasis-color: blue;">o</span>rld</p>
+    <p>W<span style="text-emphasis: '$' red;">o</span>rld</p>
+
+
+    <!-- # Tạo animation -->
+    <div class="animationTest"></div>
+
+    <!-- # Dùng shadow -->
+    <h2 class="textShadowTest">Hello this is text</h2>
+    <div class="boxShadowTest"></div>
+
+    <!-- # Tạo animation / Hiệu ứng khói -->
+    <p class="smokeClass">
+        <span class="s s1">S</span>
+        <span class="s s2">M</span>
+        <span class="s s3">O</span>
+        <span class="s s4">K</span>
+        <span class="s s5">E</span>
+    </p>
+
+    <!-- # Tạo animation / Menu mờ -->
+    <div class="wrappermenu">
+        <ul class="menu">
+            <li class="item">Home</li>
+            <li class="item">News</li>
+            <li class="item">About Us</li>
+            <li class="item">Blog</li>
+            <li class="item">Product</li>
+            <li class="item">Contact</li>
+        </ul>
+    </div>
+
+    <!-- # Tạo animation / Thanh search co dãn -->
+    <div class="box">
+        <input type="text" placeholder="Search here">
+        <a><i class="fas fa-search-location"></i></a>
+    </div>
+
+    <!-- # Tạo animation / Pacman -->
+    <div class="main">
+        <div>
+            <div class="pacman1"></div>
+            <div class="pacman2"></div>
+        </div>
+        <span class="dot d1"></span>
+        <span class="dot d2"></span>
+        <span class="dot d3"></span>
+        <span class="dot d4"></span>
+        <span class="dot d5"></span>
+        <span class="dot d6"></span>
+    </div>
+
+    <div class="testHalf"></div>
+
+    <!-- # Cách dòng -->
+    <div class="textOverflowTest">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatem, dolor!</div>
+    <div class="wordWrapTest">Lorem ipsum dolorfjajsdkfhasfashfjksdahkf sit amet consectetur adipisicing elit. Saepe, quibusdam.</div>
+
+    <!-- # Tạo thanh loading ngang với scaleX -->
+    <div class="loading">
+        <div class="bar"></div>
+    </div>
+
+    <!-- # Tạo thanh loading xoay -->
+    <div>
+        <div class="spiner"></div>
+        <div class="bar5">
+            <span class="dot12"></span>
+            <span class="dot22"></span>
+            <span class="dot32"></span>
+        </div>
+    </div>
+
+    <div>Hello<img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Pacman.svg" alt="test">World</div>
+
+</body>
+</html>

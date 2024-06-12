@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Custom Cursors</title>
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+	<!-- Cách tạo custom cursor: -->
+	<!-- 
+		- Nếu cursor trong phạm vi nào thì dùng position relative trong phạm vi đó. Nếu cả màn hình ngoài ở thẻ body có thì dùng trực tiếp ngay trong thẻ body là được
+		- Thiết kế thẻ có hình con chuột là position absolute, chỉnh vị trí ra tâm hay góc trái trên, có thể là ảnh thì dùng bg image hoặc thẻ bth tự vẽ css
+		- style cho thẻ đó active thì sao, bth thì hiện sao, thêm transition cho nó, ẩn con trỏ chuột mặc định đi
+		- Thêm js 3 sự kiện mouseenter, mouseleave và mousemove là xong. Nếu có nhiều loại con chuột phải biết ẩn hình chuột cũ, hiện hình chuột mới khi mouseenter và mouseleave
+		=> Khi hover vào giữa vùng trắng và vùng màu thực tế sẽ thấy sang vùng màu phát thì vùng trắng biến mất nhưng ở vùng trắng thì ảnh vùng màu vẫn còn. Vì ta display none luôn cho vùng trắng nhưng ảnh vùng màu ta kbh display none cả. Còn chuột vùng màu khi hover ra ngoài vẫn hiện nhưng ở phạm vi ngoài màn hình vì translate âm
+	-->
+	
+	<div class="custom-cursor site-wide">
+		<div class="pointer"></div>
+	</div>
+
+	<div class="boxes">
+		<div class="box">
+			<div class="custom-cursor box-bound" style="background-image: url('dbz-cursor.png')"></div>
+		</div>
+		<div class="box">
+			<div class="custom-cursor box-bound" style="background-image: url('op-cursor.png')"></div>
+		</div>
+		<div class="box">
+			<div class="custom-cursor box-bound" style="background-image: url('sharingan-cursor.png')"></div>
+		</div>
+	</div>
+	
+	<script src="main.js"></script>
+</body>
+</html>

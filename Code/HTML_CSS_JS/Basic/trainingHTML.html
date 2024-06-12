@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./trainingHTML.css">
+    <link rel="stylesheet" href="font-awesome/fontawesome-free-5.12.0-web/css/all.min.css">
+    <script src="font-awesome/fontawesome-free-5.12.0-web/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+</head>
+
+<body>
+    <!-- # Dùng fontawesome -->
+    <i class="fas fa-skull-crossbones" style="font-size: 50px; color: red;"></i>
+
+    <!-- # Responsive css -->
+    <div class="abc"><span>ABC</span></div>
+
+    <!-- # Basic / Dùng thẻ a -->
+    <a href="https://facebook.com" target="_self">Self</a>
+    <a href="https://facebook.com" target="_blank">Blank</a>
+
+    <!-- Tạo animation -->
+    <div class="move">Text</div>
+
+    <div class="hoverTest">
+        <div class="hoverTest2  d-flex justify-content-center">Hello</div>
+    </div>
+
+    <!-- # Dùng grid -->
+    <style>
+        .item1 {
+            grid-area: myArea;
+        }
+        .item11 {
+            grid-area: comment;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-areas:
+                'myArea myArea . . .'
+                'myArea myArea . . .'
+                '. . . . comment';
+            /* Tự xác định có 5 cột, số hàng phụ thuộc vào số item, xếp mặc định theo thứ tự trái qua phải, 
+                trên xuống dưới riêng item1 chiếm 4 ô đầu:
+                1  1  2  3  4
+                1  1  5  6  7
+                8  9  10 12 11
+                13 14
+            */
+            grid-gap: 10px;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+        .grid-container > div {
+            background-color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 20px 0;
+            font-size: 30px;
+        }
+    </style>
+    <div class="grid-container">
+        <div class="item1">1</div>
+        <div class="item2">2</div>
+        <div class="item3">3</div>  
+        <div class="item4">4</div>
+        <div class="item5">5</div>
+        <div class="item6">6</div>
+        <div class="item7">7</div>
+        <div class="item8">8</div>
+        <div class="item9">9</div>
+        <div class="item10">10</div>
+        <div class="item11">11</div>
+        <div class="item12">12</div>
+        <div class="item13">13</div>
+        <div class="item14">14</div>
+    </div>
+
+    <div style="margin-top: 100px;"></div>
+
+    <!-- # Basic / dùng clip-path -->
+    <!-- # Dùng grid -->
+    <!-- # Biến trong css -->
+    <!-- CSS Selector -->
+    <style>
+        .gallery {
+            --s: 150px; 
+            --g: 10px; 
+            display: grid;
+            width: var(--s);
+            margin: 0 auto;
+        }
+        .gallery > img {
+            grid-area: 1/1;
+            width: var(--s);
+            aspect-ratio: 1.15;
+            object-fit: cover;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50% ,75% 100%, 25% 100%, 0 50%);
+            transform: translate(var(--_x, 0), var(--_y, 0)) scale(var(--_t, 1));
+            filter: grayscale(80%);
+            transition: .2s linear;
+        }
+        .gallery > img:hover {
+            filter: grayscale(0);
+            z-index: 1;
+            --_t: 1.2;
+        }
+        /* Cơ chế: mọi thẻ nằm ở 1/1 của grid và ta tính toán các thông số cho transform thôi ez 
+        Cái hay là nó đặt biến và dùng var cho giá trị mặc định, khi hover thì sửa giá trị đó là xong */
+        .gallery > img:nth-child(1) { --_y: calc(-100% - var(--g)); }
+        .gallery > img:nth-child(7) { --_y: calc( 100% + var(--g)); }
+        .gallery > img:nth-child(3),
+        .gallery > img:nth-child(5) { --_x: calc(-75% - .87*var(--g)); }
+        .gallery > img:is(:nth-child(4),:nth-child(6)) { --_x: calc( 75% + .87*var(--g)); }
+        /* Dùng :is */
+        .gallery > img:nth-child(3),
+        .gallery > img:nth-child(4) { --_y: calc(-50% - .5*var(--g)); }
+        .gallery > img:nth-child(5), 
+        .gallery > img:nth-child(6) { --_y: calc( 50% + .5*var(--g)); }
+    </style>
+    <div class="gallery">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+    </div>
+    <!-- Hàm polygon(tỉ-lệ-width tỉ-lệ-height | ...) VD: clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); cắt
+    ra hình vuông. Còn clip-path: polygon(50% 0%, 0% 100%, 100% 100%); cắt ra tam giác -->
+
+    <!-- Cơ chế tạo rombus: Đơn giản hơn việc cắt hình thoi rồi position. xếp grid như bth rồi xoay cả cái grid, rồi
+    xoay từng ảnh trong grid ngược lại chiều xoay, do đó ảnh sẽ nhỏ lại nên ta cần phóng to width nó ra -->
+    <style>
+        .gallery1 {
+            --s: 150px; /* control the size */
+            display: grid;
+            grid: auto-flow var(--s) / repeat(2,var(--s));
+            gap: 10px;
+            place-items: center;
+            margin: calc(var(--s)/2);
+            transform: rotate(45deg);
+            width: fit-content;
+        }
+        .gallery1 > img {
+            width: 141%; /* sqrt(2)*100% */
+            aspect-ratio: 1;
+            object-fit: cover;
+            filter: grayscale(80%);
+            transform: scale(var(--_t,1)) rotate(-45deg);
+            clip-path: polygon(50% 0,100% 50%,50% 100%,0 50%);
+            cursor: pointer;
+            transition: .2s linear;
+        }
+        .gallery1 > img:hover {
+            filter: grayscale(0);
+            --_t: 1.15;
+        }
+    </style>       
+    <div class="gallery1">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+    </div>
+    <!-- Kết hợp với border radius có thể tạo các hình cái bánh cắt từng mảnh -->
+
+    <!-- Xử lý ảnh / Layermask -->
+    <style>
+        .testmask{
+            -webkit-mask-image: url(./img/w3logo.png);
+            mask-image: url(./img/w3logo.png);
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;    
+        }
+    </style>
+    <div class="testmask">
+        <img src="./img/img1.jpg">
+    </div>
+
+    <style>
+        .testmask2{
+            width: fit-content;
+            -webkit-mask-image: radial-gradient(circle, black 50%, rgba(0, 0, 0, 0.5) 50%);
+            mask-image: radial-gradient(circle, black 50%, rgba(0, 0, 0, 0.5) 50%);
+        }
+    </style>
+    <div class="testmask2">
+        <img src="./img/img1.jpg">
+    </div>
+
+    <!-- Xử lý màu -->
+    <!-- clip path k tạo được hình tròn, kết hợp với layer mask tạo hình tròn thì ta có thể custom tùy ý -->
+    <style>
+        .gallery3 {
+            --s: 200px; /* control the size */
+            --g: 6px;   /* control the gap */
+            --r: 42px;  /* control the circular shapes */
+            
+            display: grid;
+            gap: var(--g);
+            grid: auto-flow var(--s)/repeat(2,var(--s));
+        }
+        .gallery3 > img {
+            object-fit: cover;
+            -webkit-mask: var(--_m);
+                    mask: var(--_m);
+        }
+        .gallery3 > img:is(:nth-child(1),:nth-child(4)) {
+            width: 100%;
+            height: calc(100% + var(--r));
+        }
+        .gallery3 > img:is(:nth-child(2),:nth-child(3)) {
+            height: 100%;
+            width: calc(100% + var(--r));
+        }
+        .gallery3 > img:nth-child(1) {
+            --_m:
+                radial-gradient(calc(var(--r) + var(--g)) at calc(100% + var(--g)) 50%,#0000 95%, #000)
+                top/100% calc(100% - var(--r)) no-repeat,
+                radial-gradient(var(--r) at left 50% bottom var(--r),#000 95%,#0000);
+                /* Cái maspotision, kích thước và align-seft là tùy vào vị trí và kích thước => khó 
+                Để set được vị trí, nó cho 1 và 4 chiếm height dài, 2 và 3 chiếm width dài. 
+                Bản chất Dùng Grid: Khi thẻ ở trong grid mà grid bị giới hạn kích thước chẳng hạn 200px 200px, 
+                nhưng mỗi ảnh lại 300px 300px và chiếm 1 ô thì hiển nhiên nếu để auto thì kích thước grid đã đổi nhưng
+                ta để kích thước fix nên ô grid nó k giãn ra. Theo quy tắc thì ảnh nó vẫn hiện đủ kích thước 300px
+                chứ k bị ẩn đi và mặc định top left của ảnh trùng với top left của grid làm cho các ảnh đè lên nhau
+                (thật ra tùy ô chứ kp lúc nào cũng top left, có ô là top right) 
+                Để làm được ở bài này thì ta phải set thêm các attribute làm 2 nv: 1 là kích thước của ảnh. Nhớ bao cả
+                ô hình tròn dôi ra sao cho nó fit vào kích thước ô cell; 2 là vị trí của ảnh sao cho đầu tròn k ảnh hưởng
+                đến vị trí. VD ảnh thú 4 có đầu tròn ở top thì top left của ảnh k được trùng với top left của cell mà
+                bottom left của ảnh trùng thì đúng hơn. Tât cả vc chỉnh vị trí của ảnh trong grid đều có thể set bằng
+                các hàm align justify vì grid dùng được cả 6 loại. 
+                Sau khi có xong vị trí và kích thước thì ta mới set mask cho nó được. 
+                Dùng grid set vị trí và kích thước chuẩn(ẩn gradient trong browser đi sẽ hiểu thứ ta cần phải set trước)
+                Thêm mask vào cắt phần ảnh cần bỏ hay cần hiện ra
+                => Ít nhất grid cũng phải như thế, set fix thì vẫn trong ô chấp nhận đè lên nhau, chú nó tự dãn thì có 
+                khác gì thẻ bth
+                */
+        }
+        .gallery3 > img:nth-child(2) {
+            place-self: end;
+            --_m: 
+                radial-gradient(calc(var(--r) + var(--g)) at 50% calc(100% + var(--g)),#0000 95%,#000) 
+                right/calc(100% - var(--r)) 100% no-repeat, 
+                radial-gradient(var(--r) at top 50% left var(--r),#000 95%,#0000);
+                /* radial-gradient nếu k dùng closest hay farthest gì hết mà dùng 1 số thì nó chính là bán kính 
+                của radial-gradient. Ở đây bán kính là 48px thì cho màu transparent lấy 95%, màu đen lấy 5% 
+                Khi khai báo nên nhớ phải có đủ các màu đủ ra 100%, màu đen k ghi % thực chất là 5% còn lại, nếu k
+                đủ sẽ báo lỗi */
+        }
+        .gallery3 > img:nth-child(3) {
+            --_m: 
+                radial-gradient(calc(var(--r) + var(--g)) at 50% calc(0% - var(--g)),#0000 95%,#000) 
+                left/calc(100% - var(--r)) 100% no-repeat, 
+                radial-gradient(var(--r) at top 50% right var(--r),#000 95%,#0000);
+        }
+        .gallery3 > img:nth-child(4) {
+            place-self: end;
+            --_m: 
+                radial-gradient(calc(var(--r) + var(--g)) at calc(0% - var(--g)) 50%,#0000 95%,#000) 
+                bottom/100% calc(100% - var(--r)) no-repeat, 
+                radial-gradient(var(--r) at left 50% top var(--r),#000 95%,#0000);
+        }
+
+    </style>
+    <div class="gallery3">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+        <img src="./img/img1.jpg">
+    </div>
+
+</body>
+
+</html>

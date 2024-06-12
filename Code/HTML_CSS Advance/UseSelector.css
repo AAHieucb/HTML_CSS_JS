@@ -1,0 +1,58 @@
+/* CSS Selector */
+.one {
+    width: 500px;
+    height: 500px;
+    background-color: blue;
+}
+
+.test.round {
+    display: none;
+    /* apply mọi thẻ có cả 2 class test và round */
+}
+
+div.test.round:before {
+    display: none;
+    /* apply cho selector before của mọi thẻ div có cả 2 class test và round */
+}
+
+a:visited {
+    background-color: yellow;
+    /* apply cho thẻ a khi đã visted vào. Tương tự :hover or :link(chưa visit) */
+}
+input:checked {
+    display: "none";
+    /* apply cho thẻ input khi nó được checked */
+}
+
+.test input {
+    display: none;
+    /* apply cho thẻ input nằm trong 1 thẻ parent của nó có class test, thẻ input phải là con trực tiếp */
+}
+
+.one .two .three {
+    color: red;
+    /* apply cho tất cả các thẻ có class three là descendant mọi cấp của .two và .two là descendant mọi cấp của
+    .one => VD one -> six > two -> five -> three -> three thì 2 cái three cuối ok */
+}
+
+.one:hover .two .three {
+    color: yellow;
+    /* Tương tự như trên nhưng chỉ khi .one được hover */
+}
+
+.first > .sec {
+    color: blue;
+    /* apply mọi thẻ class sec là con trực tiếp của thẻ class first */
+}
+
+h4 + p {
+    color: red
+    /* apply 1 thẻ p là sibling bên dưới đầu tiên của thẻ h4 */
+}
+
+h1 ~ p {
+    background-color: green;
+    /* apply cho mọi thẻ p là sibling bên dưới của h1 */
+}
+
+/* Trong MUI thì 1 số selector k dùng được, 1 số dùng được và dấu & thay thế cho thẻ hiện tại */

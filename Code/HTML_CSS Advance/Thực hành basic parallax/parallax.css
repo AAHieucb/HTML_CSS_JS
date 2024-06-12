@@ -1,0 +1,279 @@
+html, body, div {
+    margin: 0;
+    height: 100%;
+}
+.parallax {
+    position: relative;
+}
+
+/* Cơ chế parallax: ở đây là background-attachment dùng fixed.
+Nhưng nó lại làm cho mỗi thẻ có 1 background-image khác nhau và liên tiếp nhau có vi trí fix dính ở đầu trang. Đó
+là tùy vào vị trí ta background ta set mà thôi.
+VD chuyển từ thẻ A qua thẻ B thì background-image chuyển từ thẻ A qua thẻ B nhưng cả 2 image lại fix ở đầu trang
+và k scroll theo chuột, điều này chỉ có thể thực hiện khi nó giống kiểu thanh cuộn. */
+.parallax > div {
+    background-attachment: fixed;
+    background-position: center; /* vị trí ra tâm */
+    background-repeat: no-repeat;/* k lặp */
+    background-size: cover; /* phủ kín góc nhìn */
+    height: 100%;
+    display: flex; /* content bên trong được xếp dần theo thứ tự bình thường */
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+div.forest {
+    background-image: url("./imgs/forest.jpg");
+}
+div.eagle {
+    background-image: url("./imgs/eagle.jpg");
+}
+div.rhino {
+    background-image: url("./imgs/rhino.jpg");
+}
+div.owl {
+    background-image: url("./imgs/owl.jpg");
+}
+div.lion {
+    background-image: url("./imgs/lion.jpg");
+}
+div.bear {
+    background-image: url("./imgs/bear.jpg");
+}
+div.back {
+    background-image: url("./imgs/back.jpg");
+}
+
+.parallax > div.side-menu {
+    position: fixed;
+    top: 30%;
+    left: 10px;
+    background-color: transparent;
+    opacity: 0.5;
+    height: fit-content;
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+    mix-blend-mode: difference; /* nổi màu chữ lên */
+    z-index: 99; /* đè lên nền */
+}
+div.side-menu ul {
+    padding: 0 10px;
+    list-style: none;
+}
+div.side-menu ul li {
+    margin: 20px;
+    width: 100px;
+    padding-bottom: 5px;
+    transition: 1s ease;
+    border-bottom: 2px solid white;
+    box-sizing: border-box; /* set box-sizing: border-box; và width đủ bao cả vị trí dịch chuyển là bắt buộc để
+    thẻ dịch chuyển k ảnh hưởng các thẻ khác */
+}
+div.side-menu ul li:hover {
+    cursor: pointer;
+    padding-left: 50px;
+}
+
+.active {
+    padding-left: 50px;
+}
+
+.parallax > div > p {
+    width: 60%;
+    text-align: justify;
+    color: white;
+    mix-blend-mode: difference;
+    margin: 50px;
+    font-size: 20px;
+}
+.parallax > div > p > span {
+    width: 100%;
+    float: left;
+    -webkit-clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 80%);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 80%); /* 2 cái clip path chả làm gì */
+    transform: translateY(-50px);
+    opacity: 0;
+    animation: text 10s 1.5s ease-in-out infinite; /* đúng 1 animation là gọn */
+}
+.parallax > div > p > span:first-child{
+    animation-delay: 2s;
+}
+.parallax > div > p > span:last-child{
+    animation-delay: 1s;
+}
+@keyframes text {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+        -webkit-clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 80%);
+        clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 80%);
+    }
+    20% {
+        transform: translateY(0);
+        opacity: 1;
+        -webkit-clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 15%);
+        clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 15%);
+    }
+    80% {
+        transform: translateY(0);
+        opacity: 1;
+        -webkit-clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 15%);
+        clip-path: polygon(100% 0, 100% 100%, 0 100%, 0 15%);
+    }
+    100% {
+        transform: translateY(50px);
+        opacity: 0;
+        -webkit-clip-path: polygon(100% 0, 100% -0%, 0 100%, 0 100%);
+        clip-path: polygon(100% 0, 100% -0%, 0 100%, 0 100%);
+    }
+}
+
+.parallax audio {
+    display: none;
+}
+.parallax > div.volume {
+    height: 50px;
+    width: 50px;
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: black;
+    opacity: 0.4;
+    border-radius: 10px;
+    transition: 0.5s ease-in;
+}
+.parallax > div.volume:hover {
+    opacity: 1;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.parallax div.shape {
+    position: absolute;
+    z-index: 99;
+}
+.parallax .shape > img {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+}
+.parallax .shape > img:nth-child(1) {
+    top: 50px;
+    left: 100px;
+    transform: translate(0, 0);
+    animation: eagle 10s ease-in infinite;
+}
+.parallax .shape > img:nth-child(2) {
+    bottom: 150px;
+    left: 180px;
+    transform: rotateZ(0deg) translateY(-10px);
+    animation: rhino 4s linear infinite; 
+}
+.parallax .shape > img:nth-child(3) {
+    bottom: 500px;
+    left: 800px;
+    transform: rotateZ(40deg) translate(0px,0px);
+    animation: owl 3s ease-in infinite;
+}
+.parallax .shape > img:nth-child(4) {
+    top: 400px;
+    left: 500px;
+    animation: lion 1.5s ease-out infinite;
+}
+.parallax .shape > img:nth-child(5) {
+    top: 500px;
+    left: 800px;
+    opacity: 0;
+    transition: 0.5s ease;
+    animation: bear 2s ease-in-out infinite;
+}
+@keyframes eagle {
+    0% {
+        transform: translate(0,0);
+    }
+    50% {
+        transform: translate(500px, 50px);
+    }
+    55% {
+        transform: rotateY(180deg) translate(-540px, 45px);
+    }
+    95% {
+        transform: rotateY(180deg) translate(40px, 45px);
+    }
+    100% {
+        transform: translate(0,0) rotateY(0deg);
+    }
+}
+@keyframes owl {
+    0% {
+        transform: rotateZ(40deg) translate(0px,0px);
+    }
+    30% {
+        transform: rotateZ(-40deg) translate(20px,10px);
+    }
+    50% {
+        transform: rotateZ(40deg) translate(10px,40px);
+    }
+    70% {
+        transform: rotateZ(-40deg) translate(0px,50px);
+    }
+    100% {
+        transform: rotateZ(40deg) translate(0px,0px);
+    }
+}
+@keyframes bear {
+    50% {
+        opacity: 1;
+        transform: scale(2,2)
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5, 0.5);
+    }
+}
+@keyframes lion {
+    10% {
+        transform: rotateX(360deg);
+    }
+    15% {
+        transform: rotateZ(360deg);
+    }
+    20% {
+        transform: rotateY(360deg)
+    }
+}
+@keyframes rhino {
+    50% {
+        transform: rotateZ(-40deg) translateY(10px);
+    }
+    70% {
+        transform: rotateZ(-40deg) translateY(20px);
+    }
+    100% {
+        transform: rotateZ(0deg) translateY(-10px);
+    }
+}
+div.back > div {
+    font-size: 50px;
+    height: 80px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid black;
+}
+div.back > div:hover {
+    transition: 1s ease-in;
+    background-color: azure;
+    color: #196f3d ;
+    border: 2px solid #196f3d ;
+    cursor: pointer;
+}

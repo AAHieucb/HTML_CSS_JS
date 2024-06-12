@@ -1,0 +1,329 @@
+#***Tính toán khoảng cách trong CSS
+-> auto do browser tự tính, chiều dọc lấy 0, chiều ngang lấy hết phần có thể lấy, nếu có nhiều cái cùng auto thì chia đều giá trị cho từng cái => Cần nếu muốn kích thước 1 thẻ bị kéo dài theo thẻ cha tự lấp đầy vào khoảng trống
+Hàm calc có thể tính các kiểu như 50% - 10px là 50% thẻ cha giảm 10px là bnh
+
+-> Đơn vị trong CSS:
+Đơn vị tuyệt đối: Chỉ đúng trên các thiết bị độ phân giải cao như máy in, còn trên laptop và di động kết quả cho có thể sai khác:
+1in = 96px = 2.54 cm
+
+Relative Units
+em: tương đối so với font-size của phần tử cha
+ex: Tương đối so với chiều cao chữ "x" của font hiện tại.
+ch: Chiều rộng của ký tự "0" trong font đang dùng
+*rem: Giống em, nhưng là tương đối so với phần tử gốc, thường là <html>.
+*vw: Tương đối 1% width của kích thước cửa sổ trình duyệt (viewport).
+*vh: Tương đối 1% height của kích thước cửa sổ trình duyệt (viewport).
+vmin Relative to 1% dựa trên chiều nhỏ hơn của trình duyệt. VD điện thoại xoay dọc thì vmin sẽ là 1% của width
+vmax Relative to 1% dựa trên chiều lớn hơn của trình duyệt
+*%: Có giá trị tương đối so với phần tử cha.
+
+--> Các đơn vị mới dùng riêng cho mobile như lvh, dvh, svh, svw 
+Nó có lợi ở chỗ giúp design webpage trong trường hợp có tính toolbar của browser trên điện thoại mở hay không
+
+Trap: 
+1 thẻ có height 50% thì sẽ bằng 50% height thẻ cha. Nếu thẻ cha k set height tức tự vừa với thẻ con thì chả có gì nên là 0
+Thế nhưng thẻ có padding-top 50% thì padding nó lại bằng relative theo chiều rộng. VD thẻ width 100px thì padding top 50% sẽ là 50px => thg dùng khi ta muốn padding nó thay đổi theo màn hình responsive chứ kp lúc nào cũng fix cứng, ở đây thay thế @media luôn
+
+
+
+#***Kỹ thuật color rule phối màu
+Phối màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng)
+Màu primary 30% được dùng cho các panel hay background của dialog, thẻ thường. Màu này có thể gần giống màu neutral để tạo ứng dụng 1 theme monochrome
+Màu secondary 10% chỉ dùng cho các phần tử quan trọng để người dùng focus vào mà bấm như button, vị trí mà người dùng có thể tương tác, highlight. Màu này nên nổi bật lên trên 2 màu kia
+
+Các màu chọn có thể là gradient hay thêm các màu lạ khác vào (1%) nhưng phải tuân theo quy tắc 3 màu chủ đạo. Sắp xếp các màu hợp lý, tránh các màu quá tương phản mà liên tục show ở 1 vị trí 
+Chỉ nên có 2 màu xuất hiện nhiều là neutral và primary. Chỉ cần chọn ra 3 màu và dùng trong trang với tỉ lệ như v là web nhìn hiện đại. 
+Các bức ảnh có thể mang bất kỳ màu gì k ảnh hưởng, nhưng nếu nhiều ảnh cùng 1 màu nền thì rất có thể đổi màu nền kia thành màu primary.
+Còn phụ thuộc vào font chữ, animation, bo góc.
+
+
+
+#***Font size tự động đổi theo kích thước màn hình:
+min và max trong css giúp lấy min và max của giá trị gì, khi kết hợp với kích thước relative sẽ rất mạnh
+Màn hình luôn được chia thành 100 đơn vị vw và vh. VD màn hình là 1460px thì 1vw sẽ tương ứng với 14.6px
+clamp(a, b, c); là hàm của css giúp lấy 1 giá trị trong khoảng a và c. Nó ss lấy min(b,c) là x rồi lấy max(a, x) trả ra kết quả. 
+
+VD ta muốn màn hình dưới 700px có font-size là 16px, sau đó tăng dần tuyến tính lên 1px mỗi 100px tăng lên cho đến max là 22px => font-size: clamp(16px, 1vw + 9px, 22px);
+Khi 700px, nó sẽ là clamp(16px, 16px, 22px) thì lấy 16px. Font size tuyến tính tăng lên 1300px thì clamp(16px, 22px, 22px) thì lấy 22px
+Vd muốn màn hình tăng đến đúng 1500px thì fontsize mới là 22px ta chỉ cần giải phương trình là được
+
+Or dùng generator: https://clamp.font-size.app => đổi rem ở vị trí đầu và vị trí thứ 3 thành px để tránh nhiều case bị sai => perfect r
+
+
+
+#***Tạo animation bằng JS hay CSS nhanh hơn
+Dùng CSS có performance tốt vì giảm thiểu logic cho browser và browser có thể optimize DOM, dùng GPU để tăng hiệu suất. JS tốc độ có thể nhanh or chậm hơn CSS tùy vào thư viện nhưng trong đa số các TH thì tốc độ của 2 cái là như nhau. 
+VD jQuery có animation chậm hơn CSS vì nó thiết kế ngay từ đầu k chú trọng vào animation. Các thư viện animation khác thì ok nhưng còn phụ thuộc vào thư viện nặng hay nhẹ, code css hay js dễ hơn.
+=> Cái nào tiện hơn thì dùng. Trong vài TH của React, ta nên dùng css vì việc dùng biến useState tạo animation nó làm cả component render lại và code rối hơn k tốt.
+
+
+
+#***Web safe font và color
+-> Có các loại font chạy trên linux k lỗi nhưng sang window bị lệch dòng, kể cả file do ta tạo ra => ref tới "Projects / Liquity Landing Page"
+Có các tool giúp chỉnh sửa thẳng vào file ttf để fix font như FontForge,.. nhưng khá mất tg
+
+Web safe font là các font luôn chạy mượt với mọi browser và mọi hđh thường có sẵn trong browser. Nhưng k đảm bảo các web safe font lúc nào cũng khả dụng => Viết CSS thêm fallback fonts là các font dự phòng cho browser:
+https://www.w3schools.com/cssref/css_websafe_fonts.php?fbclid=IwAR2s3BCKKc8rKHr4fKOYp8P2VFVtBj94Moc0fd0auwBP-Mzwv_riCy8FeE8
+https://www.w3schools.com/cssref/css_fonts_fallbacks.php
+
+-> Còn có sự sai lệch về màu sắc khi dùng browser khác nhau, đặc biệt là Safari so với Webkit. Khi lập trình yêu cầu tương thích cao, ta k nên giả định 2 màu là giống nhau ở 1 thẻ so với 1 bức ảnh hay video. VD: video có màu nền là #f12312 vì ta dùng devtool để lấy màu => ta k thể dùng 1 thẻ cũng có màu #f12312 và giả định rằng 2 màu giống nhau được, đặt video bên cạnh thẻ kia sẽ thấy khác màu ở 1 số browser khác.
+
+Có những màu đẹp có sẵn được support ở mọi browser nên dùng: https://www.w3schools.com/cssref/css_colors.php
+
+
+
+## Other
+-> Dùng tool quokka trong VSC: CTRL+K rồi E để exit, CTRL+K rồi Q để chạy lại quokka => sau khi cài quokkajs extension của VSC
+Có thể: CTRL+SHIFT+P để tìm và bật quokka
+
+
+
+-> CSS short for Cascading Style Sheets
+Normal flow là tính chất bth của layout khi mà ta chưa làm gì để chỉnh sửa. Vd display static là default value của 1 element khi nó làm việc trong normal flow. position absolute theo các thẻ cha nào gần nhất có position khác static
+box-sizing: border-box tốt hơn default vì ta chỉnh được thêm padding để tạo space xung quanh content bằng cách chỉnh padding
+
+
+
+-> var và let dùng với function nó như 1 biến chuẩn bth như dưới:
+var a = 10;
+function test(){
+  var a = 20;
+}
+console.log(a); // 10
+test();
+console.log(a); // 10
+
+=> Dùng với function như vậy và cần phân biệt với block scope của trong cặp {}
+{
+  let a = 1;
+  var b = 2;
+}
+Bên ngoài này dùng được b, k dùng được a
+=> Riêng với block scope thì var sẽ mang giá trị global, let sẽ chỉ dùng trong block đó thôi. TH này const giống let, chỉ riêng biến var là k có sự chặt chẽ
+
+
+
+-> Hiển thị dấu 3 chấm khi text quá dài nhưng multiline. Trước h ta toàn chơi text dài nhưng trên 1 dòng.
+.css{
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  width: 100px;
+}
+=> Tức chữ quá 2 dòng, mỗi dòng dài 100px thì phần còn lại ẩn và ở cuối dòng thứ 2 sẽ có ...
+Đây là ta viết trong css thuần và dùng React vẫn khuyến khích dùng trong file css thuần. Nếu dùng trong style inline cho 1 component phải chuyển "-webkit-line-clamp": 2; thành WebkitLineClamp: 2, vì nó k nhận diện được
+
+
+
+-> Click chuột là đổi màu 1 vài thẻ
+Thay vì dùng JS selector chọn mọi thẻ và chạy vòng for để set style or class name cho nó, cách khác là mọi thẻ ta định đổi màu sẽ có thêm 1 class và class này dùng css variable lưu màu. Khi click chuột ta đổi giá trị css variables đó của :root là xong. Dù code dài hơn nhưng tốc độ nhanh hơn là chạy vòng for.
+
+Điểm hay là nó như 1 cái kiểu clickaway listener, khi click chỗ khác thì nó k còn focus nữa sẽ mang lại style ban đầu. Trong JS làm điều này thao tác với vị trí pointer rất mất công
+
+
+
+-> Event click chuột vào 1 phần tử trong list mà k cần JS:
+Từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó ::focus r chỉnh style thoải mái. Dùng nhanh thì ok nhưng css thuần rất hạn chế, nh thứ buộc phải dùng JS.
+
+
+
+-> Pattern string find 1 string khác: 
+str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
+
+Thay vì dùng str1 + str2, ta dùng `${str1}${str2}`
+
+
+
+-> Dùng button:
+Ta thường set width relative sao cho kích thước của nó vừa mắt với ta.
+VD: có 2 button muốn chiếm full container ta dùng width 45%. Khi co màn hình lại, button cũng sẽ tự co theo nhưng nó k bh co quá mức làm ẩn chữ, có thể set thêm minWidth để đảm bảo nó luôn luôn hiện chuẩn
+
+
+
+-> Tính năng readmore bằng CSS only: Lợi dụng 2 cái radio button cho 2 dòng text Read more and Read less để trigger thông qua label r dùng css :checked để ẩn hiện dòng text bị che đi
+
+
+
+-> Disable auto focus của select option: Bug này xảy ra ngay cả khi dùng các thư viện UI khác
+Giá trị mặc định chọn item đầu tiên thì ta chỉ cần check rồi cho là rỗng là được
+
+-> Dùng direction và resize
+
+-> Thực hành / SpecialImage: thao tác với image pro hơn
+
+-> Thẻ a có thể dùng làm link or anchor:
+Dùng làm link thì ref url đến 1 resource VD website khác. 
+Dùng làm anchor thì đặt 1 id ở vị trí khác rồi thẻ <a href="#<tên id cần nhảy tới>"> => có thể dùng attribute name thay cho id
+Thẻ dialog k chiếm diện tích
+
+-> text-indent
+Dùng dialog tag để đóng mở animation dễ hơn. Trong React dùng tương tự nhét code js vào useEffect + useRef
+Thuộc tính title của các thẻ div, p,... thì hover vào các thẻ đó sẽ hiện ra tooltip là value của title
+Modal animation
+
+-> animation text bằng background image và background-clip
+
+
+
+-> bug param url:
+GET method trong url khi các trường chứa các ký tự đặc biệt reserved character sẽ gây lỗi. Vd: dấu cộng + mà dùng làm param value thì url sẽ encode sai thành khoảng trắng. 
+Để fix có thể dùng thành method POST truyền vào body. Nếu dùng GET thì trước khi gửi phải tự percent-encoded trước.
+Các reserved keyword: + ? & / : ; , = # %
+
+
+
+-> Custom cursor
+
+
+
+-> JS: Kế thừa class qua prototype
+
+
+
+-> Dùng OAuth2 login gg và dùng Gmail API:
+Để chạy apache server, khởi động nó bằng command or dùng XAMPP
+Nó sẽ tự động serve thư mục trong htdocs. VD Ta để 1 folder là 20194761 thì truy cập được index.html tự động với http://localhost/20194761
+
+Bth ta chỉ làm app gửi mail từ developer thì ta phải tạo app được sự đồng ý của developer. Còn client đăng nhập google và gửi bằng mail của họ (như gmail) thì phải có sự đồng ý của họ. Phải dùng Gmail API của gg.
+
+Doc URL setup production: https://developers.google.com/gmail/api/auth/scopes
+Doc viết api: https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
+
+Setup: 
+- Vào https://console.cloud.google.com/
+- Tạo 1 project mới nếu chưa có
+- Search Gmail API và Enable nó. Thực tế có nhiều loại API và ở đây ta đang chỉ dùng dịch vụ Gmail.
+- Setup từng bước
+Phần url phải ủy quyền: localhost:5000 chẳng hạn nếu cho phép app chạy ở local như v
+
+Phần scope là các mức độ mà ta muốn app truy cập. VD chọn https://mail.google.com/ sẽ có full access như gửi mail nhưng k có nghĩa là có mọi thứ. VD muốn xem các email gửi thì phải thêm scope https://www.googleapis.com/auth/gmail.readonly
+Có 3 loại scope:
+Recommended là scope cơ bản nhất bất cứ ai cũng ok
+Sensitive và Restricted là 2 scope truy cập data quan trọng cần sự đồng ý của người dùng. Và developer cũng phải cho app đi qua Google Verification Process mới dùng được 2 loại scope này. Google Verification Process phải trả phí hàng tháng và phải quay video cam kết sẽ dùng thông tin nhạy cảm của user để làm gì.
+
+=> Ở bản test sẽ luôn báo warning là app k an toàn. Ở bản production, nếu ta chọn scope và trong app ta dùng các scope đó thì sẽ k báo warning nhưng nó yêu cầu trả qua verification process phải đóng phí, khi đó ta sẽ có 1 ứng dụng hoàn chỉnh. Nếu ta k chọn scope mà cứ dùng scope đó trong app sẽ báo warning
+
+App chạy được trong 2 môi trường là testing và production. Đổi môi trường trong OAuth consent screen. 
+Cái OAuth2 sau khi set mà đổi url thì éo hoạt động đâu. Tức url truy cập phải xác định từ trước. Ta phải tạo hẳn credential mới or app mới để dùng 1 url khác
+
+-> Youtube API:
+Tạo ứng dụng nhúng video youtube dạng mp3. 
+
+Có thể nhúng 1 video youtube bất kỳ vào web dạng video nhét vào src được nhưng để thao tác chi tiết với data thì phải dùng YoutubeAPI. Chỉ cần đăng ký project trong google cloud platform và enable youtube api và tạo 1 api key mới là được, k cần config gì thêm.
+
+Có thể làm đủ kiểu, phát nhạc, tua bài tiếp theo, tìm kiếm bài hát, lấy thumbnail
+
+
+
+-> Trong browser, đôi khi object nó vẫn hiện là [Object object]. Lúc đó ta buộc phải JSON.stringify(object); để nó hiện ra string r beautify json format mới xem được
+
+Trong window dùng btoa từ string sang base64, atob từ base64 sang string. Nhưng đôi khi atob nó báo lỗi k decode được, h chưa fix được nên ta cho nếu bị lỗi thì bỏ qua
+Các ký tự ngoài bảng ASCII k thể dùng btoa encode trực tiếp, phải dùng đủ là:
+window.btoa(encodeURIComponent(message)).replace(/\+/g, '-').replace(/\//g, '_')
+=> encodeURIComponent giúp dùng tiếng việt nhưng gây ra lỗi khác nên bỏ qua k dùng
+
+
+
+-> Dùng SweetAlert: thư viện giúp hiển thị dialog confirm tốt nhất hiện tại
+
+
+
+-> Use contenteditable: giúp edit text trực tiếp mà k cần có tag input, nhưng khá xấu
+
+
+
+-> Dùng onerror xử lý ảnh
+Ta có thể xử lý ảnh lỗi với background-image nhưng cái cục lỗi mặc định vẫn hiện ra trông rất xấu.
+
+onerror của thẻ image giúp xử lý ảnh khi lỗi:
+<img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';" >
+Việc dùng this.onerror=null sẽ chống lỗi infinity loop. Lỗi này xảy ra ở 1 số trình duyệt khi chính ảnh để ta fix lại bị lỗi xong lại chạy onerror xong lại lỗi và cứ vô tận như v.
+Trong React hay Next cũng có thể dùng onError như bth.
+
+Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh local đảm bảo luôn tồn tại là được. 
+
+
+
+-> Tạo stack card khi scroll
+Cơ chế là cho position sticky với padding top để các thẻ k bị scroll đi mất mà luôn đính ở 1 chỗ như v
+
+Đây chỉ là css cơ bản, nếu muốn animation phức tạp hơn, có thể dùng JS: https://css-tricks.com/books/greatest-css-tricks/scroll-animation/
+
+Để mở browser nhanh ngay trong VSC: CTRL + SHIFT + P -> Chọn Simple Browser: Show
+
+
+
+-> constructor -> componentDidMount -> componentDidUpdate -> componentWillUnmount
+Trong class component có thể dùng state variable hay props bth. Muốn dùng biến const khác thì khai báo trực tiếp trong hàm render được
+
+
+
+-> Tính năng mới => web càng ngày càng giống app hơn
+import json trong file js type module trực tiếp được
+
+color-mix giúp mix 2 màu trong không gian màu nào
+Các thuộc tính cos, sin, tan cũng có sẵn là hàm css rồi
+initial-letter nằm trong selector ::first-letter giúp tạo chữ đầu tiên to đùng như đầu bài báo article
+Thuọc tính inert của button làm mất tính năng focus
+
+TransformStream là tính năng giúp pipe đầu ra của api thứ nhất làm đầu vào api thứ 2 luôn => ít dùng
+Làm như v giúp tiết kiệm băng thông vì kp tải toàn bộ dữ liệu từ API 1 về mói gửi lên api thứ 2 mà truyền liên tục theo từng phần nhỏ luôn
+
+--> ***Container query
+Media query style theo kích thước màn hình. Container query giúp chỉnh kích thước thẻ con theo kích thước của thẻ container cha giúp code responsive ez hơn
+=> Trong tailwind cũng hỗ trợ container query inline luôn
+
+Vd: ảnh và text bình thường trong container ta xếp ngang, nhưng màn hình nhỏ ta lại xếp dọc cho đẹp. Nhưng đôi khi màn hình nhỏ dần mà kích thước container lại tăng 
+VD 1 cái sidebar bị ẩn đi khi màn hình to ra. Khi đó ta phải căn khi nào nó ẩn đi rồi viết thêm 1 @media nữa cho thẻ rất mệt. Ta chỉ cần bao nó bằng 1 container và set flex-direction theo container đó là được
+
+***popovertarget và popover giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa
+css nesting đã có thể viết css như sass
+Các thuộc tính có thể dùng trực tiếp như rotate, translate, scale mà k cần dùng kèm transform
+Selector mới là: focus-visible giúp bắt TH button bị click hay chọn bởi tab key
+
+animation-timeline giúp control thuộc tính animation phụ thuộc vào hành động của user hoàn toàn bằng css. VD chỉ khi scroll thì animation mới chạy 
+
+--> color font: Font được style sẵn
+
+--> View transition API giúp chuyển trạng thái mượt mà kể cả người dùng ấn lùi lại. Mượt như app bth luôn
+Full tut kèm code full: https://developer.chrome.com/docs/web-platform/view-transitions/
+
+-> Tính năng khác của browser:
+--> Nhận biết tình trạng kết nối mạng
+--> Nhận biết người dùng bật devtool
+--> Che giấu source code frontend
+Đang ở trang webA, khi load ta cho history.pushState sang đường dẫn khác (cùng host) thì khi mở view page source sẽ ra html của đường dẫn đó. Để đánh lừa thì ta nên cho 2 đường dẫn na ná nhau với chữ i viết hoa giống chữ l viết thường
+Khi vào devtool ta cũng bắt được bằng JS và cho ẩn phần code JS đi là được. 
+Dev khác vào web sẽ thấy source code là của web kia và k có code js nào cả
+--> Nhận biết chuyển tab 
+
+-> Lấy tình trạng pin bằng JS:
+VD khi pin yếu, có thể code trang web giảm tải dung lượng tối thiểu cho user, đặc biệt là khi họ điền biểu mẫu or giao dịch mua hàng
+
+-> WebComponent
+URL code sample: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework/?fbclid=IwAR0gO-7vQPOp9p1HT02U5OisRF7g3PIth-TR-ofn5TXDWcIG9jnToXP_mRo
+
+Ta có thể tạo ra các tag html thuần để dùng được ở mọi framework. VD menu select trong HTML thuần rất khó custom triangle thì có thể tự tạo. Ta có thể tự tạo r import vào dùng
+1 tag html thuần cấu thành từ 3 phần tử:
+Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. Dev dùng k thể custom shadow DOM
+HTML <template> là tag đặc biệt mà nội dung k được render trực tiếp mà phải được copy rồi mới render ra
+Google có tool Lit giúp tạo web component dễ hơn. React19 cũng hỗ trợ webcomponent dễ dàng hơn r.
+
+-> SVG:
+SVG là 1 ngôn ngữ dạng XML miêu tả đồ họa vector 2 chiều. Chất lượng tốt, animation, tiết kiệm dung lượng. 
+SVG bị hạn chế về màu sắc, trong các hoạt ảnh ta dùng SVG rất tốt. Dù hạn chế nhưng ta vẫn có thể vẽ SVG 1 bức ảnh đẹp như chụp, khi đó performance sẽ cực kỳ tệ.
+SVG Sprites là phương pháp gom tất cả các ảnh trang trí các thứ vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
+
+Có nhiều tool giúp vẽ tay SVG
+URL: https://topdev.vn/blog/svg-la-gi/?utm_source=facebook&utm_medium=post&utm_campaign=topdev&utm_term=blog&utm_content=b_svg-la-gi&fbclid=IwAR1RQdHelcwqbSIN3_glK4F5khwmL-tCFkD9SgIy8LOSluCkOtDFO9id2wA
+
+--> Animate svg khi hover: các tag svg dùng đc animation css như bth, dùng cho các thẻ path hay g bên trong để animate 1 phần của icon cũng được luôn
+Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, khi hover vào thì đổi lại thành running là ok
+
+-> Tỉ lệ chuẩn: outer radius = inner radius + distance giữa 2 border
+
+-> Cách thay đổi css của VSC:
+Tải extension Custom css and loader -> tạo file custom.css để ở 1 thư mục -> ấn vào ký hiệu setting mở settings -> mở file user settings.json bằng ký hiệu ở góc phải bên trên -> thêm code: "vscode_custom_css.imports": ["file:///C:/Users/Ryan.Nguyen/Documents/custom.css"] là đường tuyệt đối tới file css -> CTRL + SHIFT + P mở dev tool -> tìm các class và custom thoải mái -> viết code custom vào file css -> CTRL + SHIFT + P và enable custom css and js -> tải extension Fix VSC Checksum -> CTRL + SHIFT + P Fix Checksum Restor -> tiếp Fix Checksum Apply
+
+
