@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+    <meta charset="UTF-8" />
+    <title> Plugin Flipper </title>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+    <script type='text/javascript' src='js/jquery.min.js'></script>
+</head>
+
+<body style="background:url(img/bg.jpg) repeat;">
+    <!-- LIVE DEMO -->
+
+    <!-- Đây là cái flipper, bao trong thẻ demo-box để căn giữa, tùy chỉnh nếu muôn -->
+    <div class="demo-box">
+        <div id="myflipper">
+
+            <!-- từng page 1 -->
+            <div class="flipper-page">
+                <div class="flipper-page-padding-wrap">
+                    <p class="headline first"> Flick to turn the page and see what Flipper can do. Đây là
+                        trung tâm của page sẽ viết đè 2 trang
+                    </p>
+                </div>
+            </div>
+            <!-- page tiếp -->
+            <div class="flipper-page">
+                <div class="flipper-page-padding-wrap">
+                    <p class="left headline">With Flipper you can turn any piece of content into a beautiful and stylish
+                        book-like widget. It's light, it's fast, it's cool and your mobile users will love you for
+                        it.<br /><br /><a href="http://www.youtube.com/watch?v=AZ-fg1XtSBw">Watch the video!</a></p>
+                    <p class="right headline"> Photos, image galleries, blogs, news - it all looks awesome! Flick again
+                        to see some examples.</p>
+                </div>
+            </div>
+            <!-- page tiếp -->
+            <div class="flipper-page">
+                <div class="flipper-page-padding-wrap">
+                    <h2>How about some text?</h2>
+                    <p class="mag">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                        ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor.<br /><br />Sed
+                        ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                        totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+                        dicta sunt explicabo.</p>
+                    <p class="headline" style="margin-top: 40px;">It feels just like a magazine.</p>
+                </div>
+            </div>
+            <!-- mỗi 1nhar 1 page -->
+            <div class="flipper-page no-padding"><img src="img/flipper/chairs.jpg" class="fullsize"></div>
+            <div class="flipper-page no-padding"><img src="img/flipper/clothes.jpg" class="fullsize"></div>
+            <div class="flipper-page no-padding"><img src="img/flipper/bridge.jpg" class="fullsize"></div>
+            <div class="flipper-page">
+                <p class="headline first">Flicking through photos feels just like in an album. <br /> Thank you for
+                    checking out Flipper.</p>
+            </div>
+            <div class="flipper-page"><img src="img/flipper/flipper.png"></div>
+
+            
+        </div>
+        <script>
+            (function ($, undefined) {
+                $(document).ready(function () {
+                    $('#myflipper').flipper({
+                        //chỉnh kích thước tờ giấy
+                        'width': 700,
+                        'height': 400,
+                        "arrows": true,
+                        pager: true,
+                        'imagesPath': 'img/flipper/'
+                    });
+                });
+            }(jQuery));
+        </script>
+    </div>
+    <script src="demos/flipper/flipper.min.js"></script>
+    <link rel="stylesheet" href="demos/flipper/flipper.min.css" type="text/css" />
+    <link rel="stylesheet" href="demos/flipper/demopage.css" type="text/css" />
+    <center></center>
+    <script src="js/site.js"></script>
+</body>
+
+</html>
+<a style="display:none" href="http://www.bootstrapmb.com">bootstrap模板库</a>

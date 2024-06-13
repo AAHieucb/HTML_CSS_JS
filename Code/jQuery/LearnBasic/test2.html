@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+        input[type="text"], input[type="password"] {
+            display: inline-block;
+            width: 200px;
+        }
+        label.error {
+            display: inline-block;
+            color:red;
+            width: 200px;
+        }
+        .valid{border: solid 1px blue;}
+        input.error {border:solid 1px red;}
+    </style>
+
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+
+</head>
+<body>
+    <!-- # Basic / validate form trong jQuery -->
+	<form method="get" accept-charset="utf-8" style="width:600px;margin: 0px auto;" id="formDemo">
+		<fieldset>
+			<legend>Demo jQuery Validate - ThienAnBlog.com</legend>
+            <!-- fieldset và legend 1 cặp như này -->
+			<div>
+				<label>Họ</label>
+				<input name="ho" type="text" placeholder="Vui lòng nhập họ" required>
+			</div>
+            <div>
+				<label>Họ 2</label>
+				<input name="ho2" type="text" placeholder="Vui lòng nhập họ 2" required>
+			</div>
+			<div>
+				<label>Tên</label>
+				<input name="ten" type="text" placeholder="Vui lòng nhập tên" required>
+			</div>
+			<div>
+				<label>Địa chỉ</label>
+				<input name="diachi" type="text" placeholder="Vui lòng nhập địa chỉ" required>
+			</div>
+			<button type="submit">Gửi</button>
+		</fieldset>
+	</form>
+	<script type="text/javascript">
+        $(document).ready(function() {
+            // Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này, tự động check khi keyup
+            $("#formDemo").validate({
+                rules: {
+                    ho: "required",
+                    ho2: {
+                        required: true,
+                        equalTo: 'input[name=ho]' // chú ý dùng selector
+                    },
+                    ten: "required",
+                    diachi: {
+                        required: true,
+                        minlength: 3
+                    }
+                },
+                messages: {
+                    ho: "Vui lòng nhập họ",
+                    ho2: "Vui lòng nhập đúng họ", // message chung cho mọi trường nếu k specific
+                    ten: "Vui lòng nhập tên",
+                    diachi: {
+                        required: "Vui lòng nhập địa chỉ",
+                        minlength: "Địa chỉ ngắn vậy, chém gió ah?"
+                    }
+                },
+                // Dùng 2 cái rules và message để check mọi thứ. messages tự thêm label vào bên phải hiển thị
+                // ở phiên bản query mới thì class valid và error được thêm tự nhiên vào thẻ
+                // label error của message cx tự có class error nên ở trên ta dùng input.error để specific class này
+                // cho input thôi, còn label.error cho riêng label của message. Quy ước tên như v
+            });
+        });
+	</script>
+</body>
+</html>

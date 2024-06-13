@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Magicpaper</title>
+	<!-- Kết nối thư viện Bootstrap -->
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<style>
+		.main-container {
+			text-align: center;
+		}
+
+		.box-numbers {
+			width: 500px;
+			height: auto;
+			max-width: 100%;
+			margin: auto;
+			background: #333;
+			color: #fff;
+			font-size: 15px;
+		}
+
+		.box-numbers .number {
+			width: 10%; 
+			display: inline-block;
+			padding: 10px 0;
+		}
+
+		p {padding: 0 10px;}
+
+		button {margin: 10px 0;}
+
+		.char-result {font-size: 100px;}
+	</style>
+</head>
+<body>
+	<div class="main-container">
+		<h1>Magicpaper</h1>
+		<p>Hãy nghĩ trong đầu một con số có hai chữ số. Sau đó cộng hai chữ số của số đó lại với nhau rồi lấy số đã nghĩ trừ cho kết quả vừa cộng được.</p>
+		<p>Ví dụ : Bạn nghĩ số 32 thì lấy 3 + 2 = 5 rồi lấy 32 - 5 = 27. Số 27 này là kết quả cuối cùng.</p>
+		<p>Tiếp theo bạn hãy tìm kiếm ký hiệu tương ứng với kết quả cuối cùng bằng bảng dưới đây rồi ghi nhớ ký hiệu đó vào trong đầu.</p>
+		<p>Cuối cùng nhấn vào nút "Tiếp theo" để xem kết quả.</p>
+		<div class="box-numbers"></div><!-- div.box-numbers -->
+		<button>Tiếp theo <span class="glyphicon glyphicon-chevron-right"></span></button>
+	</div><!-- div.main-container -->
+	<!-- Kết nối thư viện Jquery -->
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script>
+
+		// Thực hiện các hành động bên trong khi bắt đầu tải trang
+		$(document).ready(function() {
+			// Hàm tạo ký tự ngẫu nhiên
+			function randomChar() {
+				// Biến trong jQuery
+				$randomChar = Math.floor(Math.random()* 10 + 1); // Ngẫu nhiên số từ 1 đến 10
+				// Nếu số ngẫu nhiên bằng n thì ký tự là $char
+				if ($randomChar == '1')
+				{
+					$char = '<span class="glyphicon glyphicon-asterisk"></span>';
+				}
+				else if ($randomChar == '2')
+				{
+					$char = '<span class="glyphicon glyphicon-plus"></span>';
+				}
+				else if ($randomChar == '3')
+				{
+					$char = '<span class="glyphicon glyphicon-euro"></span>';
+				}
+				else if ($randomChar == '4')
+				{
+					$char = '<span class="glyphicon glyphicon-minus"></span>';
+				}
+				else if ($randomChar == '5')
+				{
+					$char = '<span class="glyphicon glyphicon-cloud"></span>';
+				}
+				else if ($randomChar == '6')
+				{
+					$char = '<span class="glyphicon glyphicon-music"></span>';
+				}
+				else if ($randomChar == '7')
+				{
+					$char = '<span class="glyphicon glyphicon-search"></span>';
+				}
+				else if ($randomChar == '8')
+				{
+					$char = '<span class="glyphicon glyphicon-heart"></span>';
+				}
+				else if ($randomChar == '9')
+				{
+					$char = '<span class="glyphicon glyphicon-star"></span>';
+				}
+				else if ($randomChar == '10')
+				{
+					$char = '<span class="glyphicon glyphicon-cog"></span>';
+				}
+				// $char có thể như trên hoặc có thể là một icon khác hay hình ảnh tuỳ ý bạn nhưng bạn phải code lại phần CSS để có giao diện đẹp
+			}
+
+			// Thao tác với class style
+			// Tạo bảng số từ 0 đến 99 và ký tự ngẫu nhiên 
+			for ($i = 0; $i <= 99; $i++) {
+				// Thực hiện các hành động $i lần và dừng lại khi $i <= 99
+				// Chạy hàm ngẫu nhiên ký tự
+				randomChar();
+				// Tạo các ô số từ 0 đến 99 và ký tự trong thẻ div có class là box-number
+				$('.box-numbers').append('<div class="number" data-number="' + $i + '">' + $i +'<br>' + $char + '</div>');
+			}
+
+			// Thiết lập các ô số 9, 18, 27, 36, 45, 54, 63, 72, 81 có ký tự chung 
+			// Chạy hàm ngẫu nhiên ký tự
+			randomChar();
+			$('.number[data-number="9"]').html('9<br>' + $char);
+			$('.number[data-number="18"]').html('18<br>' + $char);
+			$('.number[data-number="27"]').html('27<br>' + $char);
+			$('.number[data-number="36"]').html('36<br>' + $char);
+			$('.number[data-number="45"]').html('45<br>' + $char);
+			$('.number[data-number="54"]').html('54<br>' + $char);
+			$('.number[data-number="63"]').html('64<br>' + $char);
+			$('.number[data-number="72"]').html('72<br>' + $char);
+			$('.number[data-number="81"]').html('81<br>' + $char);
+			$('.number[data-number="99"]').html('99<br>' + $char);
+
+			// Hàm chỉnh nhanh các thuộc tính css
+			// Hiển thị kết quả khi nhấn nút “Tiếp tục”
+			// Thực hiện các hành động bên trong khi nhấn vàn thẻ button
+			$('button').click(function() {
+				$(this).hide(); // Ẩn chính nó tức là thẻ button
+				$('.box-numbers').hide(); // Ẩn div class  box-numbers tức là cái bảng
+				$('p').hide(); // Ẩn thẻ p tức là nội dung hướng dẫn
+				// Gán class ký hiêu của ô số 9 vào $show_result
+				$show_result = $('.number[data-number="9"] span').attr('class');
+				console.log($show_result);
+				// Tạo kết quả
+				$('.main-container').append('<p>Đây là ký tự bạn đang nghĩ phải không ?</p><span class="char-result ' + $show_result + '"></span>');
+			});
+		});
+		//Điều hay ho của bài này là: nó làm rất đơn giản trên 1 single page.
+		//Nó lấy ra ký tự kết quả bằng cách lấy class bootstrap của thẻ đó append vào main-container chỉnh sửa thêm kích
+		//thước thẻ thôi
+		//thay vì dùng 1 trang mới, nó hide tất cả thẻ rồi cho 1 thẻ show ra mọi thứ. Đáng lẽ điều này làm bằng JS thì
+		//lâu vl nhưng code jQuery như trên quá nhanh, quá nguy hiểm
+		//nó thêm 1 attribute mới vào thẻ là data-number mục đích chỉ để đánh dấu từng ô số 1 để lấy gán cùng char ở dưới
+	</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+    <button id="start" style="display: block; margin: 0 auto;">Start</button>
+    <div id="res" style="text-align: center"></div>
+    <div style="min-height: 300px; position: absolute; right: 10px; top: 10px; width: 1px; background-color: red;"></div>
+    <div style="margin-top:20px;"></div>
+    <img id="img1" width="200px" style=" position: relative; left: 0;" src="./frame1.svg">
+    <br>
+    <img id="img2" width="200px" style="position: relative; left: 0;" src="./frame1.svg">
+
+    <script>
+        $(function () {
+            function play(){
+                let img1, img2;
+                let speed = 10;
+                let i1 = setInterval(() => {
+                    img1 = parseInt($("#img1").attr("src").slice(7, 8));
+                    if(img1 == 3){
+                        img1 = 1;
+                    }else{
+                        img1++;
+                    }
+                    img2 = parseInt($("#img2").attr("src").slice(7, 8));
+                    if(img2 == 3){
+                        img2 = 1;
+                    }else{
+                        img2++;
+                    }
+                    $("#img1").attr("src", `./frame${img1}.svg`);
+                    $("#img2").attr("src", `./frame${img2}.svg`);
+                }, 200);
+                let i2 = setInterval(() => {
+                    // $("#img1").css("left", $("#img1").position().left + speed );
+                    // $("#img2").css("left", $("#img2").position().left + speed );
+                    // if(parseInt($("#img1").css("left")) + parseInt($("#img1").width()) > window.innerWidth - 10
+                    // || parseInt($("#img2").css("left")) + parseInt($("#img2").width()) > window.innerWidth - 10) {
+                    //     clearInterval(i2);
+                    //     clearInterval(i1);
+                    // }
+                    // Dùng margin-left mới move được với số thập phân
+                    $("#img1").css("margin-left", parseInt($("#img1").css("margin-left")) + speed/10 + Math.random()*speed);
+                    $("#img2").css("margin-left", parseInt($("#img2").css("margin-left")) + speed/10 + Math.random()*speed);
+                    if(parseInt($("#img1").css("margin-left")) + parseInt($("#img1").width()) > window.innerWidth - 10) {
+                        clearInterval(i2);
+                        clearInterval(i1);
+                        $("#res").html("First win");
+                    }
+                    if(parseInt($("#img2").css("margin-left")) + parseInt($("#img2").width()) > window.innerWidth - 10) {
+                        clearInterval(i2);
+                        clearInterval(i1);
+                        $("#res").html("Second win");
+                    }
+                }, 40);
+            }
+            $("#start").click(() => {
+                play();
+            })
+        })
+    </script>
+</body>
+</html>

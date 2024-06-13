@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    
+    <!-- khi load 1 file html bình thường -->
+    <script> 
+        $(function(){
+            $("#includedContent").load("b.html"); 
+        });
+        </script> 
+</head>
+<body>
+    <!-- dùng link như này sẽ chạy file index.html chạy file pdf ta đã set -->
+    <a href="./index.html">Google Maps</a><br>
+
+    <!-- load 1 file html phức tạp -->
+    <embed type="text/html" src="index.html" width="500" height="500">
+
+    <!-- file html trên phức tạp vì chứa plugin xem pdf, thực tế ta có thể xem pdf trực tiếp được -->
+    <embed type="application/pdf" src="demo.pdf" width="500" height="500">
+    <!-- do bh html5 hỗ trợ hết nên plugin đọc pdf k còn dùng nhiều, ta cho thẻ embed full page thì cx như plugin r -->
+
+    <!-- load 1 file html toàn text -->
+    <div id="includedContent"></div>
+</body>
+</html>

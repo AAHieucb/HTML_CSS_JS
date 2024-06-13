@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
+</head>
+
+<body>
+    <input type="text" id="id-textbox" value="" /> <br />
+    <input type="button" id="id-button" value="Alert" /><br />
+
+    <script language="javascript">
+        // # Basic / Các thao tác DOM cơ bản
+        var object = $("#id-button"); //or: var object = jQuery('#id-button');
+        object.click(function () {
+            alert($("#id-textbox").val()); //lấy giá trị input
+        });
+
+        var elements = $(".desc"); //tất cả thẻ có class desc
+        $("a"); //chọn tất cả thẻ a
+        $("#id-textbox, id-textbox"); //chọn thẻ có id hoặc class là id-textbox
+        $("*").addClass("selected"); //chọn tất cả
+    </script>
+    <script src="test.js"></script>
+
+    <!-- # Các component hay / Slider kéo ảnh -->
+    <style>
+        .beforeafter {
+            width: 270px;
+            height: 294px;
+        }
+        .ba-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            border-right: 3px solid #333;
+            overflow: hidden;
+            box-shadow: 3px 5px 5px rgba(0, 0, 0, 0.6);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.6);
+            -webkit-box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6);
+            -moz-box-shadow: 5px 0 7px rgba(0, 0, 0, 0.6);
+        }
+        .ba-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .ba-caption {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 120;
+            background: #000;
+            color: #fff;
+            text-align: center;
+            padding: 5px;
+            font-size: 12px;
+            font-family: arial;
+            filter: alpha(opacity=80);
+            -moz-opacity: 0.8;
+            -khtml-opacity: 0.8;
+            opacity: 0.8;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+    </style>
+    <!-- <script>
+        // Basic / Bắt sự kiện
+        $(document).ready(function () {
+            // Điểm dừng bên trái so với lề
+            var leftgap = 0;
+
+            // Điểm dừng bên phải so với lề
+            var rightgap = 2;
+
+            // Mặc định khi load sẽ nằm ở vị trí nào
+            var defaultgap = 0;
+
+            // Có sử dụng hiển thị caption hay không?
+            var caption = true;
+
+            // Khoảng cách để chuyển caption, 0.5 tương đương một nửa
+            var reveal = 0.5;
+
+            // Lặp qua từng cặp hình để xử lý. Mọi thẻ có class beforeafter dều được áp dụng
+            $('.beforeafter').each(function () {//hàm each của mảng JS đây mà vì $ trả ra 1 mảng
+                // Select với $
+                // Cặp đang lặp
+                var i = $(this);
+
+                // Thao tác với class style
+                // Lấy hai hình ảnh cần xử lý
+                var img_mask = i.children('img:eq(0)').attr('src');
+                var img_bg = i.children('img:eq(1)').attr('src');
+                // Hàm children của jQuery trả ra tập hợp các thẻ con của thẻ nào phù hợp với selector nào
+                // Ở đây là thẻ con img thứ mấy của thẻ i
+
+                // Lấy alt của hình thứ nhất 
+                var img_cap_one = i.children('img:eq(0)').attr('alt');
+
+                // Lấy chiều rộng và chiều cao hình thứ nhất
+                var width = i.children('img:eq(0)').width();
+                var height = i.children('img:eq(0)').height();
+
+                // Ẩn đi cả hai hình
+                i.find('img').hide();
+
+                // Thêm thuộc tính CSS cho cặp hiện tại. Cách thêm 1 list các thuộc tính
+                i.css({
+                    'overflow': 'hidden',
+                    'position': 'relative'
+                });
+
+                // Thêm một số thẻ HTML để hiển thị caption và hình ảnh
+                i.append('<div class="ba-mask"></div>');
+                i.append('<div class="ba-bg"></div>');
+                i.append('<div class="ba-caption">' + img_cap_one + '</div>');
+                // Thậm chí chưa có thẻ, nó cx appent vào để dùng 
+
+                // Thiết lập chiều rộng và chiều cao cho các thẻ vừa thêm đúng với hình
+                i.children('.ba-mask, .ba-bg').width(width); // set width và height, k có params thì là getter
+                i.children('.ba-mask, .ba-bg').height(height);
+
+                // Thiết lập backgroud cho các thẻ div vừa thêm
+                i.children('.ba-mask').css('backgroundImage', 'url(' + img_mask + ')');//thêm 1 thuộc tính
+                i.children('.ba-bg').css('backgroundImage', 'url(' + img_bg + ')');
+
+                // Thiết lập div hình 1 animate vào đúng vị trí mặc định 
+                i.children('.ba-mask').animate({
+                    'width': width - defaultgap
+                }, 1000);
+                // width từ vị trí hiện tại dịch sang vị trí width sau 1s sau khi trang web load lên.
+                // Ở đây thừa vì width nó như thế từ đầu r nên ở đây chỉ khiến cho cái thanh slide bị lag 1s nguyên vị trí
+
+                // Nếu có caption thì hiên thị, ngược lại thì ẩn đi 
+                if (caption)
+                    i.children('.caption').show();
+                else
+                    i.children('.ba-caption').hide();
+
+            }).mousemove(function (e) { // Khi hover qua từng hình
+                // Hình đang hover
+                var i = $(this);
+
+                // Lấy vị trí các thẻ
+                // Lấy vị trí left hiện tại của hình
+                pos_img = i.offset()['left'];
+                //offset() trả ra top và left của thẻ so với document, ta có thể dùng offset đế set giá trị với cú pháp:
+                //$(selector).offset({top:value,left:value})
+
+                // Thao tác với chuột
+                // Lấy vị tri hiện tại của chuột
+                pos_mouse = e.pageX;
+
+                // Tính toán khoảng cách của hình và chuột
+                new_width = pos_mouse - pos_img;
+
+                // Thao tác với class style
+                // Chiều rộng hiện tại của mình
+                img_width = i.width();
+
+                // Lấy hai capture alt của hai hình
+                img_cap_one = i.children('img:eq(0)').attr('alt');
+                img_cap_two = i.children('img:eq(1)').attr('alt');
+
+                // Xác định điểm dừng khi lật hình. Khi quá kích thước thì set kích thước vẫn là chính nố
+                if (new_width > leftgap && new_width < (img_width - rightgap)) {
+                    i.children('.ba-mask').width(new_width);
+                }
+
+                // Xác định hiển thị đúng capture
+                //qua mốc kia là hiển thị capture ảnh
+                if (new_width < (img_width * reveal)) {
+                    i.children('.ba-caption').html(img_cap_two);
+                } else {
+                    i.children('.ba-caption').html(img_cap_one);
+                }
+            });
+        });
+    </script> -->
+    
+    <div class="beforeafter">
+        <img src="https://picsum.photos/id/237/300/300" alt="Before - Original Photo" width="300" height="300" />
+        <img src="https://picsum.photos/id/238/300/300" alt="After - Original Photo" width="300" height="300" />
+    </div>
+
+    <!-- Ta có thể chuyển cái slider thành 1 plugin dùng như dưới -->
+    <script src="./jquery.beforeafter.js"></script>
+    <script>
+        $('.beforeafter').qbeforeafter({defaultgap:50, leftgap:0, rightgap:10, caption: true, reveal: 0.5});
+    </script>
+</body>
+
+</html>

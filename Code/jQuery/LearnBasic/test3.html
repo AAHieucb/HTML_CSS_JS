@@ -1,0 +1,148 @@
+<!-- điều đặc biệt là phải xóa <!DOCTYPE html> đi thì mới hoạt động với scrollTop jQuery -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Freetuts.net - Menu Dropdow Use CSS & JQUERY</title>
+        
+        <script language="javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        
+        <style>
+            /*VIẾT CSS TẠI ĐÂY*/
+            ul li .submenu{ display: none;}
+            ul li.selected .submenu{ display: block;}
+            ul li{ list-style-type: none;}
+            a{ text-decoration: none;}
+            ul a{ display: block; width: 125px; background: orange; border-bottom: 1px solid #ccc; padding-left: 25px; line-height: 30px; color: white;}
+            .submenu ul{ margin: 0px; padding: 0px;}
+            .submenu ul a{ background: blue;}
+            .submenu ul a:hover{ background: silver;}
+        </style>
+
+        <script language="javascript">
+            /*VIẾT JAVASCRIPT TẠI ĐÂY*/
+            $(document).ready(function() {
+                // Bắt sự kiện
+                $("ul li a").click(function() 
+                {
+                    // Select với $
+                    var li = $(this).parent();//lấy thẻ parent
+            
+                    // Thao tác với class style
+                    // Kiểm tra có phải click vào menu đã active ko
+                    // nếu phải thì ko làm gì, ngược lại sẽ xử lý xổ menu con ra
+                    if (li.hasClass("selected")) {
+                        return false;
+                    } 
+                    else {
+                        // Xóa class selected khỏi các thẻ li khác
+                        $('ul li').removeClass('selected');
+                        // Thêm class selected vào thẻ li hiện tại
+                        li.addClass("selected");
+                    }
+                    // trong JS có e.preventDefault, trong jQuery có return false; trong 1 event sẽ thực hiện đồng thời
+                    // e.preventDefault và e.stopPropagation. 1 cái cản trở default event xảy ra, 1 cái ngăn cản event
+                    // nổi bubble lên trên gọi thêm các sự kiện khác nếu có
+                    return false; 
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+        <!-- # Các component hay / Tạo dropdown navigator -->
+        <!-- Viết code html css nhìn ok tất cả đi rồi jQuery chỉ cần thêm bớt class là xong -->
+        <ul>
+            <li><a  href="#">Home</a>
+                <div class="submenu">
+                    <ul>
+                        <li><a href="#">About US</a></li>
+                        <li><a href="#">Sale Off</a></li>
+                        <li><a href="#">News</a></li>
+                    </ul> 
+                </div>
+            </li>
+            <li><a  href="#">Promotion</a>
+                <div class="submenu">
+                    <ul>
+                        <li><a href="#">Money</a></li>
+                        <li><a href="#">Hot Deal</a></li>
+                        <li><a href="#">Chewry Junior</a></li>
+                    </ul> 
+                </div>
+            </li>
+            <li><a  href="#">Product</a>
+                <div class="submenu">
+                    <ul>
+                        <li><a href="#">Product Random</a></li>
+                        <li><a href="#">New Product</a></li>
+                        <li><a href="#">Febtured Product</a></li>
+                    </ul> 
+                </div>
+            </li>
+        </ul>
+
+        <!-- ấn nút là scroll vào top của cái hình đỏ -->
+        <input type="button" value="Click" id="btn"/>
+        <div style="height: 6000px; background: blue"></div>
+        <div id="to" style="height: 100px; background: red"></div>
+        <script language="javascript">
+            $(document).ready(function(){
+                // Bắt sự kiện
+                $('#btn').click(function(){
+                    // Animation
+                    $('body').animate({
+                        scrollTop: $("#to").offset().top
+                    }, 500);
+                });
+            });
+        </script>
+
+        <!-- # Các component hay / Popup với css jquery -->
+        <style>
+            .popup {
+                z-index: 1;
+                background-color: white;
+                position: fixed;
+                padding: 100px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%); /* transform translate chỉnh vị trí theo kích thước của nó */
+                display: none;
+                border: 5px solid #000;
+            }
+        </style>
+        <div class="popup">
+            <div>Name: Hieu</div>
+            <div>Age: 22</div>
+        </div>
+        <input type="button" value="Click" id="popupButton"/>
+        <script language="javascript">
+            // Hiển thị popup
+            $(document).ready(function(){
+                // Bắt sự kiện
+                $("#popupButton").click(function() {
+                    // Animation
+                    $(".popup").fadeIn();
+                })
+            })
+            // Ấn ra ngoài là tắt popup
+            $(document).click(function (e)
+            {
+                var container = $(".popup");
+                console.log(e.target);
+                // Check thẻ nào có chứa các thẻ nào hay không
+                // Nếu click bên ngoài đối tượng container thì ẩn nó đi
+                if (!container.is(e.target) && container.has(e.target).length === 0 && !$("#popupButton").is(e.target)) {
+                    // if (!container.is(':visible')) { // cách check 1 thẻ có đang hiện ra hay k }
+                    // Lưu ý khi ấn nút để hiện ra thì cũng là ấn vào document, phải check cả cái nút cx ngoại lệ
+                    
+                    // Animation
+                    container.fadeOut();
+                }
+            });
+            // is trả so sánh có phải thẻ đó k; 
+            // has(tập hợp thẻ) trả ra các thẻ trong tập hợp mà nó chứa vì click vào có thể ra 1 thẻ or 1 list các thẻ
+            // Vd ta click thẻ A lồng thẻ B nhưng thẻ đang xét nó chỉ chứa thẻ B thôi thì has trả ra mảng có thẻ B
+        </script>
+    </body>
+</html>
