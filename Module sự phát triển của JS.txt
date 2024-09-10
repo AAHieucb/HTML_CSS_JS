@@ -1,3 +1,4 @@
+//!!!!!!!!
 #***Bản chất sự phát triển của JS ở frontend
 -> Đầu tiên JS được dùng trong website bằng tag <script> tới file index.js
 

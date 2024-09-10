@@ -1,0 +1,30 @@
+# DevTool Browser
+Tab Console : allow pasting
+[...$$('img')].forEach(a=>a.remove()); 
+document.designMode = "on"; 
+VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) => click tất cả các thẻ a có 2 class .touchable.primary
+
+Tab Source Browser: ctrl+p -> tìm file -> đặt debugger -> tới line bất kỳ với: ctrl+p -> :100 để tới dòng 100 -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
+CTRL + SHIFT + F để Search global
+Để cho file chạy đến dòng nào thì log gì ra có thể: right click breakpoint -> logpoint -> ghi message có thể ghi biến ra thì nó sẽ log biến đó
+
+
+
+# Load file JS với async và defer
+Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý JS, gọi là Parse Blocking
+Script attributes: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy; defer chỉ chạy khi html parse xong.
+VD: Đang parse HTML CSS thì gặp 1 script async -> tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì vẫn chạy script luôn => default
+VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script
+=> Nên đặt style ở đầu và script ở cuối vì trình duyệt bth luôn cần css load sớm để hiện ra còn tính năng k cần load ngay.
+
+
+
+# Other
+-> ES6 (ECMAScript) là các quy tắc giúp JS chạy tốt trên mọi trình duyệt.
+Babel convert ES6 sang CommonJS cho NodeJS dùng được.
+
+-> Browser khác nhau dùng rendering engine khác nhau như: Webkit dùng cho Safari, Gecko dùng trong firefox, Blink dùng trong chrome, opera.
+Chromium là 1 trình duyệt mã nguồn mở, từ đó phát triển nên các trình duyệt khác.
+
+
+
