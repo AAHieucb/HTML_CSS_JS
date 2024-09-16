@@ -365,10 +365,20 @@
     <br/>
     <style>
         .container2 {
-            --w:400px;
-            --n:3;
+            --w: 400px;
+            --n: 3;
             display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(clamp(100%/(var(--n) + 1) + 0.1%,var(--w),100%),1fr)); /*this */
+            grid-template-columns: repeat(
+                auto-fit, /* giúp co lại */
+                minmax(
+                    clamp(
+                        100%/(var(--n) + 1) + 0.1%, /* 25.01% */
+                        var(--w),
+                        100%
+                    ),
+                    1fr
+                )
+            ); /* this */
             gap:10px;
         }
         .container2 > div {
@@ -384,7 +394,7 @@
         <div></div>
     </div>
 
-    <!-- Khi kích thước k đồng đều -->
+    <!-- Khi kích thước k đồng đều --> 
     &nbsp;
     <style>
         .grid {
@@ -493,6 +503,8 @@
         }
     </style>
     <p style="width: 100px; text-indent: -20px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente, earum!</p>
+
+
 
 </body>
 </html>

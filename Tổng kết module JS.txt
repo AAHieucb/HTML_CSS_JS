@@ -556,3 +556,10 @@ Rx.Observable hỗ trợ xử lý bất đồng bộ
 # Other
 ####
 
+
+
+# Dùng Map thay if else và switch case:
+if else là cấu trúc bậc thang
+switch case nhanh hơn if else đáng kể khi số lượng điều kiện lớn. Mỗi điều kiện k phụ thuộc vào điều kiện trước đó nên thực hiện như mạch logic sẽ nhanh hơn.
+=> Tuy nhiên trong Js khi muốn search theo key nên dùng new Map là nhanh nhất. Map là 1 instanceof Object nhưng sinh ra để search nhanh hơn, nên dùng thay thế
+

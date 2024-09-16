@@ -327,3 +327,60 @@ Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, kh
 Tải extension Custom css and loader -> tạo file custom.css để ở 1 thư mục -> ấn vào ký hiệu setting mở settings -> mở file user settings.json bằng ký hiệu ở góc phải bên trên -> thêm code: "vscode_custom_css.imports": ["file:///C:/Users/Ryan.Nguyen/Documents/custom.css"] là đường tuyệt đối tới file css -> CTRL + SHIFT + P mở dev tool -> tìm các class và custom thoải mái -> viết code custom vào file css -> CTRL + SHIFT + P và enable custom css and js -> tải extension Fix VSC Checksum -> CTRL + SHIFT + P Fix Checksum Restor -> tiếp Fix Checksum Apply
 
 
+
+-> Dùng containeir query ta phải tự căn nhỏ hơn 1 con số cụ thể bao nhiêu px thì mang style gì thủ công k ổn. Có nhiều giải pháp responsive khác:
+Pb các hàm:
+flex-basis: setup kích thước cho thẻ trong flexbox, các thẻ sẽ mang kích thước flex basis của chính mình. Sau đó phần space thừa sẽ được chia ra. Nếu flexbox container lớn hơn flex-basis các thẻ cộng lại thì các thẻ sẽ mở rộng fill flexbox tuỳ vào flex-grow. Nếu flex nhỏ hơn thì các thẻ sẽ co theo tỉ lệ dựa vào flex-shrink
+clamp(min,value,max): browser set giá trị là value, nếu value nhỏ hơn min sẽ set là min, lớn hơn max sẽ set là max. Value ở giữa thường là relative.
+auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách tạo ra nhiều cột hoặc hàng hơn nếu có đủ không gian. Nếu không đủ không gian sẽ điều chỉnh kích thước các phần tử bth
+minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
+
+Bản chất là calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
+VD: (200px - 100%)*999  là check nếu container lớn hơn 200px sẽ trả ra số âm cực bé, và ngược lại dương cực lớn r
+
+VD flexbox có 2 tag con, tag con sẽ hiện lên nếu mang kích thước đủ
+.with-sidebar {
+  --main-min-width: 45ch;
+  --sidebar-size: 250px;
+  --gap: 2rem;
+
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: wrap;
+}
+.with-sidebar > * {
+  flex-grow: 1;
+}
+.with-sidebar > :first-child {
+  flex-grow: 999;
+  flex-basis: calc(
+    ((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999)
+  );
+}
+.with-sidebar > :last-child {
+  flex-basis: var(--sidebar-size);
+}
+
+VD grid nhảy cột từ 1 tới 4:
+.columns {
+  /* user setting */
+  --min-column-size: 200px;
+  --column-count: 4;
+  --gap: 2rem;
+  
+  /* calculations */
+  --breakpoint: calc(var(--min-column-size) * var(--column-count) + (var(--gap) * (var(--column-count) - 1)) );
+  --column-size: calc((100% / var(--column-count)) - var(--gap));
+  
+  display: grid;
+  gap: var(--gap);
+  
+  grid-template-columns: repeat(
+    auto-fit, 
+    minmax(
+      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), 
+      1fr)
+    );
+}
+Đã từng làm TH tăng dần cột từ 1 tới 1 số chỉ định
+
