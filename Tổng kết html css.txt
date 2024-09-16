@@ -1,24 +1,10 @@
 # Basic
--> text-transform: uppercase; => chuyển uppercase éo cần JS luôn
-mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
-backface-visibility: hidden; => sẽ khiến mặt sau của thẻ k hiện ra nếu nhìn thấy mặt sau, mặc định nó nhìn xuyên mặt trước ra mặt sau
-backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element
-pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
-box-decoration-break => xử lý style inline element khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
-
--> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
-K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-zIndex k hđ với position static, cần set rõ khi dùng.
-
--> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới
-
--> VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx, kiểu window là Z = 0 và nó theo cái cha gần nhấ có z=0 ấy
-padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
-Lỗi transition: set hover vào thì thuộc tính gì mang giá trị gì chỉ transition với dạng số xác định. VD 1 thẻ margin auto hoặc chưa set marge gì mà hover thành 10px thì sẽ nhảy sang 10px luôn vì nó k hiểu auto là từ đâu. Có thể tận dụng điều này trong animation kiểu nhảy từ trái sang phải mà k quay về rất ảo
+-> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding
 
 -> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
+border-radius: https://9elements.github.io/fancy-border-radius/
 
--> border-image; border-radius: https://9elements.github.io/fancy-border-radius/
+-> Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
 
 
 
@@ -152,87 +138,35 @@ position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hư
 -> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ dính màn hình theo vị trí top left ta set. Phạm vi là trong 1 thẻ relative khác hoặc body, nếu thẻ relative scroll hết sẽ trôi cả sticky.
 
 -> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
+VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
 
 
 
-//!!!!!!!!!!
-#***Các component khó tự tạo với css thuần
--> Pacman di chuyển:
-Chú ý là ta tách animation xoay và di chuyển thành 2 phần riêng chứ kp là vừa đi vừa xoay, do ktg xoay cực nhanh nên ta cho nó 0.1% mà thôi
-
--> Đồng hồ
-Nó thg tạo các thẻ bố cục trước r viết code css cho nó. Cuối cùng đóng gói lại thành 1 component. Dường như ta có thể tạo ra tất cả mọi thứ với css html, chỉ là phức tạp đến mức độ nào, có nghĩ ra k thôi. Với các hình quá dị thì dùng svg cx ra hết
-
--> Để tạo navigation bằng CSS thuần buộc phải dùng ul list thẻ a: 
-Đầu tiên cho text-decoration là none và :hover vào thì đổi thành gì, :active tức link hiện tại đang được chọn thì style như thế nào. dùng list-style-type: none; để ẩn đi symbol đầu của dạng list. Navigation bar dọc là mặc định khi li dùng display:block, để tạo navigation bar ngang ta dùng thẻ li có display: inline;
-
--> Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility hidden khác display none ở chỗ nó vẫn chiếm k gian nhưng k thấy và k thể tương tác. Hữu ích nếu ta muốn 1 khoảng không gian vô hình hoàn hảo. 
-
--> Tạo thanh loading ngang với scaleX: Cái hay là dùng selector ::before để animation cho before đúng kích thước scale từ 0 đến 1 để load
--> Tạo thanh loading xoay
-
--> Tạo slider
-Bản có đổi màu: Điểm hay là ta cần tạo ra 1 cục tròn tròn di chuyển thì thay vì ta viết tất cả logic css đó vào trong 1 class thì ở đây ta tách ra 2 class là slider và round rồi cùng cho thẻ sử dụng. Vì 2 tính này độc lập, ta chỉnh vị trí thanh slider thì cục kia thích tròn hay vuông chả ảnh hưởng. Từ đó ta có thể tạo slider bao nhiêu hình cũng được chỉ cần bổ sung class mới vào. VD: TH này nếu ta xóa class round đi thì nó sẽ thành hình vuông và có 1 style slider mới, nếu k ta sẽ phải viết lại logic từ đầu cho mỗi hình khác nhau
-=> Đây là cách chia tách module cơ bản trong css
-
--> Hiệu ứng khói
--> Tạo spinning card
--> ul li lồng nhau
--> Đám mây mưa
--> Sun
--> Tạo darkmode
--> Full tương tác client server HTML CSS JS
-
--> Tạo giọt nước to: 
-Để 1 thẻ ra tâm của 1 container => container position relative, thẻ con position absolute bên trong có left 50% và transform translateX(-50%), có thể translate cả trục y nếu height lớn. Tức là ta chỉnh vị trí nó ra tâm xong lùi lại 1 lượng bằng nửa kích thước nó là được. Có thể responsive bằng cách chỉnh width height phụ thuộc vào màn hình và overflow hợp lý
-
--> Có sẵn: tạo quốc kỳ của mọi quốc gia trên thế giới bằng css
-https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc?fbclid=IwAR2gWGcDZMSjSmpNDmrDIMb35eHImC0Kx3yqMVudwuRtHENBf8I2KSqDOJo#vietnam
-=> Để dùng chỉ cần copy paste html css vào
-
--> Có sẵn: các hiệu ứng cơ bản cho text, input, loading bằng html css thuần => https://cssfx.netlify.app/
-
--> Background sao bay => ref tới "Solidity / Solidity Other / Web3ReduxFull"
-
-
-
+//!!!!!!!!
 # Dùng font
-Ta có thể thêm các font chữ cho web mà các font lạ máy ta k hỗ trợ bằng cách tải trên mạng về file .ttf của font đó. Để dùng có thể link tới file .ttf font đó tương tự
-
 TrueType Fonts (TTF): TrueType là định dạng font phổ biến cho các hệ điều hành Mac OS và Windows.
-
-OpenType Fonts (OTF): OpenType là một định dạng được phát triển dựa trên nền tảng của TrueType và nó đã được đăng ký thương hiệu bởi Microsoft. Font chữ OpenType được sử dụng phổ biến hiện nay trên các nền tảng máy tính lớn.
-
-The Web Open Font Format (WOFF): WOFF bản chất là một OpenType hoặc TrueType được bổ sung một số siêu dữ liệu giúp việc truyền tải qua mạng nhẹ nhàng hơn. W3C khuyến khích sử dụng định dạng này.
-
-The Web Open Font Format (WOFF 2.0): TrueType/OpenType là một bản nén tuyệt vời hơn WOFF 1.0.
-
+OpenType Fonts (OTF): OpenType là một định dạng được phát triển dựa trên nền tảng của TrueType.
+Web Open Font Format (WOFF): là một TrueType nhưng nhẹ hơn và được W3C khuyến khích dùng
+Web Open Font Format (WOFF 2.0): là một bản nén tuyệt vời hơn WOFF 1.0.
 SVG Fonts/Shapes: SVG Fonts giúp hiển thị văn bản giống như một hình ảnh Graphic.
+Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của OpenType
 
-Embedded OpenType Fonts (EOT): EOT là một hình thức nén của OpenType, được phát triển bởi Microsoft và dùng để nhúng vào website => ít dùng nhất
-
--> Dùng @font-face
-Để dùng @font-face, ta định nghĩa ra font và dùng nó trong các thẻ như bth
+-> Định nghĩa font mớ css
 @font-face{
-    font-family: MyFont;
-    src: url(sansation_light.woff);
-    font-weight: 100;
+  font-family: MyFont;
+  src: url(sansation_light.woff);
+  font-weight: 100;
 }
 h2{
-    font-family: MyFont;
+  font-family: MyFont;
 }
-
-=> Thuộc tính font-family xác định font dùng cho 1 thẻ, nếu browser k support font đầu sẽ chuyển dần sang các font sau
-
-Cách khác là dùng tag html của google font api cho thẳng vào file html
+font-family thì nếu browser k support font đầu sẽ chuyển dần sang các font sau
 
 -> Dùng font-systhesis
-Khi ta dùng font trong app thì ta phải nhúng url trong TH của google api nhưng 1 url chỉ được với 1 weight và style cố định, nếu font này ta dùng nhiều style thì phải nhúng tất cả. Nhưng kp font nào cũng có đủ mọi style, do đó browser sẽ làm giả style. VD thẻ strong hay i đều là giả style nếu font đó k hỗ trợ. Do đó khi ta dùng font trong app nếu như ta áp style nhưng nó k đổi thì rất có thể font đó k hỗ trợ và browser cũng k giả được style, thậm chí nhiều lúc giả style sai khiến chữ bị đè hay lúc đậm lúc nhạt mỗi browser khác nhau
-Thuộc tính font-systhesis giúp ta quyết định browser có giả style hay không, nếu set là none thì k chữ luôn hiện đúng nếu có, k có thì hiện dạng mặc định chứ k giả
-weight/style/none/small-caps/weight style small-caps. Nhưng cũng đừng ngáo đá tưởng là set none thì sẽ k có chữ đậm hay nghiêng vì nếu font hỗ trợ thì vẫn dùng đc bth mà
-=> Mặc định ta sẽ để nó cho phép giả hết, nếu thấy chữ bị hỏng thì phải thay font khác, import thêm các dạng khác của font đó, k được mới phải dùng đến thuộc tính này để tắt các tính năng giả đi(thay vì phải vô từng dòng code sửa thì dùng cái này 1 phát là được)
+Browser giả style khi font k hỗ trợ, nhiều lúc giả style bị lỗi hiển thị. Nếu dùng style mà text k đổi thì có thể do font k hỗ trợ và browser cũng k giả style được.
+font-systhesis quyết định browser có giả style hay không, nếu set là none thì chữ luôn hiện đúng nếu có, k có style thì hiện dạng mặc định chứ k giả => Thường luôn cho phép giả
 
+//!!!!!!!
 -> Dùng text-rendering
 Là 1 SVG property k có trong CSS chuẩn, có: optimizeSpeed, optimizeLegibility, geometricPrecision, auto(phụ thuộc vào browser)
 optimizeLegibility là giúp vc chữ hiển thị dễ đọc, phân biệt fli bằng cách in với kích thước hơi khác biệt 1 chút cho người dùng tránh nhầm
@@ -837,3 +771,34 @@ Dùng kiểu display: table;
 Dùng grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
 Biết vẽ thẻ SVG: chịu chết
 CSS: học về SCSS và SASS -> từ đó tạo ứng dụng darkmode dễ hơn bằng hàm css tạo từ scss: https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fbetterprogramming.pub%2Fa-complete-guide-to-implementing-dark-mode-in-react-47af893b22eb%3Ffbclid%3DIwAR1TilnVLD1Ei3SPGq42tOcffeLrrXCf9TGKIOxMKUfqc9TVDNLJNOw1Ipk
+
+
+
+
+
+-> text-transform: uppercase; => chuyển uppercase éo cần JS luôn
+mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
+backface-visibility: hidden; => sẽ khiến mặt sau của thẻ k hiện ra nếu nhìn thấy mặt sau, mặc định nó nhìn xuyên mặt trước ra mặt sau
+backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element
+pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
+box-decoration-break => xử lý style inline element khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
+
+-> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
+K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
+zIndex k hđ với position static, cần set rõ khi dùng.
+
+-> 
+padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
+Lỗi transition: set hover vào thì thuộc tính gì mang giá trị gì chỉ transition với dạng số xác định. VD 1 thẻ margin auto hoặc chưa set marge gì mà hover thành 10px thì sẽ nhảy sang 10px luôn vì nó k hiểu auto là từ đâu. Có thể tận dụng điều này trong animation kiểu nhảy từ trái sang phải mà k quay về rất ảo
+
+
+
+-> Để tạo navigation bằng CSS thuần buộc phải dùng ul list thẻ a: 
+Đầu tiên cho text-decoration là none và :hover vào thì đổi thành gì, :active tức link hiện tại đang được chọn thì style như thế nào. dùng list-style-type: none; để ẩn đi symbol đầu của dạng list. Navigation bar dọc là mặc định khi li dùng display:block, để tạo navigation bar ngang ta dùng thẻ li có display: inline;
+
+-> Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
+visibility hidden khác display none ở chỗ nó vẫn chiếm k gian nhưng k thấy và k thể tương tác. Hữu ích nếu ta muốn 1 khoảng không gian vô hình hoàn hảo. 
+
+-> Tạo slider
+Bản có đổi màu: Điểm hay là ta cần tạo ra 1 cục tròn tròn di chuyển thì thay vì ta viết tất cả logic css đó vào trong 1 class thì ở đây ta tách ra 2 class là slider và round rồi cùng cho thẻ sử dụng. Vì 2 tính này độc lập, ta chỉnh vị trí thanh slider thì cục kia thích tròn hay vuông chả ảnh hưởng. Từ đó ta có thể tạo slider bao nhiêu hình cũng được chỉ cần bổ sung class mới vào. VD: TH này nếu ta xóa class round đi thì nó sẽ thành hình vuông và có 1 style slider mới, nếu k ta sẽ phải viết lại logic từ đầu cho mỗi hình khác nhau
+=> Đây là cách chia tách module cơ bản trong css
