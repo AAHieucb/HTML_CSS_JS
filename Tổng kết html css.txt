@@ -166,6 +166,14 @@ https://www.w3schools.com/cssref/css_fonts_fallbacks.php
 
 -> Dùng color font: Font được style đẹp sẵn
 
+-> @font-palette-values gom các thuộc tính font lại tái sử dụng
+@font-palette-values --identifier {
+  font-family: Bixa;
+}
+.my-class {
+  font-palette: --identifier;
+}
+
 
 
 # Dùng float:
