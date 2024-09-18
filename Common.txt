@@ -1,0 +1,11 @@
+# Kỹ thuật color rule phối màu
+Phối màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng)
+Màu primary 30% được dùng cho các panel hay background của dialog, thẻ thường. Màu này có thể gần giống màu neutral để tạo ứng dụng 1 theme monochrome
+Màu secondary 10% chỉ dùng cho các phần tử quan trọng để người dùng focus vào mà bấm như button, vị trí mà người dùng có thể tương tác, highlight. Màu này nên nổi bật lên trên 2 màu kia
+=> Chỉ nên có 2 màu xuất hiện nhiều là neutral và primary.
+
+Các màu chọn có thể là gradient hay thêm các màu lạ khác vào (1%) nhưng phải tuân theo quy tắc 3 màu chủ đạo. Xếp tránh các màu quá tương phản mà liên tục show ở 1 vị trí 
+Các bức ảnh có thể mang bất kỳ màu gì k ảnh hưởng, nhưng nếu nhiều ảnh cùng 1 màu nền thì có thể nên đổi màu nền kia thành màu primary.
+Còn phụ thuộc vào font chữ, animation, bo góc.
+
+

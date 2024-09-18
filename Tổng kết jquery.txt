@@ -1,0 +1,19 @@
+# Basic
+Có thể code jQuery ngay trên console trình duyệt
+
+-> $ is document.querySelector => https://freetuts.net/selector-trong-jquery-574.html
+$$ is document.querySelectorAll
+Bắt sự kiện: dbclick
+Lấy thẻ hiện tại đang làm với $(this)
+Animation: slideUp, hàm animate tạo animation cho thẻ sau bnh giây, fadeIn, scrollTop, slideDown
+Từng thẻ riêng có các hàm riêng: $("input").val()
+Hàm chỉnh nhanh các thuộc tính css: show, hide, addClass, css, width height, attr, removeAttr
+Dùng các hàm JS mà jQuery cung: trim
+Check 1 thẻ có chứa các thẻ nào, lấy các thẻ đang click: has, e.target, is
+Lấy vị trí các thẻ: offset
+Thêm bớt thẻ vào thẻ: append
+Lấy vị trí thẻ và vị trí chuột: e.pageX
+
+-> Dùng các plugin có sẵn của jQuery: fancybox, đọc pdf file, lật trang sách, webcam, zoom ảnh
+
+

@@ -1,91 +1,36 @@
-## SCSS:
-CSS Preprocessor là ngôn ngữ kịch bản mở rộng của CSS3. Nó bao gồm mọi tính năng của css và mở rộng thêm 1 số tính năng k có sẵn như mixin, nesting, inheritance selector,... Đa phần các tính năng thêm vào của CSS Preprocessor có vai trò giúp cấu trúc của CSS dễ đọc, dễ bảo trì hơn. Ta hoàn toàn code mọi thứ bằng css thuần nhưng css code quá tĩnh, khó tái sử dụng với các thuộc tính lặp lại. 
-Sau cùng, code của css preprocessor sẽ được compile thành code css để dùng như bth. Code css preprocessor tương thích với mọi thứ dùng css
-1 số css preprocessor phổ biến như: SASS, SCSS, LESS, Stylus, PostCSS.
-=> Trong thực tế các dự án React dùng thư viện UI riêng thì ít khi nào ta cần tái sử dụng code css vì mỗi cục có 1 tính chất riêng, nếu có cái gì chung thì thường có ThemeProvider xử lý giúp ta. Vc dùng scss sass thg chỉ trong các dự án dùng html css thuần.
-
-Cú pháp của SASS(Syntactically Awesome Style Sheets) và SCSS(Sassy Cascading Style Sheets) như nhau chỉ là: SASS k có {} còn SCSS có {} => mặc định code SCSS vì nó giúp cú pháp rõ ràng hơn. Bỏ {} là thành SASS. 
-SASS chỉ dùng tab và enter để phân cấp và xuống dòng
-
-Nhược điểm của css preprocessor đa phần là: khó khăn debug ra lỗi runtime vì nó đâu có tool debug lỗi này, tốn thời gian về hiệu năng vì phải biên dịch ra css rồi mới chạy thay vì chạy TT. 
-Thực tế, ta có thể dùng css compiler để chuyển nó thành css thuần rồi dùng file thuần đó cũng được.
-SCSS cung biến, hàm, thao tác màu và toán học khiến cho css như 1 ngôn ngữ lập trình bth
-Có thể cài cả phía frontend or môi trường backend NodeJS khi dùng SSR
-
-Có những phần code yêu cầu buộc phải dùng scss, VD css style cho 300 phần tử, ta k thể code bằng css thuần
-
-
-
 # Basic
-Ta code css3 trong file.scss thoải mái
+Cú pháp SASS(Syntactically Awesome Style Sheets) và SCSS(Sassy Cascading Style Sheets) như nhau chỉ là: SASS k có {} mà dùng tab và enter để phân cấp và xuống dòng, còn SCSS có {} => mặc định code SCSS vì nó giúp cú pháp rõ ràng hơn. Bỏ {} là thành SASS.
+Code css3 trong file.scss thoải mái
 
--> Cài đặt: 
-Phải dùng phần mềm bên thứ 3 để biên dịch vì browser k hiểu. Có thể dùng Ruby với Netbeans or Sublime Text làm editor vì nó tự hỗ trợ compile scss thành css, cài phải có java jdk. Có các trình khác như Koala hay Laravel Mix.
---> Để cài trong VSC:
-VSC tự động highlight code scss rồi. Có thể dùng thêm các extension khác để format code nếu thích.
----> Để dùng command line: npm i -g sass => sass <link file>.scss <link file đích>.css
----> Để có sass live compiler: Tải extension sass live compiler -> ấn nút sass watcher -> khi save file scss sẽ tự compile ra css live
+-> Cài trong VSC:
+Để dùng command line: npm i -g sass => sass <link file>.scss <link file đích>.css
+Để có sass live compiler: Tải extension sass live compiler -> ấn nút sass watcher -> khi save file scss sẽ tự compile ra css live
+--> Dùng sass trong React
+npm i node-sass => import file scss dùng trực tiếp như bth thôi
 
 -> Các lệnh khác:
 sass <link file>.scss <link file đích>.css --style compressed => bỏ khoảng trắng để nén file thành 1 hàng
 sass <link file>.scss <link file đích>.css --style expanded => mở rộng chuẩn đẹp như code tay dùng 2 space
 
--> Nested selector
-Thực chất là con mọi cấp
-
-Trong nested selector, nó cho phép dùng lồng nhau với & biểu diễn thẻ hiện tại, cái này giống css selector trong MUIv4
-
 -> Dùng câu điều kiện if else
+Dùng vòng loop for, while, each
+Dùng function return ra giá trị cho thuộc tính
+Xử lý chuỗi, số
 
--> Dùng vòng loop for
+-> Nested selector: cho phép dùng lồng nhau với & biểu diễn thẻ hiện tại để style
 
--> Dùng các loại toán tử:
-Toán tử cộng 2 color k dùng được nữa
+-> Dùng kế thừa:
+Dùng placeholder khi class Cha k được dùng riêng bởi bất cứ 1 thẻ nào mà luôn dùng thông qua class Con
 
--> Dùng loop while
-
--> Dùng loop each
-
-
-
-# Dùng biến và mixin
-@mixin có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào
-
+-> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào
 Dùng @content
 
 
 
-# Dùng function
-Cung giá trị cho 1 thuộc tính bằng return
-
-
-
-# Dùng kế thừa
--> Dùng placeholder khi class Cha k được dùng riêng bởi bất cứ 1 thẻ nào mà luôn dùng thông qua class Con
-
-
-
-# Xử lý chuỗi
-
-
-
-# Xử lý số
-
-
-
-# Dùng sass trong React
-SASS được thiết kế và viết bởi các lập trình viên Ruby, sử dụng cú pháp giống Ruby. package node-sass giúp convert code sass thành css dùng cho dự án react
-
--> Setup: npm i node-sass -> import file scss dùng trực tiếp như bth thôi
-
--> Cách tổ chức dự án dùng scsss
-
-
-
-# Other
--> Quan trọng là phải hiểu nó dùng các thứ trong phạm vi nào:
-- biến, function thêm 1 giá trị cho 1 attribute của class
+# Nhanh
+Phải hiểu nó dùng các thứ trong phạm vi nào:
+- Biến, function thêm 1 giá trị cho 1 attribute của class
 - class, placeholder dùng trong phạm vi 1 class khác để thêm thuộc tính cho nó
-- câu điều kiện, vòng loop dùng để tạo ra class mới
+- Câu điều kiện, vòng loop dùng để tạo ra class mới
 - mixin thì dùng được với cả 2 case trên, nó có thể thêm thuộc tính cho 1 class có sẵn or khai báo 1 class mới
 

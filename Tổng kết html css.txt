@@ -1,15 +1,44 @@
 # Basic
--> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding
+text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
+Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
+https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon động) chỉ với điều kiện thêm thẻ div này vào mã nguồn: <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 
--> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
+Có thể custom cursor
+CSS nesting có sẵn rồi
+***popovertarget và popover giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần
+
+-> Master border radius: outer radius = inner radius + distance giữa 2 border
 border-radius: https://9elements.github.io/fancy-border-radius/
 
--> Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
+-> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding
+
+-> Hack CSS: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
+Cũng có thể dùng cho thuộc tính kiểu height: -moz-fit-content;
+
+-> Biến trong css định nghĩa với -- trong 1 tag chỉ dùng được trong tag đó và tag con của nó, truy cập với var()
+VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click là được.
+
+-> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
+K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
+zIndex k hđ với position static, cần set rõ khi dùng.
+
+padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
+
+-> resize: both; direction: ltr; => biến mọi thẻ thành resizable
+contenteditable => biến mọi thẻ thành editable nhưng khá xấu
+Dùng <dialog> có sẵn
+Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
+ul li, ol li, dl dt dd
+Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết. Có none, open, dot, circle, triangle, seseam, 1 <character> bất kỳ
+Tag video chứa tag source. VD: preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
+Thuộc tính inert đặc biệt trong html, khi dùng sẽ vô hiệu hóa mọi tương tác của người dùng với các tag.
 
 
 
 # Custom thẻ input
 Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: aria-autocomplete="list"
+
+-> Nếu muốn có 1 group input radio chỉ cho chọn 1 thì phải đặt chung trường name với nhau
 
 -> input type number custom nút spin button, trỏ vào shadow DOM với: input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button
 Nó có thuộc tính -webkit-appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
@@ -43,54 +72,121 @@ p:empty là khi thẻ p k có text bên trong thì có style như nào
 p:lang(it) { } => thẻ p có lang là italia. VD: <p lang="it">Ciao bella!</p>
 div:nth-child(n) => thẻ div là con thứ n
 p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
+initial-letter tương đương selector ::first-letter giúp tạo chữ đầu tiên to đùng như đầu bài báo article
+::focus-visible giúp bắt TH button bị click hay chọn bởi tab key
 
 -> X:before và X:after như 1 thẻ khác nằm bên trong X có kích thước fit content, k có content thì mặc định là 0 0.
 before hiện ở left 0 top 0 của thẻ, after ở top right, kp hiện đằng trc vị trí thẻ hiện tại mà nó chiếm vị trí thẻ và đẩy text thẻ ra sau nó
 VD cho x là relative và before là absolute thì vị trí thẻ before sẽ tính theo thẻ x
 
+-> VD Event click chuột vào 1 phần tử trong list thì đổi style đơn giản: Từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó ::focus r chỉnh style thoải mái. 
 
-
-# Xử lý ảnh
-Ảnh thì nên ưu tiên SVG để tránh bị mờ khi zoom lớn
--> https://bennettfeely.com/clippy/ => kích thước vẫn thế nhưng hiển thị cut ảnh
-
-
-
-# Metadata SEO
-<title> <meta name="description> <meta name="keywords"/>
-<link rel = "canonical" href = "http://example.com/"/> => thông báo cho search engine URL này là trang chính và tránh lập chỉ mục với URL của các trang trùng lặp khác
-Đủ alt cho hình ảnh
-<meta name = "robots" content = "noindex, nofollow"> => Có nghĩa là không lập chỉ mục hay không theo dõi trang web này.
-<meta name = "robots" content = "index, follow"> => Có nghĩa là chỉ mục và theo dõi trang web này
-
-Open Graph tags liên kết với các social media: <meta property = "og: type" content = "article" />
-<meta property = "og: title" content = "TÊN TIÊU ĐÊ HOẶC TRANG WEB" />
-<meta property = "og: description" content = "MÔ TẢ CỦA TRANG NỘI DUNG" />
-<meta property = "og: image" content = "LIÊN KẾT ĐẾN TẬP TIN HÌNH ẢNH" />
-<meta property = "og: url" content = "PERMALINK" />
-<meta property = "og: site_name" content = "TÊN TRANG WEB" />
-
-Twitter tag tương tự nhưng chỉ dành cho twitter: <meta name = "twitter: title" content = "TÊN TIÊU ĐỀ HOẶC TRANG WEB">
-<meta name = "twitter: description" content = ”"MÔ TẢ TRANG NỘI DUNG">
-<meta name = "twitter: image" content = "LINK TO IMAGE">
-<meta name = "twitter: site" content = "USERNAME">
-<meta name = "twitter: creator" content = "@ USERNAME">
-
--> <meta name="viewport" content="width=device-width, initial-scale=1.0"> => Luôn có thẻ này để cho phép người dùng zoom-in text, điều này phù hợp với những người thị lực yếu vào website, họ sẽ phải dùng các tool giúp zoom to trang web để nhìn rõ, VD CTRL+ của browser. Custom:
-<meta name="viewport" content="user-scalable=yes"/> cho phép người dùng sử dụng các tool zoom cho trang web
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1"/> chỉ cho max scale đến 200%
-<meta name="viewport" conent="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/> => k cho zoom vì sợ break design
-=> 1 số thiết bị có tính năng zoom text only, nhưng nếu text zoom to mà layout k zoom sẽ break design, do đó code height của thẻ nên phụ thuộc vào content chứ k được fix cứng
+VD tính năng readmore với CSS only: dùng 2 cái radio button cho 2 dòng Read more và Read less để trigger thông qua label r style css :checked để ẩn hiện dòng text 
 
 
 
-# Responsive
-Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có thể gấp 3 lần height và height cực kỳ nhỏ
+# Flexbox
+Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
+Dùng kèm flex-grow và flex-shrink, order
+Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
+
+-> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
+
+-> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
+
+-> flex-basis => ref tới "Responsive css"
+
+
+
+# Dùng position 
+-> Position absolute sẽ xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
+position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hưởng đến kích thước của thẻ, tự kéo dãn cho vừa hcn đó đó là khi kích thước k set.
+
+-> Relative là thay đổi vị trí so với bình thường bao nhiêu, vẫn chiếm không gian
+
+-> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ dính màn hình theo vị trí top left ta set. Phạm vi là trong 1 thẻ relative khác hoặc body, nếu thẻ relative scroll hết sẽ trôi cả sticky.
+
+-> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
+VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
+
+
+
+# Dùng font
+TrueType Fonts (TTF): TrueType là định dạng font phổ biến cho các hệ điều hành Mac OS và Windows.
+OpenType Fonts (OTF): OpenType là một định dạng được phát triển dựa trên nền tảng của TrueType.
+Web Open Font Format (WOFF): là một TrueType nhưng nhẹ hơn và được W3C khuyến khích dùng
+Web Open Font Format (WOFF 2.0): là một bản nén tuyệt vời hơn WOFF 1.0.
+SVG Fonts/Shapes: SVG Fonts giúp hiển thị văn bản giống như một hình ảnh Graphic.
+Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của OpenType
+
+-> Dùng text-transform: uppercase; => luôn dùng k cần JS
+Dùng text-size-adjust => bỏ vì ta tự set font-size responsive chứ k cần control thuật toán điều chỉnh kích thước văn bản của trình duyệt trên điện thoại nữa
+
+-> Định nghĩa font mớ css
+@font-face{
+  font-family: MyFont;
+  src: url(sansation_light.woff);
+  font-weight: 100;
+}
+h2{
+  font-family: MyFont;
+}
+font-family thì nếu browser k support font đầu sẽ chuyển dần sang các font sau
+Or dùng @import url(<>); trong css để thêm font chữ vào đầu tiên.
+
+-> Dùng font-systhesis
+Browser giả style khi font k hỗ trợ, nhiều lúc giả style bị lỗi hiển thị. Nếu dùng style mà text k đổi thì có thể do font k hỗ trợ và browser cũng k giả style được.
+font-systhesis quyết định browser có giả style hay không, nếu set là none thì chữ luôn hiện đúng nếu có, k có style thì hiện dạng mặc định chứ k giả => Thường luôn cho phép giả
+
+-> Dùng text-rendering
+Có: optimizeSpeed, optimizeLegibility, geometricPrecision, auto (phụ thuộc vào browser)
+optimizeLegibility là giúp vc chữ hiển thị dễ đọc, phân biệt "f l i" bằng cách in với kích thước hơi khác biệt 1 chút cho người dùng tránh nhầm
+=> Thực tế cái này để thế nào cũng được, người đọc chữ nếu k sợ nhầm thì cứ optimizeSpeed nếu cần vì trông chữ nó chả khác biệt mấy
+
+-> Dùng font-smooth: xử lý antialias khi render font
+Dùng kèm -webkit-font-smoothing: auto/none/antialiased/subpixel-antialiased(nét chữ sắc nhất) => MacOS Webkit
+-moz-osx-font-smoothing: auto/grayscale => Firefox MacOS 
+
+-> Font size tự động đổi theo kích thước màn hình:
+min và max trong css giúp lấy min và max của giá trị gì, khi kết hợp với kích thước relative sẽ rất mạnh
+Màn hình luôn được chia thành 100 vw và vh. VD màn hình là 1460px thì 1vw sẽ tương ứng với 14.6px
+clamp(a, b, c); là hàm của css giúp lấy 1 giá trị trong khoảng a và c. Nó ss lấy min(b,c) là x rồi lấy max(a, x) trả ra kết quả. 
+
+VD ta muốn màn hình dưới 700px có font-size là 16px, sau đó tăng dần tuyến tính lên 1px mỗi 100px tăng lên cho đến max là 22px => font-size: clamp(16px, 1vw + 9px, 22px);
+Khi 700px, nó sẽ là clamp(16px, 16px, 22px) thì lấy 16px. Font size tuyến tính tăng lên 1300px thì clamp(16px, 22px, 22px) thì lấy 22px
+Vd muốn màn hình tăng đến đúng 1500px thì fontsize mới là 22px ta chỉ cần giải phương trình là được
+
+Or dùng generator: https://clamp.font-size.app => đổi rem ở vị trí đầu và vị trí thứ 3 thành px để tránh nhiều case bị sai
+
+-> Web safe font: 
+Có các font chạy trên linux ok nhưng sang window bị lệch dòng. Có các tool giúp chỉnh sửa thẳng vào file ttf để fix font như FontForge nhưng khá mất tg
+Web safe font là các font luôn chạy mượt với mọi browser và mọi hđh thường có sẵn trong browser. Nhưng k đảm bảo các web safe font lúc nào cũng khả dụng => Viết CSS thêm fallback fonts là các font dự phòng cho browser:
+https://www.w3schools.com/cssref/css_websafe_fonts.php?fbclid=IwAR2s3BCKKc8rKHr4fKOYp8P2VFVtBj94Moc0fd0auwBP-Mzwv_riCy8FeE8
+https://www.w3schools.com/cssref/css_fonts_fallbacks.php
+
+-> Dùng color font: Font được style đẹp sẵn
+
+
+
+# Dùng float:
+Float khiến 1 thẻ block thành inline không chiếm height và trôi sang 2 bên. Các thẻ khác vẫn hiện cùng dòng và né width nó ra.
+clear: both => khiến thẻ float chiếm height, các thẻ khác k thể ở cùng dòng với nó nữa
+
+-> VD thẻ div chỉ có các thẻ float bên trong thì height thẻ div đó là 0 vì thẻ float k chiếm height của cha nó mà
+ClearFix trong CSS giúp thẻ cha mang kích thước của thẻ con kể cả dùng float, chỉ cần cho 1 thẻ con dưới float để kéo dài cha quá float là được.
+VD: .clearfix:after{
+  content: ".";
+  clear: both;
+  display: block;
+  width: 0px;
+  height: 0px;
+}
 
 
 
 # Dùng display grid
 Giống flexbox nhưng custom vị trí từng ô tốt hơn. Kích thước từng ô, hàng, cột, thứ tự sắp xếp item vào ô, khoảng cách các ô, strech hay co lại.
+Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
 
 -> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
 
@@ -110,695 +206,217 @@ grid-template-area để sắp xếp các item vào grid theo label.
 -> Mặc định các thẻ được sắp xếp vào ô từ trái sang phải và từ trên xuông dưới. grid-auto-flow có thể thay đổi điều này bằng cách ưu tiên xếp đầy row trước hay column trước: row là xếp đầy row theo thứ tự; row dense là vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự; dense là fill bất cứ ô nào vừa là vô
 URL: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
 
--> grid-row và grid-column dùng ở con để xác định vị trí và kích thước con:
-
 -> Phân biệt: place-items: end center; => là kết hợp của align-items end và justify-items center
 place-content: end space-between; => là kết hợp của align-content end và justify-content space-between
 
 
 
-# Flexbox
-Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
-Dùng kèm flex-grow và flex-shrink, order
-Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
-
--> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
-
--> flex-basis: set kích thước initial của flex item. Nếu item lớn hơn thì theo hiển thị full item, nếu tràn ra ngoài flex container vì nó thì thẻ sẽ dài bằng với giới hạn tràn. 
-VD: container 100px, item1 50px, item2 30px. Nếu set width item1 là 1000px thì nó chỉ tới 70 thôi, nếu set width item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
-
-
-
-# Dùng position 
--> Position absolute sẽ xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
-position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hưởng đến kích thước của thẻ, tự kéo dãn cho vừa hcn đó đó là khi kích thước k set.
-
--> Relative là thay đổi vị trí so với bình thường bao nhiêu, vẫn chiếm không gian
-
--> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ dính màn hình theo vị trí top left ta set. Phạm vi là trong 1 thẻ relative khác hoặc body, nếu thẻ relative scroll hết sẽ trôi cả sticky.
-
--> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
-VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
-
-
-
-//!!!!!!!!
-# Dùng font
-TrueType Fonts (TTF): TrueType là định dạng font phổ biến cho các hệ điều hành Mac OS và Windows.
-OpenType Fonts (OTF): OpenType là một định dạng được phát triển dựa trên nền tảng của TrueType.
-Web Open Font Format (WOFF): là một TrueType nhưng nhẹ hơn và được W3C khuyến khích dùng
-Web Open Font Format (WOFF 2.0): là một bản nén tuyệt vời hơn WOFF 1.0.
-SVG Fonts/Shapes: SVG Fonts giúp hiển thị văn bản giống như một hình ảnh Graphic.
-Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của OpenType
-
--> Định nghĩa font mớ css
-@font-face{
-  font-family: MyFont;
-  src: url(sansation_light.woff);
-  font-weight: 100;
-}
-h2{
-  font-family: MyFont;
-}
-font-family thì nếu browser k support font đầu sẽ chuyển dần sang các font sau
-
--> Dùng font-systhesis
-Browser giả style khi font k hỗ trợ, nhiều lúc giả style bị lỗi hiển thị. Nếu dùng style mà text k đổi thì có thể do font k hỗ trợ và browser cũng k giả style được.
-font-systhesis quyết định browser có giả style hay không, nếu set là none thì chữ luôn hiện đúng nếu có, k có style thì hiện dạng mặc định chứ k giả => Thường luôn cho phép giả
-
-//!!!!!!!
--> Dùng text-rendering
-Là 1 SVG property k có trong CSS chuẩn, có: optimizeSpeed, optimizeLegibility, geometricPrecision, auto(phụ thuộc vào browser)
-optimizeLegibility là giúp vc chữ hiển thị dễ đọc, phân biệt fli bằng cách in với kích thước hơi khác biệt 1 chút cho người dùng tránh nhầm
-=> Thực tế cái này để thế nào cũng được, người đọc chữ nếu k sợ nhầm thì cứ optimizeSpeed nếu cần vì trông chữ nó chả khác biệt mấy
-
--> Dùng font-smooth: xử lý antialias khi render font
-auto, never, always
-Với WebKit chỉ có tác dụng với macOS nhưng có tên khác là -webkit-font-smoothing: auto/none/antialiased/subpixel-antialiased(nét chữ sắc nhất)
-Với Firefox cũng thế và chỉ có tác dụng với macOS -moz-osx-font-smoothing: auto/grayscale
-
--> Dùng text-size-adjust: 
-Nhiều website k được thiết kế cho thiết bị màn hình nhỏ(thiếu responsive) thì thay vì nó render page theo chiều rộng của màn hình, nó đơn giản là render theo 1 cái viewport cố định rộng hơn, sau đó ánh xạ vào các thiết bị điện tử. Với điện thoại, website sẽ trông bé tí vì scale viewport down to it. Các browser trên điện thoại sử dụng text inflation algorithm để phóng to text để nhìn được. Khi element chứa text chiếm 100% chiều rộng màn hình thì thuật toán này sẽ tăng kích thước text nhưng giữ kích thước layout. Thuộc tính này giúp dev control thuật toán trên các smart phone hay tablet. Truyền vào phần trăm là giá trị tăng font-size lên
-=> Éo dùng vì các website có responsive k cần quan tâm
-
-
-
-# Dùng float:
-float làm cho thẻ block thành inline và căn sang 2 bên, nó k chiếm height nhưng có chiếm width nên các thẻ khác cùng hàng phải tự né ra
-Bẫy của float: nó vốn dùng để khiến cho 1 thẻ inline bị trôi sang phải or trái và các thẻ khác nếu đụng nó sẽ phải tránh nên thường dùng kiểu làm cho 1 bức ảnh chèn vào giữa đoạn text. 
-
-clear: both sẽ khiến thẻ float cả right và left ở trên nó chiếm height và đẩy nó xuống dưới
-
-VD thẻ div chỉ có các thẻ float bên trong thì kích thước height thẻ div đó là 0 nếu ta k xác định vì thẻ float k chiếm height của cha nó mà
-=> Tức xét TH thẻ div có 1 thẻ float bên trong. 1 thẻ khác có height bằng 10 nằm dưới thẻ div đó và TH thẻ có height bằng 10 nằm trong thẻ div đó thì hiển thị đều như nhau và ngang hàng với thẻ float, nhưng C2 sẽ khiến kích thước height thẻ div tăng lên và bao các thẻ đó còn C1 thì height div kia vẫn là 0
-
--> Kỹ thuật ClearFix trong css
-
-
-
 # Responsive css
-Khi responsive có thể cho font chữ nhỏ lại để cho dễ nhìn or để hiển thị trên 1 hàng
-Khi bố cục chia 3 phần với 2 bên là 2 side bar và ở giữa là body thì trong điện thoại, 3 cột này sẽ thường hiển thị thành 1 cột chính giữa nối tiếp nhau
+Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có thể gấp 3 lần height và height cực kỳ nhỏ.
 
-Kích thước màn hình responsive thì min phải chuẩn cho đến 375-400 cho iPhoneSE. Cần chú ý TH dùng điện thoại thì height > width, máy tính thì width > height. Nhưng khi điện thoại xoay ngang thì height rất nhỏ nên cần chú ý relative height đơn vị là vh dễ bốc cức.
+-> color-scheme: light/normal/dark sẽ tự đổi màu đen trắng mà k cần set màu thủ công, dùng ở :root để đổi tất cả.
 
-Thực tế: galaxy fold còn bé hơn iPhone SE. Bth tầm 350px là ok nhưng khắt khe hơn thì nhiều lúc phải đảm bảo tới tận 280px kìa
+-> Dùng @media:
+@media not|only mediatype and (media feature) { CSS-Code; }
+với mediatype là: all / print / screen
+media feature là: min-aspect-ratio, color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, orientation, resolution
 
--> color-scheme: light=normal/dark có tác dụng hiển thị như mặc định nhưng trắng đen ngược nhau. Nó chỉ có tác dụng với vài component như textarea hay thẻ div nhưng bị overflow. Đặc biệt nếu set nó cho :root thì mọi component bên trong đều bị đổi ngược trắng đen so với mặc định.
-
--> Dùng @media trong css3:
-@media not|only mediatype and (media feature) {
-    CSS-Code;
-}
-thì mediatype là: all / print / screen
-media feature là: aspect-ratio, min-aspect-ratio, max-aspect-ratio, color, color-index, device-aspect-ratio, max-device-aspect-ratio, min-device-aspect-ratio, device-height, device-width, height, width, max-width, min-height, min-device-width, min-device-pixel-ratio, max-device-height, orientation, resolution
-=> chú ý phân biệt có feature của device, có feature của viewport
 VD: @media only screen and (max-width: 480px) and (min-width: 320px){ } => kích thước từ 320->480 của màn hình máy tính or smartphone
 VD: @media only print { } => chỉ cho máy in
-Có thể responsive trực tiếp thẻ link => <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">
+Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">
 => Các thuộc tính và responsive các kích thước cơ bản: https://freetuts.net/su-dung-media-css-tao-responsive-cho-website-660.html
 
---> Có prefers-color-scheme trong @media. VD: @media (prefers-color-scheme: dark) { ... }
-Cái prefers-color-scheme này thực ra là khi user dùng darkmode trong phần mềm sử dụng or thay đổi bằng user-agent. VD khi ta đổi theme điện thoại sang dark mode, 1 số ứng dụng khi vào nó tự mang màu tối 1 cách tự động dù người lập trình k hề code dark theme sẽ hiển thị như nào. Thì trong browser cũng có thể làm điều này. 
-Dùng light nếu ta k set theme gì cả or dùng light mode. Còn dark chỉ khi dùng dark mode. 
-=> Thực tế việc làm điều này là không cần thiết
+--> @media (prefers-color-scheme: dark) { } là khi user setting dark mode trong phần mềm sử dụng or thay đổi user-agent => k cần thiết
+--> @media (prefers-reduced-motion) {} là khi user setting giảm thiểu animation cho web. Setting này của browser để web ít animation cho đỡ lag.
 
---> Có @media (prefers-reduced-motion) {} là khi user setting cho web là giảm thiểu animation thì sẽ chạy vào đây. Setting này của browser để web ít animation cho đỡ lag chẳng hạn.
+--> K dùng được css var trong @media. VD @media screen and (max-width: --mobile-size){} => sai ngay
+Dùng sass thì vẫn được vì nó phân tích cú pháp và paste vào tại thời điểm compile. CSS thuần thì có package postcss-css-variables giúp làm điều đó.
 
--> Có thể dùng với JS: viết sẵn class ra rồi check resize event thì gán class nào
-Với TH quá nhiều style giữa 2 loại có thể tạo 2 file riêng để dùng và xử lý 2 sự kiện onLoad và resize
-Khi dùng responsive bằng JS thì k lo trình duyệt k hỗ trợ @media này nọ. 
+-> Có thể responsive bằng JS với event resize, k sợ browser k hỗ trợ @media 
+Dùng @supports (display: grid) and (not (display: inline-grid)) { } để check browser có hỗ trợ thuộc tính nào không. VD dùng để check nếu k hỗ trợ thì in ra đoạn text "Browser not support this feature!" và display none phần nào sử dụng.
 
--> Dùng @supports (display: grid) and (not (display: inline-grid)){ .. } để check browser có hỗ trợ thuộc tính nào không. Thông thường hỗ trợ 1 giá trị thì cx sẽ hỗ trợ mọi giá trị khác của thuộc tính thôi.
-Ta thường dùng cái này để check nếu k hỗ trợ thì in ra đoạn text "Browser not support this feature!" và display none phần nào sử dụng.
+-> Container query: xử lý case đôi khi màn hình nhỏ dần mà kích thước container lại tăng
 
--> K dùng được var() trong @media declaration. Kiểu VD ta muốn kích thước màn hình lưu trong --mobile-size khai báo trong :root{} và dùng @media screen and (max-width: --mobile-size){} => sai ngay
-Vì dù ta khai báo trong :root là root element of toàn bộ HTML doc nhưng media query không chơi với nó. Nên nếu làm responsive lưu vào biến buộc phải dùng cách khác
+->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
+- flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 
+VD: container 100px, item1 50px, item2 30px. Nếu set width item1 là 1000px thì nó chỉ tới 70 thôi, nếu set width item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
+Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ được chia ra. Các thẻ mở rộng tuỳ vào flex-grow. Nếu container nhỏ hơn thì lại co theo tỉ lệ dựa vào flex-shrink
+- clamp(min,value,max): browser set giá trị là value, nếu value nhỏ hơn min sẽ set là min, lớn hơn max sẽ set là max. Value ở giữa thường là relative.
+- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách nhét nhiều cột hoặc hàng hơn nếu có đủ không gian. Nếu k đủ không gian sẽ điều chỉnh kích thước các phần tử bth
+- minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
+=> Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
 
-Thực tế vẫn có các đạt được điều này: với sass thì ok vì bản chất nó phân tích cú pháp và paste vào giá trị correct (k được dùng calc). Với css thuần buộc dùng thêm package npm postcss-media-variables nhưng deprecated lâu rồi => nch là k dùng
+VD: (200px - 100%)*999  là check nếu container lớn hơn 200px sẽ trả ra số âm cực bé, và ngược lại là dương cực lớn
+VD flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thước đủ: https://www.youtube.com/watch?v=LEkFckg7sfw
+.with-sidebar {
+  --main-min-width: 45ch;
+  --sidebar-size: 250px;
+  --gap: 2rem;
+
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: wrap;
+}
+.with-sidebar > * {
+  flex-grow: 1;
+}
+.with-sidebar > :first-child {
+  flex-grow: 999;
+  flex-basis: calc(
+    ((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999)
+  );
+}
+.with-sidebar > :last-child {
+  flex-basis: var(--sidebar-size);
+}
+VD code mẫu grid nhảy cột từ 1 tới 4:
+.columns {
+  /* user setting */
+  --min-column-size: 200px;
+  --column-count: 4;
+  --gap: 2rem;
+  
+  /* calculations */
+  --breakpoint: calc(var(--min-column-size) * var(--column-count) + (var(--gap) * (var(--column-count) - 1)) );
+  --column-size: calc((100% / var(--column-count)) - var(--gap));
+  
+  display: grid;
+  gap: var(--gap);
+  
+  grid-template-columns: repeat(
+    auto-fit, 
+    minmax(
+      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), 
+      1fr)
+    );
+}
+Có code mẫu tăng dần cột từ 1 tới 1 số chỉ định
 
 
 
-# Tạo Animation
--> Có sẵn: các hiệu ứng cơ bản cho text, input, loading bằng html css thuần => https://cssfx.netlify.app/
+# Animation basic
+Tìm animation đủ loại => search #topcsseffects trong youtube kênh hơn 1000 video chỉ giới thiệu css animation
 
--> Phân biệt transition, animation, keyframe:
---> transition là thuộc tính sử dụng khi element thay đổi trạng thái. VD từ bth sang hover chẳng hạn thì quá trình này biến đổi từ từ. Kp mọi thuộc tính đều dùng được transition VD background-image vì k thể cho 2 hình ảnh chuyển dần qua nhau được vì nó liên quan đến xử lý hình ảnh video chứ k còn là css nữa. Các thuộc tính dùng được thường là các thuộc tính có thể biểu diễn bởi số or màu. Xem tại:
-https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties
-transition: [thuộc tính chuyển động] [thời gian chuyển động] [thời gian delay] [kiểu chuyển động];
-VD: transition: all 1s 0.5s ease-in; nhưng thg chỉ dùng kiểu: transition: 2s ease-in-out;
-Tức là có thể chia kiểu: transition: width 2s, height 2s, transform 2s; để kiểu transition thuộc tính gì thì chơi trong bnh giây
+-> transition: [thuộc tính chuyển động] [thời gian chuyển động] [thời gian delay] [kiểu chuyển động];
+Đổi trạng thái cho các thuộc tính liên quan đến số và màu, VD background-image k có tác dụng nhưng có thể fake chỉ bằng cách animate opacity các ảnh
+VD: transition: all 1s 0.5s ease-in; hoặc transition: width 2s, height 2s, transform 2s;
 
-Transition k dung được với height nhưng được với max-height
-Có thể tạo dropdown text animation với vói fontSize + padding + opacity
+transition k dùng được với width hay các giá trị k rõ như auto
+VD có thể set padding 0 -> unset, fontSize 0 -> unset, scaleY(0) -> scaleY(1)
+Trong React ta dùng style={appear ? {fontSize: "unset"} : {fontSize: 0, padding: 0, opacity: 0}} + transition là được
+pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
 
---> @keyframe là 1 thuộc tính hỗ trợ cho animation, nó mạnh hơn transition rất nhiều vì ta tùy ý điều chỉnh animation k nhất thiết phải là element thay đổi trạng thái. keyframe nó định nghĩa hiệu ứng sẽ trông ra sao tại mỗi thời điểm trong dải hiệu ứng. Có thể tạo ra hiệu ứng rất phức tạp, nếu muốn làm trùm css phải làm chủ hết đủ mọi hiệu ứng animation.
-animation: [animation-name] [animation-duration] [animation-timing-function]
-[animation-delay] [animation-iteration-count] [animation-direction]
-[animation-fill-mode] [animation-play-state]; => cực đầy đủ
-animation-name: toReg;
+-> animation: [animation-name] [animation-duration] [animation-timing-function] [animation-delay] [animation-iteration-count] [animation-direction] [animation-fill-mode] [animation-play-state];
 animation-duration là thời gian từ lúc bắt đầu cho đến khi kết thúc
 animation-delay là thời gian chờ trước khi hiệu ứng bắt đầu chạy
 animation-iteration-count dùng số or infinite, số float cho ra animation dừng giữa chừng
-animation-direction thì normal là đi về phía trước, reverse là về phía sau, alternate là đi về trước r sau, alternate-reverse là đi về sau r trước; animation-timing-function: linear, ease, ease-in, ease-out, ease-in-out
-animation-fill-mode: Khi kết thúc animation, nếu để none or k set gì thì mặc định dùng style ban đầu khi animation k thực thi, nếu set forwards sẽ dùng giá trị khung cuối, backwards dùng giá trị khung hình chính ở đầu animation(lúc 0%); both là hòa trộn forward và backwards; 
+animation-direction thì normal là đi về phía trước, reverse là về phía sau, alternate làm chuyển động được quay ngược lại kiểu 5s đầu là 0%->100% và 5s sau là 100%->0%, alternate-reverse ngược lại với alternate
+animation-fill-mode: Khi kết thúc animation, nếu để none or k set gì thì mặc định dùng style ban đầu khi animation k thực thi, nếu set forwards sẽ dùng giá trị khung cuối, backwards dùng giá trị khung hình chính ở đầu animation (lúc 0%); both là hòa trộn forward và backwards; 
 animation-play-state: paused hay running
 => Lưu ý để đảm bảo animation liên tiếp nhau k kiểu bị ngắt quãng thì nên setup sao cho giá trị mặc định lúc 0% bằng với giá trị lúc 100% để làm vô tận mượt hơn
 
-@keyframe có thể dùng theo % or dùng from to
-Thuộc tính animation-direction có alternate sẽ làm chuyển động được quay ngược lại kiểu 5s là 0->100, 5s sau là 100->0
 VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal)
+=> animation còn có SVG, ảnh động, 3D. URL full: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM 
 
-Dùng animation bằng JS cũng được như viết React-Spring chính là dùng JS nhưng vc dùng css thuần sẽ giảm tải tốt hơn nhiều cho các file js đỡ cồng kềnh
+-> animation-timeline giúp control thuộc tính animation phụ thuộc vào hành động của user hoàn toàn bằng css. VD chỉ khi scroll thì animation mới chạy, tạo parallax
 
-=> animation còn liên quan đến SVG, transform, code ảnh động, animation 2D và 3D cơ,.. Mỗi tội k có thời gian học hết:
-https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM
+-> Vd hover button to ra: 
+Nếu có thể, nên cho button to sẵn và scale nhỏ lại, hover thì trở về kích thước ban đầu
+Nếu không, cách tốt nhất là scale(1.2) lên và bị mờ. Để fix:
+- will-change: transform; sẽ đưa gợi ý cho browser biết sẽ thay đổi như nào để optimize, hạn chế dùng vì browser xử lý expensive có thể gây lag.
+- backface-visibility: hidden; chặn hiển thị mặt sau giúp giảm mờ.
 
-1 lần keyframe từ 0->100 phải là 1 chu kỳ lặp giống nhau
-
--> hover button to ra
-C1: hover tăng padding cho button thì button chỉ to phần padding ra còn chữ k đổi, tuy nhiên nó sẽ chiếm tăng space đẩy các thẻ khác
-C2: hover thì scale(1.2) cho nó thì mọi thứ sẽ to ra nhưng trong quá trình đó sẽ dính blurry effect. Nhưng kích thước k ảnh hưởng đến các thẻ khác. Khi transition k quá lớn thì blurry k ảnh hưởng lắm => nên dùng nhất
-C3: hover thì tăng font size của button lên, button to lên nhờ chữ bên trong to lên nhưng k chuẩn, VD lúc to lên có thể giật.
-C4: Ban đầu cho button lớn sẵn đi và scale nó nhỏ lại => hover vào thì mang kích thước ban đầu là to ok. Cách này khá hay nếu gặp TH hover vào kết thúc animation vẫn bị mờ vì cách này làm cho hover vào mới hiện ra đúng kích thước chuẩn k bị mờ còn lúc ban đầu nó bị scale nhỏ lại nên cũng k bị mờ => éo dùng vì nó cũng chiếm kích thước lớn từ lúc bắt đầu
-
-=> Nch là tùy biến tùy tình huống
-
--> click hiện drop down text:
-Dropdown hiện ra chiếm diện tích đẩy các thẻ khác. K được dùng visibility vì chiếm diện tích khi hidden và display vì k hỗ trợ transition
-Transition k dùng được với height nhưng dùng dược với max-height nên có thể click thì tăng max-height từ 0 tới 1000px or unset
-=> TH nó có backgroundColor mà lại có padding thì max-height là 0 sẽ k có tác dụng mà phải thêm opacity là 0 ban đầu vào và transition dùng với mỗi max-height thôi. Vì nếu có padding sẽ hiện ra vùng màu chỗ padding. padding cũng từ 0 -> unset luôn
-Có thể dùng fontSize là 0 -> fontSize unset hoặc scaleY(0) -> scaleY(1) => tùy cách dùng mà hiệu ứng nó hiện ra sẽ hơi khác nhau. 
-
-=> Chú ý animation tự tạo như này trong React thì VD làm kiểu: style={appear ? {fontSize: "unset"} : {fontSize: 0, padding: 0, opacity: 0}}. Bởi vì khi appear là true thì các style kia tự động k được set nữa chứ k bị lưu giữ vì code js ta k còn gán style đó nữa ở lần render này mà.
-
--> Tạo drawer menu mobile bằng css thuần: 
-Khi click nút thì phải có 1 bức màn overlay 100vh 100vw được làm tối bằng background đen với opacity. 1 cái drawer đè lên bức màn đó.
-Animation thì tạo cái drawer như bth nhưng transform translateX(-100%), khi click thì translateX(0%) kèm transition là ok.
-
--> Tìm animation đủ loại => search #topcsseffects trong youtube kênh hơn 1000 video chỉ giới thiệu css animation
-
--> will-change: auto, scroll-position, contents, transform, opacity, left, top, width, height. Thuộc tính này đưa ra gợi ý rằng 1 element sẽ thay đổi như nào cho browser. VD khi hover thì thêm filter thì ta dùng will-change: filter để browser biết trước nó sẽ bị filter khi hover để optimze. Ta thường dùng nó khi sự thay đổi của element gây ra việc lag or k như ý. Cái này dùng như 1 biên pháp cuối cùng và k nên sử dụng ở nhiều component vì browser sẽ cố xử lý để optimize performance khi component thay đổi theo cách đó, tức browser phải xử lý rất expensive. VD như ta sử dụng trong react-grid-layout. Refer tới "react-grid-layout"
-
-
-
-# Hack CSS:
-Các tiền tố -webkit- hay -moz- hầu hết bh k cần thiết khi HTML5 và CSS3 được hỗ trợ đầy đủ ở các trình duyệt hiện đại.
-Nên dùng css hack cho các thuộc tính lạ để tránh lỗi 
-
-các tiền tố: -webkit của chrome, -moz của firefox,.. là các tiền tố cung cấp bởi các rendering engine khác nhau ta dùng thêm chúng để sử dụng các tính năng css mới. Khi dùng tiền tố, trình duyệt khác gặp tiền tố k đúng của nó sẽ bỏ qua
-
-Có thể dùng cùng thuộc tính với các trình duyệt khác nhau kiểu:
-height: fit-content;
-height: -moz-fit-content;
-nhưng đa phần nếu browser hỗ trợ thuộc tính thì cũng sẽ hỗ trợ đủ giá trị nên éo bh thấy ai dùng
+-> Animate svg khi hover: các tag svg dùng đc animation css như bth, dùng cho các thẻ path hay g bên trong để animate 1 phần của icon cũng được luôn
+Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, khi hover vào thì đổi lại thành running là ok
 
 
 
 # Xử lý image
--> CSS3 hỗ trợ nhiều tính năng xử lý background-image
-Nếu ta muốn có 2 background nằm đè nhau thì phải dùng 2 thẻ html nhưng css3 hỗ trợ luôn multiple background.
-Chỉ cần nhớ 2 thuộc tính contain và cover cho hình ảnh là thường dùng nhất. contain lý tưởng hơn vì nó giữ kích thước của hình ảnh và đảm bảo hình ảnh hiển thị tất cả trong cái khung ta cho phép mà k mất chi tiết, thêm position center center là đẹp, nhưng k thg dùng với background mà thg dùng với ảnh bth trong 1 khung vì cái background nó thg ưu tiên kiểu hiện full cả khung nhưng k bóp ảnh. Background thg dùng min kích thước fix nếu nhỏ or dùng cover. cover sẽ giữ kích thước ảnh và full vào cái khung, cắt ảnh để vừa khung, nhưng khi đó thì ảnh nên có it nhất 1 kích thước lớn hơn kích thước của khung tránh ảnh bị mờ
+URL: https://bennettfeely.com/clippy/ => kích thước vẫn thế nhưng hiển thị cut ảnh
 
-Khi dùng background-image chỉ cần chú ý 4 thuộc tính: background-size chỉnh kích thước ảnh, background-image, background-repeat là no-repeat, background-position là vị trí bức ảnh. 
-Thuộc tính background-position nó kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung
-Còn có background-origin.
-VD thg dùng căn tâm ảnh background:
-backgroundPosition: "center, center",
-backgroundSize: "cover",
-backgroundRepeat: "no-repeat",
+-> Có multiple background image. Chỉ cần 4 thuộc tính: background-size (object-fit), background-image, background-repeat, background-position
+background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung
 
---> Phân biệt 
-background-origin xác định vị trí của background image theo content. Còn background-clip tương tự nhưng chỉ dùng cho background color. background-clip cũng có 1 option nữa là text sẽ lồng background image vào trong text
-=> cái background-clip ít browser hỗ trợ mặc định nên buộc thêm css hack và ảnh lồng trong text thì phải bỏ màu của text nên phải có color: transparent;
+background-origin xác định vị trí của background image theo content. 
+background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent;
+background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
+background-attachment: scroll mặc định là trôi theo scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
 
-Giá trị dùng border-box background tính từ border ngoài cùng, padding-box thì background tính từ padding, content-box tính từ vị trí content có thể dùng
+-> Các thuộc tính image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters
 
--> Thuộc tính filter chuyên về visual effect trên ảnh:
-.blur {filter: blur(4px);}
-.brightness {filter: brightness(250%);}
-.contrast {filter: contrast(180%);}
-.grayscale {filter: grayscale(100%);}
-.huerotate {filter: hue-rotate(180deg);}
-.invert {filter: invert(100%);}
-.opacity {filter: opacity(50%);}
-.saturate {filter: saturate(7);}
-.sepia {filter: sepia(100%);}
-.shadow {filter: drop-shadow(8px 8px 10px green);}
-
--> Object-fit của ảnh thường:
-Mặc định là fill, ảnh được thu nhỏ lại or kéo dãn để vừa với kích thước khung, tỷ lệ có thể bị đổi => cứ co dãn là k tốt
-contain: như trên; cover: như trên
-none: ảnh giữ kích thước gốc luôn
-scale-down: Tự động nếu kích thước ảnh nhỏ hơn chiều rộng và dài của khung thì nó tương đương none, lớn hơn thì nó tự dùng contain => tốt nhất cứ contain đi
-
--> Mọi chế độ hòa trộn kể cả cho background chỉ có hiệu lực khi có màu chồng lên nhau. VD background-blend-mode
-
--> background-attachment: Xét TH 1 thẻ khá nhỏ có background-image lớn hơn nó 1 chút thì cái background đó chỉ hiển thị trong phạm vi kích thước của thẻ nên có vài phần bị mất đi
---> Mặc định là scroll tức khi scroll xuống thì thẻ đi lên thì background sẽ dính lấy thẻ cũng scroll theo
-
---> Fixed thì background k scroll với page (nhưng thẻ vẫn bị scroll như bth), vẫn giữ quy tắc background chỉ hiện trong vùng có thẻ hiện
-VD: https://www.w3schools.com/cssref/tryit.asp?filename=trycss_background-attachment_fixed
-=> cái thẻ nó như 1 cái camera soi vào cái background fix v. Dùng tạo parallax cơ bản
-
---> Local thì chỉ scroll với content của thẻ thôi. Vd thẻ có scroll bar thì scroll cả background image đó
-
--> Layer mask:
---> Chỉ hiển thị phần nào của 1 bức ảnh full dựa vào phần ảnh của 1 bức ảnh png khác. Ảnh mask kích thước như nào ta phải tự chỉnh luôn chứ k chỉnh được trong code
---> Tạo 1 lớp style filter đè lên trên bức ảnh để hiển thị ra
-
-Trong svg element có thẻ mask có trường id là star chẳng hạn. Có 2 loại dùng:
-mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px
-mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Cái mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
+-> Layer mask: mask là shorthand của mọi thuộc tính mask-* trong css
+Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. VD hiển thị bức ảnh theo phần ảnh của 1 bức ảnh khác, ta cho bức ảnh khác đó lên 1 lớp bên trên.
+VD mask-image: linear-gradient(black, transparent);
+VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px
+VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
 
 -> Image placeholder
-Khi hiển thị ảnh có 3 TH: url ảnh chuẩn đã được load thì hiển thị ảnh bth, url ảnh chuẩn nhưng chưa được load thì ta muốn có 1 image placeholder hiển thị chờ cho đến khi ảnh đươc load, url kp là ảnh thì hiển thị image placeholder báo ảnh bị sai. 
-Cần đảm bảo khi ảnh load sẽ k đẩy các phần khác của giao diện đi mà phải giữ cố định, hiển thị đè lên img placeholder thôi
+Dùng thẻ img có width và height bằng kích thước ảnh, nếu k rõ thì dùng minWidth minHeight để luôn có placeholder. 
+Cbi sẵn 1 bức ảnh default để lỗi thì show ra. Dùng bg color xám cho thẻ img để ảnh chưa có thì hiển thị 1 màu xám, hoặc tìm cách show skeleton. Có thể dùng background-image của tag image để làm ảnh default.
+Dùng border radius thẻ div bao ngoài img kèm overflow hidden
+Dùng onLoad và onError, VD check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
+HTML có thẻ object show mọi loại media, nếu bị lỗi sẽ tự show thẻ con của thẻ object rất hay => ít dùng vì kp chuyên cho ảnh.
 
-Thông thường ta sẽ có 1 bức ảnh mặc định và nếu trường ảnh là rỗng thì dùng ảnh mặc định đó
+VD: <img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';" >
+Việc dùng this.onerror=null chống lỗi infinity loop. Lỗi này xảy ra ở 1 số trình duyệt khi chính ảnh để ta fix lại bị lỗi xong lại chạy onerror lại lỗi và cứ lặp vô tận
+Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh backup onerror local đảm bảo luôn tồn tại là được. 
 
---> Cách dùng
-Bth chỉ cần dùng thẻ img có width và height cố định bằng kích thước ảnh, nếu k rõ thì dùng minWidth minHeight để đảm bảo luôn có placeholder -> dùng background color xám cho thẻ img để khi ảnh chưa được load sẽ hiển thị 1 màu xám -> dùng border radius cho img và thẻ div bao ngoài img bằng nhau, thẻ div ngoài có thể overflow hidden là xong.
-=> Là cách nên dùng, nhưng nếu ảnh bị lỗi sẽ hiển thị hình ảnh lỗi khá xấu, cách này k thể hiển thị 1 bức ảnh mặc định được mà chỉ được 1 màu
-=> Có thể dùng bgColor cho thẻ div bao ngoài cũng được. bgColor của thẻ img sẽ được sử dụng ở bên dưới, sau khi có ảnh sẽ đè lên bgColor đó.
+--> onLoad, onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
+Thuộc tính PlaceholderSrc của LazyLoadImage nhận 1 ảnh kích thước nhỏ để hiển thị ra trước khi ảnh lớn được load. Ta có thể giảm độ phân giải ảnh bằng các công cụ chỉnh sửa để thế vào, thêm effect="blur" để làm mờ ảnh placeholder được
+--> Lib react-progressive-graceful-image rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
 
-Cách khác dùng onLoad cho thẻ img để biết ảnh k bị lỗi mới hiển thị còn lỗi sẽ hiển thị bức ảnh mặc định. VD: onError(e => { e.target.value = ảnhtest; e.onerror = null; }) nhưng trong nextjs nó bị lỗi k dùng được 
-Cách khác là dùng thẻ object, thẻ img chứa ảnh mặc định là thẻ con của thẻ object sẽ hiện ra khi ảnh bị lỗi => Cách này hoàn hảo nhất và nó cũng dùng để nhúng nhiều loại media chứ k chỉ ảnh nhưng dùng thẻ object kp chuyên cho ảnh nên ít dùng
+-> Lazy loading ảnh: thuộc tính loading="lazy"/"eager" có sẵn của html
 
---> Có thể dùng Skeleton animation or ảnh loading để làm image placeholder nhưng nó nên thật nhẹ và có sẵn là static để hiển thị nhanh
-
--> Lazy loading ảnh
-Thuộc tính loading của thẻ iframe và img mặc định là eager là load ngay lập tức khi vào web. Option khác là lazy.
-Khi dùng loading="lazy" cho ảnh thì ảnh chỉ thực sự được load khi ta scroll tới 1 khoảng gần gần bức ảnh đó => rất phù hợp với các bức ảnh lớn chiếm nhiều băng thông, thư viện hiển thị nhiều ảnh, cải thiện tốc độ load trang và chiếm ít băng thông hơn
-=> Thuộc tính này là mặc định của html mà k cần config gì thêm. Vẫn có thể dùng backgroundColor cho thẻ img hay bao nó bằng 1 thẻ bên ngoài làm image placeholder bình thường
-Thg dùng kèm với onLoad và onError nếu được để khi chưa load thì hiển thị mặc định gì, còn lỗi thì hiển thị ảnh gì kết hợp với useState của React để gán biến lưu ảnh
-
---> React: Tuy nhiên thuộc tính này k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
-Thuộc tính PlaceholderSrc của LazyLoadImage còn nhận 1 bức ảnh kích thước nhỏ để hiển thị ra trước khi bức ảnh lớn được load. Ta có thể giảm độ phân giải ảnh bằng các công cụ chỉnh sửa để thế vào ok, thêm effect="blur" để làm mờ ảnh placeholder được => bất cứ cách nào cần hiển thị ảnh mờ đều phải biết trước ảnh là gì để tạo 1 placeholder size nhỏ cho load trước.
-
-Thư viện khác: react-progressive-graceful-image => rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
-=> ref tới "Code React / ReactJS Advance/ Final"
-
---> Browser -> tab network -> No throttling -> chọn slow 3G thì tốc độ load sẽ chậm hơn sẽ xem được trải nghiệm khi mạng lag, disble cache để xem được chuẩn
-Chỉ số Cumulative Layout Shift (CLS): là chỉ số đo khi các thành phần trong web được load async với tốc độ khác nhau khi vào thì bố cục sẽ bị dịch chuyển nhiều hay ít. Bố cục càng tĩnh thì trải nghiệm càng mượt, nếu không thì nên có thêm animation cho nó cho chuẩn
-
--> Xử lý vị trí backgroundImage
-Tạo background cho button, số hay ảnh lớn đủ kiểu
+-> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation.
+SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
+Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
 
 
 
 # Xử lý màu
-Mã màu của transparent là #0000
-Có tool sinh code gradient: https://angrytools.com/gradient/
+Tool sinh code gradient: https://angrytools.com/gradient/
 
--> Gradient css3 có 3 loại: linear kéo từ 1 phía sang 1 phía, radial kéo từ 1 điểm lan ra xung quanh, conic-gradient
---> VD dùng gradient cho màu background -> chú ý nó truyền vào attribute background chứ kp background-color:
-background: -webkit-linear-gradient(direction, color1, color2, color3, color4, ...); /* For Safari 5.1 to 6.0 */
-background: -o-linear-gradient(direction, color1, color2, color3, color4, ...); /* For Opera 11.1 to 12.0 */
-background: -moz-linear-gradient(direction, color1, color2, color3, color4, ...); /* For Firefox 3.6 to 15 */
-thì direction là to top, to left, to bottom left, to top right(mặc định là top-bottom) nhưng với css hack thì k có chữ "to"
-Cú pháp CSS Hack rất nhiều, khi cần tự tra gg thôi.
-
-=> phần color dùng hàm rgba và hsla tạo màu để tạo độ có độ trong suốt kết hợp gradient thì màu sắc sẽ thanh thoát hơn.
-
---> Với radial gradient: radial-gradient(circle closest-corner at 100px 100px, red 10%, yellow 20%, pink 10%); 
-shape là circle, elipse(default)
-size có thể là closest-side, farthest-side(default), closest-corner, farthest-corner at ... ... để set kích thước
-nếu k dùng circle mặc định là elip bóp theo khung bên ngoài
-CSS Hack tương tự linear, khi đó phải tách các trường dấu phẩy: -moz-radial-gradient(circle, 100px 200px, farthest-side, red 10%, blue 90%);
+-> Gradient css có 3 loại: linear kéo từ 1 phía sang 1 phía, radial kéo từ 1 điểm lan ra xung quanh, conic-gradient
+--> Chú ý dùng background gradient thì truyền vào background chứ kp background-color
+VD: background: linear-gradient(direction, color1, color2, color3, color4, ...);
+VD: radial-gradient(circle closest-corner at 100px 100px, red 10%, yellow 20%, pink 10%); 
+shape là circle, elipse (default, bóp méo theo khung bên ngoài)
+size có thể là closest-side, farthest-side(default), closest-corner, farthest-corner at ... để set kích thước
 
 -> Các cách lấy màu: rgba(255,0,0,0.5); rgb(255,0,0); hsl(0, 1005, 50%), hsla(0,100%,10%,0.3); #ffffff; dùng tên trực tiếp red, yellow
 hsl thì hue có giá trị từ 0 đến 360, 0 và 360 cùng là đỏ.
-Dùng color name k khuyến khích vì kp dạng chuẩn của color và khó quản lý
+color-mix giúp mix 2 màu trong không gian màu nào
 
--> 1 số màu có sẵn của hệ thống => ít dùng
--webkit-focus-ring-color /* Webkit, Safari */
--moz-mac-focusring /* Firefox */
-activeborder /* Blink, Chrome */ 
+-> mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
+backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element
 
+-> Còn có sự sai lệch về màu sắc khi dùng browser khác nhau, đặc biệt là Safari so với Webkit. 
+Ta k nên giả định 2 màu là giống nhau ở 1 thẻ so với 1 bức ảnh hay video. VD: video có màu nền là #f12312 vì ta dùng devtool để lấy màu => ta k thể dùng 1 thẻ cũng có màu #f12312 và giả định rằng 2 màu giống nhau được, đặt video bên cạnh thẻ kia sẽ thấy khác màu ở 1 số browser khác.
 
-
-# Cách dòng:
-Mặc định: mặc định thì khi text tràn ra ngoài 1 khung thì sẽ tự xuống dòng, nhưng 1 từ quá dài hơn 1 dòng sẽ hiển thị thừa cả mà không cắt chữ đó. Nếu height của khung ngắn k đủ chứa text thì mặc định nó vẫn hiển thị text tràn ra ngoài khung sao cho k bị mất chi tiết nào. 
-Điều đặc biệt là mặc định nó cũng, xếp chữ dài quá sẽ ở 1 hàng riêng
-text clamp giúp hiện bao nhiêu dòng mới cho ... cơ
-
---> white-space: nowrap; là text sẽ k xuống dòng nên nếu tràn khỏi chiều ngang thì hiển thị tràn ở chiều ngang. Còn có normal là xuống dòng như mặc định. Nếu có thể, nó sẽ làm hỏng width các thẻ nếu lớn hơn 1 dòng
-
---> text-overflow giúp xử lý text tràn ra ngoài thẻ HTML thì sẽ cắt nó đi như thế nào, có clip là mặc định, ellipsis là thêm 3 chấm và phải dùng kèm overflow: hidden; mới có tác dụng. Tức dùng cái này ta mặc định là sẽ cắt đi rồi thì kiểu này sẽ quyết định khi cắt thì hiển thị cái gì ra
-
---> word-wrap giúp xử lý cắt text là 1 chữ cực dài xuống hàng như nào. Browser tự động cắt text xuống hàng nếu tràn nhưng nếu chỉ đúng 1 chữ cực kỳ dài thì nó vẫn gây overflow vì k cắt nửa chữ xuống hàng được. Thuộc tính này giúp điều đó với normal là mặc định, còn break-word chắc chắn cắt xuống dòng khi tràn
-
---> word-break chỉ định cắt text xuống hàng như nào có keep-all y hệt mặc định, break-word tương tự. break-all sẽ bỏ 1 rule mặc định là xếp chữ quá dài ở 1 hàng riêng, nó éo care điều này mà hiển thị như bth chỉ cần biết tràn là xuống và cắt chữ
-=> word-break tương tự word-wrap nhưng cung thêm break-all, dùng thế word-wrap luôn
-VD: 
-1) abcde trong khung max 5 chữ thì word-wrap break-word đảm bảo hiện là:
-abcd
-e
-2) ab def thì word-break keep-all hiện là:
-ab
-def
-vì nó kbh là cắt chữ
-3) ab def thì word-break break-all hiện là
-ab de
-f
-hiển thị như bth vì nó chỉ xuống khi tràn
-4) ab defghi ac và muốn nó vừa có kiểu bảo toàn chữ tràn khi full width, vừa break word nếu word quá dài kiểu:
-ab
-defgh
-i ac
-=> word-wrap/word-break: break-word; ok
-
-Ngoài ra còn có letter-spacing là kc giữa các ký tự, chấp nhận giá trị âm sẽ dít vào nhau. word-spacing cũng tương tự nhưng giá trị của nó là tăng hay giảm kc bnh chứ kp là giá trị kc luôn.
-
---> line-height giúp căn kc các dòng trong 1 cục văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, thay vì set paddingTop để căn vị trí của text trong thẻ, ta dùng line-height
-
---> vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuống 1 tẹo so với vị trí hiện tại mà k cần dùng đến flexbox. Nó có rất nhiều mức độ như top, text-top, super,... mà ta phải thử tất cả để tìm option phù hợp.
-=> Thông thường ta dùng kết hợp, bao tất cả bằng 1 component lớn với line-height, phần nào bên trong muốn chỉnh vị trí lên xuống thì nhét vertical-align cho nó. Or set giá trị bằng số thì muốn bnh cũng được.
-
-Lưu ý khi dùng vertical-align là nó chiếm kích thước, làm cho thẻ chứa nó bị mở rộng ra(trừ khi set fix và nó hiện tràn) khác với position absolute
-
-
-# 3D 2D transform
-Các thuộc tính transform 3D là các thuộc tính transform trên trục X, Y còn trục Z mặc định có trục là mp 2d
-
--> Ta dùng thuộc tính css transform với :
-translate(1,2) => dịch từ vị trí hiện tại đi
-rotate(20deg) => âm là xoay ngược kim, xoay từ tâm
-scale(1,2) => scale theo 2 trục, truyền 1 giá trị sẽ cùng giá trị scale cả 2 trục
-skewX() => bẻ góc theo trục x. Có thể dùng skew(xdeg, ydeg);
-skewY()
-matrix() => gộp tất cả các cái trên, k nên dùng vì rối
-
-Chú ý set transform origin khi dùng các thuộc tính 2D, mặc định nó dùng tâm của hcn.
-
-Khi dùng transform có thể gây đè lên các thẻ khác, thẻ transform vẫn chiếm css đúng vị trí cũ
-Thực tế position relative top -50px và transform translateY(-50px) éo khác gì nhau. Cái đầu dùng thông dụng và hỗ trợ bởi mọi browser. Cái sau thg dùng cho animation, mọi cái transform đều thg dùng cho animation và kp browser nào cũng support. Thực tế translate nó boost graphical performance of browser vì nó ra đời sau.
-Hàm translate có 1 điểm đặc biệt là khi lùi tương đối, nó lùi so với kích thước của chính nó chứ kp kích thước cha. VD TH ta muốn ra tâm màn hình thì position absolute cho top left 50% xong translate lùi lại -50% ở 2 trục thì tâm vật sẽ là tâm màn hình vì lùi 50% so với kích thước của nó mà
-
-transform-style: A chứa B thì xoay A, B cũng xoay theo. Vd thẻ A xoay trục Y 60 độ sẽ nhỏ lại và phần text bị méo, vc dùng transform-style mặc định là flat khiến cho điều đó trở thành kích thước và vị trí chuẩn của thẻ B luôn, nếu xoay B -60 độ thì nó xoay cái hình méo đó tiếp làm thẻ B nhỏ lại hơn nữa. Tức transform style flat thì kg 3D bị hiển thị dạng 2D sẽ thay đổi kích thước và vị trí của thẻ theo 2D; transform-style preserve-3d thì thẻ B tách rời với thẻ A và k bị flat nữa nên xoay -60 độ quay trở lại kích thước và vị trí ban đầu
-
--> Perspective là chỉnh kc từ mắt ta đến vật, càng lớn thì càng xa mắt, mặc định nó nhìn từ rất xa, khi dùng transform 3d nên chỉnh perspective. VD 1 hình vuông để nghiêng mà nhìn từ kc xa sẽ thành hcn bth chứ k thấy độ lệch, mặc định sẽ là rất xa từ vô cực. 
-
-
-
-# Setup trong html/css
--> Khi setup chú ý vài thuộc tính lạ như:
--webkit-touch-callout: none; => Khi touch và hold trên màn hình iOS hay Safari sẽ hiển thị callout(chú thích) thì có thể ta disable
-user-select: none; => cản người dùng bôi đen, thg dùng khi với canvas hay ảnh chẳng hạn
-
-box-sizing: border-box; => nên set mặc định
-Trước ta thắc mắc khi hover vào thì ta muốn dịch thẻ sang phải bằng animation tăng padding của thẻ lên chẳng hạn thì nó sẽ đẩy các thẻ khác bị ảnh hưởng. Nếu ta cho kích thước width thẻ chiếm hết phần đó luôn và dùng box-sizing: border-box; thì khi ta set padding để nó chiếm chèn vào phần body miễn body vẫn đủ chỗ thì kích thước thẻ sẽ k thay đổi, nhờ v k ảnh hưởng đến các thẻ khác. Nếu k sẽ phải dùng position absolute
-box-sizing border-box cũng là thứ giúp code front end dễ kiểm soát vì ta luôn muốn các thẻ con nằm bên trong các thẻ cha nhưng nếu padding bị trồi ra ngoài kích thước body thì lại k tốt
-
-Dùng được @import url(<>); trong css để thêm font chữ vào đầu tiên. Có cũng url dạng tag cho html đó.
-
--> CSS Reset:
-* là chọn tất cả item, thg dùng để CSS Reset mặc định cho mọi thẻ html. Trừ các thẻ dùng style trực tiếp hoặc các item reimplement lại từ các thẻ có sẵn trong html sẽ k ảnh hưởng.
-
-Trong mọi website thì selector * refer đến mọi thẻ và :root là refer đến cha của mọi thẻ. Trong react thì có thêm thẻ có id là root nằm dưới thẻ body và bao mọi thẻ khác để chọn với #root
-
---> Phân biệt unset, none, initial, inherrit: 
----> initial là đặt về default value for property, đây là thông số kỹ thuật default của riêng css. VD:
-* { all: initial; } là ta đặt mọi thẻ dùng thông số default này. VD display có thông số default là inline sẽ khiến mọi thẻ thành inline kể cả các thẻ div. Tệ hơn nó còn khiến code JS hiển thị trên màn hình chứ k bị ẩn đi như bth
-Chi tiết các thuộc tính: https://helpex.vn/question/dat-lai-xoa-kieu-css-chi-cho-phan-tu-5cb16651ae03f6169c9dc8c7
-
-=> Trong thực tế khi browser mở web, nó có default value for property nhưng gắn với từng element cơ. VD div có default display là block còn span có display là inline. Thường thì ta cần các giá trị default của browser theo quy chuẩn chung chứ kp là thông số kỹ thuật riêng của css nên kbh dùng như VD trên cả
-
----> inherit: thuộc tính được set sẽ kế thừa giá trị từ cha. Bởi vì mọi thẻ đều có mọi thuộc tính, nếu k dùng hay set thì nó là thông số default của property của element của browser.
-
----> unset: có parent thì set parent, nếu chưa từng set cho parent thì lấy initial valua. Initial là thông số kỹ thuật CSS ấy
----> none: k set giá trị và coi như k có giá trị đó luôn, 3 thuộc tính trên có với mọi thẻ còn none kp thẻ nào cũng có
-
--> Vô cùng quan trọng khi set giá trị đầu cho thẻ html, body:
-Mặc định thì thẻ html chiếm 1 hàng nhỏ trên top và tự mở rộng dần theo content bên trong, body nằm trong thẻ html cũng chỉ là 1 hàng bé. Nó luôn bằng kích thước content bên trong và nếu bên trong lớn hơn màn hình thì nó vẫn mang height là giá trị lớn hơn màn hình đó. Nếu ta set 1 kích thước height fix cho html thì sao ? Vì được gán kích thước tuyệt đối nên height của thẻ html là fix còn height của body vẫn theo content bên trong và có thể vươn dài hơn html là cơ chế rất bth. Vấn đề khi dùng kích thước tương đối 100%. Nếu dùng 100% height cho body thôi thì: thẻ html kích thước luôn theo bên trong nên bằng body, body bằng 100% tức bằng full thẻ ngoài mà điều này là vô lý vì html bao body có fix éo đâu nên lệnh này là lệnh thừa chả làm gì cả, nên set height body là bao nhiêu phần trăm vẫn quay về mặc định là theo content bên trong. Nếu dùng 100% cho cả html và body thì thẻ html là thẻ đặc biệt k có thẻ nào bao nó nhưng thực tế nếu cho nó 100% thì nó sẽ theo màn hình max của thiết bị tức ở đây tương đương vc fix cứng height cho nó kín màn. Tương tự body cũng fix cứng full height như v. Chỉ đúng ở TH này do html là thẻ đặc biệt theo kích thước cha là device thôi. Nếu content dài hơn màn hình thì html và body vẫn height fix như v nhưng thanh scroll bar vẫn hiện bth để show toàn bộ nội dung content của chương trình lúc này bị bao bởi thẻ body trong code nhưng thực tế height lại độc lập với body. Nó đặc biệt ở chỗ này, nếu 2 thẻ div ngay trong body cùng có height 100% thì height của từng thẻ sẽ bằng height body nhưng k bị giới hạn bởi body nên thành ra scroll bar cho scroll gấp đôi height màn hình hiện tại để hiện hết 2 thẻ div
-Quan trọng là cơ chế, thẻ A chứa thẻ B, thẻ A width fix, nếu thẻ B dài hơn thẻ A thì nó vẫn hiện tràn ra bình thường, trừ khi có overflow hidden or scroll bar mà thôi. Default overflow của body của browser là scrollbar ha.
-=> Tương tự rất dễ hiểu nhờ như dưới mà mọi ảnh sẽ full body mà lại tràn khỏi body fix được nên thành chuỗi ảnh liên tiếp nhau như v
-
-VD tương tự: TH thẻ img ở ngay trong thẻ body mà thẻ body và html đều để mặc định xong img cho height 50% thì k có hiệu ứng vì mặc định body và html là fit content mà chả set gì thì img sẽ là thẻ quyết định kích thước của thẻ cha mà lại phụ thuộc vào cha thì k có hiệu ứng
-
-
-
-# Dùng scroll
-Cơ bản để tạo scroll bar trong 1 box người ta cho các box là inline block xong container dùng white-space: nowrap; overflow-x: auto; là xong. Tức cho container kích thước nhỏ hơn nội dung bên trong và enable scrollbar qua thuộc tính overflow.
-Thẻ container k được dùng fit-content mà nên set kích thước responsive phụ thuộc vào màn hình. Set minWidth cho thẻ con bên trong. 
-Thuộc tính auto là khi cần scroll sẽ hiện scroll, k thì thôi. 
-=> refer tới "Projects / Tinkerbellgarden"
-
--> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng href đến đó từ 1 thẻ mà muốn click là được
-
-scroll-behavior: smooth hay auto để nhảy đến hay trượt đến
-overscoll-behavior: khi 2 scroll lồng nhau, cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll, đó là auto mặc định của browser, trên điện thoại cũng sẽ tự động có bounce effect ở đầu và cuối. contain sẽ cản lăn tiếp bên ngoài, none là cản thêm các default effect như bounce trên phone
-
--> Dùng scroll-snap
-- scroll-snap-type: x mandatory; xác định hướng và kiểu scroll. proximity là mặc định trình duyệt tính, mandatory là trình duyệt tự snap theo từng điểm scroll theo cách ta dùng scroll-snap-align 
-- scroll-snap-align là từng item sẽ có vị trí như nào với container bao nó. VD center là điểm giữa item trùng điểm giữa container, tương tự start và end. Điểm giữa của chiều nào tùy thuộc type dùng x hay y
-- scroll-snap-stop: là khi lướt quá nhanh sẽ luôn dừng ở từng element(always) hay cho lướt qua(normal)
-- Đôi khi ta k muốn chuẩn kiểu item hiển thị đúng ở 3 vị trí mà hiển thị ở hơi mé bên trái cách 1 vài pixel cơ thì:
-scroll-padding dùng ở container sẽ cho mọi item bên trong được quyền hiển thị cách mép 1 khoảng bnh
-scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào được phép hiển thị cách mép bnh
-=> dùng được 4 chiều left right top down
-
--> Ẩn thanh scrollbar nhưng vẫn giữ nguyên chức năng
-
--> Dùng overscroll-behavior
-auto: có bounce trên điện thoại, có chaining scroll
-none: không có gì hết
-contain: có bounce, k có chaining scroll
-
-Lỗi kinh hoàng ngồi mấy tiếng:
-K nên dùng fit-content.
-Khi ta code frontend, ta luôn muốn kiểm soát từng thẻ, nắm rõ nó trong lòng bàn tay. Thông thường phân cấp thẻ con nằm trong thẻ cha và vc của ta là chia vị trí các con như thế nào ở trong cha mà thôi. Do đó rất hợp lý khi mà kích thước con luôn nhỏ hơn cha thì ta có thể kiểm soát rất dễ dàng k thể sai được. Khi cần các vị trí đặc biệt thì mới dùng position absolute hay float mà thôi. Nhưng fit-content nó làm kích thước của thẻ cha theo thẻ con. Nên nếu thẻ con kích thước to đùng, nó vô tình làm phình to thẻ cha ra. Mà kích thước con luôn nhỏ hơn cha và k thể điều khiển cha thì mới làm css chuẩn.
-Quy tắc nữa là để kiếm soát kích thước toàn dự án. Khi dùng mọi thuộc tính phải đảm bảo 1 thẻ k phá hỏng kích thước chung. Vd 1 thẻ lồng dưới thẻ container thì phải đảm bảo kích thước nó width 100% full container, k để nó chiếm 1 khoảng trống nào đó k kiểm soát được sẽ rất tệ. Chỉ dùng kích thước fix với 1 số TH kích thước nhỏ.
-VD cách dùng overflow: ta muốn 1 cục nằm trong 1 khối fix kích thước và nếu tràn thì hiện scroll bar cho nó ở trong khối chứ kp cả page thì ta set minWidth cho thẻ bên trong là 1 kích thước ban đầu đủ màn hình r thẻ bao ngoài cho overflow-x: auto; là được. auto là khi cần scroll sẽ hiện scroll, k thì thôi. Scroll bar sẽ tự hiện khi thẻ bên trong có kích thước lớn hơn thẻ bên ngoài và thẻ bên ngoài dùng overflow chơi scroll. Thẻ ngoài chỉ cần set kích thước phụ thuộc vào màn hình là được. 
-Có thể dùng tab element của browser filter Show All để search mọi thuộc tính của thẻ. Thao tác chán chê với browser devtool r mới code. Devtool cũng cho phép ấn CTRL+Z để undo và DELETE để xóa
-
-barchart highchart phải sort tăng dần mốc thời gian
-
-
-
-# BEM
-BEM(Block-Element-Modifier) là phương thức viết tên class trong HTML/CSS. BEM đem lại hiệu quả viết tên class hướng module. BEM được dùng mạnh trong sass.
-
-Theo BEM, kbh dùng id mà chỉ có class và các class biểu diễn lồng nhau thì dùng với quy tắc kiểu:
-
-VD: thay vì
-  .menu { ... }
-    .menu .item { ... }
-    .menu .item.active { ... }
-Ta dùng   
-  .menu { ... }
-    .menu__item { ... }
-    .menu__item--active { ... }
-=> để biểu thị item nằm trong khối block menu
-
-VD:
-<a class="btn btn--orange" href="#">
-  <span class="btn__price">$9.99</span>
-  <span class="btn__text">Subscribe</span>
-</a>
-và file css:
-/* Block */
-.btn { ... }
-.btn__price { ... }
-.btn__text { ... }
-.btn--orange { ... }
+Có những màu đẹp có sẵn được support chuẩn ở mọi browser nên dùng: https://www.w3schools.com/cssref/css_colors.php
 
 
 
 # Other:
--> Nguồn ảnh free: 
-https://pixabay.com/ nguồn ảnh với kích thước và chất lượng khác nhau
-https://www.pexels.com/ ảnh và video chất lượng
+-> Nguồn ảnh free: https://www.pexels.com/ ảnh và video chất lượng
 https://unsplash.com/ ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
 
-https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon động) chỉ với điều kiện thêm thẻ div này vào mã nguồn: <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+-> Vd Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
+visibility vẫn chiếm không gian nhưng k nhìn thấy, dùng với position absolute để thành k chiếm kg
 
--> Dừng: 
-Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-Dùng kiểu display: table;
-Dùng grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
-Biết vẽ thẻ SVG: chịu chết
-CSS: học về SCSS và SASS -> từ đó tạo ứng dụng darkmode dễ hơn bằng hàm css tạo từ scss: https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fbetterprogramming.pub%2Fa-complete-guide-to-implementing-dark-mode-in-react-47af893b22eb%3Ffbclid%3DIwAR1TilnVLD1Ei3SPGq42tOcffeLrrXCf9TGKIOxMKUfqc9TVDNLJNOw1Ipk
+Vd Tạo navigation thì dùng ul list thẻ a: Cho text-decoration là none và :hover vào thì đổi thành gì, :active tức link hiện tại đang được chọn thì style như thế nào. Dùng list-style-type: none; cho list. Navigation bar dọc thì li dùng display:block, navigation bar ngang ta dùng thẻ li có display: inline;
 
--> CDN:
-CDN thg dùng là unpkg là dự án giúp dùng tất cả các public npm package như CDN cho dự án mà k cần install npm package
-unpkg.com/:package@:version/:file
-VD: unpkg.com/web3@1.2.4/dist/web3.min.js
+VD Tạo stack card khi scroll: Cơ chế là cho position sticky với padding top để các thẻ k bị scroll đi mất mà luôn đính ở 1 chỗ như v
+Để tạo animation phức tạp khi scroll, dùng JS sửa 1 biến --scroll là được: https://css-tricks.com/books/greatest-css-tricks/scroll-animation/
 
+-> WebComponent: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework có thể tạo ra các tag html thuần để dùng được ở mọi framework.
+Google có tool Lit giúp tạo web component dễ hơn. React19 cũng hỗ trợ webcomponent dễ dàng hơn r.
 
-
-## Not Important
-# Basic HTML
-Hypertext: text ref hyperlink tới text khác mà reader có thể access thông qua mouse click or key press. 
-VD code html viết là hypertext, văn bản thực nhìn thấy trên trang web chính là text mà reader access
-
--> Thẻ br xuống 1 dòng k kiểm soát đc chiều height. Nó dùng cho html, còn thẻ <br/> dùng cho XHTML mở rộng hơn mà thôi
-Để tạo hiêu ứng xuống dòng có thể dùng br nhưng ưu tiên dùng thẻ div với padding
-
--> Các thẻ block và inline cơ bản:
-Thẻ block luôn chiếm 1 dòng nên khi set width cho nó thì body nó nhỏ lại và phần k chiếm trở thành margin thôi
-Thẻ inline k thể xét margin theo chiều dọc, padding theo chiều dọc set k bị ảnh hưởng, height và width luôn tự động theo content k set được
-
--> Các thẻ input 
---> input radio thì check r sẽ k thể uncheck cái đó. Nếu muốn có 1 group input radio chỉ cho chọn 1 thì phải đặt chung trường name với nhau
---> input password chỉ hiển thị thôi chú gửi về server vẫn y hệt mk gốc
-
--> video: source kẹp trong video/audio
-preload="auto,metadata,none" => metadata tức là xem đến đâu thì load trc đến đấy, trong khi auto là load entire video. Chú ý phải chỉnh type video cho chuẩn 
-
--> Dùng table
-Dùng 2 thẻ colgroup và col là để set kích thước các cột cho bảng có span là số lượng cột mà thuộc tính này nó chiếm.
-Dùng attribute cellpadding để set kc trong từng ô. Dùng style border-spacing để xác định kc các ô, chỉ có hiệu lực khi border-collapse là separate
-Chỉnh padding và margin của các ô với nhau ta k thể chỉnh của tr mà phải chỉnh của th td
-=> full control luôn. cellpadding là trong 1 cell, cellspacing là giữa các cell
-Thực tế có nhiều attribute trong html bị deprecated. VD align của table, ta nên tránh dùng nó
-
--> Các thẻ lạ
-Có 3 kiểu list: ul li, ol li, dl dt dd
-Dùng thẻ ol li hiện các kiểu list theo số or la mã mà k cần dùng JS để convert
-Có nhiều thẻ hiển thị các loại text khác nhau: abbr bdo del ins pre sub sup big small...
-Thẻ fieldset lồng 1 thẻ legend và nhiều thẻ div khác bên trong 
-Thẻ aside, footer, header, article éo có gì mà phải tự style. Nó tồn tại chỉ để giúp phân chia bố cục trang web rõ ràng hơn mà thôi. Ta chỉ cần quan tâm thẻ header vì ta thg dùng nó phân chia giữa phần heading và body, dùng nó sẽ giúp trang web SEO tốt hơn.
-Thẻ marquee tự tạo chữ chạy bị deprecated trong HTML5 => ref tới "# Module html / Basic" của React
-
--> Senmatic element trong html: article, aside, detail, figure, figcaption, footer, header, section, main, mark, nav, time, summary 
-=> Thực chất đa phần các thẻ chả có style gì và ta vẫn phải tự custom như bth nhưng dùng các thẻ này sẽ giúp code dễ nhìn, dễ organize hơn nhất là khi dự án dùng html thuần
-Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
-Tuân thủ senmatic: header và footer ở đầu cuối page; figure chứa img và figcaption; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và mark để highlight important text; Kết hợp với các thẻ h1, h2,... để viết font chữ cho tiêu đề, content từng cái
-=> 1 số thẻ có thể có tính chất đặc biệt như thẻ time có thể dùng attribute. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn
-
-
-
-# Basic CSS:
-CSS3 là version mới của css chia ra làm nhiều module có các nhiệm vụ khác nhau. Vc dùng CSS3 vào giao diện giúp web chạy nhanh hơn bởi có nhiều mẫu layout ta dùng được CSS thiết kế thay vì dùng background tốn nhiều tài nguyên để lưu trữ và tải. Mỗi module trong CSS3 có luôn các module của CSS cũ.
-
--> Dùng display
-Pb: block ép thẻ thành block, sang dòng mới và chiếm hết width. Còn inline-block để ép thẻ block k còn width chiếm full dòng nữa, nó được dùng rất nhiều để tùy biến các thẻ như từng khối xếp hình, set margin padding width height thoải mái. Điểm hay là thuộc tính inline-block nếu tràn sẽ tự xuống dòng, dựa vào đó ta cứ biến mọi thẻ thành inline block thì nó tự responsive xuống dòng khi co lại r
-
-Có 1 kiểu đặc biệt là { display: list-item; list-style-position: inside; } để hiển thị thẻ này dạng list. Còn có display: table; có cấu trúc phức tạp
-
--> Căn giữa: có thể dùng flexbox
-text-align center thì content ra giữa của width của body => khác với text-align justify làm cho chữ trong khung thẳng hơn, chỉ được dùng 1 trong 2 loại
-margin 0 auto là margin 2 bên bằng nhau
-=> refer tới "# Component hay / Tạo giọt nước to"
-
--> Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết
-Có none, open, dot, circle, triangle, seseam, <character> chỉ được là 1 ký tự bất kỳ
-filled với open kết hợp được với các giá trị khác, mặc định là filled
-
-
-
-# Dùng fontawesome
-Ngày xưa, muốn có 1 icon ta phải tạo và cắt từ file psd. Bh muốn dùng các icon thông dụng trong css ta có thể dùng các thư viện có sẵn, trong đó phổ biến nhất là font awesome -> tải về và nhúng 2 file all.min.js và all.min.css vào file html -> dùng được các class của fontawesome vì chỉ cần biêt class của 1 thẻ là code css và js style thoải mái tạo ra icon
-
-
-
-# Dùng bootstrap
-CDN: <link rel="stylesheet" href="/bootstrap/bootstrap-4.4.1/dist/css/bootstrap.min.css">
-<script src="/bootstrap/bootstrap-4.4.1/jquery-3-4-1.slim.min.js"></script>
-<script src="/bootstrap/bootstrap-4.4.1/popper.min.js"></script>
-<script src="/bootstrap/bootstrap-4.4.1/dist/js/bootstrap.min.js"></script>
-
-Bootstrap là 1 framework có html, css, javascript. Đã là frame work thì sẽ có tập hợp các thứ có sẵn làm cho vc code trở nên đơn giản. Có 2 cách dùng bootstrap: 1 là tải về để link vào khi đó ta link tới 2 file bootstrap.min.js và bootstrap.min.css; 2 là nhúng bootstrap cdn.
-CDN(Content Delivery Network) giúp phát triển nội dung, website và đưa tới khách hàng ở 1 khoảng cách xa 1 cách nhanh nhất với cơ chế tìm và truy cập máy chủ lưu trữ nó ở gần đó nhất. 
-=> CDN thường áp dụng với các website lớn phân phối người dùng ở nhiều nơi khác nhau, nếu k có sẽ truy cập lag và lâu.
-Tương tự, bootstrap CDN là ta link trực tiếp vào trang web và sử dụng. Ví dụ ta cần dùng 1 dòng lệnh trong bootstrap thì khi load nó sẽ truy cập vào máy chủ bootstrap ở gần đó nhất và load đống dữ liệu đó cho ta. Ta cần link tới các trang web chứa 4 file: jquery.min.js, bootstrap.min.css, bootstrap.min.js và popper.min.js=> 4 thư viện đã đc nén. Ở phiên bản mới thì boostrap 5 đã k có jQuery file nx.
-=> Khi tải về ta chỉ cần link 2 file bootstrap.min.js và bootstrap.min.css, tuy nhiên bị mất 1 số tính năng ví dụ data-toggle => để dùng đc thì vẫn cần jquery nên vẫn script vào, nhưng nếu muôn dùng offline thì có thể copy nội dung file đó ra và nhét vào thư mục link đến đó để dùng -> thẻ script sẽ bỏ trường integrity và crossorigin vì cái đó chỉ dùng khi link từ web. Tương tự với cả file popper.min.js
-=> Buộc để ít nhất là cùng cấp file html k đc để ở một thư mục khác r link đến
-
-Trong React có riêng react-bootstrap cung sẵn component chứ k chỉ là class
-
-Trong bootstrap, responsive chia màn hình thành 6 mức trong cái bảng và có 6 loại container trong cái bảng ta có nó thể hiện max-width tức là ví dụ nếu màn hình có kích thước nhỏ hơn 576px thì container luôn chiếm full màn hình, dù class container có margin nhưng tự mất ở TH này. Còn nếu màn hình từ 992 đến dưới 1200 thì container bằng 960px và k thay đổi kích thước(kích thước là tất cả k tính margin như v margin sẽ tự căn cho kích thước đúng nv)
-
-Khi dùng bootstrap có một vấn đề là nó sẽ tự chỉnh lại các thuộc tính của các thẻ có sẵn theo 1 quy chuẩn của bootstrap trong file _reboot.scss là CSS Reset => điều này có thể gây lỗi ví dụ nó làm lại thẻ body có background màu trắng => nếu ta dùng css đổi background-color của body mà k có dấu chấm thì sẽ k hiện màu theo ý ta vì nó lấy body ở file reboot hơn. Do đó, ta phải hoặc override nó bằng dấu chấm trong file css, hoặc dùng !important or tìm file reboot.scss đó và đổi trực tiếp
-
-
-
-
-# Biến trong css
-Biến trong css dùng như properties nên có thể cho thay đổi dựa vào responsive màn hình or đổi bằng JS. VD:
-element.style.getPropertyValue("--my-var");// get variable from inline style
-getComputedStyle(element).getPropertyValue("--my-var");// get variable from wherever
-element.style.setProperty("--my-var", jsVar + 4);// set variable on inline style
-=> variable tạo từ inline style khác với var tạo bình thường
-
-
-
-# Shadow DOM và Virtual DOM
--> Virtual DOM dùng trong các thư viện như Vue, React để tăng tốc độ tìm sự khác biệt khi update components
-
--> Shadow DOM được tích hợp sẵn trong các trình duyệt hiện đại. Từ này xuất phát từ HTML5 và là nền tảng của Angular
-VD: <video> có các nút bấm pause, start bên trong, thực tế là tác dụng của shadow DOM đóng gói các công việc trong 1 web component để tái sử dụng. Mặc định nó k được render bởi trình duyệt hay bất cứ Search Engine nào, có thể tách biệt hoàn toàn với real DOM. 
-Cấu trúc 1 Element dùng shadow DOM: Element bao ngoài là Host, chứa Shadow Root, trong Shadow Root là contents chính của Shadow DOM
+1 tag html thuần gồm: - HTML <template> là tag đặc biệt mà nội dung k được render trực tiếp mà phải được copy rồi mới render ra
+- Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. Dev dùng k thể custom shadow DOM. VD nut pause start trong <video>
 Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 
--> Markdown là 1 ngôn ngữ đánh dấu định dạng dễ đọc bởi con người và dễ chuyển đổi sang HTML. Nó là 1 ngôn ngữ riêng thay thế cho HTML. Nó nổi tiếng làm ngôn ngữ đánh dấu cho nhiều nền tảng như file README.md của github dùng ngôn ngữ mark down.
-VD: ## HEADING ## để tạo 1 header trong markdown.
-URL: https://viblo.asia/p/markdown-la-gi-Ljy5VX9VZra
-
-Còn HTML được gọi là ngôn ngữ markup của thế giới web. Là 1 ngôn ngữ đánh dấu văn bản hay dùng để thiết kế, sắp đặt nội dung, hình ảnh.
-
-
-
-# Other:
--> caniuse.com là trang web check các tính năng của html, css hỗ trợ những browser nào
-Url tổng hợp spinner dạng svg: https://github.com/n3r4zzurr0/svg-spinners
-
--> Browser cũng là 1 ứng dụng có khả năng đọc file như file html bình thường nhưng kp tất cả mọi thứ vì nó k cho các tệp tin JS native hoạt động.
-Do đó để chạy các phần phức tạp của file, cần 1 server chạy trên 1 cổng sau đó ta nhét các file vào server. Đa số server web đều tự động chạy file index.html khi vào, nếu k có file đó thì có thể xử lý qua các layer trung gian rằng báo lỗi not found 404 or tự động hiển thị cây thư mục để xem các file khác có trong server. 
-LiveServer là local http server tạo bằng extension của VSC trên cổng 5500. Thg các server đều cho custom cổng bằng file config.
-
-Trong npm cũng có 1 package tạo http server local tự động chạy trên 8080. Tạo:
--> Trỏ đến đường dẫn thư mục muốn chạy bằng http-server(k mở đc thì dùng VSC ez)
--> npm install -g http-server
--> http-server -c-1 (-c-1 để disable cache) => tạo được web server ở thư mục này
--> bh ta thêm file html vào trong đường dẫn đó là chạy trên http server đó
-=> Chú ý là việc ta dùng create-react-app cũng là đã tạo ra 1 http server r. Ta có thể code JS thoải mái trên server mà k bị cấm các code JS native
-
--> Tại sao Youtube load video rất nhanh, các công ty lớn chuyên về video, họ có server lớn xử lý với băng thông rộng. Phía server họ cũng dùng các thuật toán mạnh để nén các video khi hiển thị cho người dùng nên nó rất nhẹ. Phía front end họ cũng dùng 1 số mẹo như tính toán cấu hình máy mà đưa ra video quality mặc định phù hợp, đồng thời ưu tiên load video và hiển thị component cho video trước, sau đó mới load các thành phần khác. 
-
--> Nguồn ảnh free: 
-https://pixabay.com/ nguồn ảnh với kích thước và chất lượng khác nhau
-https://www.pexels.com/ ảnh và video chất lượng
-https://unsplash.com/ ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
-
-https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon động) chỉ với điều kiện thêm thẻ div này vào mã nguồn: <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
--> Dừng: 
+-> Dừng:
+{ display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
 Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-Dùng kiểu display: table;
-Dùng grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
-Biết vẽ thẻ SVG: chịu chết
-CSS: học về SCSS và SASS -> từ đó tạo ứng dụng darkmode dễ hơn bằng hàm css tạo từ scss: https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fbetterprogramming.pub%2Fa-complete-guide-to-implementing-dark-mode-in-react-47af893b22eb%3Ffbclid%3DIwAR1TilnVLD1Ei3SPGq42tOcffeLrrXCf9TGKIOxMKUfqc9TVDNLJNOw1Ipk
-
-
-
-
-
--> text-transform: uppercase; => chuyển uppercase éo cần JS luôn
-mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
-backface-visibility: hidden; => sẽ khiến mặt sau của thẻ k hiện ra nếu nhìn thấy mặt sau, mặc định nó nhìn xuyên mặt trước ra mặt sau
-backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element
-pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
-box-decoration-break => xử lý style inline element khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
-
--> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
-K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-zIndex k hđ với position static, cần set rõ khi dùng.
-
--> 
-padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
-Lỗi transition: set hover vào thì thuộc tính gì mang giá trị gì chỉ transition với dạng số xác định. VD 1 thẻ margin auto hoặc chưa set marge gì mà hover thành 10px thì sẽ nhảy sang 10px luôn vì nó k hiểu auto là từ đâu. Có thể tận dụng điều này trong animation kiểu nhảy từ trái sang phải mà k quay về rất ảo
-
-
-
--> Để tạo navigation bằng CSS thuần buộc phải dùng ul list thẻ a: 
-Đầu tiên cho text-decoration là none và :hover vào thì đổi thành gì, :active tức link hiện tại đang được chọn thì style như thế nào. dùng list-style-type: none; để ẩn đi symbol đầu của dạng list. Navigation bar dọc là mặc định khi li dùng display:block, để tạo navigation bar ngang ta dùng thẻ li có display: inline;
-
--> Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility hidden khác display none ở chỗ nó vẫn chiếm k gian nhưng k thấy và k thể tương tác. Hữu ích nếu ta muốn 1 khoảng không gian vô hình hoàn hảo. 
-
--> Tạo slider
-Bản có đổi màu: Điểm hay là ta cần tạo ra 1 cục tròn tròn di chuyển thì thay vì ta viết tất cả logic css đó vào trong 1 class thì ở đây ta tách ra 2 class là slider và round rồi cùng cho thẻ sử dụng. Vì 2 tính này độc lập, ta chỉnh vị trí thanh slider thì cục kia thích tròn hay vuông chả ảnh hưởng. Từ đó ta có thể tạo slider bao nhiêu hình cũng được chỉ cần bổ sung class mới vào. VD: TH này nếu ta xóa class round đi thì nó sẽ thành hình vuông và có 1 style slider mới, nếu k ta sẽ phải viết lại logic từ đầu cho mỗi hình khác nhau
-=> Đây là cách chia tách module cơ bản trong css
+View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
