@@ -24,7 +24,7 @@
 
 </head>
 <body>
-    <!-- # Basic / validate form trong jQuery -->
+    <!-- Validate form trong jQuery -->
 	<form method="get" accept-charset="utf-8" style="width:600px;margin: 0px auto;" id="formDemo">
 		<fieldset>
 			<legend>Demo jQuery Validate - ThienAnBlog.com</legend>
@@ -56,7 +56,7 @@
                     ho: "required",
                     ho2: {
                         required: true,
-                        equalTo: 'input[name=ho]' // chú ý dùng selector
+                        equalTo: 'input[name=ho]' // Chú ý dùng selector
                     },
                     ten: "required",
                     diachi: {
@@ -66,17 +66,14 @@
                 },
                 messages: {
                     ho: "Vui lòng nhập họ",
-                    ho2: "Vui lòng nhập đúng họ", // message chung cho mọi trường nếu k specific
+                    ho2: "Vui lòng nhập đúng họ", // Message chung cho mọi trường nếu k specific
                     ten: "Vui lòng nhập tên",
                     diachi: {
                         required: "Vui lòng nhập địa chỉ",
                         minlength: "Địa chỉ ngắn vậy, chém gió ah?"
                     }
                 },
-                // Dùng 2 cái rules và message để check mọi thứ. messages tự thêm label vào bên phải hiển thị
-                // ở phiên bản query mới thì class valid và error được thêm tự nhiên vào thẻ
-                // label error của message cx tự có class error nên ở trên ta dùng input.error để specific class này
-                // cho input thôi, còn label.error cho riêng label của message. Quy ước tên như v
+                // Dùng 2 cái rules và message để check mọi thứ. messages tự thêm label vào bên phải hiển thị ở phiên bản query mới thì class valid và error được thêm tự nhiên vào thẻ label error của message cx tự có class error nên ở trên ta dùng input.error để specific class này cho input thôi, còn label.error cho riêng label của message. Quy ước tên như v
             });
         });
 	</script>

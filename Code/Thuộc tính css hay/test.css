@@ -7,7 +7,7 @@
 h1 {
     animation: fadeOut 2s ease;
     animation-fill-mode: forwards;
-    animation-iteration-count: 1.5; /* dừng giữa chừng */
+    animation-iteration-count: 1.5; /* Dừng giữa chừng */
 }
 @keyframes fadeOut {
     from {
@@ -23,7 +23,7 @@ h1 {
     height: 150px;
     width: 150px;
     border: 1px solid blue;
-    perspective: 100px; /* để tầm 1000px là thấy div2 thành hcn luôn */
+    perspective: 100px; /* Để tầm 1000px là thấy div2 thành hcn luôn */
 }
 #div2 {
     padding: 50px;
@@ -72,8 +72,7 @@ h1 {
 
 
 /* Tạo animation / Component hay / Tạo spinning card */
-/* Cơ chế: Ta dùng 2 thẻ với 2 animation để spin hiện 2 mặt, thẻ này xoay mặt trước thì thẻ kia xoay mặt sau và 
-dùng ẩn mặt sau là xong. 
+/* Cơ chế: Ta dùng 2 thẻ với 2 animation để spin hiện 2 mặt, thẻ này xoay mặt trước thì thẻ kia xoay mặt sau và dùng ẩn mặt sau là xong. 
 Cách khác là ta có thể dùng 1 chu kỳ 0->50 là 0->0.5 turn và 50->100 vẫn giữ 0.5 turn là cx được. Tùy biến chu kỳ. */
 .container {
     position: relative;

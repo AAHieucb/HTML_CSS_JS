@@ -130,4 +130,4 @@ console.log($.trim("  Hello  "));
 //$ k thôi sẽ chỉ ra 1 biến trống jQuery. Ta có thể dùng các hàm của jQuery cung cấp như này
 
 // Biến trong jQuery
-$char = 1; //biến trong jQuery có thể khai báo nhanh như này tương đương: var $char;
+$char = 1; // Biến trong jQuery có thể khai báo nhanh như này tương đương: var $char;

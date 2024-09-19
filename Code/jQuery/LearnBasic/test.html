@@ -15,19 +15,19 @@
 
     <script language="javascript">
         // # Basic / Các thao tác DOM cơ bản
-        var object = $("#id-button"); //or: var object = jQuery('#id-button');
+        var object = $("#id-button"); // or: var object = jQuery('#id-button');
         object.click(function () {
-            alert($("#id-textbox").val()); //lấy giá trị input
+            alert($("#id-textbox").val()); // lấy giá trị input
         });
 
-        var elements = $(".desc"); //tất cả thẻ có class desc
-        $("a"); //chọn tất cả thẻ a
-        $("#id-textbox, id-textbox"); //chọn thẻ có id hoặc class là id-textbox
-        $("*").addClass("selected"); //chọn tất cả
+        var elements = $(".desc"); // Tất cả thẻ có class desc
+        $("a"); // Chọn tất cả thẻ a
+        $("#id-textbox, id-textbox"); // Chọn thẻ có id hoặc class là id-textbox
+        $("*").addClass("selected"); // Chọn tất cả
     </script>
     <script src="test.js"></script>
 
-    <!-- # Các component hay / Slider kéo ảnh -->
+    <!-- Tạo slider kéo ảnh -->
     <style>
         .beforeafter {
             width: 270px;
@@ -72,7 +72,7 @@
         }
     </style>
     <!-- <script>
-        // Basic / Bắt sự kiện
+        // Bắt sự kiện
         $(document).ready(function () {
             // Điểm dừng bên trái so với lề
             var leftgap = 0;
@@ -152,8 +152,8 @@
                 // Lấy vị trí các thẻ
                 // Lấy vị trí left hiện tại của hình
                 pos_img = i.offset()['left'];
-                //offset() trả ra top và left của thẻ so với document, ta có thể dùng offset đế set giá trị với cú pháp:
-                //$(selector).offset({top:value,left:value})
+                // offset() trả ra top và left của thẻ so với document, ta có thể dùng offset đế set giá trị với cú pháp:
+                // $(selector).offset({top:value,left:value})
 
                 // Thao tác với chuột
                 // Lấy vị tri hiện tại của chuột
@@ -175,8 +175,7 @@
                     i.children('.ba-mask').width(new_width);
                 }
 
-                // Xác định hiển thị đúng capture
-                //qua mốc kia là hiển thị capture ảnh
+                // Xác định hiển thị đúng capture qua mốc kia là hiển thị capture ảnh
                 if (new_width < (img_width * reveal)) {
                     i.children('.ba-caption').html(img_cap_two);
                 } else {

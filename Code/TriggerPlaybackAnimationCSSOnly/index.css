@@ -1,0 +1,28 @@
+input { height: 32px; width: 32px; }
+div { font-size: 64px; width: fit-content; }
+:checked ~ div {
+  animation-delay: 0s;
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  animation-name: spin1;
+}
+/* Chỉ cần hide cái #spin1 đi là bấm nút animation lặp lại liên tiếp vì ta remove và add lại animation liên tục */
+/* #spin1{
+  display: none;
+} */
+#spin1:checked ~ div {
+  animation-name: spin1;
+}
+#spin2:checked ~ div {
+  animation-name: spin2;
+}
+@keyframes spin1 {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin2 {
+  to {
+    transform: rotate(360deg);
+  }
+}

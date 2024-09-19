@@ -1,8 +1,8 @@
 (function ($) {
     $.fn.extend({
-        //plugin name - qbeforeafter. Tuân theo cấu trúc này để tạo ra 1 plugin. Các option phải truyền vào khi gọi
-        //plugin để tham số cho plugin. Truyền vào extend 1 object, key là 1 function trả ra giá trị là sẽ xử lý từ
-        //plugin khi sử dụng. Khi dùng gọi vào hàm key đó là sử dụng với thẻ nào đó, chính là có chữ this
+        // plugin name - beforeafter. Tuân theo cấu trúc này để tạo ra 1 plugin. Các option phải truyền vào khi gọi
+        // plugin để tham số cho plugin. Truyền vào extend 1 object, key là 1 function trả ra giá trị là sẽ xử lý từ
+        // plugin khi sử dụng. Khi dùng gọi vào hàm key đó là sử dụng với thẻ nào đó, chính là có chữ this
         qbeforeafter: function (options) {
             var defaults = {
                 defaultgap: 0,
@@ -12,7 +12,7 @@
                 reveal: 0.5,
             };
 
-            var options = $.extend(defaults, options);//lấy các options truyền vào 
+            var options = $.extend(defaults, options); // lấy các options truyền vào 
 
             return this.each(function () {
                 var o = options;
@@ -54,7 +54,7 @@
                 img_width = i.width();
                 img_cap_one = i.children("img:eq(0)").attr("alt");
                 img_cap_two = i.children("img:eq(1)").attr("alt");
-                //attr là thuộc tính chứ kp key của css
+                // attr là thuộc tính chứ kp key của css
 
                 if (new_width > o.leftgap && new_width < img_width - o.rightgap) {
                     i.children(".ba-mask").width(new_width);

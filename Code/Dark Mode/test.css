@@ -1,0 +1,181 @@
+/* Tạo slider */
+/* Bản k đổi màu */
+.label input{
+    display: none;
+}
+.label input:checked+.slider2:before{
+    /* K có và k cần có selector unchecked vì mặc định nó là unchecked, khi được checked nó mới style này */
+    left: 23px;
+}
+.slider2{
+    background-color: rgb(107, 107, 107);
+    border-radius: 30px;
+    width: 50px;
+    height: 30px;
+    position: relative;
+}
+.slider2::before{
+    position: absolute;
+    left: 2px;
+    top: 2.5px;
+    content: "";
+    width: 48%;
+    height: 80%;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.4s;
+}
+
+/* CSS Selector */
+/* Bản có đổi màu */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: 1000; /* Để cục bao ngoài switcher nổi lên trên và align các thứ bên trong */
+}
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+.theme-switch input { 
+    display: none;
+}
+.slider {
+    background-color: #999;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+}
+.slider:before { /* Cả cục dài, cục tròn tròn chỉ là before của nó thôi */
+    background-color: white;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+}
+input:checked+.slider {
+    background-color: #eee;
+}
+/* Nếu input checked thì slider sẽ đổi màu */
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+    /* Cái này như kiểu position nhưng dễ hơn. Tương đương với translate(26px,0); translate3D(26px,0,0); */
+}
+/* Nếu input checked thì before hay cục tròn tròn sẽ đổi vị trí sang phải và ngược lại */
+
+.slider.round {
+    border-radius: 34px; /* Bo tròn cái cục background */
+}
+.slider.round:before {
+    border-radius: 50%; /* Bo tròn cục bên trong */
+}
+
+/* CSS Selector / dùng before after */
+.test-selector::before {
+    content: "This";
+}
+.test-selector::after {
+    content: "awesome";
+}
+
+/* Tạo animation */
+h2 {
+    display: block;
+    margin: 50px;
+    padding: 10px;
+    color: black;
+    position: relative;
+    font-weight: bold;
+    width: fit-content;
+}
+h2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: auto; 
+    right: 0;
+    width: 0;
+    background-color: red;
+    transition: 0.25s; /* transition giúp hiện animation khi dùng thêm như hover */
+    height: 100%; /* K set width và height thì sẽ là 0px k hiện gì cả */
+    z-index: -1; /* Tránh đè chữ */
+}
+
+h2:hover::before {
+    width: 100%;
+    transform: translateX(-10px);
+    left: 0;
+    right: auto;
+    /* selector của thẻ có phạm vi max là trong thẻ hiện tại nên 100% là của cả thẻ h2 */
+}
+/* Cơ chế: khi hover, do right left do nhảy từ auto sang số nên nó nhảy thẳng từ phải sang trái, sau đo width tăng dần full. Bỏ ra thì nó lại nhảy từ 0 sang auto nên trái lại sang phải nhưng nhìn thấy k đổi, width giảm về 0 nên thấy co về bên phải */
+
+/* Tạo ribbon hình tam giác */
+.ribbon{
+    margin: 10px;
+    width: 300px;
+    height: 200px;
+    background-color: #eee;
+    border-radius: 30px;
+    position: relative;
+}
+/* Cái hay là tận dụng before luôn chứ k tạo thẻ mới */
+/* Chú ý là border nó có kiểu hình thang cân nên có thể tận dụng làm ribbon tam giác như này */
+.ribbon:before{
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50px;
+    border-top: 10px solid #eee;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+}
+
+/* Thao tác với border */
+.test-border{
+    margin: 10px;
+    border-top: 50px solid red;
+    border-left: 50px solid yellow;
+    border-right: 50px solid black;
+    border-bottom: 50px solid red;
+}
+.test-before{
+    width: 100px;
+    height: 100px;
+    background-color:  green;
+    position: relative;
+    margin: 100px;
+}
+.test-before::before{
+    content: "def";
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* CSS Selector và pseudo class và pseudo element */
+.div div{
+    display: none;
+}
+/* Chỉ đổi thẻ div nằm trong class div */
+
+.div.test2class{
+    background-color: red;
+}
+/* Chỉ đổi thẻ có cả 2 class */
+/* có nhiều kiểu: .class1.class2 ; .class1 .class2 ; .class1 + .class2 ; .class1:before ; .class1:hover:before ; .class1:checked+.class2:before ; .class1.class2:before nhờ v mà ta k cần tạo nhiều class mà chỉ cần vài class để truy cập vào toàn bộ các thứ bên trong*/

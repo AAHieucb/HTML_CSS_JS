@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Export import -->
+    <script type="module" src="../JS/module2.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.4.0/Rx.js"></script>
+    
+</head>
+<body>
+    <!-- Thẻ marquee -->
+    <marquee>
+        <div>Hello</div>
+    </marquee>
+
+    <!-- # 3D 2D transform -->
+    <!-- Căn tâm màn hình, kích thước dialog phải k quá lớn để k tràn -->
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">Hello</div>
+
+    <!-- # Basic -->
+    <button onclick="event1();">Alert</button>
+    <button onclick="event2(event);">Prompt</button>
+
+    <!-- Các kiểu embed media -->
+    <embed src="../file/background.jpg" type="image/jpg">
+    <img src="../file/background.jpg" alt="error Test">
+    <img src="../file/backgroundaa.jpg" alt="error Test" onerror="this.src='../file/background.jpg'">
+    <!-- Kiểu k tìm đc ảnh thì set lại link ảnh về default -->
+
+    <!-- submit form -->
+    <iframe src="#" frameborder="0"></iframe>
+    <button onclick="test()">Try it</button>
+    <form action="">
+        <input type="text" name="Name" value="text">
+        <input type="button" onclick="submitFunc();" value="submit" id="inputButton">
+    </form>
+    
+    <!-- <script type="text/javascript" src="../JS/training1.js"></script> -->
+    <script type="text/javascript" src="../JS/training2.js"></script>
+
+    <!-- Thao tác với các biến global -->
+    <div id="check" name="hieu" class="test">ABCXYZ</div>
+    <button onclick="window.location.reload();">Refresh</button><!-- là nút F5 đó-->
+
+    <button onclick="reload();">Reload</button>
+    <button onclick="set();">set</button>
+    <script>
+        function reload(){
+            window.location.reload();
+        }
+        function set() {
+            window.location.href = "https://www.facebook.com";
+        }
+    </script>
+
+    <!-- # Dùng sự kiện JS -->
+    <ul id="list"></ul>
+    <div style="border: 1px; background-color: red; height: 250px; width: 500px;" 
+        onmouseover="eventMouseOver(event)" id="div"></div>
+
+    <a href="javascript: void(0);">Useless link</a>
+    <a href="javascript: void alert('Alert!!');">Alert</a>
+    <!-- Khi dùng js trong href nó nhận như 1 đg link,ta phải thêm javascript: đằng trc như v để báo hiệu code js -->
+
+    <script>
+        // Mảng và object và hàm
+        // Dùng set get của object
+        var user = {
+            name: "Hieu",
+            age: 18,
+            get name() {
+                return name; // chú ý éo có this như function nhé.
+            },
+            set name_age(value){
+                [name, age] = value.split(" ");
+            }
+        }
+        user.name_age = "Trang 21";
+        console.log("User: ", user.name, user.age);
+
+        // # Dùng descriptor
+        Object.defineProperty(user, 'job', { // nên dùng như bên dưới rõ ràng hơn
+            value: 'IT',
+            writable: true,
+            configurable: true
+        })
+        var description = Object.getOwnPropertyDescriptors(user);
+        // Chú ý getOwnPropertyDescriptors(object) khác getOwnPropertyDescriptor(object,attribute)
+        console.log("Before editting job: ", description.job.writable);
+        Object.defineProperties(user, {
+            name: {
+                value: 'John',
+                writable: true
+            },
+            job: {
+                writable: false
+            }
+        });
+        description = Object.getOwnPropertyDescriptors(user); // Chú ý muốn xem sự thay đổi phải cập nhật biến nhé
+        console.log("After editting job: ", description.job.writable);
+        console.log("Enumerable: ", description.job.enumerable);
+        var clonePerfectOfUser = Object.defineProperties({}, Object.getOwnPropertyDescriptors(user));
+        console.log(clonePerfectOfUser);
+    </script>
+
+    <script>
+        // Dùng promise all
+        Promise.all([1,2,3,4]).then(value => console.log("data: ", value)) // value là mảng 4 ptu
+            .then(value => console.log("data: ", value)) // value là undefined vì k có đối số 2
+            .catch(error => console.log("error: ", error)) // error
+
+        // Mảng và object và hàm
+        var testString = "hello world";
+        var testStringToArr = [...testString]; // Thích chuyển từ string sang arr đều đc
+        console.log(testStringToArr)
+
+        // Bignumber trong JS
+        console.log(9007199254740991n * 10n);
+
+        // Mảng và object và hàm / Function() constructor
+        const sum = new Function('a', 'b', 'return a + b'); // có new hay k cũng được
+        console.log(sum(2, 6));
+
+        const sumOfArray = new Function(
+            'const sumArray = (arr) => arr.reduce((previousValue, currentValue) => previousValue + currentValue); \
+            return sumArray'
+        )(); // Nhớ phải có return function trong string để lấy được function ra
+        console.log(sumOfArray([1, 2, 3, 4]));
+
+        const sayHello = new Function('return function (name) { return `Hello, ${name}` }')();
+        console.log(sayHello('world'));
+    </script>
+
+    <script type="module">
+        // Thao tác với JSON
+        import data from "./test.json" assert { type: "json" };
+        console.log(data);
+
+        // Có thể tách lưu argument và body riêng
+        const f = new Function(data.object.a)();
+        f("hieu");
+        
+        const jsonObject = JSON.stringify({
+            a: 10,
+            b: {
+                d: "test",
+            },
+            c: () => console.log("K chuyển function TT sang JSON được")
+        })
+        console.log(jsonObject);
+
+        const jsObject = JSON.parse(jsonObject);
+        console.log(jsObject);
+
+        // # Garbage collector / Cách để clear 1 object key trong JS
+        const obj = {a: 'one', b: 'two'};
+        for (const key in obj) {
+            delete obj[key];
+        }
+        console.log(obj);
+
+        // Object là let (or var)
+        let obj1 = {a: 'one', b: 'two'};
+        obj1 = {};
+        console.log(obj1); // GC sẽ xử lý
+
+        // Cách so sánh 2 array trong JS
+        let array1 = [11, [22, 33]];
+        let array2 = [11, [22, 33]];
+        console.log(array1.toString());
+        console.log(JSON.stringify(array1));
+        console.log(JSON.stringify(array2));
+
+        // Chuyển sang string: k dùng toString vì nó tự flat
+        console.log(JSON.stringify(array1) === JSON.stringify(array2)); //true
+        // Nhược điểm là nó tự bỏ qua null và undefined nên sai
+        let array3 = [11, null, 33];
+        let array4 = [11, undefined, 33];
+        console.log(JSON.stringify(array3) === JSON.stringify(array4)); //true
+        // => Có thể sửa array ban đầu để ép nó về giống được ok
+        
+        // Cách tốt nhất lại là ss số phần tử và loop check từng phần tử. Có thể làm chạy với for loop
+        const compareArrays = (a, b) =>
+            a.length === b.length &&
+            a.every((element, index) => element === b[index]);
+        console.log(compareArrays(array1, array2)); //false
+    </script>
+
+</body>
+</html>

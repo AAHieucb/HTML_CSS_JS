@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./final.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        /* # Dùng scroll / Dùng scroll-snap */
+        .section {
+            overflow-x: auto;
+            white-space: nowrap;
+            scroll-snap-type: x mandatory;
+            scroll-snap-stop: always;
+            scroll-padding: 0 0 0 50px;
+        }
+
+        .section .section__item:nth-child(1) {
+            background-color: cyan;
+        }
+
+        .section .section__item:nth-child(2) {
+            background-color: yellow;
+            scroll-margin-left: 20px;
+        }
+
+        .section .section__item:nth-child(3) {
+            background-color: green;
+        }
+
+        .section .section__item:nth-child(4) {
+            background-color: blue;
+        }
+
+        .section .section__item:nth-child(5) {
+            background-color: violet;
+        }
+
+        .section__item {
+            width: 300px;
+            height: 200px;
+            display: inline-block;
+            scroll-snap-align: start;
+        }
+    </style>
+
+    <!-- # Dùng scroll / Ẩn thanh scrollbar nhưng vẫn giữ nguyên chức năng -->
+    <style>
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- # Dùng scroll / Dùng scroll-snap -->
+    <div class="section">
+        <div class="section__item">Item 1</div>
+        <div class="section__item">Item 2</div>
+        <div class="section__item">Item 3</div>
+        <div class="section__item">Item 4</div>
+        <div class="section__item">Item 5</div>
+    </div>
+
+    <!-- # Dùng scroll / Dùng overscroll-behavior -->
+    <div style="width: 100px; height: 100px; overflow: auto;">
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cupiditate provident quibusdam natus quod dolorum 
+            animi veniam ullam aspernatur, necessitatibus inventore nam! Aliquid mollitia totam esse sit, neque soluta. 
+            Similique, quaerat!
+        </p>
+    </div>
+
+    <!-- VD Tạo quốc kỳ của mọi quốc gia trên thế giới bằng css -->
+    <style>
+        h3 {
+            position: absolute;
+            text-align: center;
+            top: 20px;
+        }
+
+        /* Main Style Stars from here  */
+        .flag {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .vietnam {
+            background-color: #db2017;
+            display: grid;
+            place-items: center;
+        }
+
+        .vietnam::before {
+            position: absolute;
+            content: "";
+            height: 110px;
+            aspect-ratio: 1;
+            background: #ff0;
+            clip-path: polygon(50% 0%,
+                    61% 35%,
+                    98% 35%,
+                    68% 57%,
+                    79% 91%,
+                    50% 70%,
+                    21% 91%,
+                    32% 57%,
+                    2% 35%,
+                    39% 35%);
+        }
+    </style>
+    <div class="flag vietnam"></div>
+
+    <!-- color-scheme -->
+    <style>
+        .colorScheme {
+            color-scheme: light dark;
+        }
+    </style>
+    <div class="colorScheme">
+        <div>Hello</div>
+        <textarea name="" id="" cols="30" rows="10">Hello World</textarea>
+    </div>
+
+    <!-- # Responsive css / Dùng @media trong css3 -->
+    <!-- Mặc định ta k set mode gì trong các ứng dụng bth nên nó coi là light mode và chỉ phần @media dùng light hoạt động được  -->
+    <style>
+        .day {
+            background: #eee;
+            color: black;
+        }
+
+        .night {
+            background: #333;
+            color: white;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .day.dark-scheme {
+                background: #333;
+                color: white;
+            }
+
+            .night.dark-scheme {
+                background: black;
+                color: #ddd;
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .day.light-scheme {
+                background: white;
+                color: #555;
+            }
+
+            .night.light-scheme {
+                background: #eee;
+                color: black;
+            }
+        }
+
+        .day,
+        .night {
+            display: inline-block;
+            padding: 1em;
+            width: 7em;
+            height: 2em;
+            vertical-align: middle;
+        }
+    </style>
+    <div class="day">Day (initial)</div>
+    <div class="day light-scheme">Day (changes in light scheme)</div>
+    <div class="day dark-scheme">Day (changes in dark scheme)</div>
+    <br />
+    <div class="night">Night (initial)</div>
+    <div class="night light-scheme">Night (changes in light scheme)</div>
+    <div class="night dark-scheme">Night (changes in dark scheme)</div>
+
+    <!-- # Responsive css / Dùng @supports -->
+    <style>
+        .syn-none {
+            font-synthesis: none;
+        }
+
+        .supports {
+            display: block;
+        }
+
+        @supports (font-synthesis: none) {
+            .supports {
+                display: none;
+            }
+        }
+
+        .syn {
+            background: #969481;
+            border-radius: 16px;
+            padding: 1em 2em;
+        }
+    </style>
+    <p class="supports">👋 Your browser does not currently support the <code>font-synthesis</code> property.</p>
+
+    <!-- # Dùng font / Dùng font-systhesis / Dùng text-rendering -->
+    <div class="syn">
+        <p class="syn-none">This line of text applies the <code>none</code> keyword, so nothing should be
+            <strong>bold</strong> or <i>oblique</i>.
+        </p>
+    </div>
+
+    <style>
+        .useTextRendering {
+            text-rendering: optimizeSpeed;
+        }
+    </style>
+    <div class="useTextRendering">fi fl ff li</div>
+
+    <!-- Các property của column -->
+    <style>
+        .newspaper {
+            column-count: 3;
+            column-gap: 40px;
+            column-rule-style: solid;
+            column-rule-width: 1px;
+            column-rule-color: lightblue;
+        }
+    </style>
+    <div class="newspaper">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
+        dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+        suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
+        vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
+        iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
+        Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
+        possim assum.
+    </div>
+
+    <!-- Shadow DOM và Virtual DOM -->
+    <i>I am <span id="sd-root">shadow</span> root</p>
+    <script>
+        const host = document.querySelector("#sd-root");
+        host.attachShadow({mode: "open"});
+        // Éo hiểu sao nhưng shadow root nó éo hiện ra => k cần qt
+    </script>
+
+    <!-- Dùng SVG element -->
+    <style>
+        .circle {
+            pointer-events: all; /* enable event cho các svg element */
+        }
+        .circle:hover {
+            fill: red;
+        }
+    </style>
+    <svg width='100' height='100'>
+        <circle class="circle" cx='50' cy='50' r='40' stroke='green' stroke-width='4' fill='yellow' />
+    </svg>
+
+    <!-- Các thẻ input -->
+    <style>
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+        }
+    </style>
+    <input type="number" value="1" />
+
+    <!-- hover button to ra -->
+    <style>
+        .buttonhover:hover{
+            padding: 20px 60px;
+            /* transition: 1s; */
+            transition: transform, padding 1s; /* Chỉ 1 animation chỉnh padding */
+        }
+        .buttonhover2:hover{
+            transform: scale(5);
+            transition: 1s;
+        }
+        .buttonhover3:hover{
+            font-size: 20px;
+            transform: scale(5);
+            transition: 1s;
+        }
+        .buttonhover4 {
+            font-size: 40px;
+            transform: scale(0.5);
+            transform-origin: 0% 100%;
+        }
+        .buttonhover4:hover{
+            transform: scale(1);
+            transition: 1s;
+            transform-origin: 0% 100%;
+        }
+    </style>
+    <button class="buttonhover">ABC</button>
+    <button class="buttonhover2">ABC</button>
+    <button class="buttonhover4">ABC</button>
+    <button class="buttonhover3">ABC</button>
+
+    <!-- Responsive mà k cần @media -->
+    <style>
+        .container {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+            gap: 10px;
+        }
+        .container > div {
+            height:100px;
+            background:red;
+        }
+    </style>
+    <div class="container">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <br/>
+
+    <!-- Responsive k cần @media mạnh hơn -->
+    <style>
+        .container1 {
+            display: flex;
+            flex-wrap:wrap; /* this */
+            gap:10px;
+        }
+        .container1 > div {
+            height: 100px;
+            flex: max(400px, 100%/4 - 0.1%); /* and this */
+            background: red;
+        }
+    </style>
+    <div class="container1">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <br/>
+    <style>
+        .container2 {
+            --w: 400px;
+            --n: 3;
+            display:grid;
+            grid-template-columns: repeat(
+                auto-fit, /* giúp co lại */
+                minmax(
+                    clamp(
+                        100%/(var(--n) + 1) + 0.1%, /* 25.01% */
+                        var(--w),
+                        100%
+                    ),
+                    1fr
+                )
+            ); /* this */
+            gap:10px;
+        }
+        .container2 > div {
+            height:100px;
+            background:red;
+        }
+    </style>
+    <div class="container2">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+    <!-- Khi kích thước k đồng đều --> 
+    &nbsp;
+    <style>
+        .grid {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 100px 1fr 2fr;
+            margin: 0 0 1rem 0;
+        }
+        .grid > div {
+            height: 100px;
+            background: red;
+        }
+    </style>
+    <div class="grid">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+
+
+    <!-- Tính năng readmore bằng CSS only -->
+    <style>
+        input#inputHiddenContent3, #inputShownContent3, span#spanHiddenContent3 { display: none; }
+        input#inputShownContent3:checked ~ span#spanHiddenContent3 { display: block; }
+        input#inputHiddenContent3:checked ~ span#spanHiddenContent3 { display: none; }
+        input#inputShownContent3:checked ~ #myReadMore label { display: none; }
+    </style>
+    <input type=radio id="inputShownContent3" name="group3" />
+    <span id="myReadMore">
+        <h4>First part of the static content</h4>
+        <label for="inputShownContent3">Read more....</label>
+    </span>
+    <span id="spanHiddenContent3">
+        <p>	toggle the second part of the story. </p>
+        <label for="inputHiddenContent3">Read less....</label>
+    </span>
+    <input type=radio id="inputHiddenContent3" name="group3" />
+
+    
+    <!-- Disable auto focus của select option -->
+    <select>
+        <option selected disabled>Choose an item</option>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="vw">VW</option>
+        <option value="audi">Audi</option>
+    </select>
+
+    <select>
+        <option hidden>Choose an item</option>
+        <option value="volvo">Volvo</option>
+        <option value="saab">Saab</option>
+        <option value="vw">VW</option>
+        <option value="audi">Audi</option>
+    </select>
+
+    <!-- Dùng direction và resize có thể khiến mọi thứ resizeable -->
+    <style>
+        div.resizeable{
+            overflow: hidden;
+            resize: both;
+            background-color: red;
+            display: inline-block;
+            direction: ltr;
+        }
+    </style>
+    <div class="resizeable">
+        Hello
+    </div>
+    <span>World</span>
+
+    <!-- Dùng table -->
+    <style>
+        /* Có nhiều kiểu style border đặc biệt nên check trước khi tự custom */
+        th, td{
+            border-style: inset;
+        }
+    </style>
+    <table border="10" 
+    bordercolor="green" 
+    width="50%" align="center" cellpadding="8px" cellspacing="10px">
+        <caption>Hello</caption>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td align="right">John Smith</td>
+            <td>smith@example.org</td>
+        </tr>
+        <tr>
+            <td colspan="2">John Smith</td>
+        </tr>
+        <tr>
+            <td rowspan="2">John Smith</td>
+            <td >John Smith</td>
+        </tr>
+        <tr>
+            <td>Data</td>
+        </tr>
+    </table>
+
+    <style>
+        p:first-letter{
+            color: red;
+        }
+    </style>
+    <p style="width: 100px; text-indent: -20px;">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente, earum!</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="useEmmet.css">
+</head>
+
+<body>
+    <!-- Dùng emmet -->
+
+    <!-- dấu chấm, bq, ftr, btn/bu, sect, hdr. Các thẻ còn lại gõ 1 phần tên ra -->
+    <div class="">Div</div>
+    <blockquote>Block quote</blockquote>
+    <footer>Footer</footer>
+    <button>Button</button>
+    <section>Section</section>
+    <header>Header</header>
+
+    <!-- div#hello.wrapper.test -->
+    <div id="hello" class="wrapper test"></div>
+
+    <!-- img[src="cat.jpg"][alt="Cute cat pic"] -->
+    <img src="cat.jpg" alt="Cute cat pic" />
+
+    <!-- p{This is a paragraph} -->
+    <p>This is a paragraph</p>
+
+    <!-- section+section, ul>li -->
+    <section></section>
+    <section></section>
+    <ul>
+        <li></li>
+    </ul>
+
+    <!-- div+div>p>span+em^bq -->
+    <div></div>
+    <div>
+        <p><span></span><em></em></p>
+        <blockquote></blockquote>
+    </div>
+    <!-- + là sibling của, > là cha của, ^ leo thẻ sau lên 1 bậc. Ở đây thẻ bq đang cùng với em nằm trong p, ta cho nó
+    ngang hàng bằng cách leo lên 1 cấp với ^ -->
+
+    <!-- div>(header>ul>li>a)+footer>p thì k cần leo cái footer lên nx-->
+    <div>
+        <header>
+            <ul>
+                <li><a href=""></a></li>
+            </ul>
+        </header>
+        <footer>
+            <p></p>
+        </footer>
+    </div>
+
+    <!-- ul>li*5 , ul>li{Item $}*3 => dấu $ sẽ tự tăng lên với các item giống nhau như v được gọi. TextNode trong {} -->
+    <!-- ul>li.item$$$*5 là số có 3 chữ số với $$$ -->
+    <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <ul>
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+    </ul>
+    <ul>
+        <li class="item001"></li>
+        <li class="item002"></li>
+        <li class="item003"></li>
+        <li class="item004"></li>
+        <li class="item005"></li>
+    </ul>
+
+    <!-- ul>li.item$@3*5 dùng @<số> bắt đầu bằng bao nhiêu -->
+    <!-- ul>li.item$@-*5 dùng @- để đảo chiều-->
+    <!-- ul>li.item$@-3*5 dùng kết hợp -->
+
+    <ul>
+        <li class="item3"></li>
+        <li class="item4"></li>
+        <li class="item5"></li>
+        <li class="item6"></li>
+        <li class="item7"></li>
+    </ul>
+    <ul>
+        <li class="item5"></li>
+        <li class="item4"></li>
+        <li class="item3"></li>
+        <li class="item2"></li>
+        <li class="item1"></li>
+    </ul>
+    <ul>
+        <li class="item7"></li>
+        <li class="item6"></li>
+        <li class="item5"></li>
+        <li class="item4"></li>
+        <li class="item3"></li>
+    </ul>
+    <!-- ul>li{item$@-3}*5 -->
+    <ul>
+        <li>item7</li>
+        <li>item6</li>
+        <li>item5</li>
+        <li>item4</li>
+        <li>item3</li>
+    </ul>
+
+    <!-- .wrapper => tag k specific tự hiểu là div -->
+    <div class="wrapper"></div>
+
+    <!-- em>.emphasis => khi dùng k tag kết hợp với thẻ em nó tự hiểu ngầm là thẻ span dù k có tên thẻ -->
+    <em><span class="emphasis"></span></em>
+    <!-- ul>.item => khi dùng kiểu list mà k có tag con thì tự hiểu là tag của list item. Tương tự các kiểu list khác -->
+    <ul>
+        <li class="item"></li>
+    </ul>
+    <!-- table>.row>.col tương tự với table tự có tr và tr tự gọi td -->
+    <table>
+        <tr class="row">
+            <td class="col"></td>
+        </tr>
+    </table>
+
+    <!-- bôi đen code cần kẹp->F1->Emmet: Wr-> Enter-> gõ tên tag(+emmet code)->Enter => có thể nhét thành phím tắt -->
+    <!-- đã nhét phím tắt: trỏ chuột đến dòng dưới(or bôi đen vùng cần)->CTRL+K->div.wrapper->enter -->
+    <div class="wrapper">
+        <div>Bôi đen chỗ này</div>
+    </div>
+
+    <!-- lorem, lorem10 -->
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, temporibus earum, est officiis eum magni, quisquam ex
+    asperiores non sapiente deserunt quam rerum! Labore recusandae rerum culpa ipsam sint iusto.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo, explicabo!
+
+    <!-- ul.my-list>lorem10.item-$*5 muôn dùng lorem thì bỏ >li đi, lorem10 thay cho {} là text -->
+    <!-- dùng lorem thì k dùng được class cho thẻ div-> nch là đừng dùng kết hợp -->
+    <ul class="my-list">
+        <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. A, magnam?</li>
+        <li>Non officiis necessitatibus fuga illo natus dolor doloribus et libero?</li>
+        <li>Illo sint ipsa molestiae, tempora ipsum minus optio obcaecati repellendus!</li>
+        <li>Ex incidunt est quisquam repudiandae, sequi minus similique delectus impedit.</li>
+        <li>Debitis dolor illum maxime quibusdam exercitationem, est quas quo explicabo!</li>
+    </ul>
+    <!-- dùng lorerm tự hiểu là text, ta dùng {<text>} để dùng text thg or chữ bth k có {} sẽ hiểu là tên tag -->
+    <!-- VD: ul.item-list>{hello}.item$*5 -->
+    <ul class="item-list">
+        <li class="item1">hello</li>
+        <li class="item2">hello</li>
+        <li class="item3">hello</li>
+        <li class="item4">hello</li>
+        <li class="item5">hello</li>
+    </ul>
+
+</body>
+
+</html>

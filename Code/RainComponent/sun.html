@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/sun.css">
+</head>
+<body>
+    <!-- # Sun -->
+
+    <!-- Dường như mỗi 1 cái nó đều làm thành 1 thẻ riêng, từng ray tia nắng 1 và bao ngoài là 1 position relative
+    để sắp xếp các thứ bên trong -->
+    <div class="main">
+        <div class="full-sun">
+            <div class="sun"></div>
+            <div class="ray1"></div>
+            <div class="ray2"></div>
+            <div class="ray3"></div>
+            <div class="ray4"></div>
+            <div class="ray5"></div>
+            <div class="ray6"></div>
+        </div>
+        <div class="cloud">
+            <div class="c1"></div>
+            <div class="c2"></div>
+            <div class="c3"></div>
+        </div>
+    </div>
+    <!-- Cơ chế tạo chuỗi animation, lên r mới xoay -->
+    <!-- Để xoay được nó dùng 1 thẻ bao ngoài và xoay thẻ đó chứ kp xoay từng tia -->
+    <!-- Để tạo animation liên tiếp trên 1 object, vc này thực ra k hề dễ vì trong css k có kiểu xong animation nào thì làm tiếp animation nào mà ta dùng animation cho 1 thẻ thì cứ chia ra 0-50% là animation1, 50-100% là animation2 -->
+
+
+    <p>Animation</p>
+
+    <!-- Có 1 cách khác để tạo animation liên tiếp là dùng animation delay. Chỉ cần cho các thẻ animation delay lần lượt nhau kèm đồng bộ thời gian animation chạy và phần trăm trong @keyframe hợp lý là được. Thời gian animation để xem animation của 1 thẻ kéo dài bao lâu, phần trăm keyframe dể biết trong khoảng thời gian đó thì animation hiển thị gì vào những lúc nào và animation delay để các thẻ nào thực hiện sau bao giây, tức là ta đảm bảo thẻ a xong animation thì thẻ b hết animation delay và chuẩn bị thực hiện -->
+    <a class="btn-100" href="#">100</a>
+    <a class="btn-500" href="#">500</a>
+    <a class="btn-1250" href="#">1250</a>
+    <!-- Bh hỗ trợ multiple animation nên có thể dùng animation delay cho 1 thẻ chạy nhiều animation được thì cũng như sequence animation -->
+
+</body>
+</html>
