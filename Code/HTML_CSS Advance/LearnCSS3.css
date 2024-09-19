@@ -16,8 +16,6 @@ button {
     color: white;
     background-color: tomato;
     border: none;
-    /* transition sử dụng 2 thuộc tính chủ yếu là transition-property và transition-duration */
-    /* transition-property: background-color; */
     transition-property: all;
     transition-duration: 1s;
 }
@@ -242,7 +240,7 @@ img .a {
 .abc::first-letter{
     color: red;
 }
-.abc::selection{ /* khi bôi đen để select */
+.abc::selection{ 
     color: cyan;
 }
 
@@ -252,17 +250,12 @@ img .a {
 	padding: 15px;
     border-image: url(https://freetuts.net/upload/tut_post/images/2019/01/20/1636/border-image.GIF) 30 round;
     border-image-repeat: stretch round;
-    /* border-image thực hiện thực tế là các bức ảnh liên tục nhau từ trái qua, từ trên xuống. border-image thực tế
-    là rút gọn theo thứ tự truyền vào của: */
+    /* border-image thực hiện thực tế là các bức ảnh liên tục nhau từ trái qua, từ trên xuống. border-image thực tế là rút gọn theo thứ tự truyền vào của: */
     /* border-image-source */
-    /* border-image-slice là độ dày đặc. Dùng border-image-slice: 10% fill; sẽ thấy bản chất. Giảm hay tăng cái phần 
-    trăm là thấy được độ dày đặc của các bức ảnh con so với ảnh gốc, càng lớn thì phần fill càng mất, nhưng border k mất*/
-    /*border-image-width: là độ dày cạnh của border*/
-    /*border-image-outset: lượng image area mở rộng ra bên ngoài box. Dùng cái này có thể khiến border-image che đi
-    phần border thực hình chữ nhật của cạnh or nằm bên trong or nằm bên ngoài tùy chỉnh */
-    /*border-image-repeat: space, stretch, repeat, round. Cái round luôn fit, cái repeat k fit, stretch dãn phần
-    giữa, space tương tự như round nhưng k co nhỏ để fit mà các tile ảnh chồng đè lên nhau. Cái round luôn fit nhưng
-    khi màn hình co nhỏ thì từng cục bị co dít lại nhìn xấu */
+    /* border-image-slice là độ dày đặc. Dùng border-image-slice: 10% fill; sẽ thấy bản chất. Giảm hay tăng cái phần trăm là thấy được độ dày đặc của các bức ảnh con so với ảnh gốc, càng lớn thì phần fill càng mất, nhưng border k mất*/
+    /* border-image-width: là độ dày cạnh của border */
+    /* border-image-outset: lượng image area mở rộng ra bên ngoài box. Dùng cái này có thể khiến border-image che đi phần border thực hình chữ nhật của cạnh or nằm bên trong or nằm bên ngoài tùy chỉnh */
+    /* border-image-repeat: space, stretch, repeat, round. Cái round luôn fit, cái repeat k fit, stretch dãn phần giữa, space tương tự như round nhưng k co nhỏ để fit mà các tile ảnh chồng đè lên nhau. Cái round luôn fit nhưng khi màn hình co nhỏ thì từng cục bị co dít lại nhìn xấu */
     /* Ta có thể dùng kiểu border-image: url(...) 27 round repeat; tức round vertical và repeat horizontal */
 }
 
@@ -281,7 +274,7 @@ img .a {
     height: 350px;
     background-size: cover, 300px 300px;
 
-    /* vừa dùng background color và background image */
+    /* Vừa dùng background color và background image */
     background-color: cyan;
     background-clip: content-box; 
 }
@@ -293,7 +286,7 @@ img .a {
     background-position: center;
     -webkit-background-clip: text; /* background clip ít browser hỗ trợ */
     text-align: center;
-    color: transparent; /* phải có */
+    color: transparent; /* Phải có */
 }
 
 
@@ -301,7 +294,7 @@ img .a {
 .gradientTest1{
     width: 200px;
     height: 100px;
-    background: linear-gradient(red, yellow);/*gradient dùng với background chứ kp là background-color*/
+    background: linear-gradient(red, yellow); /* gradient dùng với background chứ kp là background-color */
 }
 .gradientTest2{
     width: 200px;
@@ -311,8 +304,8 @@ img .a {
 .gradientTest3{
     width: 200px;
     height: 100px;
-    background : repeating-linear-gradient(to bottom, rgba(255,0,0,0.5) 10%, blue 20%);/*hsla(0, 100%, 10%, 0.3);*/
-    /* dùng rgba tạo độ trong suốt cho màu */
+    background : repeating-linear-gradient(to bottom, rgba(255,0,0,0.5) 10%, blue 20%); /* hsla(0, 100%, 10%, 0.3); */
+    /* Dùng rgba tạo độ trong suốt cho màu */
     /* repeating cho phép các màu chiếm 1 lượng nào đó và lặp lại, dùng thêm phần trăm */
 }
 .gradientTest4{
@@ -435,12 +428,12 @@ img .a {
 
 /* Tạo animation / Menu mờ */
 .wrappermenu {
-    /*để menu k bị chiếm khoảng trống chiều dọc khi hover vào to ra sẽ đẩy các thẻ khác*/
+    /* Để menu k bị chiếm khoảng trống chiều dọc khi hover vào to ra sẽ đẩy các thẻ khác */
     float: left;
 }
 .menu {
     position: relative;
-    padding: 0;/*phải bỏ hết padding thẻ ul mặc định có*/
+    padding: 0;/* Phải bỏ hết padding thẻ ul mặc định có */
     list-style: none;
     background-color: transparent;
 }
@@ -451,11 +444,11 @@ img .a {
 .item {
     text-align: center;
     width: fit-content;
-    display: inline-block;/*li là thẻ block, muốn dùng nó inline thành 1 cục thì thêm inline-block*/
+    display: inline-block; /* li là thẻ block, muốn dùng nó inline thành 1 cục thì thêm inline-block */
     transition: 0.5s ease;
     padding: 20px;
     text-transform: uppercase;
-    /* vừa dùng transition để mọi chuyển đổi với thẻ kiểu hover đều mất 0.5s */
+    /* Vừa dùng transition để mọi chuyển đổi với thẻ kiểu hover đều mất 0.5s */
 }
 .menu .item:hover {
     font-size: 32px;
@@ -464,8 +457,7 @@ img .a {
     filter: blur(0);
     cursor: pointer;
 }
-/* Thực chất xàm lol, màu chữ hay font hay màu background đều dùng transition chuyển đổi được hết mà éo cần
-keyframe, chỉ có background image mới ép buộc thôi. Transition cx mặc định có forwards nên k dùng keyframe cx đc */
+/* Thực chất xàm lol, màu chữ hay font hay màu background đều dùng transition chuyển đổi được hết mà éo cần keyframe, chỉ có background image mới ép buộc thôi. Transition cx mặc định có forwards nên k dùng keyframe cx đc */
 @keyframes bg {
     0% {
         background-color: transparent;
@@ -499,7 +491,7 @@ input {
     font-size: 18px;
     font-weight: 600;
 }
-input::placeholder {/*màu chữ của hover text*/
+input::placeholder { /* Màu chữ của hover text */
     color: antiquewhite;
 }
 a {
@@ -647,7 +639,7 @@ input:focus {
 }
 
 /* Component hay / Tạo thanh loading ngang với scaleX */
-/*  CSS Selector */
+/* CSS Selector */
 div.loading {
     position: relative;
     width: 100%;
@@ -699,8 +691,7 @@ div.bar::after {
 
 /* Tạo animation */
 /* Component hay / Tạo thanh loading xoay */
-/* Cơ chế: để tạo cục xoay xoay đơn giản vl. Cho border hình tròn, 1 cái top có màu còn lại là màu trắng, thêm animation 
-cho nó rotate liên tục quay tâm */
+/* Cơ chế: để tạo cục xoay xoay đơn giản vl. Cho border hình tròn, 1 cái top có màu còn lại là màu trắng, thêm animation cho nó rotate liên tục quay tâm */
 .spiner {
     margin-top: 50px;
     width: 100px;
@@ -738,9 +729,7 @@ cho nó rotate liên tục quay tâm */
 .bar5 span.dot32 {
     animation-delay: 0s;
 }
-/* Ta muốn scale từ 0 đến 1 xong 1 về 0 nhưng k thực hiện tiếp luôn mà scale(0) bị giữ 1 khoảng thời gian rồi lặp
-lại => ta phải hiểu là 1 lần keyframe từ 0% -> 100% là 1 chu kỳ để các hành động lặp lại nên ta k thể để từ
-scale(0) -> scale(1) được mà phải bao cả 0->1->0->delay->0 trong 1 lần keyframe 0% -> 100% */
+/* Ta muốn scale từ 0 đến 1 xong 1 về 0 nhưng k thực hiện tiếp luôn mà scale(0) bị giữ 1 khoảng thời gian rồi lặp lại => ta phải hiểu là 1 lần keyframe từ 0% -> 100% là 1 chu kỳ để các hành động lặp lại nên ta k thể để từ scale(0) -> scale(1) được mà phải bao cả 0->1->0->delay->0 trong 1 lần keyframe 0% -> 100% */
 @keyframes dot {
     0%, 80%, 100% {
         transform: scale(0);

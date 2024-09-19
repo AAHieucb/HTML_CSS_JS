@@ -10,7 +10,6 @@
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 </head>
 <body>
-    <!-- # Mẹo CSS -->
     <!-- translateZ với position fixed -->
     <div style="background-color: red; width: 100px; height: 100px; transform: translateZ(0);">
         <div style="background-color: green; width: 50px; height: 50px; position: fixed;"></div>        
@@ -33,8 +32,7 @@
         <div>.</div>
     </div>
 
-    <!-- Kỹ thuật ClearFix trong CSS cx chỉ là chỉnh thẻ cha group1 có kích thước bằng với các con của nó bên trong
-    Ở đây dùng clear kết hợp after là xong, thì gọi là clearFix -->
+    <!-- ClearFix -->
     <div class="group1">
         <div style="float: left; background-color: red;">
             Nội dung bên trái
@@ -47,12 +45,10 @@
         Nội dung bên dưới
     </div>
 
-
-    <!-- # Tạo Animation -->
-    <!-- Transition -->
+    <!-- Dùng transition -->
     <button>Button 1</button>
 
-    <!-- # Pacman di chuyển -->
+    <!-- Animation pacman di chuyển -->
     <img class="a" src="https://upload.wikimedia.org/wikipedia/commons/4/49/Pacman.svg">
     <div class="dot dot-1"></div>
     <div class="dot dot-2"></div>
@@ -75,18 +71,12 @@
     <div class="dot dot-19"></div>
     <div class="dot dot-20"></div>
 
-    
-    <!-- # Mẹo CSS -->
     <!-- margin collapse case1 lấy margin lớn hơn khi margin 2 thẻ block đụng nhau -->
     <div style="margin-bottom: 30px;">TEXT 1</div>
     <div style="margin-top: 20px;">TEXT 2</div>
-    <!-- fix bằng display: inline-block; cho 1 trong 2 thẻ vì thuộc tính này phân định thẻ đó thành 1 
-        block riêng có margin chuẩn k collapse được. Thuộc tính display inline-block rất hay được dùng
-        ở thẻ block để áp dụng chức năng
-        Dùng position absolute cx fix được nhưng sai thuộc tính -->
+    <!-- fix bằng display: inline-block; cho 1 trong 2 thẻ vì thuộc tính này phân định thẻ đó thành 1 block riêng có margin chuẩn k collapse được  -->
 
-    <!--  Margin âm sẽ lùi về nhưng k nên để margin âm vì nó lấy tổng margin âm nhỏ nhất và dương lớn nhất 
-        làm giá trị cho margin -->
+    <!--  Margin âm sẽ lùi về nhưng k nên để margin âm vì nó lấy tổng margin âm nhỏ nhất và dương lớn nhất làm giá trị cho margin -->
     <div style="margin-bottom: 30px;">TEXT 1</div>
     <div style="margin-top: -20px;">TEXT 2</div>
 
@@ -122,7 +112,6 @@
 
     
     <!-- # Xử lý màu -->
-    <!-- gradient -->
     <div class="gradientTest1"></div>
     <div class="gradientTest2"></div>
     <div class="gradientTest3"></div>
@@ -130,7 +119,6 @@
     <div class="gradientTest5"></div>
 
 
-    <!-- # Basic -->
     <!-- Emphasis marks -->
     <p>W<span style="text-emphasis-style: double-circle filled; text-emphasis-color: blue;">o</span>rld</p>
     <p>W<span style="text-emphasis: '$' red;">o</span>rld</p>

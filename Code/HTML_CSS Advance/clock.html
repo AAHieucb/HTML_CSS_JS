@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" media="screen" href="/css/clock.css">
-    <script src="/js/clock.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/clock.css">
+    <script src="./js/clock.js"></script>
 </head>
 <body>
     <!-- # Đồng hồ -->
@@ -30,16 +30,14 @@
             <li><span>12</span></li>
         </ul>
     </div>
-    <!-- Phần vẽ kcj đặc biệt vì kích thước clock là khối tròn fix thì li absolute cứ theo phần trăm or fix đều được vì 
-    cục này cũng fix kích thước như v -->
-    <!-- Về các kim, ta viết style 1 class và 1 animation move cho từng kim là được. VD kim giây ta cho animation
-    trong 60s infinite rotate 1 vòng là được, tương tự với kim phút và kim giờ -->
-    <!-- thuộc tính step của animation làm nó chạy dần bao nhiêu bước từ step-position nào, k có nó thì sẽ quay mượt -->
+    <!-- Kim đồng hô là các thẻ li position absolute chỉnh vị trí fix -->
+    <!-- Chỉ cần viết animation cho các kim theo đúng. VD kim giờ animation duration là 3600s -->
+
+    <!-- thuộc tính step của animation chia chuyển động thành bao nhiêu bước thay vì chuyển động liên tục như mặc định.
+     VD steps(60,end) thì chia 60 bước và 1 bước kết thúc tại ví trí kết thúc của khung hình -->
     <!-- Khi dùng calc có thể tính các kiểu như 50%-10px là 50% thẻ cha giảm 10px là bnh -->
 
-    <!-- Tuy nhiên dùng clock với CSS nó k có tác dụng trong thực tế khi mà thời gian ta muốn lấy thực tế từ thời gian
-    hiện tại trong máy thì phải dùng js để lấy, bỏ animation đi, dùng js setInterval sau 1s thì set lại giá trị 3 kim 
-    cho css -->
+    <!-- Để lấy tg thực tế, dùng setInterval JS chứ k dùng animation css dược -->
 
 </body>
 </html>
