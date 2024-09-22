@@ -1,0 +1,267 @@
+# Basic
+Có thể tạo quy mô dự án lớn mấy cũng được
+
+-> Chuyển trang bằng html or js đều được
+
+-> Chia file từng pages. 
+Dùng SCSS, CSS đặt tên bằng BEM.
+
+-> Khởi tạo dự án: tuỳ biến
+Có thể tạo file html cho mỗi pages code UI, có thể tạo file html rỗng rồi viết code JS thêm element vào
+Có thể tự chạy với live server, có thể dùng bundler tool để tối ưu code và chạy trên 1 cổng theo config, quản lý package library.
+
+Các tool khác nhau tạo dự án khác nhau dùng kiểu nào cũng được, ta đều config về tuỳ ý ta được hết. 
+VD: 
+- Dùng live server với file html css js thuần.
+Thích dùng package nào thì CDN vào hoặc tự cài npm k cần bundler, hoặc cop mẹ file js của nó vào dự án. Dùng thêm bundler thì quản lý version tốt hơn thôi
+- Tạo với vite nó ra dự án thuần nhưng theo kiểu SPA, file html trống và file js tự code vào.
+
+
+
+# React -> Vanilla
+-> Tạo Global stores dùng cơ chế pubsub để 1 state đổi thì thực hiện loạt hành động
+// store.js
+const store = {
+  state: {},
+  listeners: [],
+  getState() {
+    return this.state;
+  },
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+    this.notify();
+  },
+  subscribe(listener) {
+    this.listeners.push(listener);
+  },
+  notify() {
+    this.listeners.forEach(listener => listener(this.state));
+  }
+};
+export default store;
+
+--> Viết gọn hơn với object descriptor dùng effect như này
+const state = {
+  get value() {
+    return _value;
+  },
+  set value(newValue) {
+    _value = newValue;
+    this.effect();
+  },
+  effect: () => {}
+};
+
+-> Trong react có sự kiện "onChange", trong vanillajs có sự kiện "change" chỉ trigger khi không còn focus vào ô input, ta có thể dùng sự kiện "input" sẽ trigger mọi lúc value thay đổi giống y hệt onChange
+
+-> Các biến khai báo js mà không trong 1 block, nó sẽ là global var và dùng được ở mọi file js khác miễn các file js khác được tải sau file js này
+File js tải trước có thể dùng biến globalvar của file js tải sau nếu đảm bảo thời điểm dùng biến, file js tải sau đã hoàn tất việc load qua biến.
+
+-> Khi thay thuộc tính phần tử trong vanilla js, trình duyệt sẽ nhận ra thay đổi này và tính toán lại các styles cho phần tử bị thay đổi và các phần tử con của nó nếu cần thiết.
+Reflow: Nếu sự thay đổi CSS ảnh hưởng đến bố cục (layout) của trang, trình duyệt sẽ thực hiện "reflow" để tính toán lại vị trí và kích thước của các phần tử trong tài liệu.
+Repaint: Sau khi reflow, nếu có bất kỳ sự thay đổi nào ảnh hưởng đến sự xuất hiện của các phần tử (như màu sắc, hình ảnh, hoặc đường viền), trình duyệt sẽ thực hiện "repaint" để vẽ lại các phần tử trên màn hình.
+Cuối cùng, trình duyệt sẽ tổng hợp tất cả các lớp đồ họa và hiển thị chúng trên màn hình.
+=> Điều đặc biệt là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết.
+
+VD: box.style.width = '200px'; // Thay đổi kích thước (gây reflow và repaint)
+box.style.backgroundColor = 'blue'; // Thay đổi màu sắc (chỉ gây repaint)
+
+Reflow là quá trình tốn kém tài nguyên, vì vậy nên hạn chế số lần reflow bằng cách gộp các thay đổi CSS lại với nhau hoặc sử dụng các kỹ thuật như documentFragment để giảm thiểu số lần reflow. VD:
+// Thay vì:
+element.style.width = '200px';
+element.style.height = '200px';
+element.style.backgroundColor = 'blue';
+// Dùng:
+element.classList.add('new-style');
+
+-> Vấn đề khó chịu nhất khi dùng VanillaJS là global state bị reset mỗi khi chuyển trang. Do kp là SPA nên mỗi khi chuyển trang là 1 set data mới. May mà browser có cache nên các file js css html k cần tải lại.
+Giải pháp là lưu global state lại trong localStorage, cookie, indexed db, url params. Có thể làm kiểu mới vào pages là lấy và xoá, trước khi chuyển page thì set data tuỳ biến.
+
+-> Để fetch data mỗi khi vào web chỉ cần viết ngay trong script ngoài cùng là được. 
+Pb: 
+- document.addEventListener('DOMContentLoaded', function() { }); => sự kiện khi toàn bộ HTML đã được tải xong, k chờ tài nguyên như ảnh, stylesheet.
+- window.onload => sự kiện khi toàn bộ trang đã được tải xong, bao gồm tất cả các tài nguyên phụ như hình ảnh, stylesheet, và iframe.
+
+Vấn đề là DOMContentLoaded luôn trigger khi sang 1 pages mới, mà ta luôn cần là DOM load xong thì mới fetch data để đảm bảo data có thể hiện ra. VD:
+<body>
+  <div id="data-container">Loading data...</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetchDataAndDisplay();
+    });
+    async function fetchDataAndDisplay() {
+      const dataContainer = document.getElementById('data-container');
+      try {
+        const response = await fetch('https://api.example.com/data');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        dataContainer.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+      } catch (error) {
+        dataContainer.textContent = 'Failed to load data: ' + error.message;
+      }
+    }
+  </script>
+</body>
+Nhưng ta cần khi vào là fetch data sơm hơn ngay khi vào pages, còn khi nào DOM load xong mới show ra data, chưa load DOM xong thì chưa show ra, load dom xong mà chưa fetch data xong thì show loading. VD:
+<body>
+  <div id="data-container">Loading data...</div>
+  <script>
+    let dataFetched = false;
+    let domContentLoaded = false;
+    let fetchedData = null;
+    fetch('https://api.example.com/data')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        fetchedData = data;
+        dataFetched = true;
+        displayDataIfReady();
+      })
+      .catch(error => {
+        document.getElementById('data-container').textContent = 'Failed to load data: ' + error.message;
+      });
+    document.addEventListener('DOMContentLoaded', function() {
+      domContentLoaded = true;
+      displayDataIfReady();
+    });
+    function displayDataIfReady() {
+      if (dataFetched && domContentLoaded) {
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = '<pre>' + JSON.stringify(fetchedData, null, 2) + '</pre>';
+      }
+    }
+  </script>
+</body>
+
+-> Ta biết khi chuyển pages thì luôn phải fetch lại data, cần lưu vào localStorage lấy ra mới cache được. Giả sử lấy được thì cần có cơ chế tách tên biến k bị trùng giữa các pages. Có thể chia theo namespace:
+// Global namespace object
+var MyApp = MyApp || {};
+// Storing data in the namespace
+MyApp.globalData = {
+  fetchedData: null
+};
+// Function to fetch data
+MyApp.fetchData = async function() {
+  if (!MyApp.globalData.fetchedData) {
+    const response = await fetch('your-data-source-url');
+    MyApp.globalData.fetchedData = await response.json();
+  }
+  return MyApp.globalData.fetchedData;
+};
+
+-> Trong phạm vi 1 pages, có thể cache lại data để kp gọi lại nhiều lần:
+- Dùng Immediately Invoked Function Expression: cung hàm fetch data nếu chưa từng được fetch
+(function() {
+  var privateData = null;
+  window.MyApp = {
+    fetchData: async function() {
+      if (!privateData) {
+        const response = await fetch('your-data-source-url');
+        privateData = await response.json();
+      }
+      return privateData;
+    }
+  };
+})();
+
+- Dựng 1 global stores lưu key-value hoặc nhét hàm fetch API vào 1 file riêng lưu kết quả vào global var và export ra.
+// dataStore.js
+let globalData = null;
+export const fetchData = async () => {
+  if (!globalData) {
+    const response = await fetch('your-data-source-url');
+    globalData = await response.json();
+  }
+  return globalData;
+};
+export const getData = () => globalData;
+
+- Dùng service worker lưu cache => tắt browser bật lại vẫn có data, thậm chí bật lại mà offline vẫn dùng được web. 
+// serviceWorker.js
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request).then(function(response) {
+        let responseClone = response.clone();
+        caches.open('my-cache').then(function(cache) {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      });
+    })
+  );
+});
+Cần cơ chế đảm bảo nếu k hỗ trợ service worker thì bỏ qua. Nêú dùng service worker, đang offline và online sẽ tự discard và fetch data mới.
+
+=> Tương tự có thể implement revalidate hoặc time to live cho data.
+
+-> Đó là dùng service worker cache api data, có thẻ cache file html css js như bth
+VD: 
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Worker Example</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(function(registration) {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch(function(error) {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+</head>
+<body>
+    <h1>Service Worker Example</h1>
+    <script src="script.js"></script>
+</body>
+</html>
+
+// service-worker.js
+const CACHE_NAME = 'my-cache-v1';
+const FILES_TO_CACHE = [
+  '/',
+  '/index.html',
+  '/styles.css',
+  '/script.js'
+];
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(function(cache) {
+        console.log('Caching files');
+        return cache.addAll(FILES_TO_CACHE);
+      })
+  );
+});
+// Xử lý fetch
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request);
+    })
+  );
+});
+
+/* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  text-align: center;
+}
+
+// script.js
+console.log('Script loaded');

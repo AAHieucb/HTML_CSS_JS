@@ -1,0 +1,167 @@
+:root {
+  /* MaxWidth Of Page, Container-Fluid, Container, Gutter*/
+
+  --max-width-page: 2560px;
+  --max-width-container-fluid: 1920px;
+  --max-width-container: 1198px;
+  --gap: 26px;
+  --border: 40px;
+
+  /* Colors Variable Demo*/
+  --main-cl: #0328ee;
+  --middle-cl: #00116a;
+  --dark-cl: #010725;
+  --dark-blue: #010d50;
+  --white-cl: #ffffff;
+  --black-cl: #141414;
+  --grey-dark-cl: rgba(255, 255, 255, 0.1);
+  --grey-light-cl: rgba(255, 255, 255, 0.2);
+  --grey-social-cl: rgba(255, 255, 255, 0.5);
+  --grey-footer: rgba(255, 255, 255, 0.3);
+  --offwhite-cl: #d9d9d9;
+
+  // Fontsize - Lineheight Variable Demo
+  --fs-h1: 6.6rem;
+  --lh-h1: 8rem;
+  --ls-h1: -1px;
+
+  --fs-h2: 4.2rem;
+  --lh-h2: 5.5rem;
+  --ls-h2: 0px;
+
+  // 18px / 26px / 0.9px - label dsb
+  --fs-lb: 1.8rem;
+  --lh-lb: 2.6rem;
+  --ls-lb: 0.9px;
+
+  // 16px / 16px / 1.6px -textbtn dsr
+  --fs-txtbtn: 1.6rem;
+  --lh-txtbtn: 1.6rem;
+  --ls-txtbtn: 1.6px;
+
+  // 18px / 32px / 0px -body dsr
+  --fs-body1: 1.8rem;
+  --lh-body1: 3.2rem;
+  --ls-body1: 0px;
+
+  // 16px / 26px / 0px -body dsr
+  --fs-body2: 1.6rem;
+  --lh-body2: 2.6rem;
+  --ls-body2: 0px;
+
+  // 14px / 16px / 1.4px - textmenu dsm
+  --fs-txtmenu: 1.4rem;
+  --lh-txtmenu: 1.6rem;
+  --ls-txtmenu: 1.4px;
+
+  // heading h3 22px, 31px
+  --fs-h3: 2.2rem;
+  --lf-h3: 3.1rem;
+
+  // 14px / 18px / 0.7px -textmenu dsm
+  --fs-txttag: 1.4rem;
+  --lh-txttag: 1.8rem;
+  --ls-txttag: 0.7px;
+
+  //Special - porfolio label
+  --fs-spec: 2rem;
+  --ls-spec: 1px;
+  --lh-spec: 2.6rem;
+
+  // 16px/18px/1.8px - author name - bold
+  --fs-author: 1.6rem;
+  --ls-author: 0.8px;
+  --lh-author: 1.8rem;
+
+  // 28px/30px/0.28px
+  --fs-yr: 2.8rem;
+  --lh-yr: 3rem;
+  --ls-yr: 0.28px;
+
+  // 28px/40px/0.28px
+  --fs-blog: 2.8rem;
+  --lh-blog: 4rem;
+  --ls-blog: 0.28px;
+
+  // 28px/30px/0.28px
+  --fs-faq: 2.8rem;
+  --lh-faq: 3rem;
+  --ls-faq: 0.28px;
+
+  // 26px / 26px / 1.4px
+  --fs-navmenu: 2.6rem;
+  --ls-navmenu: 2.6rem;
+  --ls-navmenu: 1.4px;
+
+  // General Variable Demo
+  --height-header: 100px;
+  --height-button: 70px;
+  --height-button-header: 56px;
+  --pd-section: 120px;
+
+  // Timing Transition Variable Demo
+  --duration: 0.4s;
+  --cubic: cubic-bezier(0.59, 0.29, 0.15, 0.93);
+
+  // Responsive
+  @include md {
+    --max-width-container: 1140px;
+  }
+  @include sm {
+    --max-width-container: 960px; // hoặc max-width: 100% tuỳ yêu cầu
+  }
+  @include xs {
+    --max-width-container: 100%; // hoặc max-width: 100% tuỳ yêu cầu
+    --gap: 16px;
+
+    // Fontsize - Lineheight Variable Demo
+    // 38px / 46px / -1px
+    --fs-h1: 3.6rem;
+    --lh-h1: 4.6rem;
+    --ls-h1: -1px;
+
+    // 28px / 36px / 0px
+    --fs-h2: 2.8rem;
+    --lh-h2: 3.6rem;
+    --ls-h2: 0px;
+
+    // 16px / 16px / 1.6px
+    --fs-txtbtn: 1.6rem;
+    --lh-txtbtn: 1.6rem;
+    --ls-txtbtn: 1.6px;
+
+    // 16px / 26px / 0px
+    --fs-body1: 1.6rem;
+    --lh-body1: 2.6rem;
+    --ls-body1: 0px;
+
+    // 16px / 26px / 0px
+    --fs-body2: 1.6rem;
+    --lh-body2: 2.6rem;
+    --ls-body2: 0px;
+
+    // 32px / 100% / 1.4px
+    --fs-txtmenu: 3.2rem;
+    --lh-txtmenu: 100%;
+    --ls-txtmenu: 1.4px;
+
+    // 14px/16px,0.24px
+    --fs-txtmenu-sm: 1.4rem;
+    --lh-txtmenu-sm: 1.6rem;
+    --ls-txtmenu-sm: 0.24px;
+
+    // 28px/30px/0.25px
+    --fs-yr: 2.8rem;
+    --lh-yr: 3rem;
+    --ls-yr: 0.25px;
+
+    // 18px/26px/0.28px
+    --fs-faq: 1.8rem;
+    --lh-faq: 2.6rem;
+    --ls-faq: 0.28px;
+  }
+
+  @include xxs {
+    --max-width-container: 100%;
+  }
+}

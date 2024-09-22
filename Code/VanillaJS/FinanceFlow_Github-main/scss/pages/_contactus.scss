@@ -1,0 +1,183 @@
+
+    .getintouch {
+      overflow-x: hidden;
+      min-width: 320px;
+      h1 {
+        padding-bottom: 52px;
+      }
+      &__content {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--gap);
+        &-form {
+          padding-right: 38px;
+          grid-column: 1/9;
+          .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 32px;
+            .form-group {
+              position: relative;
+              input {
+                width: 100%;
+                color: var(--white-cl);
+                font-size: var(--fs-body1);
+                line-height: var(--lh-body1);
+                letter-spacing: var(--ls-body1);
+                font-family: dsr;
+                border-radius: 100px;
+                margin-top: 12px;
+                padding: 0 25px;
+                height: 68px;
+                background: var(--dark-blue);
+                &.--error {
+                  border: 1.5px solid red;
+                }
+                &:focus {
+                  border: 1px solid var(--main-cl);
+                  outline: none;
+                }
+              }
+              .error {
+                margin-top: 3px;
+                position: absolute;
+                left: 0;
+                font-size: var(--fs-body1);
+                font-family: dsr;
+                line-height: var(--lh-body1);
+                letter-spacing: var(--ls-body1);
+                color: red;
+                @include xs {
+                  left: initial;
+                  right: 0;
+                }
+              }
+            }
+            &:nth-child(3) {
+              display: grid;
+              grid-template-columns: 1fr;
+              margin-bottom: 52px;
+
+              textarea {
+                width: 100%;
+                color: var(--white-cl);
+                font-size: var(--fs-body1);
+                line-height: var(--lh-body1);
+                letter-spacing: var(--ls-body1);
+                font-family: dsr;
+                border-radius: 14px;
+                margin-top: 12px;
+                padding: 20.5px 25px;
+                height: 162px;
+                border: 1px solid var(--dark-cl);
+                background: var(--dark-blue);
+                &.--error {
+                  border: 1.5px solid red;
+                }
+                &:focus {
+                  border: 1px solid var(--main-cl);
+                  outline: none;
+                }
+              }
+            }
+          }
+        }
+        &-mail {
+          grid-column: 9/13;
+        }
+        @include sm {
+          display: block;
+          &-mail {
+            margin-top: 45px;
+          }
+        }
+        @include xs {
+          &-form {
+            padding: 0;
+            .form-row {
+              display: block;
+              margin-bottom: 0px;
+              .form-group {
+                margin-top: 24px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .faq {
+      .container {
+        .heading.--h1 {
+          text-transform: uppercase;
+          padding-bottom: 80px;
+          text-align: center;
+        }
+        .faq__content {
+          display: grid;
+          grid-template-columns: repeat(12, 1fr);
+
+          @include sm {
+            display: block;
+            width: 100%;
+          }
+          &-item {
+            grid-column: 3/11;
+            border-bottom: 1px solid var(--grey-light-cl);
+            padding: 32px 0;
+
+            .accordion {
+              color: var(--white-cl);
+              padding-right: 40px;
+              cursor: pointer;
+              width: 100%;
+              outline: none;
+              text-align: left;
+              transition: var(--duration);
+              background: transparent;
+              font-family: dsb;
+              font-size: var(--fs-faq);
+              letter-spacing: var(--ls-faq);
+              line-height: var(--lh-faq);
+              position: relative;
+              &.active::before,
+              &::before {
+                content: "";
+                height: 2px;
+                width: 27px;
+                background: var(--white-cl);
+                display: block;
+                position: absolute;
+                top: 50%;
+                @include transition(var(--duration));
+                right: 0;
+              }
+              &:after {
+                content: "";
+                height: 27px;
+                width: 2px;
+                transform: rotate(0deg) translate(-12.5px, -12.5px);
+                background: var(--white-cl);
+                display: block;
+                position: absolute;
+                top: 50%;
+                @include transition(var(--duration));
+                right: 0;
+              }
+              &.active::after {
+                display: none;
+              }
+            }
+            .panel {
+              margin-top: 16px;
+              background-color: transparent;
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.2s ease-out;
+            }
+          }
+        }
+      }
+    }
+  
+

@@ -1,0 +1,156 @@
+# Basic parallax
+-> 1) Dùng background-attachment fixed cho 1 thẻ có backgroundImage. Khi thẻ đó hiện ra thì backgroundImage ở vị trí fixed so với màn hình chứ k theo thẻ hiện tại nữa.
+
+-> 2) Stack card dính ở top khi scroll
+Cho chúng position sticky và set top-padding cho từng card chênh nhau 1 khoảng theo index là xong.
+
+-> 3) Animation on scroll có thư viện trong react
+
+-> 4) Parallax khi background chuyển động với tốc độ khác với content chính
+Tc1: position sticky cho 1 thẻ sẽ stick thẻ đó với thẻ parent của nó. Nếu thẻ parent scroll hết thì nó cũng k stick nữa
+
+Tc2: kết hợp với scaleY(). Nếu scaleY cho thẻ cha của thẻ sticky, mọi thẻ bên trong cũng bị scale theo và khi scroll, thẻ stikcy k còn cố định nữa mà sẽ di chuyển sao cho điểm đầu và cuối của thẻ sticky trùng với điểm đầu và cuối của thẻ cha. Set cho nó đi chậm hơn thẻ ngoài là được
+Nhưng v thì sẽ bóp méo, cách để trống bị méo là thẻ con sẽ scaleY(1/tỉ lệ cũ) là được. Tức là có scaleY để nó chạy tính năng kia chứ còn scale lại như cũ nó vẫn dùng tính chất đó
+URL: https://codepen.io/hexagoncircle/pen/JjRYaZw
+
+-> 5) Parallax khi các object chuyển động dị dạng khi scroll, font chữ và box tăng to nhỏ, đi ngang
+3 vấn đề: 1 là làm sao để các thẻ đè lên nhau, phần text bị ảnh che qua; 2 là làm sao các thẻ di chuyển theo các hướng khác nhau khi scroll; 3 là làm sao 1 thẻ cũng scroll như bth nhưng lại chậm hơn các thẻ khác
+
+- Dùng react-scroll-parallax với transform chính là cơ chế làm điều đó:
+1) Các thẻ đè lên nhau có thể dùng position absolute, thẻ nào in dưới sẽ đè lên thẻ in trên. 
+2) Để di chuyển hướng khác ta phải animation theo scroll, dùng JS để thay đổi biến --scroll và css theo biến
+3) Tương tự như animation, 1 thẻ ta cho đi xuống với tốc độ chậm hơn scroll xuống sẽ tạo cảm giác như scroll chậm lại
+
+- Thật ra có thể thay đổi style bằng JS theo vị trí scroll mà k dùng biến css. VD bắt sự kiện scroll và:
+text.style.marginTop = window.scrollY * 2.5 + "px"; thì thẻ đó sẽ đi theo scroll luôn
+leaf.style.top = window.scrollY * -1.5 + "px";
+leaf.style.left = window.scrollY * 1.5 + "px"; => để lá cây đi sang phải và lên trên nhanh hơn bth
+
+1 công thức duy nhất: 
+window.addEventListener('scroll', () => { document.body.style.setProperty('--scroll', window.pageYOffset / (document.body.offsetHeight - window.innerHeight)) }, false);
+URL: https://css-tricks.com/books/greatest-css-tricks/scroll-animation/
+
+-> 6) Parallax theo scroll mà không cần JS với animation-timeline: scroll();
+
+-> 7) Parallax di chuột chuyển động nghiêng theo
+- react-next-tilt là 1 thư viện giúp nghiêng thẻ theo chuột.
+Cơ chế cũng chỉ là xđ vị trí chuột bằng JS và bắt sự kiện hover thẻ nào thì nghiêng thẻ đó. Các thuộc tính css giúp nghiêng thẻ là rotateX, rotateY, scale3d, rotate3d
+
+Thư viện react-next-parallax kế thừa từ react-next-tilt
+Chỉ cần bao bằng thẻ <Parallax> của thư viện là tự có hiệu ứng. Nó giải quyết 2 vđ với react-next-tilt là khi thẻ gần hơn thì k cần tự to hơn, và khi thẻ xoay bị ra ngoài phạm vi sẽ tự biến mất. 
+Bình thường thì nó k tự biến mất vì dùng overflow hidden sẽ làm mất hiệu ứng parallax
+
+data-parallax-offset => thuộc tính giúp các thẻ di chuyển mạnh hay yếu khi hover chuột
+data-parallax-opacity
+data-parallax-skew
+data-parallax-rotation
+animationMode="center-to-edge/edge-to-edge-both/edge-to-edge-x'
+animationReverse="all/all-except-offset"
+offsetMultiplier => tương tự data-parallax-offset, nó áp dụng với all offset values.
+controlElement
+
+-> Dùng astro: thư viện giống react-next-tilt nhưng dùng rất dễ, có mỗi 1 component, docs có mỗi 1 trang duy nhất và dùng cho react ok
+
+-> 8) Di chuyển và hoán đổi ảnh theo scroll chuột
+Công thức css tạo sự thay đổi animation theo scroll để tạo parallax, dùng cho mọi thuộc tính: 
+(scrollVar - oldMin) * newRange / oldRange + newMin
+calc(-1% * (max(var(--scroll), 25) - 25) * 100 / 75)
+=> Để convert 1 giá trị sang 1 đơn vị khác, ta dùng phép nhân. VD 1vw*var(--value) là ta đang convert sang value vw 
+
+Nếu ta muốn 1 thẻ di chuyển theo scroll chuột, ta dùng position sticky và thay đổi vị trí thẻ theo scroll với css variable trong transform translate
+
+
+
+# Dùng css thuần animation-timeline tạo parallax
+Trước tiên để các thẻ đè lên nhau, còn 1 cách nữa là dùng grid-template-areas. Khi cho tất cả cùng 1 thuộc tính grid-area, chúng sẽ nằm cùng 1 chỗ
+Nó cũng hoạt động tốt kết hợp với position absolute. Nếu 1 thẻ con dùng position absolute, nó cũng nằm đúng ở vị trí hiện tại luôn, top left các thứ sẽ chỉnh từ vị trí grid-area đổ đi
+
+VD: https://www.youtube.com/watch?v=d10GaL6F-lA
+Tut URL: https://www.youtube.com/watch?v=UmzFk68Bwdk
+
+animation-timeline: scroll() chạy animation khi scroll từ top tới bottom.
+scroll(x/inline) là khi scroll ngang, scroll(y/block) là scroll dọc.
+scroll thực tế check thẻ gần nó nhất mà bị scroll thì chạy animation theo nên nếu thẻ này trong 1 thẻ khác bị scroll sẽ animation theo thẻ đó, để effect chỉ chạy với scroll ngoài cùng ta dùng scroll(root). Dùng kết hợp với overflow hidden ở thẻ con 
+
+animation-timeline: view() chạy animation khi thẻ đi từ vị trí nào đến vị trí nào của view
+animation-range giúp kiểm soát điểm bắt đầu và start của timeline, có entry là animation bắt đầu khi nó mới vào viewport và kết thúc khi nó hiện đầy đủ trong view port
+
+=> Animation có thể k hoạt động ở browser khác, hãy search gg thêm polyfill cdn cho scroll-timeline là đươc. Hoặc check với @support
+
+VD Tạo thanh loading ngang khi scroll bằng css thuần quá đỉnh với animation-timeline scroll(block):
+
+-> Nhiều người họ gặp vấn đề về tiền đình, họ k muốn animation trong web của họ khiến họ loạn mắt, họ sẽ set reduced motion trong OS của họ để giảm animation. 
+Khi đó nếu ta cố hiện sẽ khiến animation bị hỏng, nên wrap lại trong @media:
+@media (prefers-reduced-motion: no-preference) {
+  .... animation css
+}
+Để bật chế độ này: mở devtool -> ctrl shift p -> reduced motion
+Khi đó đoạn code animation css sẽ chạy
+
+
+
+# Dùng react-scroll-parallax
+https://react-scroll-parallax.damnthat.tv/docs/usage/components/parallax-banner-component
+
+Cơ chế là dùng JS để thay đổi css var tuỳ vào vị trí scroll.
+Cơ chế animation là dùng transform. 2 cách để 1 thẻ đè lên 1 thẻ khác là dùng absolute và transform. Nhưng transform thì vẫn chiếm diện tích cũ. Nhờ cơ chế này ta có thể tạo hoạt cảnh nhiều thẻ lồng 3d lên nhau và tốc độ di chuyển khác nhau
+
+
+
+# Dùng gasp
+-> Cơ chế scroll thì thẻ xoay ngang, đến 1 mốc thì lại đi như bth: Dùng 1 thẻ position fixed ở cuối màn hình, scroll thì translateX thẻ đó đi ngang và 1 thẻ space height cao để scroll. 
+Cái khó là cân nhắc responsive. Dùng gasp sẽ làm được hết
+
+
+
+# Animation Draggable
+-> draggable attribute có sẵn trong html tag 
+
+-> HTML JS bh support đầy event cho drag drop nên tự làm rất dễ.
+
+-> Thư viện react draggable
+dnd-kit/core => thư viện số 1 hiện tại => ref tới trava lending pool
+react-beautiful-dnd => lib đơn giản hơn
+react-grid-layout
+framer-motion => basic
+
+
+
+# Other
+-> Prj Unplash Figma framermotion parallax: https://www.youtube.com/watch?v=29UWA-GdA7k
+useScroll, useTransform của framer motion rất mạnh có thể dùng cho parallax thay thế các thư viện khác mà k cần đổi css var
+
+-> Prj parallax pvới photoshop: https://www.youtube.com/watch?v=Yo3j_Dx4u7c
+
+Cơ chế để move chuột thì các thẻ di chuyển full màn như v thì ảnh phải to hơn màn hình, khi ta di chuột thì transform các ảnh layer với tốc độ khác nhau. Dùng cubic bezier để transition hiệu ứng từ nhanh sang chậm dần.
+https://cubic-bezier.com/ => url cho hàm transition dạng cubic
+
+Để khiến nó realistic hơn, ta cần move nó cả trục z: Để move trục z, ta phải dùng translateZ(10px) nhưng nó chỉ hoạt động khi dùng kèm, hàm perspective(2300px). VD:
+transform: translateX(...) translateY(...) perspective(2300px) translateZ(1000px);
+Tương tự dùng cả rotateY cho thẻ nữa
+
+Để khiến nó responsive: 
+Ta cho thẻ main bao tất cả với overflow hidden
+Nhưng khi màn hình mobile quá nhỏ, các bức ảnh mà theo phân trăm width sẽ bị nhỏ quá mà height của điện thoại lớn hơn width. Ta cần ảnh to ra theo height thì hãy dùng @media, xóa hết width về initial, set kích thước theo height là đươc.
+
+--> Cách tạo animation khi vào page lần đầu thì các thẻ chạy loạn 1 lần duy nhất, gọi là reveal animation:
+Lúc mới đầu page được load, ta chỉ cần apply animation cho nó luôn là được. Trước tiên cần đảm bảo là pages load xong hết tài nguyên, sau đó setup vị trí start, vị trí cuối cùng là web bình thường và cho chạy animation.
+Trong JS thì dễ dàng viết ngay trong file JS, trong react thì nhét vào useEffect hoặc tốt hơn thì dùng class css vì useEffect chạy khi DOM load xong.
+
+Cần đảm bảo khi load lần đầu tiên, mọi actions và animation khác đều k được thực hiện như mouse k thể bấm. Di chuột thì thoải mái
+
+-> Tạo infinite horizontal scroll: https://www.youtube.com/watch?v=iLmBy-HKIAw
+Giải pháp là dùng gấp 2 thẻ html và align animation hoàn hảo cho lần jump ở giữa với translate calc(50% - 0.5rem)
+
+-> File vite.config.ts settings base url của ứng dụng với:
+base: '/react-next-parallax_demo',
+
+-> Dùng IntersectionObserver
+Là 1 cách kiểm tra 1 phần tử có xuất hiện trên view port hay không. Cho 1 biến IntersectionObserver lắng nghe 1 thẻ bất kỳ thì nó sẽ check nếu thẻ đó có giao với viewport thì gọi hàm tương ứng.
+
+intersectionRatio: tỉ lệ phần hiển thị với thẻ root
+target: css selector thẻ đang nhắm tới
+isIntersecting: có giao với thẻ root hay không
+rootBounds: kích thước thẻ root, mặc định là màn hình
+intersectionRect: kích thước và vị trí phần giao
+

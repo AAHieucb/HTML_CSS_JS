@@ -1,0 +1,161 @@
+html {
+  font-size: 62.5%; // 1rem = 10px
+}
+body {
+  background: var(--dark-cl);
+  width: 100%;
+  max-width: var(--max-width-page);
+  margin: auto;
+  scroll-behavior: smooth;
+  font-family: dsr;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  &.--disable-scroll {
+    height: 100vh;
+    overflow: hidden;
+  }
+  .container-fluid {
+    width: 100%;
+    max-width: var(--max-width-container-fluid);
+    padding-right: var(--gap);
+    padding-left: var(--gap);
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+  }
+  .container {
+    width: 100%;
+    max-width: var(--max-width-container);
+    padding-right: var(--gap);
+    padding-left: var(--gap);
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+  }
+  @include xs {
+    .container-fluid,
+    .container {
+      padding-right: calc(var(--gap) + 6px);
+      padding-left: calc(var(--gap) + 6px);
+    }
+  }
+  .main {
+    position: relative;
+    .portfolio {
+      padding-top: 125px;
+    }
+    .earnrewards {
+      padding-top: 142px;
+      padding-bottom: 275px;
+    }
+    .reviews {
+      padding-top: 200px;
+    }
+    .signup {
+      padding-top: 159px;
+    }
+    .news {
+      padding-top: 170px;
+    }
+    .download {
+      padding-bottom: 120px;
+    }
+    .timeline {
+      padding-top: 184px;
+      padding-bottom: 132px;
+    }
+    .ourteam {
+      padding-bottom: 126px;
+    }
+    .about {
+      padding-bottom: 232px;
+      padding-top: calc(40px + var(--height-header));
+    }
+    .pricing {
+      padding-bottom: 225px;
+      padding-top: calc(40px + var(--height-header));
+    }
+    .blog {
+      padding-top: calc(40px + var(--height-header));
+    }
+    .blognews{
+      padding-top: 148px;
+      padding-bottom: 80px;
+    }
+    .sponsor.--about {
+      padding-bottom: 120px;
+    }
+    .post {
+      padding-top: 148px;
+      padding-bottom: 80px;
+    }
+
+    .blogdetail {
+      padding-bottom: 122px;
+      padding-top: calc(56px + var(--height-header));
+    }
+
+    .detailnews {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+
+    .getintouch {
+      padding-top: calc(80px + var(--height-header));
+    }
+    .faq {
+      padding: 120px 0px;
+    }
+
+    @include xs {
+      .portfolio {
+        padding-top: 56px;
+      }
+      .earnrewards {
+        padding-top: 76px;
+        padding-bottom: 82.6px;
+      }
+      .reviews {
+        padding-top: 120px;
+      }
+      .signup {
+        padding-top: 120px;
+      }
+      .news {
+        padding-top: 80px;
+      }
+      .download {
+        padding-bottom: 80px;
+      }
+      .timeline {
+        padding-top: 104.6px;
+        padding-top: 104px;
+      }
+      .ourteam {
+        padding-bottom: 80px;
+      }
+      .pricing {
+        padding-bottom: 80px;
+      }
+      .sponsor.--about {
+        padding-bottom: 80px;
+      }
+      .post {
+        padding-top: 80px;
+        padding-bottom: 80px;
+      }
+
+      .blogdetail {
+        padding-bottom: 80px;
+        padding-top: calc(48px + var(--height-header));
+      }
+
+      .getintouch {
+        padding-top: calc(48px + var(--height-header));
+      }
+      .faq {
+        padding: 80px 0;
+      }
+    }
+  }
+}

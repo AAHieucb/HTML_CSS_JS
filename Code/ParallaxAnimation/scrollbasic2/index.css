@@ -1,0 +1,31 @@
+/* # Animation scroll với keyframe đặc biệt css only */
+
+.scroll-reveal span { /*Dùng inline để animation chạy theo từng dòng chứ k chạy cả thẻ 1 lúc*/
+  color: #00000059;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(90deg, red, blue);
+  animation: scroll-reveal linear forwards; /*forwards để stay at the last keyframe*/
+  animation-timeline: view();
+}
+
+.scroll-reveal h2 span {
+  /*contain là hiện cả thẻ trong viewport mới có animation, cover là mới nhú lên 1 tí là animation luôn*/
+  /* Vd: animation-range: cover 20%; Equivalent to cover 20% cover 100% */
+  animation-range-start: contain 20vh; /*animation bắt đầu khi nhú lên 1 tí chỗ 20vh, kết thúc khi nhú vào 30vh*/
+  animation-range-end: contain 30vh; 
+}
+
+.scroll-reveal p span {
+  animation-range-start: cover calc(30vh - 33.2px); 
+  /*Chuẩn với mọi responsive, ở đây ta để thẻ h2/span khi mà cả thẻ vượt quá mốc 30vh thì thẻ p/span sẽ bắt đầu animation luôn vì nó mới nhú lên 30vh ở ngay dưới nhưng do h2/span có margin nên trừ đi đúng lượng margin*/
+  animation-range-end: cover 50vh; 
+}
+
+@keyframes scroll-reveal {
+  to {
+    background-size: 100% 100%;
+  }
+}

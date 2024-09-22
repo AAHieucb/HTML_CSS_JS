@@ -1,0 +1,69 @@
+
+    .pricing {
+      overflow-x: hidden;
+      min-width: 320px;
+      &__list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 40px;
+        margin-bottom: 56px;
+        flex-wrap: wrap;
+        gap: 38px;
+        &-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 24px;
+        }
+      }
+      &__package {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 26px;
+        @include sm {
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            &-item {
+                .btnmain {
+                    width: 100%;
+                }
+            }
+        }
+        &-item {
+          background: var(--dark-blue);
+          padding: 48px 30px;
+          border-radius: var(--border);
+          .textbox {
+            p,
+            h2 {
+              margin-top: 16px;
+            }
+          }
+          .feature {
+            margin-top: 40px;
+            margin-bottom: 54px;
+            &__list {
+              li {
+                position: relative;
+                color: var(--white-cl);
+                margin-top: 16px;
+                padding-left: 22px;
+                &:before {
+                  content: "";
+                  @include size(6px, 6px, true);
+                  background: var(--main-cl);
+                  position: absolute;
+                  top: 25%;
+                  left: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  
+

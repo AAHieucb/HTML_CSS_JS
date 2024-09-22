@@ -5,7 +5,6 @@ https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon độ
 
 Có thể custom cursor
 CSS nesting có sẵn rồi
-***popovertarget và popover giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần
 
 -> Master border radius: outer radius = inner radius + distance giữa 2 border
 border-radius: https://9elements.github.io/fancy-border-radius/
@@ -32,6 +31,53 @@ ul li, ol li, dl dt dd
 Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết. Có none, open, dot, circle, triangle, seseam, 1 <character> bất kỳ
 Tag video chứa tag source. VD: preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
 Thuộc tính inert đặc biệt trong html, khi dùng sẽ vô hiệu hóa mọi tương tác của người dùng với các tag.
+Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
+contain: paint;
+
+
+
+# Css anchor
+URL: https://www.youtube.com/watch?v=B4Y9Ed4lLAI&list=WL&index=2&t=61s
+***popovertarget popover popovertargetaction giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần, tự responsive
+anchor trong css và html để gắn popover hiện theo thẻ nào
+:root:hash(#context:popover-open): Check popover đang được mở bằng css selector để style
+VD1: 
+<style>
+  [popover] {
+    inset: unset;
+    bottom: anchor(top);
+    left: anchor(center);
+    translate: -50%;
+    margin: 0.25rem 0;
+  }
+</style>
+<button popovertarget="info" id="btn">Field</button>
+<div popover id="info" anchor="btn">Extra</div>
+VD2: 
+<style>
+  #btn {
+    anchor-name: --i-btn;
+  }
+  [popover] {
+    anchor-default: --i-btn;
+    inset: unset;
+    translate: -50%;
+    margin: 0.25rem 0;
+    position-fallback: --top-to-bottom;
+  }
+  @position-fallback --top-to-bottom { /* @position-fallback check dùng các position @try, nếu k được thì cứ lấy tiếp cái sau */
+    @try {
+      bottom: anchor(top);
+      left: anchor(center);
+    }
+    @try {
+      bottom: anchor(bottom); /* K fit top thì anchor xuống bottom => auto positioning */
+      left: anchor(center);
+    }
+  }
+</style>
+<button popovertarget="info" id="btn">Field</button>
+<div popover id="info">Extra</div>
 
 
 
@@ -43,6 +89,12 @@ Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autoco
 -> input type number custom nút spin button, trỏ vào shadow DOM với: input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button
 Nó có thuộc tính -webkit-appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
 K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn
+
+-> Có thể dùng hidden tạo input ảnh hoặc file đẹp
+
+-> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
+
+-> Gõ có gợi ý với: <datalist> + input list
 
 
 
@@ -63,8 +115,10 @@ VD: a[href$=".abc" i]  /  [href*="google.com"]  /  img:not([alt])
 input:checked/:disabled/:enabled/:required => khi input buộc nhập giá trị 
 input:optional/:read-only X :read-write/:valid X :invalid/:out-of-range tức khi lỗi out-of-range thì mang style css gì X :in-range
 
-Pb :focus là chính thẻ đó được focus, :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này bị focus thì thẻ này sẽ mang style nào
 Pb: :is(<>) thì cho độ ưu tiên cao nhất là 100 còn :where(<>) với cú pháp giống hệt cho độ ưu tiên thấp nhất là 0 như dùng cho css reset
+
+Pb :focus là chính thẻ đó được focus, :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này bị focus thì thẻ này sẽ mang style nào (bao cả việc ấn tab để focus)
+VD ta ấn button và show dropdown thì dùng button:focus .dropdown { display: flex; } nhưng ấn vào dropdown thì button mất focus sẽ ẩn dropdown, dùng :focus-within cho thẻ bao ngoài 2 cái đó để fix
 
 p:empty là khi thẻ p k có text bên trong thì có style như nào
 :target là kiểu phần tử target khi bị href tới thì mang style gì. VD: <p><a href="#news1">Đến nội dung số 1</a></p> <p id="news1"><b>Nội dung số 1</b></p>
@@ -74,6 +128,10 @@ div:nth-child(n) => thẻ div là con thứ n
 p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
 initial-letter tương đương selector ::first-letter giúp tạo chữ đầu tiên to đùng như đầu bài báo article
 ::focus-visible giúp bắt TH button bị click hay chọn bởi tab key
+
+VD: button:not(:first-child){} => mọi thẻ button không là first-child trong web 
+button:has(svg){} => mọi button có thẻ svg là child 
+VD giả sử tạo checkbox với option light/dark mode thì cách css hay nhất là: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; } 
 
 -> X:before và X:after như 1 thẻ khác nằm bên trong X có kích thước fit content, k có content thì mặc định là 0 0.
 before hiện ở left 0 top 0 của thẻ, after ở top right, kp hiện đằng trc vị trí thẻ hiện tại mà nó chiếm vị trí thẻ và đẩy text thẻ ra sau nó
@@ -87,7 +145,7 @@ VD tính năng readmore với CSS only: dùng 2 cái radio button cho 2 dòng Re
 
 # Flexbox
 Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
-Dùng kèm flex-grow và flex-shrink, order
+Dùng kèm flex-grow và flex-shrink, order. Mặc định flex-shrink = 1, flex-grow = 0 nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
 Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
 
 -> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
@@ -95,6 +153,9 @@ Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. V
 -> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
 
 -> flex-basis => ref tới "Responsive css"
+Flexbox gặp vấn đề là chỉnh size dựa vào kích thước item bên trong, shrink hay grow cũng thế. Grid tốt hơn vì chỉnh size dựa vào kích thước các cell bên ngoài set từ trước.
+VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
+Để fix: phải dùng flex-basis, nó khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
 
 
 
@@ -150,7 +211,7 @@ Dùng kèm -webkit-font-smoothing: auto/none/antialiased/subpixel-antialiased(n�
 -> Font size tự động đổi theo kích thước màn hình:
 min và max trong css giúp lấy min và max của giá trị gì, khi kết hợp với kích thước relative sẽ rất mạnh
 Màn hình luôn được chia thành 100 vw và vh. VD màn hình là 1460px thì 1vw sẽ tương ứng với 14.6px
-clamp(a, b, c); là hàm của css giúp lấy 1 giá trị trong khoảng a và c. Nó ss lấy min(b,c) là x rồi lấy max(a, x) trả ra kết quả. 
+clamp(a, b, c); là hàm của css giúp lấy 1 giá trị trong khoảng a và c. Nó ss lấy min(b,c) là x rồi lấy max(a, x) trả ra kết quả. Dùng min,max,clamp thay thế width,max/min-width
 
 VD ta muốn màn hình dưới 700px có font-size là 16px, sau đó tăng dần tuyến tính lên 1px mỗi 100px tăng lên cho đến max là 22px => font-size: clamp(16px, 1vw + 9px, 22px);
 Khi 700px, nó sẽ là clamp(16px, 16px, 22px) thì lấy 16px. Font size tuyến tính tăng lên 1300px thì clamp(16px, 22px, 22px) thì lấy 22px
@@ -172,22 +233,6 @@ https://www.w3schools.com/cssref/css_fonts_fallbacks.php
 }
 .my-class {
   font-palette: --identifier;
-}
-
-
-
-# Dùng float:
-Float khiến 1 thẻ block thành inline không chiếm height và trôi sang 2 bên. Các thẻ khác vẫn hiện cùng dòng và né width nó ra.
-clear: both => khiến thẻ float chiếm height, các thẻ khác k thể ở cùng dòng với nó nữa
-
--> VD thẻ div chỉ có các thẻ float bên trong thì height thẻ div đó là 0 vì thẻ float k chiếm height của cha nó mà
-ClearFix trong CSS giúp thẻ cha mang kích thước của thẻ con kể cả dùng float, chỉ cần cho 1 thẻ con dưới float để kéo dài cha quá float là được.
-VD: .clearfix:after{
-  content: ".";
-  clear: both;
-  display: block;
-  width: 0px;
-  height: 0px;
 }
 
 
@@ -227,10 +272,12 @@ Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có 
 -> Dùng @media:
 @media not|only mediatype and (media feature) { CSS-Code; }
 với mediatype là: all / print / screen
-media feature là: min-aspect-ratio, color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, orientation, resolution
+media feature là:  color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, resolution
+orientation portrait/landscape => vì điện thoại xoay ngang và điện thoại xoay khác nhau, k thể chỉ @media theo mỗi width. Mở rộng với min-aspect-ratio
 
 VD: @media only screen and (max-width: 480px) and (min-width: 320px){ } => kích thước từ 320->480 của màn hình máy tính or smartphone
 VD: @media only print { } => chỉ cho máy in
+VD: @media (100px <= width <= 300px) {} => luôn dùng
 Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">
 => Các thuộc tính và responsive các kích thước cơ bản: https://freetuts.net/su-dung-media-css-tao-responsive-cho-website-660.html
 
@@ -244,6 +291,10 @@ Dùng sass thì vẫn được vì nó phân tích cú pháp và paste vào tạ
 Dùng @supports (display: grid) and (not (display: inline-grid)) { } để check browser có hỗ trợ thuộc tính nào không. VD dùng để check nếu k hỗ trợ thì in ra đoạn text "Browser not support this feature!" và display none phần nào sử dụng.
 
 -> Container query: xử lý case đôi khi màn hình nhỏ dần mà kích thước container lại tăng
+URL: https://topdev.vn/blog/responsive-giao-dien-cuc-dinh-voi-container-queries  /  https://www.youtube.com/watch?v=rrLAg7xNERA
+container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
+@container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
+Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
 
 ->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
 - flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 
@@ -254,6 +305,9 @@ Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ đư�
 - minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
 => Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
 
+VD: Chỉ cần grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); là đã tự responsive chia cột, nếu mỗi phần tử k thể nhỏ hơn 100px sẽ tự giảm 1 cột
+auto-fit hết container, cố gắng fit full width với các phần tử hiện tại khi chỉ có 1 row
+auto-fill những cột còn lại, thì sẽ lấy min width và cố gắng tưởng tượng còn nhiều cột khác xép vào
 VD: (200px - 100%)*999  là check nếu container lớn hơn 200px sẽ trả ra số âm cực bé, và ngược lại là dương cực lớn
 VD flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thước đủ: https://www.youtube.com/watch?v=LEkFckg7sfw
 .with-sidebar {
@@ -322,6 +376,7 @@ animation-direction thì normal là đi về phía trước, reverse là về ph
 animation-fill-mode: Khi kết thúc animation, nếu để none or k set gì thì mặc định dùng style ban đầu khi animation k thực thi, nếu set forwards sẽ dùng giá trị khung cuối, backwards dùng giá trị khung hình chính ở đầu animation (lúc 0%); both là hòa trộn forward và backwards; 
 animation-play-state: paused hay running
 => Lưu ý để đảm bảo animation liên tiếp nhau k kiểu bị ngắt quãng thì nên setup sao cho giá trị mặc định lúc 0% bằng với giá trị lúc 100% để làm vô tận mượt hơn
+VD tạo animation hover mới có thì nên để animation-play-state là paused, hover thì running để tránh animation chạy mãi sẽ ngốn CPU: https://www.youtube.com/watch?v=M1qPpwVcF64
 
 VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal)
 => animation còn có SVG, ảnh động, 3D. URL full: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM 
@@ -337,47 +392,15 @@ Nếu không, cách tốt nhất là scale(1.2) lên và bị mờ. Để fix:
 -> Animate svg khi hover: các tag svg dùng đc animation css như bth, dùng cho các thẻ path hay g bên trong để animate 1 phần của icon cũng được luôn
 Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, khi hover vào thì đổi lại thành running là ok
 
+-> Hiểu nguyên tắc xếp chồng code css: style được thêm vào sau sẽ đè lên style được thêm vào trước đó. Ở mỗi thời điểm, ta chỉ cần hiểu nó có style gì là được. VD animation forwards thực tế là style cuối cùng được thêm vào thẻ và cố định như v luôn.
+transition sẽ luôn giúp thuộc tính css bị biến đổi từ từ nếu có sự thay đổi. 
+Nếu muốn khác đi, nên dùng animation keyframes. Mọi lúc animation có sự thay đổi khác biệt đều là 1 keyframes riêng. 
+VD: animation ẩn và hiện, néu dùng keyframes thì buộc lúc hiện và ẩn là 2 keyframes phải tạo ra.
+=> Tưởng tượng animation như các stack xếp chồng lên nhau khi set sẽ dễ hơn
 
-
-# Xử lý image
-URL: https://bennettfeely.com/clippy/ => kích thước vẫn thế nhưng hiển thị cut ảnh
-
--> Có multiple background image. Chỉ cần 4 thuộc tính: background-size (object-fit), background-image, background-repeat, background-position
-background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung
-
-background-origin xác định vị trí của background image theo content. 
-background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent;
-background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
-background-attachment: scroll mặc định là trôi theo scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
-
--> Các thuộc tính image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters
-
--> Layer mask: mask là shorthand của mọi thuộc tính mask-* trong css
-Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. VD hiển thị bức ảnh theo phần ảnh của 1 bức ảnh khác, ta cho bức ảnh khác đó lên 1 lớp bên trên.
-VD mask-image: linear-gradient(black, transparent);
-VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px
-VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
-
--> Image placeholder
-Dùng thẻ img có width và height bằng kích thước ảnh, nếu k rõ thì dùng minWidth minHeight để luôn có placeholder. 
-Cbi sẵn 1 bức ảnh default để lỗi thì show ra. Dùng bg color xám cho thẻ img để ảnh chưa có thì hiển thị 1 màu xám, hoặc tìm cách show skeleton. Có thể dùng background-image của tag image để làm ảnh default.
-Dùng border radius thẻ div bao ngoài img kèm overflow hidden
-Dùng onLoad và onError, VD check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
-HTML có thẻ object show mọi loại media, nếu bị lỗi sẽ tự show thẻ con của thẻ object rất hay => ít dùng vì kp chuyên cho ảnh.
-
-VD: <img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';" >
-Việc dùng this.onerror=null chống lỗi infinity loop. Lỗi này xảy ra ở 1 số trình duyệt khi chính ảnh để ta fix lại bị lỗi xong lại chạy onerror lại lỗi và cứ lặp vô tận
-Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh backup onerror local đảm bảo luôn tồn tại là được. 
-
---> onLoad, onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
-Thuộc tính PlaceholderSrc của LazyLoadImage nhận 1 ảnh kích thước nhỏ để hiển thị ra trước khi ảnh lớn được load. Ta có thể giảm độ phân giải ảnh bằng các công cụ chỉnh sửa để thế vào, thêm effect="blur" để làm mờ ảnh placeholder được
---> Lib react-progressive-graceful-image rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
-
--> Lazy loading ảnh: thuộc tính loading="lazy"/"eager" có sẵn của html
-
--> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation.
-SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
-Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
+-> Trong js có event "transitionend" bắt khi quá trình transition kết thúc.
+VD: ta muốn 1 thẻ bị faded rồi biến mất. Nếu ta dùng keyframes với opacity sẽ k biến mất, nếu dùng display sẽ k có animation. Có thể dùng opacity rồi bắt sự kiện "transitionend" để gán display none là được.
+Cách khác là setTimeout đúng bằng thời gian transition rồi xoá thẻ.
 
 
 

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Task List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Task List</h1>
+        <ul id="taskList" class="space-y-4">
+            <li class="bg-gray-50 p-4 rounded-lg shadow cursor-move flex items-center space-x-4" draggable="true">
+                <i class="fas fa-grip-vertical text-gray-400"></i>
+                <div class="flex-grow">
+                    <input type="text" class="w-full bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none text-lg font-semibold" value="Task 1" />
+                    <textarea class="w-full bg-transparent resize-none mt-2 text-sm text-gray-600" rows="2">Description for Task 1</textarea>
+                </div>
+                <select class="bg-white border border-gray-300 rounded px-2 py-1 text-sm">
+                    <option>To Do</option>
+                    <option>In Progress</option>
+                    <option>Done</option>
+                </select>
+            </li>
+            <li class="bg-gray-50 p-4 rounded-lg shadow cursor-move flex items-center space-x-4" draggable="true">
+                <i class="fas fa-grip-vertical text-gray-400"></i>
+                <div class="flex-grow">
+                    <input type="text" class="w-full bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none text-lg font-semibold" value="Task 2" />
+                    <textarea class="w-full bg-transparent resize-none mt-2 text-sm text-gray-600" rows="2">Description for Task 2</textarea>
+                </div>
+                <select class="bg-white border border-gray-300 rounded px-2 py-1 text-sm">
+                    <option>To Do</option>
+                    <option>In Progress</option>
+                    <option>Done</option>
+                </select>
+            </li>
+        </ul>
+        <button id="addTask" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">Add New Task</button>
+    </div>
+    <script>
+        const taskList = document.getElementById('taskList');
+        const addTaskBtn = document.getElementById('addTask');
+        let draggedItem = null;
+
+        function handleDragStart(e) {
+            draggedItem = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.outerHTML);
+            this.classList.add('bg-blue-100');
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        function handleDragEnter(e) {
+            this.classList.add('bg-yellow-100');
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('bg-yellow-100');
+        }
+
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            if (draggedItem !== this) {
+                this.parentNode.removeChild(draggedItem);
+                const dropHTML = e.dataTransfer.getData('text/html');
+                this.insertAdjacentHTML('beforebegin', dropHTML);
+                const dropElem = this.previousSibling;
+                addDragEvents(dropElem);
+            }
+            this.classList.remove('bg-yellow-100');
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('bg-blue-100');
+        }
+
+        function addDragEvents(elem) {
+            elem.addEventListener('dragstart', handleDragStart);
+            elem.addEventListener('dragover', handleDragOver);
+            elem.addEventListener('dragenter', handleDragEnter);
+            elem.addEventListener('dragleave', handleDragLeave);
+            elem.addEventListener('drop', handleDrop);
+            elem.addEventListener('dragend', handleDragEnd);
+        }
+
+        document.querySelectorAll('#taskList li').forEach(addDragEvents);
+
+        addTaskBtn.addEventListener('click', () => {
+            const newTask = document.createElement('li');
+            newTask.className = 'bg-gray-50 p-4 rounded-lg shadow cursor-move flex items-center space-x-4';
+            newTask.draggable = true;
+            newTask.innerHTML = `
+                <i class="fas fa-grip-vertical text-gray-400"></i>
+                <div class="flex-grow">
+                    <input type="text" class="w-full bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none text-lg font-semibold" value="New Task" />
+                    <textarea class="w-full bg-transparent resize-none mt-2 text-sm text-gray-600" rows="2">Description for New Task</textarea>
+                </div>
+                <select class="bg-white border border-gray-300 rounded px-2 py-1 text-sm">
+                    <option>To Do</option>
+                    <option>In Progress</option>
+                    <option>Done</option>
+                </select>
+            `;
+            taskList.appendChild(newTask);
+            addDragEvents(newTask);
+        });
+    </script>
+</body>
+</html>

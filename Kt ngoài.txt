@@ -53,7 +53,6 @@ Ta có thể cấu hình config thủ công cho nó tự động làm các task 
 
 
 
-
 # AJAX
 Asynchronous Javascript And XML chỉ là phương thức dùng ở FE gọi vào server lấy data và load dữ liệu vào 1 phần web, chứ k request html, css, js như ngày xưa. Các hàm như v gọi là AJAX.
 Ngày xưa AJAX dùng window.XmlHttpRequest Object(XHR) để gọi request và trả về response dạng XML biểu diễn DOM element or HTML dạng string
@@ -142,3 +141,6 @@ Normal flow là tính chất bth của layout khi mà ta chưa làm gì để ch
 -> TransformStream là tính năng giúp pipe đầu ra của api thứ nhất làm đầu vào api thứ 2 luôn. Làm như v giúp tiết kiệm băng thông vì kp tải toàn bộ dữ liệu từ API 1 về mói gửi lên api thứ 2 mà truyền liên tục theo từng phần nhỏ luôn
 
 -> Cách thay đổi css của VSC: Tải extension Custom css and loader -> tạo file custom.css để ở 1 thư mục -> ấn vào ký hiệu setting mở settings -> mở file user settings.json bằng ký hiệu ở góc phải bên trên -> thêm code: "vscode_custom_css.imports": ["file:///C:/Users/Ryan.Nguyen/Documents/custom.css"] là đường tuyệt đối tới file css -> CTRL + SHIFT + P mở dev tool -> tìm các class và custom thoải mái -> viết code custom vào file css -> CTRL + SHIFT + P và enable custom css and js -> tải extension Fix VSC Checksum -> CTRL + SHIFT + P Fix Checksum Restor -> tiếp Fix Checksum Apply
+
+-> New morphism : kiểu design tạo clean effect rất ảo
+Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng
