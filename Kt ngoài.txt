@@ -11,11 +11,17 @@ CTRL + SHIFT + F để Search global
 
 
 # Load file JS với async và defer
-Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý JS, gọi là Parse Blocking
+Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý JS, gọi là Parse Blocking => default
 Script attributes: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy; defer chỉ chạy khi html parse xong.
 VD: Đang parse HTML CSS thì gặp 1 script async -> tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì vẫn chạy script luôn => default
 VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script
 => Nên đặt style ở đầu và script ở cuối vì trình duyệt bth luôn cần css load sớm để hiện ra còn tính năng k cần load ngay.
+
+-> Nếu không xác định type="module" trong thẻ <script>, file JS sẽ được xử lý như một script thông thường, k có tính năng của module. Sự khác biệt:
+Scope: Trong module, biến và hàm được khai báo sẽ có scope riêng, không bị rò rỉ ra toàn cục. Trong script thông thường, chúng sẽ nằm trong scope toàn cục.
+Không thể sử dụng import và export trong script thông thường. Chỉ module mới hỗ trợ tính năng này.
+Module sẽ được tải và thực thi theo thứ tự mà chúng được khai báo, nhưng có thể sử dụng import để tải module khác. 
+Module luôn chạy trong chế độ strict, trong khi script thông thường không.
 
 
 
@@ -42,6 +48,8 @@ Có nhiều công cụ đóng gói modules như Browserify, Webpack, Parcel, Fus
 VD để đóng gói: ./node_modules/.bin/webpack index.js -o index_bundle.js => đóng gói index.js thành index_bundle.js. Bản chất là nó tối ưu code và require() về dạng code mà client hiểu được
 - Rồi client chỉ cần dùng file index_bundle.js như file client bth: tức "client dùng package của server ở phía client được"
 - Hoặc import sourcecode: client tạo file index2.js require file index.js (trực tiếp) rồi bundler luôn 2 files, file html chỉ cần <script> tới index2.js, tức "file js này có thể import sourcecode trực tiếp từ file js khác" (khác với trước đó là buộc phải import hết theo thứ tự vào file html).
+=> Thực tế type module của script cho phép import rồi.
+=> Ít khi nào dùng require trong client làm gì, cứ dùng import thôi
 
 -> Có nhiều phiên bản JS, nhiều lúc ta cần chuyển đổi những mã JS ở bản mới về bản cũ để hỗ trợ các browser cũ hơn của người dùng, thì dùng Babel.
 Vì Babel cũng là 1 thư viện, việc tích hợp vào webpack giúp đóng gói các file cần thiết và chuyển đổi về dạng dùng được ở phía browser (chuyển require về dạng browser hiểu được). 
@@ -138,9 +146,20 @@ Normal flow là tính chất bth của layout khi mà ta chưa làm gì để ch
 -> Dùng tool quokka trong VSC: CTRL+SHIFT+P để tìm và bật quokka, CTRL+K rồi E để exit, CTRL+K rồi Q để chạy lại quokka => sau khi cài quokkajs extension của VSC
 Để mở browser nhanh ngay trong VSC: CTRL + SHIFT + P -> Chọn Simple Browser: Show
 
--> TransformStream là tính năng giúp pipe đầu ra của api thứ nhất làm đầu vào api thứ 2 luôn. Làm như v giúp tiết kiệm băng thông vì kp tải toàn bộ dữ liệu từ API 1 về mói gửi lên api thứ 2 mà truyền liên tục theo từng phần nhỏ luôn
+-> TransformStream là tính năng giúp xử lý đầu ra của api thứ nhất trước khi cho làm đầu vào api thứ 2. Làm như v giúp tiết kiệm băng thông vì kp tải toàn bộ dữ liệu từ API 1 về mói gửi lên api thứ 2 mà truyền liên tục theo từng phần nhỏ luôn
 
 -> Cách thay đổi css của VSC: Tải extension Custom css and loader -> tạo file custom.css để ở 1 thư mục -> ấn vào ký hiệu setting mở settings -> mở file user settings.json bằng ký hiệu ở góc phải bên trên -> thêm code: "vscode_custom_css.imports": ["file:///C:/Users/Ryan.Nguyen/Documents/custom.css"] là đường tuyệt đối tới file css -> CTRL + SHIFT + P mở dev tool -> tìm các class và custom thoải mái -> viết code custom vào file css -> CTRL + SHIFT + P và enable custom css and js -> tải extension Fix VSC Checksum -> CTRL + SHIFT + P Fix Checksum Restor -> tiếp Fix Checksum Apply
 
 -> New morphism : kiểu design tạo clean effect rất ảo
 Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng
+Skeuomorphism hình thực tế => k dùng
+Flat design: web như 1 mặt phẳng với hình vẽ đơn giản, k có shadow hay hiệu ứn nổi lên gì cả
+Material design mở rộng của flat design, có hiệu ứng nổi lên mọi nơi. Màu và shape cần thay đổi. Mọi chuyển động phải liên tục, k đột ngột ẩn hiện.
+Retro/Vintage Styles: web phong cách tinh tế, cổ kính, sang trọng, quý tộc, cổ điển. 
+Brutalism design: web hiệu ứng mạnh, thô mộc, tương phản cao, font chữ nhiều lúc rất ảo
+Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi, đơn giản, có thể đơn sắc, là loại web dễ tạo và dễ nhìn nhất.
+Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
+Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng, trông như được xếp ngẫu nhiên. 
+
+-> MicroInteraction: animation các thứ nhỏ nhặt khi hover và click. Animation càng nhỏ, càng đơn giản càng đẹp.
+Lib react: react-useanimations
