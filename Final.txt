@@ -3,3 +3,50 @@ URL: https://www.youtube.com/watch?v=PL3Odw-k8W4
 
 
 
+# Transform stream
+1 loại stream xử lý data, pipe vào các stream khác như bth.
+
+Vd tạo một TransformStream để chuyển đổi văn bản thành chữ hoa trước khi đọc nó thì dùng transform stream ở giữa để viết hoa chữ:
+const transformStream = new TransformStream({
+  start() {
+    // Được gọi khi TransformStream khởi tạo
+    console.log('TransformStream bắt đầu.');
+  },
+  transform(chunk, controller) {
+    controller.enqueue(chunk.toUpperCase());
+  },
+  flush(controller) {
+    // Được gọi khi toàn bộ luồng đầu vào đã được xử lý
+    console.log('Đã hoàn thành chuyển đổi.');
+  }
+});
+const readableStream = new ReadableStream({
+  start(controller) {
+    // Đẩy dữ liệu vào luồng
+    controller.enqueue('hello');
+    controller.enqueue(' world');
+    controller.close();
+  }
+});
+// Kết nối ReadableStream với TransformStream và tạo một WritableStream để ghi dữ liệu
+readableStream
+  .pipeThrough(transformStream) // Chuyển dữ liệu qua TransformStream
+  .pipeTo(new WritableStream({
+    write(chunk) {
+      // Ghi ra phần dữ liệu đã biến đổi
+      console.log(chunk);
+    },
+    close() {
+      console.log('Đã ghi xong dữ liệu.');
+    }
+  }));
+
+
+
+# Animation với transform 
+1) Thứ tự transform có ảnh hưởng tới object di chuyển, rotateZ sẽ rotate cả trục tọa độ nên nếu rotateZ rồi translateX khác với translateX rồi rotateZ
+2) transform origin mặc định ở top left
+3) rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
+4) keyframe transform: rotateZ(-45deg) translateX(50px) rotateZ(45deg); => nó khiến object đi đường vòng cung và k bị xoay vì các animation thực hiện đồng thời. Nó sẽ rotateZ, đi trục x, rotateZ ngược lại. Tức là ở mỗi bước di chuyển, nó rotateZ và đi trục x đồng thời làm đường vòng cung. Sau đó rotateZ ngược lại khiến object quay về vị trí ban đầu. Quá trình cực nhanh ở mỗi bước. Nó k đi chéo luôn vì quá trình rotate và đi trục X đồng thời chứ kp rotate xong mới đi x, cuối cùng mới rotate ngược về
+5) Để animation 1 set thẻ, ta nhét vào 1 thẻ container và animation thẻ container là được
+

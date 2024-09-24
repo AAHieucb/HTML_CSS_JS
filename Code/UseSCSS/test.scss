@@ -229,7 +229,7 @@ $borders : "solid 2px" "solid 3px";
 }
 
 // Xử lý chuỗi
-.Xulychuoi-#{to-upper-case("Hello")}{ // k dùng được 2 cái # trong cùng 1 thứ được
+.Xulychuoi-#{to-upper-case("Hello")}{
     font-family: quote($string: "Arial sans-serif");
     border: unquote(str-slice("XsolidX", 2, 6)) 3px;
     font-family: str-insert($string: "abcd", $insert: "X", $index: 1); // mặc định là có "" khi thao tác với string

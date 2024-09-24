@@ -8,10 +8,29 @@ Rx.Observable.create(function() => { // Kiểm soát khi subscribe thì làm gì
   error("E");
   next("params2"); // k chạy nữa
 }).subscribe(observer);
+=> 1 Observer có 3 hàm next, error, complete: next chạy khi phát giá trị mới; complete mà chạy thì stream kết thúc và k thể dùng nữa, phải tạo stream mới.
 Khi có error or complete, Obsevable bị huỷ k thể emit gì nữa, trừ khi ta bắt error xử lý
-Chỉ cần hiểu 1 Observable có thể phát ra 1 cái gì đó vào 1 lúc nào đó, thường là sự kiện hoặc call API. Có thể subscribe để nhận giá trị phát ra để làm gì đó, k thì thôi hết.
+Chỉ cần hiểu 1 Observable có thể phát ra 1 cái gì đó vào 1 lúc nào đó, thường là sự kiện hoặc call API. Có thể subscribe để nhận giá trị phát ra để làm gì đó, k thì thôi hết
 
 CÓ thể dùng Observer pattern trong OOP để tự tạo quá trình phát và xử lý sự kiẹn
+
+-> Việc đầu tiên là tạo Observable, tạo từ event thì dùng fromEvent, tạo từ 1 hoặc nhiều giá trị cụ thể thì dùng of
+
+--> Tạo Observable từ Promise bất kỳ bằng from.
+import { from } from 'rxjs';
+const myPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('Kết quả từ Promise');
+  }, 1000);
+});
+const apiCall$ = from(myPromise);
+
+--> Tạo Observable từ lệnh call API:
+Dùng from được
+Dùng ajax: import { fetch } from 'rxjs/fetch';
+const apiCall$ = fetch('https://api.example.com/data').pipe(
+  switchMap(response => response.json())
+);
 
 -> scan tích luỹ các giá trị emit trước đó như reduce của JS, dùng cho các lần sau:
 import { fromEvent, scan } from 'rxjs';
@@ -31,10 +50,32 @@ fromEvent(document, 'click')
   .subscribe((count) => console.log(count));
 => Click thì hiện ra vị trí chuột throttle mỗi 1s
 
--> Tương tự debounceTime(300)
+-> VD nhập input thì debounce search:
+const search$ = fromEvent(input, 'input').pipe(
+  debounceTime(300), // Wait for 300ms pause in events
+  map(event => event.target.value), // Get the input value
+  filter(x => x.length > 2),
+  switchMap(query => {
+    if (query) {
+      return axios.get(`https://api.example.com/search?q=${query}`);
+    } else {
+      return []; // Return an empty array if no query
+    }
+  })
+);
+search$.subscribe(
+  response => {
+    // Assuming the API returns an array of results
+    resultsDiv.innerHTML = response.data.map(item => `<div>${item.name}</div>`).join('');
+  },
+  error => {
+    console.error('Error fetching data:', error);
+    resultsDiv.innerHTML = '<div>Error fetching results</div>';
+  }
+);
 
 -> interval phát ra 1 Observable mới sau mỗi ktg, giá trị đó tăng dần bắt đầu từ 0
-switchMap sẽ chuyển sang 1 Observable mới và discard Observable gốc. Tức khi dùng pipe với switchMap, sẽ chỉ có 1 Observable chạy tại 1 thời điểm. Nó discard Observable gốc và Observable trước đó nó tạo ra.
+switchMap sẽ chuyển sang 1 Observable mới và discard Observable gốc. Tức khi dùng pipe với switchMap, sẽ chỉ có 1 Observable chạy tại 1 thời điểm. Nó discard Observable gốc và Observable trước đó nó tạo ra. Vd stream1.switchMap(x => stream2, (x, y) => "" + x + y); param2 là hàm combine 2 giá trị 
 Néu muôn k discard Observable thì dùng mergeMap thay switchMap, mergeMap dùng cả. 
 import { interval } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -48,342 +89,7 @@ polling$.pipe(
 => switchMap chuyển đổi giá trị trả về của hàm thành 1 Observable mới, ở đây sẽ phát ra giá trị trả vè của lệnh call API. Ta k cần await vì nó xử lý hết r.
 => Mỗi 5s thì interval tạo 1 Observable mới và thay thế luôn bởi Observable của switchMap. Nhưng nếu gọi API chạy quá 5s sẽ kbh xử lý được giá trị trong subscribe vì 5s sau intervale phát ra Observable thì switchMap discard nó và Observable trước đó nó tạo ra luôn để dùng cái mới nhất => ở đây có thẻ viét lại bằng JS với setInterval và Promise
 
-
-
-
-
-
--> Xử lý sự kiện 
-import { fromEvent } from 'rxjs';
-import { map, takeUntil, concatAll } from 'rxjs/operators';
-const mousedown$ = fromEvent(draggable, 'mousedown');
-const mousemove$ = fromEvent(document, 'mousemove');
-const mouseup$ = fromEvent(document, 'mouseup');
-mousedown$.pipe(
-  map(event => mousemove$.pipe(
-    takeUntil(mouseup$),
-    map(moveEvent => {
-      return {
-        x: moveEvent.clientX - event.offsetX,
-        y: moveEvent.clientY - event.offsetY
-      };
-    })
-  )),
-  concatAll()
-).subscribe(pos => {
-  draggable.style.top = `${pos.y}px`;
-  draggable.style.left = `${pos.x}px`;
-});
-=> map để xử lý kết quả trả về
-
-VD nhập input callAPI:
-const search$ = fromEvent(input, 'input').pipe(
-    debounceTime(300), // Wait for 300ms pause in events
-    map(event => event.target.value), // Get the input value
-    switchMap(query => {
-        if (query) {
-            return axios.get(`https://api.example.com/search?q=${query}`);
-        } else {
-            return []; // Return an empty array if no query
-        }
-    })
-);
-search$.subscribe(
-    response => {
-        // Assuming the API returns an array of results
-        resultsDiv.innerHTML = response.data.map(item => `<div>${item.name}</div>`).join('');
-    },
-    error => {
-        console.error('Error fetching data:', error);
-        resultsDiv.innerHTML = '<div>Error fetching results</div>';
-    }
-);
-
--> Xử lý nhiều sự kiện đồng thời. VD Theo dõi sự kiện click và input để cập nhật một giá trị:
-import { fromEvent, merge } from 'rxjs';
-import { map } from 'rxjs/operators';
-const button = document.getElementById('myButton');
-const input = document.getElementById('myInput');
-const buttonClick$ = fromEvent(button, 'click').pipe(map(() => 'Button clicked'));
-const inputChange$ = fromEvent(input, 'input').pipe(map(event => `Input changed: ${event.target.value}`));
-merge(buttonClick$, inputChange$).subscribe(console.log);
-=> merge sẽ kết hợp các Observables lại thành 1 Observable và phát ra giá trị mà các Observable bên trong phát ra
-=> JS thuần phải viết listener event từng cái dài hơn
-
--> Kết hợp dữ liệu từ nhiều API, như Promise.all
-import { forkJoin } from 'rxjs';
-import axios from 'axios';
-const api1$ = axios.get('https://api.example.com/data1');
-const api2$ = axios.get('https://api.example.com/data2');
-forkJoin([api1$, api2$]).subscribe(([data1, data2]) => {
-  console.log('Data from API 1:', data1.data);
-  console.log('Data from API 2:', data2.data);
-});
-=> forkJoin sẽ biến Promise thành Observable, gom lại thành 1 Observable và phát ra giá trị nếu các Observable bên trong cũng hoàn thành.
-
--> VD unsubscribe
-import { fromEvent } from 'rxjs';
-const button = document.getElementById('myButton');
-const subscription = fromEvent(button, 'click').subscribe(() => {
-  console.log('Button clicked!');
-});
-// Hủy đăng ký khi không còn cần thiết
-function cleanup() {
-  subscription.unsubscribe();
-}
-// Gọi cleanup khi cần
-window.addEventListener('beforeunload', cleanup);
-
-VD2 Hủy đăng ký ngay sau khi click:
-const subscription = observable.subscribe(() => {
-  console.log('Button clicked!');
-  subscription.unsubscribe();
-});
-
-VD3: import { fromEvent } from 'rxjs';
-import { take } from 'rxjs/operators';
-const button = document.getElementById('myButton');
-fromEvent(button, 'click').pipe(
-  take(1) // Chỉ nhận giá trị đầu tiên và tự động hủy đăng ký
-).subscribe(() => {
-  console.log('Button clicked once!');
-});
-
--> VD:
-import { of, concatMap } from 'rxjs';
-of(1, 2, 3).pipe(
-  concatMap(value => of(value * 2)) // Nhân đôi giá trị
-).subscribe(console.log); // In ra: 2, 4, 6
-=> of tạo ra 1 Observable phát ra các giá trị input ngay lập tức theo thứ tự
-=> concatMap nhận giá trị phát ra từ 1 Observable và chạy callback để tạo ra Observable mới phát ra giá trị callback return. Điểm đb là thực hiện tuần tự. Chờ Observable trước tạo ra mới tạo tiếp Observable mới
-
--> 
-<script>
-  const { fromEvent, combineLatest } = rxjs;
-  const { debounceTime, map, filter, concatMap } = rxjs.operators;
-  const input = document.getElementById('searchInput');
-  const resultsDiv = document.getElementById('results');
-
-  // Observable cho sự kiện nhập liệu
-  const search$ = fromEvent(input, 'input').pipe(
-    debounceTime(300), // Chờ 300ms sau khi người dùng ngừng nhập
-    map(event => event.target.value), // Lấy giá trị từ input
-    filter(query => query.length > 2) // Chỉ tiếp tục nếu độ dài từ khóa lớn hơn 2
-  );
-
-  // Observable cho dữ liệu từ API
-  const fetchData = (query) => {
-    return axios.get(`https://api.example.com/search?q=${query}`).then(response => response.data);
-  };
-
-  // Kết hợp các kết quả từ API
-  search$.pipe(
-    concatMap(query => fetchData(query)) // Gọi API và chờ kết quả
-  ).subscribe(data => {
-    // Hiển thị kết quả
-    resultsDiv.innerHTML = data.map(item => `<div>${item.name}</div>`).join('');
-  });
-</script>
-
--> VD:
-import { combineLatest, of } from 'rxjs';
-const obs1$ = of(1, 2);
-const obs2$ = of('A', 'B');
-combineLatest([obs1$, obs2$]).subscribe(console.log); // In ra: [2, 'B']
-=> combineLatest sẽ tạo Observable phát ra giá trị mới nhất của các Observable bên trong. Nó sẽ phát lần đầu tiên khi mỗi Observable bên trong phát ra ít nhất 1 giá trị, phát tiếp mỗi khi bất kỳ Observable nào bên trong đổi giá trị.
-
--> Các operator phổ biến
-const source$ = of(1, 2, 3, 4, 5).pipe(
-  takeWhile(x => x < 4) // Gặp giá trị k thoả mãn sẽ xoá bỏ Observable
-);
-
-const source$ = of(1).pipe(
-  expand(x => of(x + 1)),
-  take(5) // Giới hạn số lần phát ra
-);
-=> Expand nhận giá trị, trả ra Observable, phát giá trị, rồi lại nhận đệ quy giá trị của Observable đó r phát ra Observable tiếp. Thường dùng gọi API phân trang
-VD: const fetchAllPages = (initialPage) => {
-  return of(initialPage).pipe(
-    expand(page => fetchPage(page).pipe(
-      map(response => ({
-        nextPage: response.nextPage, // Lấy trang tiếp theo từ response
-        data: response.data // Lấy dữ liệu từ response
-      }))
-    )),
-    takeWhile(({ nextPage }) => nextPage !== null), // Dừng khi không còn trang nào
-    reduce((acc, { data }) => {
-      acc.push(...data); // Gộp dữ liệu từ từng trang vào mảng
-      return acc;
-    }, [])
-  );
-};
-
--> subscribe có 3 hàm next, error, complete.
-next chạy khi phát giá trị mới
-complete mà chạy thì stream kết thúc và k thể dùng nữa, phải tạo stream mới.
-
-
-
--> Dự án lớn thường dùng với Angular thiết kế class, có thể cho Observable là thuộc tính class. Lấy ra ngoài và gọi subcribe ở bên ngoài khi muốn làm gì => reactive programmsing
-Việc ta addEventListener 1 sự kiện nhiều callback lợi hơn add 1 callback gom nhiều hàm là có thể quản lý tốt hơn và removeEventListener từng phần tuỳ ý.
-
-Pb:
-VD ta tạo Observable ngay trong class làm 1 thuộc tính thì nó sẽ thực thi ngay và có data luôn lần sau gọi sẽ tái sử dụng
-VD public getMappedValue(): Observable<any> {
-  return defer(() => ajax.getJSON(this.apiUrl)).pipe(
-    map(response => response.data)
-  );
-}
-=> Sẽ gọi khi nào gọi hàm getMappedValue() và có subscribe
-VD public getMappedValue(): Observable<any> {
-  return ajax.getJSON(this.apiUrl).pipe(
-    map(response => response.data) // Map dữ liệu theo yêu cầu
-  );
-}
-=> Sẽ gọi khi nào gọi hàm getMappedValue()
-
-
--> Điều đb là Subject next() có thể khởi động lại stream tuỳ ý. Khi dùng nó sẽ k gọi complete khi chạy xong trừ khi gọi Subject complete hoặc complete trong observable.
-
-import { from, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-const fetchSubject = new Subject();
-const fetchData = () => {
-  return fetch(apiUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    });
-};
-
-// Observable để thực hiện fetch khi có tín hiệu từ Subject
-const data$ = fetchSubject.pipe(
-  switchMap(() => from(fetchData())) // Chuyển đổi tín hiệu thành observable
-);
-
-// Đăng ký subscriber
-data$.subscribe({
-  next: (data) => console.log('Received data:', data),
-  error: (err) => console.error('Fetch error:', err),
-});
-
-// Hàm để phát tín hiệu fetch
-const fetchAndNotify = () => {
-  fetchSubject.next(); // Phát tín hiệu để fetch dữ liệu
-};
-
-// Gọi hàm để fetch dữ liệu lần đầu
-fetchAndNotify();
-
-// Gọi lại hàm để fetch lại dữ liệu
-setTimeout(() => {
-  console.log('Fetching data again...');
-  fetchAndNotify();
-}, 5000); // Fetch lại sau 5 giây
-
--> tap dùng để debug, thực hiện action k ảnh hưởng tới stream
-
--> stream1.switchMap(x => stream2, (x,y) => "" + x + y); => hàm combine 2 giá trị 
-
--> delay(500)
--> distinctUntilChange() chỉ phát khi giá trị bị thay đổi so với lần trước đó nhận được.
--> startWith(), phát 1 giá trị nào lần đầu tiên rồi chạy tiếp như bth => dùng làm default value
-
--> Subject là 1 Observable k có gì
-Nó cũng là 1 Observer có thể phát data với .next(data) và subcribe để bắt
-
--> concat:
-const observable1 = of('First').pipe(delay(1000)); // Emits 'First' after 1 second
-const observable2 = of('Second').pipe(delay(500)); // Emits 'Second' after 0.5 seconds
-
-// Concatenate the observables
-const concatenated$ = concat(observable1, observable2);
-
-// Subscribe to the concatenated observable
-concatenated$.subscribe({
-  next: (value) => console.log(value),
-  complete: () => console.log('All observables completed.')
-});
-
--> throwError: tạo 1 observable phát ra 1 error ngay lập tức, chờ subscribe gọi vào error hoặc tìm tiếp operator catchError
-import { throwError, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-
-// Create an observable that throws an error
-const errorObservable = throwError(new Error('Something went wrong!'));
-
-// Subscribe to the observable and handle the error
-errorObservable.pipe(
-  catchError(err => {
-    console.error('Caught error:', err.message);
-    return of('Error handled, returning fallback value.'); // Return a fallback observable
-  })
-).subscribe({
-  next: (value) => console.log(value),
-  complete: () => console.log('Completed.')
-});
-
--> retryWhen: chạy vào khi có throw error từ 1 Observable bên trên, nó sẽ bắt error từ Observable và xử lý tuỳ ý, trả ra 1 Observable. Observable trả ra sẽ tự gọi retry hàm gốc sau đó.
-
-import { of, throwError } from 'rxjs';
-import { retryWhen, delay, take, tap } from 'rxjs/operators';
-
-// Simulate an observable that throws an error
-const source$ = () => {
-  return Math.random() > 0.5 ? throwError(new Error('Random error!')) : of('Success!');
-};
-
-// Use retryWhen to retry on error
-const retried$ = source$().pipe(
-  retryWhen(errors => 
-    errors.pipe(
-      tap(err => console.log('Error occurred:', err.message)), // Log the error
-      delay(1000), // Wait for 1 second before retrying
-      take(3) // Retry a maximum of 3 times
-    )
-  )
-);
-
-// Subscribe to the observable
-retried$.subscribe({
-  next: (value) => console.log(value),
-  error: (err) => console.error('Final error:', err.message),
-  complete: () => console.log('Completed.')
-});
-
--> 
-
-
-
-
--> pairwise => phát cặp giá trị liên tiếp, hiện tại và trước đo
-
--> pluck("")
-// Tạo một observable phát ra các đối tượng
-const source$ = of(
-  { id: 1, name: 'Alice' },
-  { id: 2, name: 'Bob' },
-  { id: 3, name: 'Charlie' }
-);
-
-// Sử dụng pluck để lấy thuộc tính 'name'
-const names$ = source$.pipe(
-  pluck('name')
-);
-
-// Đăng ký để nhận giá trị
-names$.subscribe({
-  next: (name) => console.log('Received name:', name),
-  complete: () => console.log('Completed.')
-});
-
-
-
-
-
--> Nếu muốn thành công thì ngừng call, phải huỷ polling:
+VD2 Nếu muốn thành công thì ngừng call, phải huỷ polling:
 import { interval, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import axios from 'axios';
@@ -405,4 +111,250 @@ polling$.pipe(
     console.error('Error fetching data:', error);
   }
 );
-=> Phế như Promise, éo hiểu sao mn thích dùng.
+
+-> concat kết hợp nhiều Observable thành 1 và phát tuần tự. VD:
+const observable1 = of('First').pipe(delay(1000)); // Emits 'First' after 1 second
+const observable2 = of('Second').pipe(delay(500)); // Emits 'Second' after 0.5 seconds
+// Concatenate the observables
+const concatenated$ = concat(observable1, observable2);
+// Subscribe to the concatenated observable
+concatenated$.subscribe({
+  next: (value) => console.log(value),
+  complete: () => console.log('All observables completed.')
+});
+
+Còn concatMap tạo ra 1 Observable kết hợp nhiều Observable phát ra từ 1 Observable (vì 1 Observable có thể phát ra nhiều Observable khác). Tức từ 1 Observable thành 1 Observable y hệt, chỉ có điểm duy nhất khác biệt là thêm thuộc tính phát lần lượt.
+VD: const source = of(
+  concat(interval(1000).pipe(take(3)), interval(500).pipe(take(2)))
+);
+source.pipe(concatAll()).subscribe(value => {
+  console.log(value);
+});
+
+-> map xử lý kết quả
+takeUtil sẽ complete Observable hiện tại khi 1 Observable nào khác phát giá trị
+import { fromEvent } from 'rxjs';
+import { map, takeUntil, concatAll } from 'rxjs/operators';
+const mousedown$ = fromEvent(draggable, 'mousedown');
+const mousemove$ = fromEvent(document, 'mousemove');
+const mouseup$ = fromEvent(document, 'mouseup');
+mousedown$.pipe(
+  map(event => mousemove$.pipe(
+    takeUntil(mouseup$),
+    map(moveEvent => {
+      return {
+        x: moveEvent.clientX - event.offsetX,
+        y: moveEvent.clientY - event.offsetY
+      };
+    })
+  )),
+  concatAll()
+).subscribe(pos => {
+  draggable.style.top = `${pos.y}px`;
+  draggable.style.left = `${pos.x}px`;
+});
+=> Sự kiện liên tục bắt và xử lý cho đến khi mouse up.
+
+-> Xử lý nhiều sự kiện đồng thời. VD Theo dõi sự kiện click và input để cập nhật một giá trị:
+import { fromEvent, merge } from 'rxjs';
+import { map } from 'rxjs/operators';
+const button = document.getElementById('myButton');
+const input = document.getElementById('myInput');
+const buttonClick$ = fromEvent(button, 'click').pipe(map(() => 'Button clicked'));
+const inputChange$ = fromEvent(input, 'input').pipe(map(event => `Input changed: ${event.target.value}`));
+merge(buttonClick$, inputChange$).subscribe(console.log);
+=> merge sẽ kết hợp các Observables lại thành 1 Observable và phát ra giá trị mà các Observable bên trong phát ra
+=> JS thuần phải viết listener event từng cái dài hơn
+
+-> forkJoin sẽ biến Promise thành Observable, gom lại thành 1 Observable và phát ra giá trị nếu các Observable bên trong đều hoàn thành.
+import { forkJoin } from 'rxjs';
+import axios from 'axios';
+const api1$ = axios.get('https://api.example.com/data1');
+const api2$ = axios.get('https://api.example.com/data2');
+forkJoin([api1$, api2$]).subscribe(([data1, data2]) => {
+  console.log('Data from API 1:', data1.data);
+  console.log('Data from API 2:', data2.data);
+});
+=> Kết hợp dữ liệu từ nhiều API, có thể viết lại y hệt với Promise.all
+
+-> Để hủy subscribe:
+VD1: import { fromEvent } from 'rxjs';
+const button = document.getElementById('myButton');
+const subscription = fromEvent(button, 'click').subscribe(() => {
+  console.log('Button clicked!');
+});
+function cleanup() {
+  subscription.unsubscribe();
+}
+// Gọi cleanup khi cần
+window.addEventListener('beforeunload', cleanup);
+
+VD2 Hủy đăng ký ngay sau khi click 1 lần:
+const subscription = observable.subscribe(() => {
+  console.log('Button clicked!');
+  subscription.unsubscribe();
+});
+
+VD3 tự hủy đk:
+import { fromEvent } from 'rxjs';
+import { take } from 'rxjs/operators';
+const button = document.getElementById('myButton');
+fromEvent(button, 'click').pipe(
+  take(1) // Chỉ nhận giá trị đầu tiên và tự động hủy đăng ký
+).subscribe(() => {
+  console.log('Button clicked once!');
+});
+
+-> of tạo ra 1 Observable phát ra các giá trị input ngay lập tức theo thứ tự
+concatMap nhận giá trị phát ra từ 1 Observable và chạy callback để tạo ra Observable mới phát ra giá trị callback return. Điểm đb là thực hiện tuần tự. Tuần tự tức là phát theo thứ tự chứ kp chờ subscribe chạy xong.
+import { of, concatMap } from 'rxjs';
+of(1, 2, 3).pipe(
+  concatMap(value => of(value * 2)) // Nhân đôi giá trị
+).subscribe(console.log); // In ra: 2, 4, 6
+
+-> combineLatest sẽ tạo Observable phát ra giá trị mới nhất của các Observable bên trong. Nó sẽ phát lần đầu tiên khi mỗi Observable bên trong phát ra ít nhất 1 giá trị, phát tiếp mỗi khi bất kỳ Observable nào bên trong phát thêm giá trị:
+import { combineLatest, of } from 'rxjs';
+const obs1$ = of(1, 2);
+const obs2$ = of('A', 'B');
+combineLatest([obs1$, obs2$]).subscribe(console.log); // Chắc chắn sẽ in ra 2 'B' cuối cùng
+
+-> TakeWhile sẽ dừng khi 1 đk k còn đúng.
+const source$ = of(1, 2, 3, 4, 5).pipe(
+  takeWhile(x => x < 4) // Gặp giá trị k thoả mãn sẽ xoá bỏ Observable
+);
+
+-> Expand nhận giá trị thực hiện callback, trả ra Observable phát giá trị mới, rồi lại nhận đệ quy giá trị của Observable đó r phát ra Observable tiếp. Thường dùng gọi API phân trang
+VD1: const source$ = of(1).pipe(
+  expand(x => of(x + 1)),
+  take(5) // Giới hạn số lần phát ra
+);
+
+-> scan tạo ra 1 observable phát liên tục các giá trị tích lũy. reduce tương tự nhưng chỉ phát ra 1 giá trị cuối cùng sau khi xử lý và Observable gốc complete.
+VD2: const fetchAllPages = (initialPage) => {
+  return of(initialPage).pipe(
+    expand(page => fetchPage(page).pipe(
+      map(response => ({
+        nextPage: response.nextPage, // Lấy trang tiếp theo từ response
+        data: response.data // Lấy dữ liệu từ response
+      }))
+    )),
+    takeWhile(({ nextPage }) => nextPage !== null), // Dừng khi không còn trang nào
+    reduce((acc, { data }) => {
+      acc.push(...data); // Gộp dữ liệu từ từng trang vào mảng
+      return acc;
+    }, [])
+  );
+};
+
+-> tap dùng để debug, thực hiện action k ảnh hưởng tới stream
+-> delay(500)
+-> distinctUntilChange() chỉ phát khi giá trị bị thay đổi so với lần trước đó nhận được.
+-> startWith() phát 1 giá trị nào lần đầu tiên rồi chạy tiếp như bth => dùng làm default value
+-> pairwise => phát cặp giá trị liên tiếp, hiện tại và trước đo
+
+-> Subject là 1 Observable k có gì. Có thể xây từ đó lên rồi gọi .next(data) để khởi động lại stream chạy r phát data, gọi .complete() để kết thúc.
+import { from, Subject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+const fetchSubject = new Subject();
+const fetchData = () => {
+  return fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    });
+};
+// Observable để thực hiện fetch khi có tín hiệu từ Subject
+const data$ = fetchSubject.pipe(
+  switchMap(() => from(fetchData())) // Chuyển đổi tín hiệu thành observable
+);
+// Đăng ký subscriber
+data$.subscribe({
+  next: (data) => console.log('Received data:', data),
+  error: (err) => console.error('Fetch error:', err),
+});
+// Hàm để phát tín hiệu fetch
+const fetchAndNotify = () => {
+  fetchSubject.next(); // Phát tín hiệu để fetch dữ liệu
+};
+// Gọi hàm để fetch dữ liệu lần đầu
+fetchAndNotify();
+// Gọi lại hàm để fetch lại dữ liệu liên tục
+setTimeout(() => {
+  console.log('Fetching data again...');
+  fetchAndNotify();
+}, 5000); // Fetch lại sau 5 giây
+
+-> pluck("name") tạo Observable mới phát ra thuộc tính name trong giá trị object phát ra bởi Observable trước
+// Tạo một observable phát ra các đối tượng
+const source$ = of(
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 3, name: 'Charlie' }
+);
+// Sử dụng pluck để lấy thuộc tính 'name'
+const names$ = source$.pipe(
+  pluck('name')
+);
+// Đăng ký để nhận giá trị
+names$.subscribe({
+  next: (name) => console.log('Received name:', name),
+  complete: () => console.log('Completed.')
+});
+
+-> Xử lý error:
+throwError: tạo 1 observable phát ra 1 error ngay lập tức, chờ subscribe gọi vào error hoặc tìm tiếp các operators catchError, retryWhen
+import { throwError, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+// Create an observable that throws an error
+const errorObservable = throwError(new Error('Something went wrong!'));
+// Subscribe to the observable and handle the error
+errorObservable.pipe(
+  catchError(err => {
+    console.error('Caught error:', err.message);
+    return of('Error handled, returning fallback value.'); // Return a fallback observable
+  })
+).subscribe({
+  next: (value) => console.log(value),
+  complete: () => console.log('Completed.')
+});
+
+--> retryWhen: chạy vào khi có throw error từ 1 Observable bên trên, nó sẽ bắt error từ Observable và xử lý tuỳ ý, trả ra 1 Observable. Observable trả ra này sẽ tự gọi retry hàm gốc sau đó.
+import { of, throwError } from 'rxjs';
+import { retryWhen, delay, take, tap } from 'rxjs/operators';
+// Simulate an observable that throws an error
+const source$ = () => {
+  return Math.random() > 0.5 ? throwError(new Error('Random error!')) : of('Success!');
+};
+// Use retryWhen to retry on error
+const retried$ = source$().pipe(
+  retryWhen(errors => 
+    errors.pipe(
+      tap(err => console.log('Error occurred:', err.message)), // Log the error
+      delay(1000), // Wait for 1 second before retrying
+      take(3) // Retry a maximum of 3 times
+    )
+  )
+);
+// Subscribe to the observable
+retried$.subscribe({
+  next: (value) => console.log(value),
+  error: (err) => console.error('Final error:', err.message),
+  complete: () => console.log('Completed.')
+});
+
+-> Dự án lớn thường dùng với Angular thiết kế class, cho Observable là thuộc tính class. Lấy ra ngoài và gọi subcribe ở bên ngoài khi muốn làm gì => reactive programming
+Việc ta addEventListener 1 sự kiện nhiều callback lợi hơn add 1 callback gom nhiều hàm là có thể quản lý tốt hơn và removeEventListener từng phần tuỳ ý.
+Pb qtr:
+VD ta tạo Observable ngay trong class làm 1 thuộc tính thì nó sẽ thực thi ngay và có data luôn, dùng thuộc tính sẽ có sẵn data và k cần làm gì khác.
+VD public getMappedValue(): Observable<any> {
+  return defer(() => ajax.getJSON(this.apiUrl)).pipe(
+    map(response => response.data)
+  );
+} => Sẽ gọi lại hàm fetch khi nào gọi hàm getMappedValue() và phải dùng subscribe
+VD public getMappedValue(): Observable<any> {
+  return ajax.getJSON(this.apiUrl).pipe(
+    map(response => response.data) // Map dữ liệu theo yêu cầu
+  );
+} => Sẽ gọi lại hàm fetch khi nào gọi hàm getMappedValue()

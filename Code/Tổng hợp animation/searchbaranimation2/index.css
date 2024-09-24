@@ -3,13 +3,13 @@
 }
 
 body {
+  background: #532394;
   font-family: Verdana, Geneva, sans-serif;
   padding: 60px 20px;
 }
 
 @keyframes caret-color {
   100% {
-    /* caret-color là vị trí cursor khi gõ từ */
     caret-color: #E46071;
   }
 }
@@ -136,6 +136,4 @@ body {
 .Info a:hover {
   color: rgba(255, 255, 255, 0.5);
   border-bottom-color: rgba(255, 255, 255, 0.5);
-}
-
-/*# sourceMappingURL=index.css.map */
+}/*# sourceMappingURL=index.css.map */
