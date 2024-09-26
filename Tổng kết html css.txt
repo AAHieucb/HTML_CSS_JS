@@ -144,22 +144,6 @@ VD tính năng readmore với CSS only: dùng 2 cái radio button cho 2 dòng Re
 
 
 
-# Flexbox
-Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
-Dùng kèm flex-grow và flex-shrink, order. Mặc định flex-shrink = 1, flex-grow = 0 nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
-Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
-
--> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
-
--> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
-
--> flex-basis => ref tới "Responsive css"
-Flexbox gặp vấn đề là chỉnh size dựa vào kích thước item bên trong, shrink hay grow cũng thế. Grid tốt hơn vì chỉnh size dựa vào kích thước các cell bên ngoài set từ trước.
-VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
-Để fix: phải dùng flex-basis, nó khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
-
-
-
 # Dùng position 
 -> Position absolute sẽ xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
 position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hưởng đến kích thước của thẻ, tự kéo dãn cho vừa hcn đó đó là khi kích thước k set.
@@ -238,6 +222,22 @@ https://www.w3schools.com/cssref/css_fonts_fallbacks.php
 
 
 
+# Flexbox
+Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
+Dùng kèm flex-grow và flex-shrink, order. Mặc định flex-shrink = 1, flex-grow = 0 nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
+Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
+
+-> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
+
+-> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
+
+-> flex-basis => ref tới "Responsive css"
+Flexbox gặp vấn đề là chỉnh size dựa vào kích thước item bên trong, shrink hay grow cũng thế. Grid tốt hơn vì chỉnh size dựa vào kích thước các cell bên ngoài set từ trước.
+VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
+Để fix: phải dùng flex-basis, nó khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
+
+
+
 # Dùng display grid
 Giống flexbox nhưng custom vị trí từng ô tốt hơn. Kích thước từng ô, hàng, cột, thứ tự sắp xếp item vào ô, khoảng cách các ô, strech hay co lại.
 Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
@@ -302,7 +302,7 @@ Dùng đơn vị 50cqw để set kích thước theo width của container, nế
 VD: container 100px, item1 50px, item2 30px. Nếu set width item1 là 1000px thì nó chỉ tới 70 thôi, nếu set width item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
 Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ được chia ra. Các thẻ mở rộng tuỳ vào flex-grow. Nếu container nhỏ hơn thì lại co theo tỉ lệ dựa vào flex-shrink
 - clamp(min,value,max): browser set giá trị là value, nếu value nhỏ hơn min sẽ set là min, lớn hơn max sẽ set là max. Value ở giữa thường là relative.
-- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách nhét nhiều cột hoặc hàng hơn nếu có đủ không gian. Nếu k đủ không gian sẽ điều chỉnh kích thước các phần tử bth
+- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách nhét nhiều cột hoặc hàng hơn nếu có đủ không gian. Nếu k đủ không gian sẽ điều chỉnh kích thước các phần tử bth => nên dùng auto-fill hơn
 - minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
 => Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
 
@@ -327,8 +327,8 @@ VD flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thướ
   flex-grow: 999;
   flex-basis: calc(
     ((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999)
-  );
-}
+  ); // Tức flex-basis xếp trước vào vị trí, k đủ sẽ đẩy thẻ xuống (flex-basis là NN xuống dòng), sau đó mới tính flex-grow, flex-shrink các thứ
+} 
 .with-sidebar > :last-child {
   flex-basis: var(--sidebar-size);
 }

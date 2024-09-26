@@ -341,6 +341,7 @@
         .container1 > div {
             height: 100px;
             flex: max(400px, 100%/4 - 0.1%); /* and this */
+            flex-basis: 400px;
             background: red;
         }
     </style>
@@ -389,7 +390,7 @@
         .grid {
             display: grid;
             gap: 1rem;
-            grid-template-columns: 100px 1fr 2fr;
+            grid-template-columns: 100px 1fr 2fr; /*fr k định hình kích thước nên sẽ chiếm hết phần còn lại*/
             margin: 0 0 1rem 0;
         }
         .grid > div {

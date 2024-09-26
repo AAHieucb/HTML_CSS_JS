@@ -64,7 +64,7 @@
         // Animation khi close: ta cho animation trước, animation kết thúc thì gọi close để ẩn đi thôi
         dialog.classList.remove('hide');
         dialog.close();
-        dialog.removeEventListener('webkitAnimationEnd',  arguments.callee, false);
+        dialog.removeEventListener('webkitAnimationEnd',  arguments.callee, false); // arguments.callee sai với arrow function, k nên dùng
       }, false);
     };
   </script>
