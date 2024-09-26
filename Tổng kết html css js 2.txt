@@ -312,8 +312,13 @@ Sự kiện hay dùng: https://freetuts.net/su-kien-event-trong-javascript-368.h
 
 -> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
 
--> Tham số 3 của addEventListener là useCapture, ngược với bubbling
-Khi 1 action kích hoạt nhiều event listener thì capture thực hiện cha đến con. Nếu có cả capture và bubbling thì capture thực hiện trước r đến bubbling.
+-> addEventListener
+Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase rồi đến Bubbling phase, từ cha đến con. Khi chạy, thấy thẻ nào bắt capture hay bubbling mà chạy event thẻ đó tương ứng. Có thể dùng object { capture: true, once: true }
+
+removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase. Tham số thứ 3 boolean tương tự, có thể dùng object {capture: false}
+Nếu đăng ký với once hoặc passive, remove phải có once và passive
+
+passive: true => Báo là sẽ k chạy event.preventDefault() và browser có thể xử lý ngay lập tức, cải thiện hiệu suất. Mặc định hiệu suất bị giảm khi browser xử lý event vì luôn phải đợi xem event.preventDefault có được gọi hay không.
 
 
 

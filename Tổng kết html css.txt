@@ -82,35 +82,36 @@ VD2:
 
 
 # Custom thẻ input
-Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: aria-autocomplete="list"
+Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
+
+Gõ có gợi ý theo list có sẵn với: <datalist> + input list
 
 -> Nếu muốn có 1 group input radio chỉ cho chọn 1 thì phải đặt chung trường name với nhau
 
 -> input type number custom nút spin button, trỏ vào shadow DOM với: input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button
 Nó có thuộc tính -webkit-appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
-K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn
+K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn. K dùng pattern có sẵn vì nó k check từ lúc gõ, lúc submit mới báo message k rõ ràng
 
 -> Có thể dùng hidden tạo input ảnh hoặc file đẹp
 
 -> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
 
--> Gõ có gợi ý với: <datalist> + input list
-
 
 
 # CSS Selector
 -> Cùng độ ưu tiên thì lấy cái set sau: !important > inline style > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
+dialog.hide > dialog[open] > .hide
 VD: style theo pseudo-class: .test:hover { }
 style theo attributes: div[id=test] { }
 style theo pseudo-element: .test:before { }
 VD: a[href$=".abc" i]  /  [href*="google.com"]  /  img:not([alt]) 
 
--> space  là descendant
->  child
+space là descendant mọi cấp
+>  child trực tiếp
 ~  mọi sibling sau
 +  1 sibling ngay sau 
 
--> Vd 1 thẻ a mà có cả 4 thuộc tính thì phải viết css đúng thứ tự sự kiện nếu k sẽ k có hiệu ứng:link/:visited -> :selection -> :hover -> :active (click chuột)
+-> Vd 1 thẻ a mà có cả 4 thuộc tính thì phải viết css đúng thứ tự sự kiện nếu k sẽ k có hiệu ứng :link/:visited -> :selection -> :hover -> :active (click chuột)
 
 input:checked/:disabled/:enabled/:required => khi input buộc nhập giá trị 
 input:optional/:read-only X :read-write/:valid X :invalid/:out-of-range tức khi lỗi out-of-range thì mang style css gì X :in-range

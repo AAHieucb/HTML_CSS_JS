@@ -49,4 +49,7 @@ readableStream
 3) rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
 4) keyframe transform: rotateZ(-45deg) translateX(50px) rotateZ(45deg); => nó khiến object đi đường vòng cung và k bị xoay vì các animation thực hiện đồng thời. Nó sẽ rotateZ, đi trục x, rotateZ ngược lại. Tức là ở mỗi bước di chuyển, nó rotateZ và đi trục x đồng thời làm đường vòng cung. Sau đó rotateZ ngược lại khiến object quay về vị trí ban đầu. Quá trình cực nhanh ở mỗi bước. Nó k đi chéo luôn vì quá trình rotate và đi trục X đồng thời chứ kp rotate xong mới đi x, cuối cùng mới rotate ngược về
 5) Để animation 1 set thẻ, ta nhét vào 1 thẻ container và animation thẻ container là được
+6) Animation k tự chạy lại khi đã chạy xong đúng số lần, nếu muốn chạy lại, phải gán tiếp lại class có animation cho nó.
+7) Mỗi giai đoạn di chuyển khác nhau nên có 1 animation riêng. Khi đã có animation xuôi, k nên tái sử dụng animation ngược lại với direction reverse mà hãy tạo 1 keyframe mới vì nhiều lúc lỗi k hiểu tại sao.
+8) Nếu vị trí from của animation k trùng với vị trí ban đầu, vật sẽ nhảy sang state đó r animation tiếp rất xấu. State trước khi chạy animation cũng chính là from
 

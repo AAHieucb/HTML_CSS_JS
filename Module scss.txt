@@ -36,24 +36,20 @@ Dùng @content
 
 # Nhanh
 Phải hiểu nó dùng các thứ trong phạm vi nào:
-- Biến, function thêm 1 giá trị cho 1 attribute của class
-- class, placeholder dùng trong phạm vi 1 class khác để thêm thuộc tính cho nó
-- Câu điều kiện, vòng loop dùng để tạo ra class mới
-- mixin thì dùng được với cả 2 case trên, nó có thể thêm thuộc tính cho 1 class có sẵn or khai báo 1 class mới
+- function tái sử dụng logic tính toán giá trị 
+- Biến tái sử dụng giá trị
+- placeholder, @extends tái sử dụng style
+- mixin tái sử dụng style nhưng nhận tham số
+- if tạo điều kiện trong vòng lặp hoặc mixin hoặc function 
+- loop tạo 1 số lượng lớn 1 cái gì đó có quy tắc
 
-//!!!!!!!
 -> Dùng scss dự án lớn:
-- Chia style common, css reset, themes, style từng phần tử, mixin biến hàm chia file common riêng.
-- Có thể 1 folder scss riêng, hoặc file scss ở ngay cùng cấp với file html tương ứng.
+- Tuân thủ BEM, tối ưu hoá code với kế thừa, biến, mixin, placeholder. Gom style common, themes, variables, css reset chung. Chia nhỏ style từng phần tử riêng.
+- Có thể chia 1 folder scss riêng chứa mọi thứ và chia theo module. Hoặc từng file scss ở cùng cấp với file html từng components.
 
-VD1: nên chia scss cùng cấp với flie html từng component. Còn file common thì để cấp ngoài cùng. 
-src/index.scss chứa common css, css var
-src/themes/mixins.scss chứa common mixin
-src/themes/variables.scss chứa common scss variables
-src/themes/các scss link từ các library
-=> File nào cần style common thì import vào là xong. Trong React dùng node-sass tự làm mọi thứ k cần lo việc compile nữa
+VD: 1 folder scss riêng chia module mọi thứ. Các file common chia riêng, các file từng module chia riêng. File main.scss ngoài cùng @use file common trước, @use các file module sau để bên trong file scss từng module dùng biến, mixin, hàm common thoải mái. Tuyệt đối k dùng @import tránh lặp.
+File main.scss @use mọi thứ, rồi chỉ cần compile duy nhất 1 file đó thành main.css là xong.
 
-VD2 có thể chia scss 1 folder riêng cho mọi phần tủ ở mọi nơi, ngoài cùng có index.scss use tất cả file. Khi compile chỉ cần compile 1 file index.scss đó thành 1 file css duy nhất là xong:
 scss/
 ├── base/
 │   ├── _reset.scss
@@ -105,27 +101,21 @@ utils/_index.scss:
 
 main.scss:
 @use 'utils/index' as *;
-
 @use 'base/reset'; // dùng namespace là reset
 @use 'base/typography' as t; // dùng namespace là t
 @use 'base/base';
-
 @use 'components/buttons';
 @use 'components/cards';
 @use 'components/modals';
-
 @use 'layout/header';
 @use 'layout/footer';
 @use 'layout/grid';
 @use 'layout/sidebar';
-
 @use 'pages/home';
 @use 'pages/about';
 @use 'pages/contact';
-
 @use 'themes/default';
 @use 'themes/dark';
-
 // Other common style
 body {
   font-family: $font-stack;
@@ -135,6 +125,17 @@ body {
   @include flex-center;
   padding: rem(16);
 }
+
+VD2: trong các dự án như React thường viết file scss cùng cấp với thư mục từng component của nó. Các file scss common viết ngoài cùng và thêm vào index.jsx ngoài cùng
+Vì là SPA nên thêm vào ngoài cùng sẽ dùng được mọi nơi trong dự án nên file scss dùng trực tiếp mọi thứ. import trực tiếp scss vào jsx, k cần lo về qtr compile
+
+--> ref tới "HTML CSS JS / Finance flow" thiết kế rất hay
+reset.scss
+mixins.scss => gom lại responsive, css hack, common code nhận biến
+variables.scss => tạo biến cho từng kích thươc màn hình được
+layout.scss
+components.scss => sửa thẻ common, thêm các class common, tái sử dụng nhiều component
+lib.scss => css thêm từ library or sửa library
 
 --> Chú ý tuân thủ BEM:
 .button {
