@@ -7,10 +7,14 @@ URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
 -> Có multiple background image. background-size background-image background-repeat background-color (dùng kèm background image được sẽ nằm ở dưới)
 background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung. background-image hiện trong phạm vi content, nếu dịch tràn ra ngoài sẽ k dịch chuyển trừ khi cho repeat hoặc background-size lớn 
 
+background: red url("./image.png") no-repeat local right top
+
 background-origin xác định vị trí của background image theo content. 
 background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient cho text color đc
 background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
 background-attachment: scroll mặc định là trôi theo scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
+
+VD: background-origin apply cho cả background-color và background-image, k thể chỉnh riêng hay chia từng image
 
 -> Các thuộc tính image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters
 
@@ -19,7 +23,7 @@ Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. 
 VD mask-image: linear-gradient(black, transparent);
 VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px
 VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
-Dùng mask: linear-gradient(90deg, transparent, 20% white, 80% white, 20% white, transparent);
+Dùng mask: linear-gradient(90deg, transparent, white 20%, white 100%, transparent);
 
 -> Image placeholder
 Dùng thẻ img có width và height bằng kích thước ảnh, nếu k rõ thì dùng minWidth minHeight để luôn có placeholder. 
