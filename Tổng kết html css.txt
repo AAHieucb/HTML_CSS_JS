@@ -168,17 +168,21 @@ Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của O
 -> Dùng text-transform: uppercase; => luôn dùng k cần JS
 Dùng text-size-adjust => bỏ vì ta tự set font-size responsive chứ k cần control thuật toán điều chỉnh kích thước văn bản của trình duyệt trên điện thoại nữa
 
--> Định nghĩa font mớ css
+-> Định nghĩa font mới trong css:
 @font-face{
   font-family: MyFont;
-  src: url(sansation_light.woff);
+  src: url(sansation_light.woff2) format("woff2"),
+       url(sansation_light.woff) format("woff"); // Browser k support woff2 thì dùng woff
   font-weight: 100;
 }
 h2{
   font-family: MyFont;
 }
-font-family thì nếu browser k support font đầu sẽ chuyển dần sang các font sau
-Or dùng @import url(<>); trong css để thêm font chữ vào đầu tiên.
+font-family thì nếu browser k support font đầu sẽ chuyển dần sang các font sau, src cũng có url backup
+Cùng font mà style khác nhau có url riêng, ta phân biệt bằng font-style và font-weight, dùng đúng loại sẽ tự lấy đúng url cho font => nên dùng 1 font file chuẩn thôi
+Browser đôi khi yêu cầu phải định nghĩa rõ serif. VD tên font là Fa nhưng phải định nghĩa là font-family: Fa, sans-serif;
+
+--> Có thể dùng @import url(<>); trong css để thêm font chữ vào và dùng trực tiếp trong font-family. Chỉ được với remote url, k dùng được url local file.
 
 -> Dùng font-systhesis
 Browser giả style khi font k hỗ trợ, nhiều lúc giả style bị lỗi hiển thị. Nếu dùng style mà text k đổi thì có thể do font k hỗ trợ và browser cũng k giả style được.
@@ -227,6 +231,17 @@ Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục
 Dùng kèm flex-grow và flex-shrink, order. Mặc định flex-shrink = 1, flex-grow = 0 nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
 Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
 
+-> Nhanh: flex: 2 2 10%; // grow shrink basis 
+flex: 2 2; // grow shrink
+flex: 2 // = 2 1 0%
+=> flex shrink default 1, flex grow default 0, flex-basis 0%
+flex-flow: row wrap;
+place-content: center space-between; /* align-content: center; justify-content: space-between; */
+place-items: center stretch; /* align-items: center; justify-items: stretch; */ => k có stretch
+place-self: start end; /* align-self: start; justify-self: end; */ => có thể stretch, trong phạm vi ô to
+=> align-items, jusitfy-content, align-content cho flex
+=> 1 điểm khác biệt lớn của place-items và place-self là place-items dùng cho container bao ngoài, place self là dùng cho từng phần tử được. place-self chỉ cần dùng cho grid
+
 -> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
 
 -> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
@@ -235,11 +250,12 @@ Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. V
 Flexbox gặp vấn đề là chỉnh size dựa vào kích thước item bên trong, shrink hay grow cũng thế. Grid tốt hơn vì chỉnh size dựa vào kích thước các cell bên ngoài set từ trước.
 VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
 Để fix: phải dùng flex-basis, nó khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
+=> Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex k xử lý trước trường hợp row cuối cùng k full
 
 
 
 # Dùng display grid
-Giống flexbox nhưng custom vị trí từng ô tốt hơn. Kích thước từng ô, hàng, cột, thứ tự sắp xếp item vào ô, khoảng cách các ô, strech hay co lại.
+Giống flexbox nhưng custom chia vị trí từng ô tốt hơn.
 Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
 
 -> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
@@ -247,21 +263,20 @@ Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwA
 -> grid-template-columns: 10% 10% 10%; là chia 3 thẻ bên trong làm 3 cột, một cột chiếm 10%. 
 grid-template-columns: 1fr 1fr 1fr; hoặc (auto auto auto) cx là 3 cột bằng nhau. Hoặc repeat(3, 1fr) viết lặp
 grid-template-rows: 300px 100px; => row1 cao 300px, row2 cao 100px, các row sau kích thước mặc định k fix
-
--> grid-auto-columns set default size cho các column trong grid container; grid-auto-rows set default size cho rows trong container
-
--> VD grid-area: 2 / 1 / span 2 / span 3; => thẻ ở row 2 column 1 kéo dài 2 rows 3 column
-VD grid-area: 1 / 1 / 2 / 2; tương đương với grid-row-start: 1; grid-column-start: 1; grid-row-end: 2; grid-column-end: 2;
-
-grid-template-area để sắp xếp các item vào grid theo label.
+grid-template-columns: repeat(3, minmax(200px, 1fr));
 
 -> grid-column / grid-row là 1 phần tử chiếm bnh cột và hàng. Vd: grid-row: 1 / span 2; là item này bắt đầu từ row1 và kéo dài 2 row
 
--> Mặc định các thẻ được sắp xếp vào ô từ trái sang phải và từ trên xuông dưới. grid-auto-flow có thể thay đổi điều này bằng cách ưu tiên xếp đầy row trước hay column trước: row là xếp đầy row theo thứ tự; row dense là vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự; dense là fill bất cứ ô nào vừa là vô
-URL: https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
+-> grid-auto-rows sẽ set kích thước chiều cao mặc định cho row mói được thêm vào, nếu ta k set bằng grid-template-rows cho nó thì sẽ lấy cái này; Tương tự grid-auto-columns
 
--> Phân biệt: place-items: end center; => là kết hợp của align-items end và justify-items center
-place-content: end space-between; => là kết hợp của align-content end và justify-content space-between
+-> grid-template-areas để sắp xếp các item vào grid theo label. Kết hợp grid-area khi responsive đổi vị trí area.
+
+-> grid-area còn là short của grid column và grid row. VD:
+VD grid-area: 2 / 1 / span 2 / span 3; => thẻ ở row 2 column 1 kéo dài 2 rows 3 column
+VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-column-start: 1; grid-row-end: 2; grid-column-end: 2; => Kéo dài từ row1->row2, col2->col3
+
+-> grid-auto-flow: column; ưu tiên xếp hết từng col trước. 
+grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
 
 
 
@@ -296,6 +311,8 @@ URL: https://topdev.vn/blog/responsive-giao-dien-cuc-dinh-voi-container-queries 
 container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
 @container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
 Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
+
+--> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
 
 ->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
 - flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 
@@ -363,6 +380,8 @@ Tìm animation đủ loại => search #topcsseffects trong youtube kênh hơn 10
 -> transition: [thuộc tính chuyển động] [thời gian chuyển động] [thời gian delay] [kiểu chuyển động];
 Đổi trạng thái cho các thuộc tính liên quan đến số và màu, VD background-image k có tác dụng nhưng có thể fake chỉ bằng cách animate opacity các ảnh
 VD: transition: all 1s 0.5s ease-in; hoặc transition: width 2s, height 2s, transform 2s;
+cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm
+transition-delay
 
 transition k dùng được với width hay các giá trị k rõ như auto
 VD có thể set padding 0 -> unset, fontSize 0 -> unset, scaleY(0) -> scaleY(1)
@@ -383,6 +402,7 @@ VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infi
 => animation còn có SVG, ảnh động, 3D. URL full: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM 
 
 -> animation-timeline giúp control thuộc tính animation phụ thuộc vào hành động của user hoàn toàn bằng css. VD chỉ khi scroll thì animation mới chạy, tạo parallax
+view(), scroll(), scroll-timeline-name: --squareTimeline;
 
 -> Vd hover button to ra: 
 Nếu có thể, nên cho button to sẵn và scale nhỏ lại, hover thì trở về kích thước ban đầu
@@ -452,3 +472,4 @@ Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 { display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
 Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
 View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
+@property và css houdini can thiệp sâu vào animation

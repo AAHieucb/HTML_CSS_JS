@@ -340,8 +340,7 @@
         }
         .container1 > div {
             height: 100px;
-            flex: max(400px, 100%/4 - 0.1%); /* and this */
-            flex-basis: 400px;
+            flex: max(400px, 100%/4 - 0.1%); /* and this => max 3 cột */
             background: red;
         }
     </style>
@@ -366,11 +365,13 @@
                         var(--w),
                         100%
                     ),
+                    /* Chỉ đơn giản là chặn min-width: max là 100% k đổi, min là kích thước nhỏ nhất để chia được làm 3 cột */
                     1fr
                 )
             ); /* this */
             gap:10px;
         }
+        /* +0.1% để nếu k đủ sẽ k xuống hàng mới mà sẽ dãn các hàng trước ra => đặt giới hạn max số cột => thg chả dùng vì sẽ bao container max-width */
         .container2 > div {
             height:100px;
             background:red;

@@ -4,8 +4,8 @@ URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
 
 => Ứng dụng tạo diamond grid: https://www.youtube.com/watch?v=A5GXdjEOvos&list=WL&index=98
 
--> Có multiple background image. Chỉ cần 4 thuộc tính: background-size (object-fit), background-image, background-repeat, background-position
-background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung
+-> Có multiple background image. background-size background-image background-repeat background-color (dùng kèm background image được sẽ nằm ở dưới)
+background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung. background-image hiện trong phạm vi content, nếu dịch tràn ra ngoài sẽ k dịch chuyển trừ khi cho repeat hoặc background-size lớn 
 
 background-origin xác định vị trí của background image theo content. 
 background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient cho text color đc

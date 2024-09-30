@@ -53,3 +53,23 @@ readableStream
 7) Mỗi giai đoạn di chuyển khác nhau nên có 1 animation riêng. Khi đã có animation xuôi, k nên tái sử dụng animation ngược lại với direction reverse mà hãy tạo 1 keyframe mới vì nhiều lúc lỗi k hiểu tại sao.
 8) Nếu vị trí from của animation k trùng với vị trí ban đầu, vật sẽ nhảy sang state đó r animation tiếp rất xấu. State trước khi chạy animation cũng chính là from
 
+
+
+# Trick responsive flexbox grid
+Xếp flex-basis trước, nếu các thẻ có flex-basis mà k đủ cho 1 dòng thì sẽ xuống dòng. Sau đó mới tính grow, shrink. Do đó có thể lợi dùng flex-basis để kiểm soát số cột
+
+VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp column fit vào ô với kích thước 200px nếu có thể. Có thể dãn lớn hơn 200px. Nhỏ hơn 200px thì xuống dòng.
+minmax nếu max hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
+1fr đơn vị phân số fraction chia tỉ lệ nhưng bản thân nó k theo kích thước bất cứ container nào cả, chỉ là tỉ lệ các item. Bth nó kiểu max 100% ấy. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ hoạt động k như mong muốn, hay invalid property.
+repeat là hàm trong css có sẵn. Thường dùng là repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì đến grid. Mục số là điền số chứ đừng điền 1fr, có thể dùng minmax(200px,1fr) để full width mà max width.
+Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row.
+Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như nào thì dòng dưới phải có cột width như vậy. Nếu k muốn v thì dùng flex.
+
+-> Kỹ thuật responsive:
+1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
+Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => kết hợp min max kiểu lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px
+2) Max số cột:
+Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn
+
+VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
+
