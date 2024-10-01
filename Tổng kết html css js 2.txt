@@ -71,7 +71,7 @@ VD: .clearfix:after{
 white-space: nowrap
 text-overflow + overflow hidden xử lý text tràn thì cut và hiển thị gì ra
 letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc các word bnh chứ kp là giá trị kc luôn
-text-ident để lùi đầu dòng paragraph
+text-indent để lùi đầu dòng paragraph
 
 box-decoration-break => xử lý style inline element khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
 line-height giúp căn kc các dòng trong 1 văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, VD dùng thay việc set paddingTop
@@ -81,7 +81,7 @@ vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuốn
 -> Mặc định text tràn khung sẽ tự xuống dòng, nhưng 1 từ dài quá 1 dòng sẽ k cắt.
 word-wrap xử lý cut text như nào, dùng break-all sẽ cut được chữ dài => bỏ, thế bằng word-break
 word-break y hệt word-wrap nhưng cung thêm break-all. break-all thì 1 chữ k đủ dòng vẫn viết tiếp, mặc định thì chữ k đủ phần còn lại sẽ xuống dòng sau
-line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp
+line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp / -webkit-line-clamp
 VD: 
 1) abcde trong khung max 5 chữ thì word-wrap break-word đảm bảo hiện là:
 abcd
