@@ -176,7 +176,7 @@ Tức chỉ cần cho container kích thước nhỏ hơn content và set overfl
 overflow: clip; kết hợp với overflow-clip-margin: 30px; để kiểm soát overflow vẫn tràn ra ngoài mà k chiếm thêm kích thước
 overflow-scroll: Chèn thêm hàng loạt thẻ vào bên trên mà k thay đổi vị trí scroll, k bị đẩy scroll xuống.
 
--> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng tag a href đến đó là được
+-> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng tag a href đến đó là được => tính năng scroll to top
 scroll-behavior: smooth hay auto để nhảy đến hay trượt đến
 
 -> overscroll-behavior: khi 2 scroll lồng nhau, cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
@@ -243,13 +243,12 @@ lvh là chiều cao lớn nhất khi k có toolbar, svh là chiều cao nhỏ nh
 dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => luôn dùng
 
 --> Trap: 1 thẻ có height 50% thì sẽ bằng 50% height thẻ cha. Nếu thẻ cha k set height tức tự vừa với thẻ con thì chả có gì nên là 0
-Thế nhưng thẻ có padding-top 50% thì padding nó lại bằng relative theo chiều rộng. VD thẻ width 100px thì padding top 50% sẽ là 50px => thg dùng khi ta muốn padding nó thay đổi theo màn hình responsive chứ kp lúc nào cũng fix cứng, k cần dùng @media
 
 
 
 ## JS
 # Basic
-script tới file js ở cuối page để đảm bảo mọi component đã load xong
+script tới file js ở cuối page để đảm bảo mọi component đã load xong, hoặc dùng defer
 
 -> Thao tác với chuột clientX, clientY
 window.scrollTo(0, document.body.scrollHeight); để scroll xuống vị trí dưới cùng của thẻ body
@@ -265,9 +264,7 @@ Có thể dùng JSON lưu function bằng function constructor
 str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
 Thay vì dùng str1 + str2, nên dùng `${str1}${str2}`
 
-
-
-# Dùng biến global 
+-> Dùng biến global 
 BOM(Browser Object Model) là thứ cho phép ta thao tác với browser như cookies, history, window, screen, navigator, location.
 Có thể xem trạng thái load của document, tình trạng pin, tốc độ internet, onerror để handle window error, có chuyển tab, bật devtool
 

@@ -14,7 +14,8 @@ CTRL + SHIFT + F để Search global
 Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý JS, gọi là Parse Blocking => default
 Script attributes: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy; defer chỉ chạy khi html parse xong.
 VD: Đang parse HTML CSS thì gặp 1 script async -> tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì vẫn chạy script luôn => default
-VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script
+VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script 
+Điểm lợi dùng defer là để script load ở đầu file vẫn đảm bảo thực hiện sau khi DOM load.
 => Nên đặt style ở đầu và script ở cuối vì trình duyệt bth luôn cần css load sớm để hiện ra còn tính năng k cần load ngay.
 
 -> Nếu không xác định type="module" trong thẻ <script>, file JS sẽ được xử lý như một script thông thường, k có tính năng của module. Sự khác biệt:
