@@ -109,6 +109,14 @@ Có thể làm đủ kiểu, phát nhạc, tua bài tiếp theo, tìm kiếm bà
 
 
 
+# Sitemap
+robots.txt là file kiểm soát quá trình crawl của search engine, sitemap.xml giúp search engine đánh chỉ mục dễ hơn. 
+Sitemap chứa thông tin về các url cần crawl và cấu trúc nội dung, cải thiện SEO, dễ đánh chỉ mục hơn với web có nội dung động.
+Nếu đk sitemap với Google Search Console, có thể theo dõi thống kê hiệu suất các trang để biết mà cải thiện SEO.
+=> Ta phải tạo thủ công sitemap.xml, thêm các trường giá trị, đặt cùng index.html và hosting là được.
+
+
+
 # Other
 -> ES6 (ECMAScript) là các quy tắc giúp JS chạy tốt trên mọi trình duyệt.
 Babel convert ES6 sang CommonJS cho NodeJS dùng được.

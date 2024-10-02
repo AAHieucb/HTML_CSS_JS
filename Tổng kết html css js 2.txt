@@ -21,25 +21,26 @@ VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị 
 VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
 Dùng mask: linear-gradient(90deg, transparent, 20% white, 80% white, 20% white, transparent);
 
--> Image placeholder
-Dùng thẻ img có width và height bằng kích thước ảnh, nếu k rõ thì dùng minWidth minHeight để luôn có placeholder. 
-Cbi sẵn 1 bức ảnh default để lỗi thì show ra. Dùng bg color xám cho thẻ img để ảnh chưa có thì hiển thị 1 màu xám, hoặc tìm cách show skeleton. Có thể dùng background-image của tag image để làm ảnh default.
-Dùng border radius thẻ div bao ngoài img kèm overflow hidden
-Dùng onLoad và onError, VD check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
+-> Setup image:
+Setup ảnh object-fit contain, object-position center center, min-width width aspect-ratio, border-radius, overflow hidden
+
+--> Setup iamge plcae holder
+Dùng background-color, luôn set min-width min-height để luôn có placeholder
+Dùng 1 bức ảnh mặc định loading or skeleton làm background image
+Nếu biết trước ảnh là gì có thể tạo 1 phiên bản cực nhẹ là thu nhỏ ảnh lại rồi phóng to lên làm background image là được.
+
+--> Dùng onLoad và onError, VD check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
 HTML có thẻ object show mọi loại media, nếu bị lỗi sẽ tự show thẻ con của thẻ object rất hay => ít dùng vì kp chuyên cho ảnh.
 
 VD: <img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';" >
 Việc dùng this.onerror=null chống lỗi infinity loop. Lỗi này xảy ra ở 1 số trình duyệt khi chính ảnh để ta fix lại bị lỗi xong lại chạy onerror lại lỗi và cứ lặp vô tận
 Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh backup onerror local đảm bảo luôn tồn tại là được. 
 
---> 1 cách khá hay là chuẩn bị 1 phiên bản cực nhẹ cho ảnh, thu nhỏ nó lại và làm mờ đi. Cho nó làm background-image và phóng to lên để load ra trong lúc tải ảnh gốc nặng.
-object-position: center top; => giống background position nhưng áp dụng với các tag có thuộc tính object-fit 
-
---> onLoad, onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
+Khi làm với react thì onLoad, onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
 Thuộc tính PlaceholderSrc của LazyLoadImage nhận 1 ảnh kích thước nhỏ để hiển thị ra trước khi ảnh lớn được load. Ta có thể giảm độ phân giải ảnh bằng các công cụ chỉnh sửa để thế vào, thêm effect="blur" để làm mờ ảnh placeholder được
---> Lib react-progressive-graceful-image rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
+Lib react-progressive-graceful-image rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
 
--> Lazy loading ảnh: thuộc tính loading="lazy"/"eager" có sẵn của html
+--> Lazy loading ảnh: thuộc tính loading="lazy"/"eager" có sẵn của html
 
 -> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation.
 SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
@@ -68,8 +69,9 @@ white-space: nowrap
 text-overflow + overflow hidden xử lý text tràn thì cut và hiển thị gì ra
 letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc các word bnh chứ kp là giá trị kc luôn
 text-ident để lùi đầu dòng paragraph
+text-align justify
 
-box-decoration-break => xử lý style inline element khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
+box-decoration-break => xử lý style inline element (span) khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
 line-height giúp căn kc các dòng trong 1 văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, VD dùng thay việc set paddingTop
 vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuống 1 tẹo so với vị trí hiện tại mà k cần dùng đến flexbox => nên thử mọi options khi dùng
 => Thông thường ta bao tất cả bằng 1 component lớn với line-height, phần nào bên trong muốn chỉnh vị trí lên xuống thì nhét vertical-align cho nó
@@ -164,32 +166,6 @@ none: k set giá trị và coi như k có giá trị đó luôn, 3 thuộc tính
 
 
 
-# Dùng scroll
-Cơ bản tạo scrollbar trong 1 box: cho box là inline-block, white-space nowrap, overflow-x auto, set width không được fit-content mà responsive màn hình, thẻ con bên trong phải set minWidth bằng kích thước của box.
-Tức chỉ cần cho container kích thước nhỏ hơn content và set overflow có scrollbar là được.
-=> refer tới "Projects / Tinkerbellgarden"
-
-overflow: clip; kết hợp với overflow-clip-margin: 30px; để kiểm soát overflow vẫn tràn ra ngoài mà k chiếm thêm kích thước
-overflow-scroll: Chèn thêm hàng loạt thẻ vào bên trên mà k thay đổi vị trí scroll, k bị đẩy scroll xuống.
-
--> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng tag a href đến đó là được
-scroll-behavior: smooth hay auto để nhảy đến hay trượt đến
-
--> overscroll-behavior: khi 2 scroll lồng nhau, cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
-
--> Có thể ẩn thanh scrollbar nhưng vẫn giữ nguyên chức năng
-
--> Dùng scroll-snap
-- scroll-snap-type: x mandatory; xác định hướng và kiểu scroll. proximity là scroll tới mép card mới tự scroll vào đúng vị trí card, mandatory là trình duyệt tự snap theo từng điểm scroll mọi lúc theo cách ta dùng scroll-snap-align 
-- scroll-snap-align là từng item sẽ có vị trí như nào với container bao nó. VD center là điểm giữa item trùng điểm giữa container, tương tự start và end. Điểm giữa của chiều nào tùy thuộc type dùng x hay y
-- scroll-snap-stop: là khi lướt quá nhanh sẽ luôn dừng ở từng element(always) hay cho lướt qua(normal)
-- Đôi khi ta k muốn chuẩn kiểu item hiển thị đúng ở 3 vị trí mà hiển thị ở hơi mé bên trái cách 1 vài pixel cơ thì:
-scroll-padding dùng ở container sẽ cho mọi item bên trong được quyền hiển thị cách mép 1 khoảng bnh
-scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào được phép hiển thị cách mép bnh
-=> dùng được 4 chiều left right top down. Thường để kích thước container chia hết cho kích thước card bên trong
-
-
-
 # BEM
 BEM(Block-Element-Modifier) đem lại hiệu quả viết tên class hướng module, dùng mạnh trong sass.
 Theo BEM, kbh dùng id mà chỉ có class và các class biểu diễn lồng nhau thì dùng với quy tắc kiểu.
@@ -211,6 +187,35 @@ và file css: .btn { ... }
 .btn__price { ... }
 .btn__text { ... }
 .btn--orange { ... }
+
+
+
+# Dùng scroll
+Cơ bản tạo scrollbar trong 1 box: cho box là inline-block, white-space nowrap, overflow-x auto, set width không được fit-content mà responsive màn hình, thẻ con bên trong phải set minWidth bằng kích thước của box.
+Tức chỉ cần cho container kích thước nhỏ hơn content và set overflow có scrollbar là được.
+=> refer tới "Projects / Tinkerbellgarden"
+
+overflow: clip; kết hợp với overflow-clip-margin: 30px; để kiểm soát overflow vẫn tràn ra ngoài mà k chiếm thêm kích thước
+overflow-scroll: Chèn thêm hàng loạt thẻ vào bên trên mà k thay đổi vị trí scroll, k bị đẩy scroll xuống.
+
+-> Custom style scrollbar: https://css-tricks.com/custom-scrollbars-in-webkit/
+K dùng kèm scrollbar-width thin được mà set trong shadow dom, k sẽ lỗi
+
+-> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng tag a href đến #đó là được
+scroll-behavior: smooth hay auto để nhảy đến hay trượt đến
+
+-> overscroll-behavior: khi 2 scroll lồng nhau, cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
+
+-> Có thể ẩn thanh scrollbar nhưng vẫn giữ nguyên chức năng
+
+-> Dùng scroll-snap
+- scroll-snap-type: x mandatory; xác định hướng và kiểu scroll. proximity là scroll tới sát mép card mới tự scroll vào đúng vị trí card nếu k sẽ lơ lửng, mandatory là trình duyệt tự snap theo từng điểm scroll mọi lúc theo cách ta dùng scroll-snap-align 
+- scroll-snap-align là từng item sẽ có vị trí như nào với container bao nó. VD center là điểm giữa item trùng điểm giữa container, tương tự start và end. Điểm giữa của chiều nào tùy thuộc type dùng x hay y
+- scroll-snap-stop: là khi lướt quá nhanh sẽ luôn dừng ở từng element(always) hay cho lướt qua(normal)
+- Đôi khi ta k muốn chuẩn kiểu item hiển thị đúng ở 3 vị trí mà hiển thị ở hơi mé bên trái cách 1 vài pixel cơ thì:
+scroll-padding dùng ở container sẽ cho mọi item bên trong được quyền hiển thị cách mép 1 khoảng bnh
+scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào được phép hiển thị cách mép bnh
+=> dùng được 4 chiều left right top down. Thường để kích thước container chia hết cho kích thước card bên trong
 
 
 

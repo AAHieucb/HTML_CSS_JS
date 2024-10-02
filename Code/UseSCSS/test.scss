@@ -246,3 +246,47 @@ $borders : "solid 2px" "solid 3px";
     width: min(5em, 3em, 4em);// max
     width: random($limit: 9) + px; // thiếu dấu cộng là sai
 }
+
+// Dùng map
+$themes: (
+    light: (
+      colorHeaderFooter: #fff,
+      colorText: #000,zzz
+      colorBackground: #f8f8fa,
+    ),
+    dark: (
+      colorHeaderFooter: #36394c,
+      colorText: #eff2f7,
+      colorBackground: #222736,
+    ),
+);
+
+@mixin themify($themes) {
+    @each $theme, $map in $themes {
+        // & trỏ tới thẻ cha của thẻ hiện tại
+        .theme-#{$theme} & {
+            $theme-map: () !global; // Khai báo bién map k có phần tử nào
+            // global khiến 1 biến trở thành toàn cục, k có thì chỉ dùng trong phạm vi block này thôi
+            // Néu có nhiều @mixin gán các gía trị khác nhau cho biến toàn cục này thì nó thực hiện theo thứ tự @include và chạy như bth, dùng giá trị mới nhất gán
+            @each $key, $submap in $map {
+                $value: map-get(map-get($themes, $theme), '#{$key}');
+                // Thực hiện hàm từ trên xuống gán như bth. map-merge merges 2 maps lại
+                $theme-map: map-merge( 
+                    $theme-map,
+                    ( $key: $value, )
+                ) !global;
+            }
+            @content;
+            $theme-map: null !global; // Chạy xong @content thì gỉai phóng bộ nhớ, tránh bị lặp trong các lần lặp tiếp theo
+        }
+    }
+}
+@function themed($key) {
+    @return map-get($theme-map, $key);
+}
+// Có thẻ dùng làm darkmode: https://betterprogramming.pub/a-complete-guide-to-implementing-dark-mode-in-react-47af893b22eb
+.header {
+    @include themify($themes) {
+      background: themed('headerFooterBackground');
+    }
+}

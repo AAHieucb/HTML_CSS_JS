@@ -32,6 +32,8 @@ Dùng placeholder khi class Cha k được dùng riêng bởi bất cứ 1 thẻ
 -> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào
 Dùng @content
 
+-> Dùng map bắt đầu bằng ()
+
 
 
 # Nhanh
