@@ -7,10 +7,14 @@ URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
 -> Có multiple background image. background-size background-image background-repeat background-color (dùng kèm background image được sẽ nằm ở dưới)
 background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung. background-image hiện trong phạm vi content, nếu dịch tràn ra ngoài sẽ k dịch chuyển trừ khi cho repeat hoặc background-size lớn 
 
+background: red url("./image.png") no-repeat local right top
+
 background-origin xác định vị trí của background image theo content. 
 background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient cho text color đc
 background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
 background-attachment: scroll mặc định là trôi theo scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
+
+VD: background-origin apply cho cả background-color và background-image, k thể chỉnh riêng hay chia từng image
 
 -> Các thuộc tính image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters
 
@@ -19,7 +23,7 @@ Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. 
 VD mask-image: linear-gradient(black, transparent);
 VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px
 VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
-Dùng mask: linear-gradient(90deg, transparent, 20% white, 80% white, 20% white, transparent);
+Dùng mask: linear-gradient(90deg, transparent, white 20%, white 100%, transparent);
 
 -> Setup image:
 Setup ảnh object-fit contain, object-position center center, min-width width aspect-ratio, border-radius, overflow hidden
@@ -79,7 +83,7 @@ vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuốn
 -> Mặc định text tràn khung sẽ tự xuống dòng, nhưng 1 từ dài quá 1 dòng sẽ k cắt.
 word-wrap xử lý cut text như nào, dùng break-all sẽ cut được chữ dài => bỏ, thế bằng word-break
 word-break y hệt word-wrap nhưng cung thêm break-all. break-all thì 1 chữ k đủ dòng vẫn viết tiếp, mặc định thì chữ k đủ phần còn lại sẽ xuống dòng sau
-line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp
+line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp / -webkit-line-clamp
 VD: 
 1) abcde trong khung max 5 chữ thì word-wrap break-word đảm bảo hiện là:
 abcd
@@ -244,13 +248,12 @@ lvh là chiều cao lớn nhất khi k có toolbar, svh là chiều cao nhỏ nh
 dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => luôn dùng
 
 --> Trap: 1 thẻ có height 50% thì sẽ bằng 50% height thẻ cha. Nếu thẻ cha k set height tức tự vừa với thẻ con thì chả có gì nên là 0
-Thế nhưng thẻ có padding-top 50% thì padding nó lại bằng relative theo chiều rộng. VD thẻ width 100px thì padding top 50% sẽ là 50px => thg dùng khi ta muốn padding nó thay đổi theo màn hình responsive chứ kp lúc nào cũng fix cứng, k cần dùng @media
 
 
 
 ## JS
 # Basic
-script tới file js ở cuối page để đảm bảo mọi component đã load xong
+script tới file js ở cuối page để đảm bảo mọi component đã load xong, hoặc dùng defer
 
 -> Thao tác với chuột clientX, clientY
 window.scrollTo(0, document.body.scrollHeight); để scroll xuống vị trí dưới cùng của thẻ body
@@ -266,9 +269,7 @@ Có thể dùng JSON lưu function bằng function constructor
 str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
 Thay vì dùng str1 + str2, nên dùng `${str1}${str2}`
 
-
-
-# Dùng biến global 
+-> Dùng biến global 
 BOM(Browser Object Model) là thứ cho phép ta thao tác với browser như cookies, history, window, screen, navigator, location.
 Có thể xem trạng thái load của document, tình trạng pin, tốc độ internet, onerror để handle window error, có chuyển tab, bật devtool
 
