@@ -19,7 +19,7 @@ VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root v�
 
 -> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-zIndex k hđ với position static, cần set rõ khi dùng.
+zIndex nên luôn đi với position relative
 
 padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
 
@@ -38,6 +38,7 @@ contain: paint;
 
 # Css anchor
 URL: https://www.youtube.com/watch?v=B4Y9Ed4lLAI&list=WL&index=2&t=61s
+Ful tut: https://css-tricks.com/css-anchor-positioning-guide/
 ***popovertarget popover popovertargetaction giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần, tự responsive
 anchor trong css và html để gắn popover hiện theo thẻ nào
 :root:hash(#context:popover-open): Check popover đang được mở bằng css selector để style
@@ -132,7 +133,7 @@ initial-letter tương đương selector ::first-letter giúp tạo chữ đầu
 
 VD: button:not(:first-child){} => mọi thẻ button không là first-child trong web 
 button:has(svg){} => mọi button có thẻ svg là child 
-VD giả sử tạo checkbox với option light/dark mode thì cách css hay nhất là: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; } 
+VD giả sử tạo checkbox với option light/dark mode thì cách css hay nhất là: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; } => chú ý phải đổi từ thẻ body vì nó chỉ effect thẻ hiện tại và các con của nó khi ta reassign css vars
 
 -> X:before và X:after như 1 thẻ khác nằm bên trong X có kích thước fit content, k có content thì mặc định là 0 0.
 before hiện ở left 0 top 0 của thẻ, after ở top right, kp hiện đằng trc vị trí thẻ hiện tại mà nó chiếm vị trí thẻ và đẩy text thẻ ra sau nó
@@ -154,75 +155,6 @@ position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hư
 
 -> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
 VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
-
-
-
-# Dùng font
-TrueType Fonts (TTF): TrueType là định dạng font phổ biến cho các hệ điều hành Mac OS và Windows.
-OpenType Fonts (OTF): OpenType là một định dạng được phát triển dựa trên nền tảng của TrueType.
-Web Open Font Format (WOFF): là một TrueType nhưng nhẹ hơn và được W3C khuyến khích dùng
-Web Open Font Format (WOFF 2.0): là một bản nén tuyệt vời hơn WOFF 1.0.
-SVG Fonts/Shapes: SVG Fonts giúp hiển thị văn bản giống như một hình ảnh Graphic.
-Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của OpenType
-
--> Dùng text-transform: uppercase; => luôn dùng k cần JS
-Dùng text-size-adjust => bỏ vì ta tự set font-size responsive chứ k cần control thuật toán điều chỉnh kích thước văn bản của trình duyệt trên điện thoại nữa
-
--> Định nghĩa font mới trong css:
-@font-face{
-  font-family: MyFont;
-  src: url(sansation_light.woff2) format("woff2"),
-       url(sansation_light.woff) format("woff"); // Browser k support woff2 thì dùng woff
-  font-weight: 100;
-}
-h2{
-  font-family: MyFont;
-}
-font-family thì nếu browser k support font đầu sẽ chuyển dần sang các font sau, src cũng có url backup
-Cùng font mà style khác nhau có url riêng, ta phân biệt bằng font-style và font-weight, dùng đúng loại sẽ tự lấy đúng url cho font => nên dùng 1 font file chuẩn thôi
-Browser đôi khi yêu cầu phải định nghĩa rõ serif. VD tên font là Fa nhưng phải định nghĩa là font-family: Fa, sans-serif;
-
---> Có thể dùng @import url(<>); trong css để thêm font chữ vào và dùng trực tiếp trong font-family. Chỉ được với remote url, k dùng được url local file.
-
--> Dùng font-systhesis
-Browser giả style khi font k hỗ trợ, nhiều lúc giả style bị lỗi hiển thị. Nếu dùng style mà text k đổi thì có thể do font k hỗ trợ và browser cũng k giả style được.
-font-systhesis quyết định browser có giả style hay không, nếu set là none thì chữ luôn hiện đúng nếu có, k có style thì hiện dạng mặc định chứ k giả => Thường luôn cho phép giả
-
--> Dùng text-rendering
-Có: optimizeSpeed, optimizeLegibility, geometricPrecision, auto (phụ thuộc vào browser)
-optimizeLegibility là giúp vc chữ hiển thị dễ đọc, phân biệt "f l i" bằng cách in với kích thước hơi khác biệt 1 chút cho người dùng tránh nhầm
-=> Thực tế cái này để thế nào cũng được, người đọc chữ nếu k sợ nhầm thì cứ optimizeSpeed nếu cần vì trông chữ nó chả khác biệt mấy
-
--> Dùng font-smooth: xử lý antialias khi render font
-Dùng kèm -webkit-font-smoothing: auto/none/antialiased/subpixel-antialiased(nét chữ sắc nhất) => MacOS Webkit
--moz-osx-font-smoothing: auto/grayscale => Firefox MacOS 
-
--> Font size tự động đổi theo kích thước màn hình:
-min và max trong css giúp lấy min và max của giá trị gì, khi kết hợp với kích thước relative sẽ rất mạnh
-Màn hình luôn được chia thành 100 vw và vh. VD màn hình là 1460px thì 1vw sẽ tương ứng với 14.6px
-clamp(a, b, c); là hàm của css giúp lấy 1 giá trị trong khoảng a và c. Nó ss lấy min(b,c) là x rồi lấy max(a, x) trả ra kết quả. Dùng min,max,clamp thay thế width,max/min-width
-
-VD ta muốn màn hình dưới 700px có font-size là 16px, sau đó tăng dần tuyến tính lên 1px mỗi 100px tăng lên cho đến max là 22px => font-size: clamp(16px, 1vw + 9px, 22px);
-Khi 700px, nó sẽ là clamp(16px, 16px, 22px) thì lấy 16px. Font size tuyến tính tăng lên 1300px thì clamp(16px, 22px, 22px) thì lấy 22px
-Vd muốn màn hình tăng đến đúng 1500px thì fontsize mới là 22px ta chỉ cần giải phương trình là được
-
-Or dùng generator: https://clamp.font-size.app => đổi rem ở vị trí đầu và vị trí thứ 3 thành px để tránh nhiều case bị sai
-
--> Web safe font: 
-Có các font chạy trên linux ok nhưng sang window bị lệch dòng. Có các tool giúp chỉnh sửa thẳng vào file ttf để fix font như FontForge nhưng khá mất tg
-Web safe font là các font luôn chạy mượt với mọi browser và mọi hđh thường có sẵn trong browser. Nhưng k đảm bảo các web safe font lúc nào cũng khả dụng => Viết CSS thêm fallback fonts là các font dự phòng cho browser:
-https://www.w3schools.com/cssref/css_websafe_fonts.php?fbclid=IwAR2s3BCKKc8rKHr4fKOYp8P2VFVtBj94Moc0fd0auwBP-Mzwv_riCy8FeE8
-https://www.w3schools.com/cssref/css_fonts_fallbacks.php
-
--> Dùng color font: Font được style đẹp sẵn
-
--> @font-palette-values gom các thuộc tính font lại tái sử dụng
-@font-palette-values --identifier {
-  font-family: Bixa;
-}
-.my-class {
-  font-palette: --identifier;
-}
 
 
 
@@ -425,36 +357,12 @@ Cách khác là setTimeout đúng bằng thời gian transition rồi xoá thẻ
 
 
 
-# Xử lý màu
-Tool sinh code gradient: https://angrytools.com/gradient/
-
--> Gradient css có 3 loại: linear kéo từ 1 phía sang 1 phía, radial kéo từ 1 điểm lan ra xung quanh, conic-gradient
---> Chú ý dùng background gradient thì truyền vào background chứ kp background-color
-VD: background: linear-gradient(direction, color1, color2, color3, color4, ...);
-VD: radial-gradient(circle closest-corner at 100px 100px, red 10%, yellow 20%, pink 10%); 
-shape là circle, elipse (default, bóp méo theo khung bên ngoài)
-size có thể là closest-side, farthest-side(default), closest-corner, farthest-corner at ... để set kích thước
-
--> Các cách lấy màu: rgba(255,0,0,0.5); rgb(255,0,0); hsl(0, 1005, 50%), hsla(0,100%,10%,0.3); #ffffff; dùng tên trực tiếp red, yellow
-hsl thì hue có giá trị từ 0 đến 360, 0 và 360 cùng là đỏ.
-color-mix giúp mix 2 màu trong không gian màu nào
-
--> mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
-backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element
-
--> Còn có sự sai lệch về màu sắc khi dùng browser khác nhau, đặc biệt là Safari so với Webkit. 
-Ta k nên giả định 2 màu là giống nhau ở 1 thẻ so với 1 bức ảnh hay video. VD: video có màu nền là #f12312 vì ta dùng devtool để lấy màu => ta k thể dùng 1 thẻ cũng có màu #f12312 và giả định rằng 2 màu giống nhau được, đặt video bên cạnh thẻ kia sẽ thấy khác màu ở 1 số browser khác.
-
-Có những màu đẹp có sẵn được support chuẩn ở mọi browser nên dùng: https://www.w3schools.com/cssref/css_colors.php
-
-
-
 # Other:
 -> Nguồn ảnh free: https://www.pexels.com/ ảnh và video chất lượng
 https://unsplash.com/ ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
 
 -> Vd Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility vẫn chiếm không gian nhưng k nhìn thấy, dùng với position absolute để thành k chiếm kg
+visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg. Nó khác với opacity vẫn có thể tương tác
 
 Vd Tạo navigation thì dùng ul list thẻ a: Cho text-decoration là none và :hover vào thì đổi thành gì, :active tức link hiện tại đang được chọn thì style như thế nào. Dùng list-style-type: none; cho list. Navigation bar dọc thì li dùng display:block, navigation bar ngang ta dùng thẻ li có display: inline;
 

@@ -59,7 +59,7 @@ readableStream
 Xếp flex-basis trước, nếu các thẻ có flex-basis mà k đủ cho 1 dòng thì sẽ xuống dòng. Sau đó mới tính grow, shrink. Do đó có thể lợi dùng flex-basis để kiểm soát số cột
 
 VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp column fit vào ô với kích thước 200px nếu có thể. Có thể dãn lớn hơn 200px. Nhỏ hơn 200px thì xuống dòng.
-minmax nếu max hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
+minmax nếu max nhỏ hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
 1fr đơn vị phân số fraction chia tỉ lệ nhưng bản thân nó k theo kích thước bất cứ container nào cả, chỉ là tỉ lệ các item. Bth nó kiểu max 100% ấy. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ hoạt động k như mong muốn, hay invalid property.
 repeat là hàm trong css có sẵn. Thường dùng là repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì đến grid. Mục số là điền số chứ đừng điền 1fr, có thể dùng minmax(200px,1fr) để full width mà max width.
 Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row.
@@ -72,4 +72,24 @@ Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => k�
 Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn
 
 VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
+
+VD chỉ muốn bo góc ở màn hình lớn:
+.card {
+  border-radius: max(0px, min(8px, calc((100vw - 4px - 100%)*9999)));
+}
+=> 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần như bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
+Tức if(mobile) borderRadius=0px else borderRadius=8px
+
+
+
+# CSS selector
+input[type='file'][multiple] khi chọn nhiều thuộc tính
+
+
+
+# Tự tạo dialog css thuần hiện ra
+Để tạo tính năng click ra ngoài thì ẩn dialog, có thể bắt sự kiện click global rồi check target được click k chứa dialog thì close dialog.
+1 cách khác là phủ 1 thẻ màu tối toàn màn hình rồi đè dialog lên. Click vào dialog thì k sao nhưng click vào thẻ đó bên ngoài sẽ close dialog
+Để tuỳ biến có scroll màn hình ngoài hay không chỉ cần set overflow hidden là cản scroll thôi.
+
 

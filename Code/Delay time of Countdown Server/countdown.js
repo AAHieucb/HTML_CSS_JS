@@ -1,3 +1,4 @@
+//!!!!!!!!
 // Thao tác với Math / làm tròn
 function toUnit(time, a, b) {
     return String(Math.floor((time % a) / b)).padStart(2, '0');

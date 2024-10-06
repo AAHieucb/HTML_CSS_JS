@@ -105,7 +105,7 @@ h2::before {
     top: 0;
     left: auto; 
     right: 0;
-    width: 0;
+    width: 10px;
     background-color: red;
     transition: 0.25s; /* transition giúp hiện animation khi dùng thêm như hover */
     height: 100%; /* K set width và height thì sẽ là 0px k hiện gì cả */
@@ -114,10 +114,8 @@ h2::before {
 
 h2:hover::before {
     width: 100%;
-    transform: translateX(-10px);
-    left: 0;
     right: auto;
-    /* selector của thẻ có phạm vi max là trong thẻ hiện tại nên 100% là của cả thẻ h2 */
+    /* Nguyên nhân của animation này là do left auto, right auto sẽ k đi từ từ mà nhảy, vì nó kp số */
 }
 /* Cơ chế: khi hover, do right left do nhảy từ auto sang số nên nó nhảy thẳng từ phải sang trái, sau đo width tăng dần full. Bỏ ra thì nó lại nhảy từ 0 sang auto nên trái lại sang phải nhưng nhìn thấy k đổi, width giảm về 0 nên thấy co về bên phải */
 

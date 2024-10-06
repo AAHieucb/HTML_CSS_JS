@@ -7,8 +7,6 @@ html, body, div {
 }
 
 /* Cơ chế parallax: ở đây là background-attachment dùng fixed.
-Nhưng nó lại làm cho mỗi thẻ có 1 background-image khác nhau và liên tiếp nhau có vi trí fix dính ở đầu trang. Đó
-là tùy vào vị trí ta background ta set mà thôi.
 VD chuyển từ thẻ A qua thẻ B thì background-image chuyển từ thẻ A qua thẻ B nhưng cả 2 image lại fix ở đầu trang
 và k scroll theo chuột, điều này chỉ có thể thực hiện khi nó giống kiểu thanh cuộn. */
 .parallax > div {
