@@ -93,3 +93,46 @@ input[type='file'][multiple] khi chọn nhiều thuộc tính
 Để tuỳ biến có scroll màn hình ngoài hay không chỉ cần set overflow hidden là cản scroll thôi.
 
 
+
+# IntersectionObserver
+Check khi chiều cao của thẻ hiển thị bao nhiêu phần trăm trên màn hình. Nó chỉ tính phần hiển thị trên màn, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
+Nếu muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công.
+
+const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+  entries.forEach(entry => {
+    const ratio = entry.intersectionRatio;
+    console.log(ratio);
+  });
+};
+const observer = new IntersectionObserver(handleIntersect, {
+  threshold: [0.25, 0.5, 0.75]
+});
+observer.observe(ref.current);
+observer.unobserve(ref.current);
+
+
+
+# Vấn đề trigger lại animation
+-> Trong JS để tạo ra 1 animation, ta thêm 1 class animate và thẻ đó, nhớ xoá đi khi k cần nữa.
+Mỗi lần xoá rồi thêm class sẽ chạy lại animation, nhưng VD nếu muốn animation thêm lần nữa theo đk của JS thì k được. Nếu remove rồi add lại class sẽ k chạy animation.
+Có nhièu cách fix:
+- Trigger reflow ép ở giữa sẽ khiến browser buộc render lại ngay:
+animatedElement.classList.remove('animate');
+void animatedElement.offsetWidth; // forces reflow
+animatedElement.classList.add('animate');
+
+- Dùng timeout cực ngắn: cách này k đảm bảo sẽ chạy animation ở mọi trường hợp 
+animatedElement.classList.remove('animate');
+setTimeout(() => {
+    animatedElement.classList.add('animate');
+}, 10); 
+=> Để 10ms là đủ khiến browser nhận ra và render lại.
+=> Có thể để là 0 thì chạy ngay event loop sau.
+
+-> Css only
+VD click 1 button thì trigger animation X chạy 1 lần (css only với flex box gán animation name), click lần nữa trigger tiếp sẽ k chạy
+
+Nếu k dùng css only, có giải pháp là đặt setTimeout cực ngắn ngay khi checked thì unchecked luôn.
+Néu dùng css only, cách duy nhất là đặt 2 animation giống nhau nhưng khác tên. Gán qua gán lại để đổi qua animation khác khi unchecked và checked là ok thôi
+=> Tức là animation css only sẽ k trigger lại, chỉ có cách đổi qua animation khác
+

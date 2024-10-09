@@ -80,6 +80,8 @@ VD2:
 <button popovertarget="info" id="btn">Field</button>
 <div popover id="info">Extra</div>
 
+-> Dùng @starting-style và transition allow-discrete
+
 
 
 # Custom thẻ input

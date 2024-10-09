@@ -128,7 +128,7 @@ addStyles(document.getElementById('my-element'), {
 
 // Check phím capslock có được bật
 const el = document.getElementById('password');
-el.addEventListener('keyup', e => console.log(e.getModifierState('CapsLock')));
+el.addEventListener('keyup', e => console.log(e.getModifierState('CapsLock')), e.key);
 
 // Check Date valid
 const isDateValid = (...val) => !Number.isNaN(new Date(...val).valueOf());
