@@ -240,7 +240,6 @@ $borders : "solid 2px" "solid 3px";
 // Xử lý số
 .Xulyso{
     width: percentage(0.2);
-    width: percentage(100px / 50px);
     width: round(10.4px); // ceil, floor
     width: abs(-10.4px);
     width: min(5em, 3em, 4em);// max
@@ -248,10 +247,10 @@ $borders : "solid 2px" "solid 3px";
 }
 
 // Dùng map
-$themes: (
+$themesX: (
     light: (
       colorHeaderFooter: #fff,
-      colorText: #000,zzz
+      colorText: #000,
       colorBackground: #f8f8fa,
     ),
     dark: (
@@ -261,21 +260,31 @@ $themes: (
     ),
 );
 
+$theme-map: ();
+
 @mixin themify($themes) {
     @each $theme, $map in $themes {
-        // & trỏ tới thẻ cha của thẻ hiện tại
+        // & trỏ tới thẻ cha của thẻ hiện tại và mất cha luôn => thành ".theme-dark .header"
         .theme-#{$theme} & {
-            $theme-map: () !global; // Khai báo bién map k có phần tử nào
+            $theme-map: (); // Khai báo bién map là toàn cục k có phần tử nào
             // global khiến 1 biến trở thành toàn cục, k có thì chỉ dùng trong phạm vi block này thôi
             // Néu có nhiều @mixin gán các gía trị khác nhau cho biến toàn cục này thì nó thực hiện theo thứ tự @include và chạy như bth, dùng giá trị mới nhất gán
-            @each $key, $submap in $map {
-                $value: map-get(map-get($themes, $theme), '#{$key}');
-                // Thực hiện hàm từ trên xuống gán như bth. map-merge merges 2 maps lại
-                $theme-map: map-merge( 
-                    $theme-map,
-                    ( $key: $value, )
-                ) !global;
-            }
+
+            // @each $key, $submap in $map {
+            //     $value: map-get(map-get($themes, $theme), '#{$key}');
+            //     // Thực hiện hàm từ trên xuống gán như bth. map-merge merges 2 maps lại
+            //     $theme-map: map-merge( 
+            //         $theme-map,
+            //         ( $key: $value, )
+            //     ) !global;
+            // }
+            // Viết mẹ này cho gọn chứ
+            $theme-map: map-merge( 
+                $theme-map,
+                $map
+            ) !global;
+            // Phải cho thành biến global mới dùng được trong @content chứ ở đây k truyền @map vào @content ngay được 
+
             @content;
             $theme-map: null !global; // Chạy xong @content thì gỉai phóng bộ nhớ, tránh bị lặp trong các lần lặp tiếp theo
         }
@@ -286,7 +295,7 @@ $themes: (
 }
 // Có thẻ dùng làm darkmode: https://betterprogramming.pub/a-complete-guide-to-implementing-dark-mode-in-react-47af893b22eb
 .header {
-    @include themify($themes) {
-      background: themed('headerFooterBackground');
+    @include themify($themesX) {
+      background: themed('colorBackground');
     }
 }

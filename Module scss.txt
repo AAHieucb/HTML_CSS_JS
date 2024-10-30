@@ -32,7 +32,85 @@ Dùng placeholder khi class Cha k được dùng riêng bởi bất cứ 1 thẻ
 -> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào
 Dùng @content
 
--> Dùng map bắt đầu bằng ()
+
+
+# Thiết kế 
+-> Dùng map bắt đầu bằng () tạo nhiều theme mode
+
+-> Dùng kết hợp BEM với &__header { &--container { } }
+
+-> Tạo responsive trong scss: tạo hàng loạt mixin
+VD: 
+@mixin xxxs {
+	@media screen and (max-width: 375.98px) {
+		@content;
+	}
+}
+@mixin landscape {
+	@media screen and (orientation: landscape) {
+		@content;
+	}
+}
+
+Dùng cho css hack:
+@mixin keyframes($animation-name) {
+	@-webkit-keyframes #{$animation-name} {
+		@content;
+	}
+	@-moz-keyframes #{$animation-name} {
+		@content;
+	}
+	@-ms-keyframes #{$animation-name} {
+		@content;
+	}
+	@-o-keyframes #{$animation-name} {
+		@content;
+	}
+	@keyframes #{$animation-name} {
+		@content;
+	}
+}
+@mixin transform($args) {
+	transform: $args;
+	-webkit-transform: $args;
+	-moz-transform: $args;
+	-ms-transform: $args;
+	-o-transform: $args;
+}
+
+Điều kiện if else phức tạp:
+@mixin fullscreen($fixed: false) {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	@if $fixed {
+		position: fixed;
+	} @else {
+		position: absolute;
+	}
+}
+
+Gom thuộc tính:
+@mixin overtext($lines) {
+	display: -webkit-inline-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+@mixin customscroll($width: 5px, $bgTrack: #ddd, $bgThumb: #121212) {
+	&::-webkit-scrollbar {
+		width: $width;
+	}
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	&::-webkit-scrollbar-thumb {
+		background: $bgThumb;
+	}
+}
+
 
 
 
@@ -139,7 +217,7 @@ layout.scss
 components.scss => sửa thẻ common, thêm các class common, tái sử dụng nhiều component
 lib.scss => css thêm từ library or sửa library
 
---> Chú ý tuân thủ BEM:
+--> Chú ý tuân thủ BEM, tốt hơn là css selector, ngừoi ta bảo css selector chỉ nên 1 cấp thôi
 .button {
   background-color: var(--primary-color);
   &--primary {

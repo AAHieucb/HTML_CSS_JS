@@ -56,6 +56,8 @@ VD: const numbers = [1, 2, 3];
 const squares = Array.from(numbers, x => x * x);
 console.log(squares); // [1, 4, 9]
 
+Có thể ss 2 array chấp cả nested với: JSON.stringify(a1) == JSON.stringify(a2) => trừ TH undefined và null se coi là giống nhau
+
 -> Sort array giảm dần: arr.sort(function(a, b){return b-a});
 Cách nhớ: trả true thì giữ thứ tự(a, b) tức a < b, trả false thì đổi b < a
 
@@ -82,6 +84,10 @@ Bên nhận: window.addEventListener("message", function (event) {
   if (event.origin !== "http://localhost:8001/window-1") return;        
   alert(event.data);
 });
+
+window.opener giúp lấy trang gốc mở ra cửa sổ hiện tại
+window.parent giúp lấy trang gốc chứa iframe hiện tại
+=> Nhưng truy cập DOM phải cùng host vì browser có same site policy cản cả API và tương tác DOM. Muốn giao tiếp phải dùng postMessage
 
 
 
@@ -268,3 +274,9 @@ Tương tự các hàm như Object.assign cũng nên check như v nếu ứng d�
 -> Cách che giấu source code frontend: Đang ở trang webA, khi load ta cho history.pushState sang đường dẫn khác (cùng host) thì khi mở view page source sẽ ra html của đường dẫn đó. Để đánh lừa thì ta nên cho 2 đường dẫn na ná nhau với chữ i viết hoa giống chữ l viết thường
 Bắt khi người dùng vào devtool bằng JS và cho ẩn phần code JS đi là được. 
 Dev khác vào web sẽ thấy source code là của web kia và k có code js nào cả
+
+-> try catch error, hoặc có thể tạo wrapper function dùng then catch để custom trả ra [undefined, T] | [Error] cũng được (T là type của data).
+
+-> Trong JS có kiểu dữ liệu struct và shared struct tương tự nhưng truy cập được từ multithread, web worker
+
+

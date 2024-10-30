@@ -1,0 +1,189 @@
+<style>
+  /* Tạo color palette tốt nhất là dùng oklch, 3 giá trị chỉnh rất tiện */
+  /* Màu nào trong đây nhìn cũng ổn vì nó giới hạn khoảng light đủ vừa mắt */
+  /* @layer chả khác mẹ gì viết bình thường, chỉ là gom module lại cho dễ nhìn thôi, style sau vẫn đè lên style trước */
+  @layer demo.colors {
+    :root {
+      --hue: 230;
+      --primary: oklch(70% .2 var(--hue)); 
+      --primary-highlight: oklch(97% .2 var(--hue));
+      --header-bg: oklch(35% .01 200);
+      --text: white;
+    }
+    
+    li {
+      --_bg: oklch(
+        /* decrease lightness as list grows */
+        calc(75% - (var(--i) * 5%)) 
+        
+        /* decrease chroma as list grows */
+        calc(.2 - (var(--i) * .01)) 
+        
+        /* lightly rotate the hue as the list grows */
+        calc(var(--hue) - (var(--i) + 5))
+      );
+    }
+  }
+
+  @layer demo.color-usage {
+    html {
+      background: radial-gradient(
+        circle at center, 
+        var(--primary-highlight), 
+        var(--primary)
+      );
+    }
+    
+    .scoreboard {
+      box-shadow:
+        3px 3px 2px oklch(0% .02 var(--hue) / 0.02),
+        7px 7px 5px oklch(0% .02 var(--hue) / 0.03),
+        13px 13px 10px oklch(0% .02 var(--hue) / 0.04),
+        22px 22px 18px oklch(0% .02 var(--hue) / 0.07),
+        42px 42px 33px oklch(0% .02 var(--hue) / 0.075),
+        100px 100px 80px oklch(0% .02 var(--hue) / 0.1)
+      ;
+      
+      & > header {
+        background: var(--header-bg);
+        color: var(--text);
+        
+        & > svg {
+          color: var(--primary);
+        }
+      }
+      
+      & li {
+        background: var(--_bg);
+        color: var(--text);
+      }
+      
+      & .number {
+        background: var(--text);
+        color: var(--_bg);
+      }
+    }
+  }
+
+  @layer demo.scoreboard {
+    .scoreboard {
+      --_pad: 1rem 1.5rem;
+      
+      border-radius: 10px;
+      overflow: clip;
+      
+      & > header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: var(--_pad);
+        
+        & > svg {
+          inline-size: 2.5ch;
+          /* inline-size cũng set kích thước kiểu width nhưng dựa vào writing-mode, width thì không */
+        }
+      }
+      
+      & > ol {
+        padding: 0;
+        
+        & > li {
+          padding: var(--_pad);
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          
+          &::marker {
+            display: inline-block;
+          }
+          
+          & > p {
+            flex: 1;
+            inline-size: clamp(10ch, 50vw, 30ch);
+          }
+          
+          & > .number {
+            aspect-ratio: 1;
+            border-radius: 1e3px;
+            block-size: 3ch;
+            font-size: .9rem;
+            line-height: 1;
+            display: inline-flex;
+            place-items: center;
+            place-content: center;
+          }
+        }
+      }
+    }
+  }
+
+  @layer demo.support {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    html {
+      block-size: 100%;
+    }
+
+    body {
+      min-block-size: 100%;
+      font-family: 'Open Sans', system-ui, sans-serif;
+
+      display: grid;
+      place-items: center;
+      place-content: center;
+      gap: 2rem;
+    }
+    
+    input[type="range"] {
+      accent-color: var(--primary);
+      /* Chỉnh accent-color nếu muốn custom màu của các thẻ input đặc biệt */
+    }
+  }
+</style>
+
+<div class="scoreboard">
+  <header>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
+    </svg>
+    <h2>Top 5 Players</h2>
+  </header>
+  <ol>
+    <!-- Có thể định nghĩa css var cho từng thẻ ngay trong style="--i:1;" và dùng trong class nó mang -->
+    <li style="--i: 1">
+      <span class="number">1</span>
+      <p>Cyberduck</p>
+      <span class="score">404</span>
+    </li>
+    <li style="--i: 2">
+      <span class="number">2</span>
+      <p>Ladylucifer</p>
+      <span class="score">388</span>
+    </li>
+    <li style="--i: 3">
+      <span class="number">3</span>
+      <p>RetroPirate</p>
+      <span class="score">303</span>
+    </li>
+    <li style="--i: 4">
+      <span class="number">4</span>
+      <p>KRmonster</p>
+      <span class="score">260</span>
+    </li>
+    <li style="--i: 5">
+      <span class="number">5</span>
+      <p>Superfox</p>
+      <span class="score">222</span>
+    </li>
+  </ol>
+</div>
+
+<input type="range" value="230" min="0" max="360" id="hue"> 
+
+<script>
+  hue.oninput = e => document.firstElementChild.style.setProperty('--hue', e.target.value)
+  // hue chạy từ 0 đến 360
+</script>

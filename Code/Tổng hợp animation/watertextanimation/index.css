@@ -20,7 +20,7 @@ body{
 	background-image: url(https://res.cloudinary.com/drcrre4xg/image/upload/v1571101002/water_zvupjx.png);
 	-webkit-background-clip: text;
 	animation: water 15s infinite;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
 }
 @keyframes water {
 	from{

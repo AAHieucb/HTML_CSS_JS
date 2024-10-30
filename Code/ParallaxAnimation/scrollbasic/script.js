@@ -23,7 +23,7 @@ const observer = new IntersectionObserver(entries => {
       document.querySelectorAll("[data-img]").forEach(img => {
         img.classList.remove("show")
       })
-      const img = document.querySelector(entry.target.dataset.imgToShow)
+      const img = document.querySelector(entry.target.dataset.imgToShow) // Có thể truy cập mọi attribute tag tên là data-* sang camel case, ở đây là data-image-to-show
       img?.classList.add("show")
       break
     }

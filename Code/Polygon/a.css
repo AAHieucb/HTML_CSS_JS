@@ -9,7 +9,7 @@
   --v: 0.25; 
   --hc:calc(clamp(0,var(--h),0.5) * var(--s)) ;
   --vc:calc(clamp(0,var(--v),0.5) * var(--s) * var(--r)); 
-  
+  white-space
   /*margin */
   --mv: 2px; /* vertical */
   --mh: calc(var(--mv) + (var(--s) - 2*var(--hc))/2); /* horizontal */
@@ -24,7 +24,7 @@
   font-size: 0; /*disable white space between inline block element */
   position:relative;
   padding-bottom:50px;
-  filter:drop-shadow(2px 2px 1px #333)
+  filter:drop-shadow(2px 2px 1px #333);
 }
 
 .container div {
@@ -47,6 +47,20 @@
                     #fff        0 var(--f));
 }
 
+.XXX {
+  width: 200px;
+  height: 1000px;
+  position: relative;
+  background-image: repeating-linear-gradient(     
+    red 0 calc(var(--f) - 2px),      
+    #fff        0 var(--f));
+  clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+}
+.XXX::before {
+  content:"Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10";
+  position:absolute;
+  inset:0;
+}
 
 .container div::before {
   padding-top:80px;
@@ -64,8 +78,8 @@
 }
 
 .container div {
-  animation:show 3s infinite;
-  opacity:0;
+  /* animation:show 3s infinite; */
+  opacity:1;
 }
 /* Css hỗ trợ for loop r */
 @for $i from 1 through 43 {

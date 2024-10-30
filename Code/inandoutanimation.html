@@ -50,6 +50,7 @@
   }
 
   .hover-box::before {
+    transition: all 500ms;
     content: "";
     display: block;
     width: clamp(10px, 15%, 50px);
@@ -62,10 +63,10 @@
 }
 </style>
 <script>
+  // Tương tự animation in và out là 2 keyframes khác nhau
   const hoverBox = document.querySelector(".hover-box");
 
   hoverBox.addEventListener("mousemove", (event) => {
-    // because we're starting in the middle
     const x = event.offsetX - hoverBox.offsetWidth / 2;
     const y = event.offsetY - hoverBox.offsetHeight / 2;
 

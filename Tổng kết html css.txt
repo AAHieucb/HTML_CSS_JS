@@ -1,15 +1,19 @@
 # Basic
-text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
+text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/  |  drop-shadow theo hình dạng ảnh có nền transparent
 Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
 https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon động) chỉ với điều kiện thêm thẻ div này vào mã nguồn: <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+Tổng hợp component UI bằng html thuần*: https://uiverse.io/
+GSAP dùng được với css thuần: https://gsap.com/
 
 Có thể custom cursor
 CSS nesting có sẵn rồi
 
 -> Master border radius: outer radius = inner radius + distance giữa 2 border
 border-radius: https://9elements.github.io/fancy-border-radius/
+Dùng border-image
 
--> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding
+-> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
 
 -> Hack CSS: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
 Cũng có thể dùng cho thuộc tính kiểu height: -moz-fit-content;
@@ -26,13 +30,18 @@ padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa 
 -> resize: both; direction: ltr; => biến mọi thẻ thành resizable
 contenteditable => biến mọi thẻ thành editable nhưng khá xấu
 Dùng <dialog> có sẵn
-Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
+Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn => dùng content: attr(data-image-to-show) => trong js lấy sang camel case tag.dataset.imageToShow
 ul li, ol li, dl dt dd
 Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết. Có none, open, dot, circle, triangle, seseam, 1 <character> bất kỳ
 Tag video chứa tag source. VD: preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
 Thuộc tính inert đặc biệt trong html, khi dùng sẽ vô hiệu hóa mọi tương tác của người dùng với các tag.
 Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
 contain: paint;
+
+-> -webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác
+Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-available; width: -webkit-fill-available;
+-> Chỉnh thứ tự in chữ với "writing-mode: vertical-rl;"
+-> hidden attribute set cho 1 thẻ sẽ ẩn thẻ đó đi
 
 
 
@@ -80,22 +89,60 @@ VD2:
 <button popovertarget="info" id="btn">Field</button>
 <div popover id="info">Extra</div>
 
--> Dùng @starting-style và transition allow-discrete
+-> Dùng @starting-style và transition-behavior allow-discrete
+
+-> dialog là 1 loại popover và có thể dùng kèm API của popover => tạo ra dialog tự có click outside to close.
 
 
 
 # Custom thẻ input
 Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
 
+Dùng event "input" giống onChange của react, dùng thay event "change"
+
 Gõ có gợi ý theo list có sẵn với: <datalist> + input list
 
 -> Nếu muốn có 1 group input radio chỉ cho chọn 1 thì phải đặt chung trường name với nhau
 
 -> input type number custom nút spin button, trỏ vào shadow DOM với: input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button
-Nó có thuộc tính -webkit-appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
+Nó có thuộc tính -webkit-appearance và appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
 K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn. K dùng pattern có sẵn vì nó k check từ lúc gõ, lúc submit mới báo message k rõ ràng
 
+input pattern [a-z] mà k có số lượng {2,} or {2,8} or + * ? đằng sau thì nó mặc định phải là 1 ký tự thôi
+
 -> Có thể dùng hidden tạo input ảnh hoặc file đẹp
+C1: <CustomButton2 variant="outlined" onClick={() => fileInputRef.current.click()}>
+  Upload File
+</CustomButton2>
+<input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={getFile} />
+
+Đọc text từ file:
+const getFile = (event) => {
+  const reader = new FileReader();
+  reader.onload = (e) => { console.log(e.target.result); };
+  reader.readAsText(event.target.files[0]);
+}
+C2: Input image, hiển thị và gửi qua API
+<input accept="image/*" hidden id="raised-button-file" type="file" onChange={onImageChange}/>
+<label htmlFor="raised-button-file">
+  <Box style={{ width: "299px", height: "300px" }}>
+    <img
+      width="100%"
+      height="100%"
+      style={{ borderRadius: "15px" }}
+      src={image}
+    />
+  </Box>
+</label>
+const onImageChange = (event) => {
+  if (event.target.files && event.target.files[0]) {
+    setImage(URL.createObjectURL(event.target.files[0]));
+  }
+  setImageSending(event.target.files[0]);
+};
+const uploadData = new FormData();
+uploadData.append("image", imageSending);
+const response = await client.post("/api/v1/event", uploadData, config);
 
 -> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
 
@@ -108,6 +155,7 @@ VD: style theo pseudo-class: .test:hover { }
 style theo attributes: div[id=test] { }
 style theo pseudo-element: .test:before { }
 VD: a[href$=".abc" i]  /  [href*="google.com"]  /  img:not([alt]) 
+VD: input[type='file'][multiple] khi chọn nhiều thuộc tính
 
 space là descendant mọi cấp
 >  child trực tiếp
@@ -119,7 +167,12 @@ space là descendant mọi cấp
 input:checked/:disabled/:enabled/:required => khi input buộc nhập giá trị 
 input:optional/:read-only X :read-write/:valid X :invalid/:out-of-range tức khi lỗi out-of-range thì mang style css gì X :in-range
 
-Pb: :is(<>) thì cho độ ưu tiên cao nhất là 100 còn :where(<>) với cú pháp giống hệt cho độ ưu tiên thấp nhất là 0 như dùng cho css reset
+Pb: :is(<>) thì cho độ ưu tiên cao nhất là 100 còn :where(<>) với cú pháp giống hệt nhưng luôn cho độ ưu tiên thấp nhất là 0 như dùng cho css reset
+:is thực tế có độ ưu tiên bằng với việc liệt kê bth, nó có tác dụng gom viẹc liệt kê gọn hơn
+VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
+:is cũng khiến cho các phần tử trong ngoặc () có cùng specifility là cái cao nhất trong list. VD ở trên thì h1, h2 sẽ có cùng specific như class .link dù nó chỉ là thẻ thường.
+VD: a:is(:hover, :focus) {} tương đương a:hover,a:focus {}
+VD dùng :root css reset nó bị cao hơn bth, ta nhét vào ép specifility về 0 với :where(:root) { }. Ngược lại thì :where(.parent) .child {} thì .chịld vẫn giữ specifility của nó chứ k theo cha.
 
 Pb :focus là chính thẻ đó được focus, :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này bị focus thì thẻ này sẽ mang style nào (bao cả việc ấn tab để focus)
 VD ta ấn button và show dropdown thì dùng button:focus .dropdown { display: flex; } nhưng ấn vào dropdown thì button mất focus sẽ ẩn dropdown, dùng :focus-within cho thẻ bao ngoài 2 cái đó để fix
@@ -131,7 +184,7 @@ p:lang(it) { } => thẻ p có lang là italia. VD: <p lang="it">Ciao bella!</p>
 div:nth-child(n) => thẻ div là con thứ n
 p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
 initial-letter tương đương selector ::first-letter giúp tạo chữ đầu tiên to đùng như đầu bài báo article
-::focus-visible giúp bắt TH button bị click hay chọn bởi tab key
+:focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey
 
 VD: button:not(:first-child){} => mọi thẻ button không là first-child trong web 
 button:has(svg){} => mọi button có thẻ svg là child 
@@ -212,6 +265,8 @@ VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-c
 -> grid-auto-flow: column; ưu tiên xếp hết từng col trước. 
 grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
 
+-> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
+
 
 
 # Responsive css
@@ -220,18 +275,21 @@ Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có 
 -> color-scheme: light/normal/dark sẽ tự đổi màu đen trắng mà k cần set màu thủ công, dùng ở :root để đổi tất cả.
 
 -> Dùng @media:
-@media not|only mediatype and (media feature) { CSS-Code; }
+@media not|only mediatype and (mediafeature and|or|not mediafeature) { CSS-Code; }
 với mediatype là: all / print / screen
-media feature là:  color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, resolution
+media feature là:  color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, resolution, orientation (portrait/landscape)
 orientation portrait/landscape => vì điện thoại xoay ngang và điện thoại xoay khác nhau, k thể chỉ @media theo mỗi width. Mở rộng với min-aspect-ratio
 
+VD: @media (min-width: 100px) {} => tương đương @media all and (min-width: 100px) {}
+VD: @media (min-device-width: 100px) {} => thì kích thước tính cả thanh công cụ và thanh cuộn => k dùng
 VD: @media only screen and (max-width: 480px) and (min-width: 320px){ } => kích thước từ 320->480 của màn hình máy tính or smartphone
 VD: @media only print { } => chỉ cho máy in
 VD: @media (100px <= width <= 300px) {} => luôn dùng
+VD: @media only screen and (max-width: 100px) and (orientation: landscape), screen and (min-width: 100px) {} => Áp dụng cho các thiết bị màn hình có width nhỏ hơn 100px và chiều rộng lớn hơn chiều cao, k bao gồm thiết bị đọc màn hình hay in ấn, đồng thời áp dụng cho mọi loại thiết bị hiển thị bao gồm cả in ấn và thiết bị đọc màn hình nếu width lớn hơn 100px
 Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">
 => Các thuộc tính và responsive các kích thước cơ bản: https://freetuts.net/su-dung-media-css-tao-responsive-cho-website-660.html
 
---> @media (prefers-color-scheme: dark) { } là khi user setting dark mode trong phần mềm sử dụng or thay đổi user-agent => k cần thiết
+--> @media (prefers-color-scheme: dark) { } là khi user setting dark mode trong phần mềm sử dụng or thay đổi user-agent (light/dark/no-references) => k cần thiết
 --> @media (prefers-reduced-motion) {} là khi user setting giảm thiểu animation cho web. Setting này của browser để web ít animation cho đỡ lag.
 
 --> K dùng được css var trong @media. VD @media screen and (max-width: --mobile-size){} => sai ngay
@@ -245,6 +303,7 @@ URL: https://topdev.vn/blog/responsive-giao-dien-cuc-dinh-voi-container-queries 
 container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
 @container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
 Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
+container: main / inline-size; => shorthands container- name / container-type
 
 --> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
 
@@ -301,7 +360,7 @@ VD code mẫu grid nhảy cột từ 1 tới 4:
     auto-fit, 
     minmax(
       min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), 
-      1fr)
+      1fr)@
     );
 }
 Có code mẫu tăng dần cột từ 1 tới 1 số chỉ định
@@ -356,6 +415,43 @@ VD: animation ẩn và hiện, néu dùng keyframes thì buộc lúc hiện và 
 -> Trong js có event "transitionend" bắt khi quá trình transition kết thúc.
 VD: ta muốn 1 thẻ bị faded rồi biến mất. Nếu ta dùng keyframes với opacity sẽ k biến mất, nếu dùng display sẽ k có animation. Có thể dùng opacity rồi bắt sự kiện "transitionend" để gán display none là được.
 Cách khác là setTimeout đúng bằng thời gian transition rồi xoá thẻ.
+=> Tương tự có sự kiện animationend
+
+-> interpolate-size: allow-keywords; quá mạnh, cho phép animate theo các giá trị auto, min-content, max-content, fit-content
+VD text dài thì min-content thì chỉ đủ kích thước 1 từ dài nhất, max-content là khi text trải dài hết ra
+=> Luôn để ở :root sẽ áp dụng với mọi thẻ
+
+
+
+# View transition API
+View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
+Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api tiện và sẽ tự tối ưu performance.
+
+-> Giải thích view transition api: https://www.youtube.com/watch?v=xZteiW-cun8
+Có thể đổi view-transition-name ở từng thẻ, customize animation của view transition api (mặc định là fade).
+
+-> Để đổi DOM bth trong SPA, chỉ cần cho hàm update DOM vào document.startViewTransition => dùng css thuần sẽ phải ốp animation mọi tag là ngu xuẩn.
+
+-> Để cross-document transition cùng origin:
+C1 ngu: fetch pages đó về rồi thế vào innerHTML pages hiện tại. Tức dùng như single page nhưng chả ai làm vậy.
+C2: view transition api có cách riêng để dùng cho cross-document. Nó chờ fetch xong hết rồi animation chuyển pages.
+
+--> document.createDocumentTransition ấn tiến lùi thì ok chứ ấn thẻ a éo được
+await document.createDocumentTransition().start(() => {
+  window.location.href = 'y.html';
+});
+
+--> Dùng: @view-transition {
+	navigation: auto;
+}
+::view-transition-group(root) {
+	animation-duration: 0.5s;
+}
+=> Code hack: trong head phải có ít nhất 1 <script src="ignored"></script>
+
+--> pageshow là sự kiện phát khi load pages lần đầu tiên, hoặc navigate tới
+pagereveal là sự kiện phát ra khi nội dung được render, bất kể nội dung từ cache, prerender hay refresh mới.
+pageswap là khi load hẳn 1 document mới, document cũ sẽ bị unload luôn sẽ phát
 
 
 
@@ -381,5 +477,16 @@ Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 -> Dừng:
 { display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
 Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
 @property và css houdini can thiệp sâu vào animation
+https://www.frontendmentor.io/ => học Fremaster
+
+-> Tổng kết thiết kế tối thiểu: tạo dự án, darkmode, chia file css var và các style common, routing chuyển pages, responsive, BEM
+- Tạo dự án: parcel import npm; html thuần import cdn; react;
+- Hosting: Github pages, netlify.
+- Darkmode: scss dùng map; css thuần dùng var có thể set từ checkbox hoặc dùng JS set data-theme attribute cho thẻ body, hoặc viết thủ công như cách scss sau khi tạo ra; Dùng css relative color tạo color palette.
+- Chia file: html thuần chia mỗi pages 1 file; css chia style chung và riêng từng pages ở các file riêng rồi import file css trực tiếp lẫn nhau được; scss cũng style chung từng file, từng pages @use các file chung đó, chia cả file components các thứ, cuối cùng quy hét về 1 file scss duy nhất @use tất cả để compile bằng 1 lệnh thôi, mọi pages đều phải script tới file chung đó dẫn đến style thừa nhưng chả sao.
+- BEM: scss dùng &--container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
+- Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
+- Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
+
+

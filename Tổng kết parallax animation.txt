@@ -64,6 +64,7 @@ Nếu ta muốn 1 thẻ di chuyển theo scroll chuột, ta dùng position stick
 # Dùng css thuần animation-timeline tạo parallax
 Trước tiên để các thẻ đè lên nhau, còn 1 cách nữa là dùng grid-template-areas. Khi cho tất cả cùng 1 thuộc tính grid-area, chúng sẽ nằm cùng 1 chỗ
 Nó cũng hoạt động tốt kết hợp với position absolute. Nếu 1 thẻ con dùng position absolute, nó cũng nằm đúng ở vị trí hiện tại luôn, top left các thứ sẽ chỉnh từ vị trí grid-area đổ đi
+=> Cơ chế tạo animation parallax nhiều hình đè lên nhau, có thể cho position absolute và thứ tự thẻ đúng để thẻ dưới đè thẻ trên
 
 VD: https://www.youtube.com/watch?v=d10GaL6F-lA
 Tut URL: https://www.youtube.com/watch?v=UmzFk68Bwdk
@@ -74,6 +75,7 @@ scroll thực tế check thẻ gần nó nhất mà bị scroll thì chạy anim
 
 animation-timeline: view() chạy animation khi thẻ đi từ vị trí nào đến vị trí nào của view
 animation-range giúp kiểm soát điểm bắt đầu và start của timeline, có entry là animation bắt đầu khi nó mới vào viewport và kết thúc khi nó hiện đầy đủ trong view port
+=> ref tới "ParallaxAnimation / scrollbasic2"
 
 => Animation có thể k hoạt động ở browser khác, hãy search gg thêm polyfill cdn cho scroll-timeline là đươc. Hoặc check với @support
 
@@ -140,7 +142,7 @@ Trong JS thì dễ dàng viết ngay trong file JS, trong react thì nhét vào 
 Cần đảm bảo khi load lần đầu tiên, mọi actions và animation khác đều k được thực hiện như mouse k thể bấm. Di chuột thì thoải mái
 
 -> Tạo infinite horizontal scroll: https://www.youtube.com/watch?v=iLmBy-HKIAw
-Giải pháp là dùng gấp 2 thẻ html và align animation hoàn hảo cho lần jump ở giữa với translate calc(50% - 0.5rem)
+Giải pháp là dùng gấp 2 thẻ html và align animation hoàn hảo cho lần jump ở giữa với translate calc(50% - 0.5rem) = calc(50% - gap/2)
 
 -> File vite.config.ts settings base url của ứng dụng với:
 base: '/react-next-parallax_demo',

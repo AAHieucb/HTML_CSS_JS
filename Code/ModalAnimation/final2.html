@@ -166,7 +166,6 @@
     }
   </style>
 
-  <!-- -->
   <div class="test_css_nesting">
     <div class="changecolor">Hello 5</div>
   </div>
@@ -281,6 +280,7 @@
       list-style: none;
       padding-left: 0;
       display: grid;
+      width: 100%;
       grid-template-columns: 1fr;
       grid-template-rows: repeat(var(--cards), var(--cardHeight));
       gap: var(--cardMargin);
@@ -300,6 +300,7 @@
       --index: 4;
     }
     .card {
+      /* Bản chất chỉ vài dòng đơn giản như này */
       position: sticky;
       top: 0;
       padding-top: calc(var(--index) * var(--cardTopPadding));
@@ -308,7 +309,6 @@
       background-color: #52B2CF;
     }
     #card2 .card-body {
-      /* background-color: #7EC4CF; */
       background-color: #E5A36F;
     }
     #card3 .card-body {

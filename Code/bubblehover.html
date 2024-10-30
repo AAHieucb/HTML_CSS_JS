@@ -16,12 +16,12 @@
     </section>
   </body>
 </html>
-
+2
 <!-- 
 - Cho grid-template-columns kích thước từng ô nhỏ hơn kích thước thật của element sẽ chồng lên nhau
 - Ta thay đổi số trong grid-template-columns, cũng có thể gọi transition grid-template-columns được => ảo đá
 - Hover 1 thẻ và chọn thẻ trước thẻ đó => ta chỉ cần css selector mọi thẻ mà có thẻ ngay sau đó là thẻ được hover.
-- Khi chiều cao k đủ bị khuất khi hover scale lên, ta cho padding-block
+- Khi chiều cao k đủ bị khuất khi hover scale lên, ta cho padding-block, tương tự có padding-inline
 - Kiểm soát thứ tự animation với transition-delay
 URL: https://www.youtube.com/watch?v=2f4JAsTFRLA
 -->
@@ -47,7 +47,7 @@ body {
   display: grid;
   grid-template-columns: repeat(var(--avatar-count), var(--column-size));
   transition: 500ms;
-  transition-delay: 500ms;
+  transition-delay: 500ms; /* khi bỏ hover sẽ chờ 500ms mới co lại */
 
   max-width: 80vw;
   padding-block: 100px; /* Set padding cho chiều dọc */

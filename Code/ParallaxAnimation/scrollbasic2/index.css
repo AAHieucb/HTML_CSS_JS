@@ -14,8 +14,8 @@
 .scroll-reveal h2 span {
   /*contain là hiện cả thẻ trong viewport mới có animation, cover là mới nhú lên 1 tí là animation luôn*/
   /* Vd: animation-range: cover 20%; Equivalent to cover 20% cover 100% */
-  animation-range-start: contain 20vh; /*animation bắt đầu khi nhú lên 1 tí chỗ 20vh, kết thúc khi nhú vào 30vh*/
-  animation-range-end: contain 30vh; 
+  animation-range-start: cover 20vh; /*animation bắt đầu khi nhú lên 1 tí chỗ 20vh, kết thúc khi nhú vào 30vh*/
+  animation-range-end: cover 30vh; 
 }
 
 .scroll-reveal p span {

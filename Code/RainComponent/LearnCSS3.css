@@ -23,14 +23,14 @@ button:hover {
     background-color: wheat;
 }
 
-img .a {
+img.a {
     width: 50px;
     top: 100px;
     left: 100px;
     position: absolute;
     z-index: 99;
 }
-img .a {
+img.a {
     animation-name: pacman;
     animation-duration: 4s;
     animation-timing-function: linear;
@@ -249,13 +249,13 @@ img .a {
     border: 15px solid;
 	padding: 15px;
     border-image: url(https://freetuts.net/upload/tut_post/images/2019/01/20/1636/border-image.GIF) 30 round;
-    border-image-repeat: stretch round;
+    border-image-repeat: stretch round; /* stretch ngang, round dọc */
     /* border-image thực hiện thực tế là các bức ảnh liên tục nhau từ trái qua, từ trên xuống. border-image thực tế là rút gọn theo thứ tự truyền vào của: */
     /* border-image-source */
-    /* border-image-slice là độ dày đặc. Dùng border-image-slice: 10% fill; sẽ thấy bản chất. Giảm hay tăng cái phần trăm là thấy được độ dày đặc của các bức ảnh con so với ảnh gốc, càng lớn thì phần fill càng mất, nhưng border k mất*/
+    /* border-image-slice: thực tế ảnh border fill kín và repeat tất cả nhưng ta k set fill nên k nhìn thấy. Dùng số thì càng lớn thì phần thân (kp 4 góc) sẽ ngày càng dày đặc. Dùng % tương tự số. fill là có in kín nằm dưới content hay không (sẽ thành giống bg image). VD border-image-slice: 10% 20%; thì chiều ngang 10%, dọc 20%*/
     /* border-image-width: là độ dày cạnh của border */
-    /* border-image-outset: lượng image area mở rộng ra bên ngoài box. Dùng cái này có thể khiến border-image che đi phần border thực hình chữ nhật của cạnh or nằm bên trong or nằm bên ngoài tùy chỉnh */
-    /* border-image-repeat: space, stretch, repeat, round. Cái round luôn fit, cái repeat k fit, stretch dãn phần giữa, space tương tự như round nhưng k co nhỏ để fit mà các tile ảnh chồng đè lên nhau. Cái round luôn fit nhưng khi màn hình co nhỏ thì từng cục bị co dít lại nhìn xấu */
+    /* border-image-outset: lượng image area mở rộng ra bên ngoài box. Mặc định là 0 hiện đúng chỗ border. VD Dùng cái này có thể khiến border-image che đi phần border thực hình chữ nhật của cạnh or nằm bên trong or nằm bên ngoài tùy chỉnh */
+    /* border-image-repeat: space, stretch, repeat, round. Cái round luôn fit và có thể scale để fit, cái repeat k fit, stretch dãn để fit và k repeat, space tương tự như repeat nhưng nếu k fit thì khoảng trống được distributed ra giữa các cái repeat */
     /* Ta có thể dùng kiểu border-image: url(...) 27 round repeat; tức round vertical và repeat horizontal */
 }
 

@@ -124,7 +124,7 @@ console.log(a(1));
 // -> Dạng này kp là lấy được giá trị nhanh nhất mà là "lấy giá trị nhanh nhất nhưng phải trả ra true" nên chỉ khi tất cả trả ra false, ta mới lấy false nên phải thêm 1 đoạn Promise.all trả ra false ở dưới tức là tự động resolve(false) để lấy giá trị false
 function firstTrue(promises) {
     const newPromises = promises.map(p => new Promise(
-        (resolve, reject) => p.then(v => v && resolve(true), reject)
+        (resolve, reject) => p.then(v => v && resolve(true), reject) // bỏ && resolve(true) cũng được, nó như return v luôn thôi. Return với resolve vốn dĩ giống nhau, đều trả ra giá trị r chạy vào .then
     ));
     newPromises.push(Promise.all(promises).then(() => false));
     return Promise.race(newPromises);
@@ -136,8 +136,8 @@ var test = values => firstTrue(
     }))
 ).then((ret) => console.log("Promise race của ", values, " cho ra", ret));
 
-test([true, true, true]);
 test([false, false, false]);
+test([true, true, true]);
 test([true, false, false]);
 test([false, true, false]);
 test([false, false, true]);

@@ -43,7 +43,8 @@ readableStream
 
 
 
-# Animation với transform 
+# Animation
+Animation với transform 
 1) Thứ tự transform có ảnh hưởng tới object di chuyển, rotateZ sẽ rotate cả trục tọa độ nên nếu rotateZ rồi translateX khác với translateX rồi rotateZ
 2) transform origin mặc định ở top left
 3) rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
@@ -52,6 +53,13 @@ readableStream
 6) Animation k tự chạy lại khi đã chạy xong đúng số lần, nếu muốn chạy lại, phải gán tiếp lại class có animation cho nó.
 7) Mỗi giai đoạn di chuyển khác nhau nên có 1 animation riêng. Khi đã có animation xuôi, k nên tái sử dụng animation ngược lại với direction reverse mà hãy tạo 1 keyframe mới vì nhiều lúc lỗi k hiểu tại sao.
 8) Nếu vị trí from của animation k trùng với vị trí ban đầu, vật sẽ nhảy sang state đó r animation tiếp rất xấu. State trước khi chạy animation cũng chính là from
+
+-> Multiple aniamtion liên tiếp nhau sử dụng animation-delay và set phần trăm chuẩn trong @keyframes
+
+-> Playback 1 animation cũ: 
+1) Bth animation chạy 1 lần sẽ k trigger lại, nhưng nếu gán cho 1 animation khác r remove animation đó thì animation cũ sẽ trigger. Điều này chỉ được khi đổi animation-name.
+Nhờ v, có thể tạo 1 animation giống hệt nhau, rồi liên tục thêm bớt cái animation thứ 2 để animation trigger liên tục thực chất là 2 cái so le
+2) Đổi trạng thái animation từ nhanh sang chậm khi ấn nút, ta bao bằng 1 thẻ khác và animation ngược lại với cường độ nhỏ hơn, ấn thì đổi animation-play-state paused sang running
 
 
 
@@ -69,7 +77,7 @@ Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như n
 1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
 Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => kết hợp min max kiểu lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px
 2) Max số cột:
-Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn
+Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
 
 VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
 
@@ -78,12 +86,9 @@ VD chỉ muốn bo góc ở màn hình lớn:
   border-radius: max(0px, min(8px, calc((100vw - 4px - 100%)*9999)));
 }
 => 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần như bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
-Tức if(mobile) borderRadius=0px else borderRadius=8px
+Tức if(!mobile) borderRadius=0px else borderRadius=8px
 
-
-
-# CSS selector
-input[type='file'][multiple] khi chọn nhiều thuộc tính
+=>***Cứ tưởng tượng màn hình lớn và màn hình nhỏ thì min max width là gì là chơi dược thôi
 
 
 
@@ -96,7 +101,7 @@ input[type='file'][multiple] khi chọn nhiều thuộc tính
 
 # IntersectionObserver
 Check khi chiều cao của thẻ hiển thị bao nhiêu phần trăm trên màn hình. Nó chỉ tính phần hiển thị trên màn, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-Nếu muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công.
+Nếu muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
 
 const handleIntersect = (entries: IntersectionObserverEntry[]) => {
   entries.forEach(entry => {
@@ -132,7 +137,252 @@ setTimeout(() => {
 -> Css only
 VD click 1 button thì trigger animation X chạy 1 lần (css only với flex box gán animation name), click lần nữa trigger tiếp sẽ k chạy
 
-Nếu k dùng css only, có giải pháp là đặt setTimeout cực ngắn ngay khi checked thì unchecked luôn.
+Nếu k dùng css only, có giải pháp là đặt setTimeout cực ngắn ngay khi checked thì unchecked luôn. Cẩn thận toang khi ngừoi dùng ấn liên tục cực nhanh
 Néu dùng css only, cách duy nhất là đặt 2 animation giống nhau nhưng khác tên. Gán qua gán lại để đổi qua animation khác khi unchecked và checked là ok thôi
 => Tức là animation css only sẽ k trigger lại, chỉ có cách đổi qua animation khác
+
+
+
+# Promise
+Function trả ra promise thì khi gọi function sẽ thực hiện promise luôn. 
+Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
+Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
+Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
+
+
+
+# Animate SVG
+stroke-dasharray: 5,3; tức là 5 pixel liền thì có 3 pixels đứt sau đó và cứ tiếp tục vẽ đến hết hình
+stroke-dashoffset xác định điểm bắt đầu vẽ của stroke-dasharray.
+
+Bản chất animate line svg là nó animate thuộc tính stroke-dashoffset thôi
+VD vẽ animationt trên trang https://editor.method.ac/ rồi svg từng phần tử
+
+
+
+# pointer-events: none; sẽ cản sự kiện của 1 thẻ. VD ứng dụng navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
+
+
+
+# Setup dự án:
+Dùng bundler chuẩn: vite tự setup
+Dùng bundler tự động: parcel cài nhẹ cái là xong nếu dự án k dùng gì phức tạp. Hỗ trợ livereload, build và start ở 1 port, cài package npm và import vào file js cho dự án html thuần ok
+Dùng HTML thuần với live server
+Dùng html thuần nhưng tự cài node_modules: npm i mọi thứ vào đó rồi tự quản lý version, tự import vào dự án, vẫn dùng live server bth.
+
+
+
+# Dùng relative color
+-> Basic
+:root {
+  --clr-primary-rgb: 255 120 0;
+  --clr-primary: rgb(var(--clr-primary-rgb));
+
+  --clr-secondary-rgb: 0 255 25;
+  --clr-secondary: rgb(var(--clr-primary-rgb));
+}
+Dùng đổi opacity:
+background: rgb(var(-clr-primary-rgb) / .5);
+
+-> Cách trên phức tạp, tạo 2 biến cho mỗi màu. Có thể dùng from tạo màu từ 1 màu khác và custom:
+hsl(from #ff0000 / 0.5); => giảm opacity đi 0.5
+hsl(from red h s calc(l - 20) / 0.5); => lấy màu đỏ và giảm light đi 20
+hsl(from var(--clr-primary) h s 20%); => đổi rgb sang hsl, sau đó map thông số h và s, còn light set là 20%
+rgb(from #ffff r g g / 0.5); => tương tự nhưng lấy màu green làm màu blue
+oklch(from red calc(l * .5) calc(c * .1) h / 0.5); => oklch() là hàm tạo màu như lch() nhưng màu sắc cân bằng hơn. lightness, chroma (như saturation), hue.
+
+
+
+# Bind chia được tham số kiểu này
+function greet(greeting, punctuation) {
+    console.log(greeting + ', ' + this.name + punctuation);
+}
+const person = { name: 'John' };
+const greetPerson = greet.bind(person, 'Hello');
+greetPerson('!');
+
+
+
+# Private custom variables trong css
+Thiết kế css var cho dự án lớn: dùng fallback var + kế thừa css var, đảm bảo css var được đinh nghĩa trong 1 scope tối ưu
+VD: 
+<div class="container">
+  <div class="hello">
+    <button>Hello</button>
+    <p>Hello</p>
+  </div>
+  <div class="hi">
+    <button>Hi</button>
+    <p>Hi</p>
+  </div>
+  <div class="bye">
+    <button>Bye</button>
+    <p>Bye</p>
+  </div>
+</div>
+
+-> Ngu:
+.hello button {
+  color: red;
+}
+.hello p {
+  box-shadow: 1px 1px 1px red;
+}
+.hi button {
+  color: blue;
+}
+.hi p {
+  box-shadow: 1px 1px 1px yellow;
+}
+.bye .button {
+  color: green;
+}
+.bye p {
+  box-shadow: 1px 1px 1px red;
+}
+
+-> Dùng private custom variables tự định nghĩa với dấu _ ở dưới. 
+.container {
+  --_shadow: var(--shadow, red);
+  --_color--text: var(--color, var(--color-text, red));
+}
+.container button {
+  color: var(--_color--text);
+}
+.container p {
+  box-shadow: 1px 1px 1px var(--_shadow);
+}
+.hi {
+  --_shadow: yellow;
+  --_color--text: blue;
+}
+.bye {
+  --_color--text: green;
+}
+=> :root có thể list hàng loạt các variables làm style chung và chỉ cần sửa trong đó để tạo các theme khác nhau. Nếu k định nghĩa tự dùng fallback cho các private custom var. Đảm bảo tính kế thừa từ cao xuống
+=> Các private var k ảnh hưởng tới scope khác. Nhìn custom var, ta hiểu ngay là đổi trong container của phần đó, thay vì tìm trên root, root chỉ đinh nghĩa các biến base
+=> Giảm bớt số lượng selector. VD muốn đổi màu button trong bye thì đổi ngay css var của .bye thay vì viết selector ".bye button"
+
+
+
+# Responsive chuẩn với grid layout + @container query
+Dùng grid layout hoặc flex để chia bố cục, dùng kèm @container query để style các items
+VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card có ảnh sẽ mang style thay đổi 
+.grid-auto-fit {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(30ch, 100%), 1fr));
+  container: grid-auto-fit / inline-size;
+}
+.card:has(> img) {
+  // Giả sử mỗi card dài 30ch
+  // Khi tăng lên 2 card 1 hàng, thẻ chứa ảnh chiếm cả 1 hàng
+  @container grid-auto-fit (inline-size > calc(30ch * 2 + 1rem)) {
+    grid-column: span 2;
+
+    display: grid;
+    grid-template-columns: subgrid;
+    gap: 0;
+
+    > img {
+      grid-column: 2;
+      grid-row: 1 / 4;
+    }
+  }
+
+  // Khi tăng lên 4 card 1 hàng, thẻ chứa ảnh chiếm 2 hàng 2 cột
+  @container grid-auto-fit (inline-size > calc(30ch * 4 + 3rem)) {
+    grid-column: span 2;
+    grid-row: span 2;
+    > :not(img) {
+      grid-column: 1 / -1;
+    }
+    > img {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+  }
+}
+
+
+
+# Dùng css @scope và @layer
+Specifility: @layer > @scope > thứ tự định nghĩa trong css
+
+-> CSS rule mặc định theo thứ tự đinh nghĩa trong css. @scope khiến cho nó theo thứ tự nested tag trong html. VD:
+// index.html
+<div class="container">
+  <p class="text">Hello <button class="xxx">Button</button></p>
+</div>
+// index.css
+.text p { color: red; }
+.container p { color: white; }
+=> Chữ sẽ là màu trắng vì 2 class cùng specifility sẽ theo thứ tự đinh nghĩa
+
+@scope sẽ lấy css lên dần các thẻ cha cho đến khi gặp @scope gần nhất, gắp text thì k theo container nữa
+@scope (.text) to (button.xxx) {
+  :scope { } // tương đương với & { }
+  p { color: red; }
+  button { color: yellow; }
+}
+.container p { color: white; }
+.container button { color: black; }
+=> Giả sử ở đây ta muốn @scope k ảnh hưởng tới các button ở trong mà mang class xxx và các tag trong button đó
+
+VD: @scope (.text) to (button.xxx, a, p[class]) { 
+  // Code css
+} 
+=> tag nằm trong .text sẽ ưu tiên mang code css đó hơn ưu tiên hơn bth, nhưng nếu tag có dạng selector là button.xxx or a or p[class] sẽ inherrit, tức mang specifility thấp, chỉ dùng giá trị đó nếu bên ngoài k set style gì cho thẻ đó.
+
+--> VD :scope dùng y như & được
+@scope (article) to (> figure) {} => áp dụng cho con của article, trừ con trực tiếp là tag figure
+@scope (article) to (aside :scope) {} => áp dụng nếu article là con của aside
+
+--> Dùng trong HTML tag: k cần định nghĩa scope cho thẻ nào, tự hiểu là dùng cho thẻ bao sát thẻ style chứa nó, ở đây là @scope (article) { }
+<article>
+  <style>
+    @scope {
+      & {
+        color: red;
+      }
+    }
+  </style>
+  <p>Affected tag</p>
+</article>
+<article>
+  <p>Not affected</p>
+</article>
+
+-> Specifility (0,1,1) theo thứ tự là: 
+Số ID selector
+Số class / pseudo class / attribute selector 
+Số type selector / pseudo elements như :after, :first-letter
+=> Thực ra là có 4 giá trị, còn 1 cái inline style mạnh hơn cả id selector css nữa. Chỉ có !important mới mạnh hơn inline style thôi.
+
+Dùng & sẽ tính specifility chuẩn, dùng :scope sẽ coi cả cục :scope như 1 class, không tính các selector trước đó
+VD: 
+@scope (main .text) to (button.xxx) {
+  :scope img { } // (0, 1, 1)
+}
+@scope (main .text) to (button.xxx) {
+  & img { } // (0, 1, 2)
+}
+=> Vì & coi là thế từ cục trên vào thành "main .text img {}" => luôn dùng & là đc
+
+--> Bản chất specifility => càng specific, càng quan trọng
+URL: https://specificity.keegan.st/
+Cascade là đinh nghĩa sau sẽ đè lên định nghĩa trước. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>. Cascade chỉ đúng khi cùng specifility, nếu khác thì specifility cao hơn ở bên phải qua sẽ override. VD (1,0,0) đè lên (0,1,10)
+VD: 2 cái cùng !important thì cái khai báo sau sẽ đè lên trước
+=> Nên luôn dùng class, tránh dùng !important, #id, nested selector nhiều nhất có thể
+
+-> Có 3 loại layer theo thứ tự đè nhau: user agent styles -> user styles -> author styles
+user agent styles có sẵn style cho các thẻ theo setting kỹ thuật của browser, ta k thể đụng vào. Ta chỉ có thể tác động vào layer cuối là author style.
+@layer giúp định nghĩa thêm các layer trong author styles.
+Các layer sẽ có specifility độc lập, ngoại trừ 3 layer có sẵn, các layer tự tạo có specifility theo thứ tự định nghĩa. Cái khai báo sau đè cái trước, bất chấp speicifility của các phần tử bên trong.
+
+VD: viết style layer1 -> viết style layer2 -> viết thêm style cho layer1 => style layer2 sẽ đè lên mọi thứ của layer1 vì thứ tự khai báo layer2 sau layer1
+VD: @layer framework, reset, base, layout, components; => nhét ở đầu file để khai báo thứ tự, thì khai báo bên dưới thế nào vẫn luôn tuân theo thứ tự này
+=> Giải quyết TH khi cần custom style của framework sử dụng nhưng nó specifility k đủ để đổi, buộc phải thêm !important rất dở. Nếu thêm được style của framework vào @layer thì sửa ok
+=> !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau, vì nó chạy từ trên xuống thấy important sẽ k cho bất cứ style nào tương tự ở sau đó override cả
+
 

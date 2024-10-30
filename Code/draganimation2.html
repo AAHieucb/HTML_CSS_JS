@@ -16,7 +16,6 @@
     <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Task List</h1>
         <ul id="taskList" class="space-y-4">
-            <!-- Muốn thẻ nào drag thì để draggable true. Khi drag 1 thẻ true over 1 thẻ true khác sẽ bắn sự kiện dragover -->
             <li class="bg-gray-50 p-4 rounded-lg shadow cursor-move flex items-center space-x-4" draggable="true">
                 <i class="fas fa-grip-vertical text-gray-400"></i>
                 <div class="flex-grow">
@@ -30,12 +29,12 @@
                 </select>
             </li>
             <li class="bg-gray-50 p-4 rounded-lg shadow cursor-move flex items-center space-x-4" draggable="true">
-                <i class="fas fa-grip-vertical text-gray-400"></i>
-                <div class="flex-grow">
+                <i class="fas fa-grip-vertical text-gray-400" draggable="false"></i>
+                <div class="flex-grow" draggable="false">
                     <input type="text" class="w-full bg-transparent border-b border-gray-300 focus:border-blue-500 outline-none text-lg font-semibold" value="Task 2" />
                     <textarea class="w-full bg-transparent resize-none mt-2 text-sm text-gray-600" rows="2">Description for Task 2</textarea>
                 </div>
-                <select class="bg-white border border-gray-300 rounded px-2 py-1 text-sm">
+                <select class="bg-white border border-gray-300 rounded px-2 py-1 text-sm" draggable="false">
                     <option>To Do</option>
                     <option>In Progress</option>
                     <option>Done</option>
@@ -45,36 +44,25 @@
         <button id="addTask" class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">Add New Task</button>
     </div>
     <script>
-        /*
-            Khi drag 1 thẻ thì thẻ đó đổi màu
-            Khi drag 1 thẻ lên 1 thẻ khác thì thẻ kia cũng đổi màu
-            Khi nhả ra sẽ đổi vị trí thẻ
-        */
+        // Vì sự kiện trigger với 1 thẻ và mọi thẻ trong nó nên có thể subscribe với 1 thẻ cha là được
         const taskList = document.getElementById('taskList');
         const addTaskBtn = document.getElementById('addTask');
         let draggedItem = null;
-        let x = null;
         let m = null;
+        let x = null;
 
-        // Dragstart phát 1 lần khi drag 1 thẻ hoặc drag vào các phần tử trong thẻ đó
         function handleDragStart(e) {
-            // Sub từng thẻ draggable thì e.target = this = thẻ draggable đó thôi
-            draggedItem = this;
-            // dataTransfer là cái nhấc lên
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.outerHTML);
-            this.classList.add('bg-blue-100');
+            // Khi dùng với 1 thẻ cha chứa các thẻ draggable, thì this là thẻ cha, e.target là thẻ draggable
             console.log("dragstart");
+            draggedItem = e.target;
+            e.target.classList.add('bg-blue-100');
         }
 
-        // Dragover phát ra mỗi khi drag lên 1 thẻ draggable hoặc các thẻ con trong thẻ draggable đó
-        // e.target đổi liên tục khi hover lên từng phần của thẻ draggable
         function handleDragOver(e) {
             console.log("dragover");
             if (e.preventDefault) {
                 e.preventDefault();
             }
-            e.dataTransfer.dropEffect = 'move';
             if(m) clearTimeout(m);
             if(x != e.target){
                 console.log("New tag hover");
@@ -84,17 +72,8 @@
                 x = e.target;
                 x.classList.add("xxx");
             }
-            e.dataTransfer.dropEffect = 'move';
-            return false;
         }
-        // Drag over là sự kiện phát ra liên tục khi giữ drag over 1 thẻ. drag enter và drag leave không phải sự kiện stable vì nếu di chuột cực nhanh sẽ bị miss. Điểm đặc biệt là di chuột cực nhanh ra khỏi 1 thẻ draggable thì chắc chắn phát dragleave khỏi nó hoặc các con trong nó ngay sau dragover cuối cùng.
-        // dragstart -> drag enter -> drag over -> hover vào con của draggable true -> drag enter mới -> drag leave -> drag drop -> drag end
-        // Dùng các sự kiện k stable bị sai. Giải pháp là dragover thẻ nào thì gán cho thẻ đó 1 class xxx, rồi style cho li có con .xxx thì đổi bg. Khi leave ta xoá xxx đi, nhưng sẽ bị nhấp nháy => giải pháp là dùng settimeout 10ms cho nó là dragover kịp thời chạy trước rồi, còn dragover không chạy khi drag ra hẳn ngoài thì dragleave mới hoạt động
 
-        // dragenter, dragleave phát mới mỗi khi drag lên thẻ draggable hoặc con của nó, e.target là thẻ con mới mỗi lần enter hoặc leave
-        function handleDragEnter(e) {
-            console.log("dragenter");
-        }
         function handleDragLeave(e) {
             if(m) clearTimeout(m);
             m = setTimeout(() => {
@@ -105,16 +84,11 @@
 
         function handleDrop(e) {
             console.log("dragdrop");
-            x.classList.remove("xxx");
             if (e.stopPropagation) {
                 e.stopPropagation();
             }
             if (draggedItem !== this) {
-                this.parentNode.removeChild(draggedItem);
-                const dropHTML = e.dataTransfer.getData('text/html');
-                this.insertAdjacentHTML('beforebegin', dropHTML);
-                const dropElem = this.previousSibling;
-                addDragEvents(dropElem);
+                taskList.insertBefore(draggedItem, e.target.nextSibling);
             }
             this.classList.remove('bg-yellow-100');
             return false;
@@ -122,20 +96,19 @@
 
         function handleDragEnd(e) {
             x.classList.remove("xxx");
-            this.classList.remove('bg-blue-100');
+            e.target.classList.remove('bg-blue-100');
             console.log("dragend");
         }
 
         function addDragEvents(elem) {
             elem.addEventListener('dragstart', handleDragStart);
             elem.addEventListener('dragover', handleDragOver);
-            elem.addEventListener('dragenter', handleDragEnter);
             elem.addEventListener('dragleave', handleDragLeave);
             elem.addEventListener('drop', handleDrop);
             elem.addEventListener('dragend', handleDragEnd);
         }
 
-        document.querySelectorAll('#taskList li').forEach(addDragEvents);
+        addDragEvents(taskList);
 
         addTaskBtn.addEventListener('click', () => {
             const newTask = document.createElement('li');
@@ -154,7 +127,6 @@
                 </select>
             `;
             taskList.appendChild(newTask);
-            addDragEvents(newTask);
         });
     </script>
 </body>

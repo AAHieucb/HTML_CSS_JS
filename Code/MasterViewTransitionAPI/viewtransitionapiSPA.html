@@ -1,0 +1,387 @@
+<!-- Ví dụ update DOM bth -->
+
+<style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    line-height: 1.7;
+  }
+
+  .visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  .flow > * + * {
+    margin-block-start: var(--flow-spacing, 1rem);
+  }
+
+  .content-grid {
+    --container-max-width: 60rem;
+    --min-inline-margin: 2rem;
+    display: grid;
+    grid-template-columns:
+      [full-width-start breakout-left-start] minmax(
+        1rem,
+        1fr
+      ) [content-start breakout-right-start] min(
+        100% - var(--min-inline-margin),
+        var(--container-max-width)
+      )
+      [content-end breakout-left-start] minmax(
+        1rem,
+        1fr
+      ) [full-width-end breakout-right-end];
+  }
+
+  .content-grid > *,
+  .full-width > * {
+    grid-column: content;
+  }
+
+  .content-grid > .full-width {
+    grid-column: full-width;
+
+    display: grid;
+    grid-template-columns: inherit;
+  }
+
+  .breakout-right {
+    grid-column: breakout-right;
+  }
+
+  .breakout-left {
+    grid-column: breakout-left;
+  }
+
+  .primary-header {
+    margin-block-end: 3rem;
+    border-block-end: 1px solid var(--separator-color, black);
+  }
+
+  .primary-header__layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    /*   grid-column: content-start / full-width-end; */
+  }
+
+  .primary-navigation > ul {
+    list-style: none;
+    margin: 0;
+    padding: var(--navigation-padding, 1rem) 0;
+    display: flex;
+    gap: clamp(1rem, 5vi, 2.5rem);
+  }
+
+  :is(.primary-navigation, .account-links) :where(a) {
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--link-color, #777);
+  }
+
+  :is(.primary-navigation, .account-links)
+    :where(a:hover, a:focus, a[aria-current="page"]) {
+    color: var(--link-current-color, #111);
+  }
+
+  .account-links {
+    display: flex;
+  }
+
+  .account-links > * {
+    display: flex;
+    align-items: center;
+    padding-block: var(--navigation-padding, 1rem);
+    padding-inline: 3rem;
+  }
+
+  .create-account {
+    background: var(--button-bg, #333);
+    color: var(--button-text, white);
+  }
+
+  .main-with-aside {
+    --flow-spacing: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  .main-with-aside > :not(aside) {
+    flex-basis: 55ch;
+    flex-grow: 999;
+  }
+
+  .main-with-aside > aside {
+    flex-basis: 325px;
+    flex-grow: 1;
+  }
+
+  .sidebar {
+    --flow-spacing: 1em;
+    align-self: start;
+    padding: 2rem 3rem;
+    border: 2px solid #eee;
+    border-radius: 0.5rem;
+  }
+
+  .breadcrumbs ol {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .breadcrumbs a {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    border-radius: 100vw;
+    background: var(--breadcrumb-color, #eee);
+    color: inherit;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .breadcrumbs li:not(:last-child)::after {
+    content: " / ";
+    display: inline-block;
+    font-size: 1.75em;
+    font-weight: 100;
+    transform: skew(-20deg);
+    line-height: 0;
+    margin-inline: 0.5em 0;
+  }
+
+  .breadcrumbs a:hover,
+  .breadcrumbs a:focus {
+    background: #ccc;
+  }
+
+  .conference-list {
+    /* display: grid; */
+    list-style: none;
+    padding: 0;
+  }
+
+  .conference:not(:last-child):not(:has(+ [hidden])) {
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid black;
+  }
+
+  .conference-date::after {
+    content: " •";
+  }
+
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border: 0;
+    padding: 0;
+  }
+
+  .filter-btn {
+    cursor: pointer;
+    text-transform: uppercase;
+    background: transparent;
+    border: 0;
+    border-radius: 0.25rem;
+    padding: 0.25rem 1rem;
+  }
+
+  .filter-btn:hover,
+  .filter-btn:focus {
+    background-color: #ccc;
+  }
+
+  .filter-btn.active {
+    background: black;
+    color: white;
+    box-shadow: 0 0 0.5rem rgb(0 0 0 / 0.2);
+  }
+
+  /* Bản chất là browser lấy screenshot ngay trước và sau animation và đè 2 shot lên nhau, rồi animation cho opacity 2 cái thôi. */
+  /* view-transition-group là hợp của view-transition-new và view-transition-old là 2 trạng thái screen shot trước và sau khi đổi, sửa cả 2 luôn */
+  ::view-transition-group(root) {
+    animation-duration: 2s;
+    mix-blend-mode: none; /* Hack tránh lỗi khi custom animation */
+  }
+  ::view-transition-old(root) {
+
+  }
+  ::view-transition-new(root) {
+
+  }
+  
+  /* root là áp dụng với thẻ root sẽ ảnh hưởng mọi thẻ bên trong. Sẽ gặp vấn đề nếu muốn 1 nhóm thẻ dùng view transition 1, 1 nhóm thẻ khác dùng view transition 2, view-transition-name k hoạt động đúng, k dùng
+  https://www.youtube.com/watch?v=jZiZs8cZAKU */
+  */
+</style>
+
+<div class="content-grid">
+  <header class="primary-header full-width">
+    <div class="primary-header__layout breakout-right">
+      <nav class="primary-navigation">
+        <ul>
+          <li><a href="#">Discover</a></li>
+          <li><a href="#">Live</a></li>
+          <li><a href="#">Jobs</a></li>
+          <li><a aria-current="page" href="#">Conferences</a></li>
+        </ul>
+      </nav>
+
+      <div class="account-links">
+        <a href="#">Log In</a>
+        <a href="#" class="create-account">Get Started</a>
+      </div>
+    </div>
+  </header>
+  <nav aria-label="Breadcrumb" class="breadcrumbs">
+    <ol>
+      <li><a href="#">Conferences</a></li>
+      <li><a href="#" aria-current="page">Tech</a></li>
+    </ol>
+  </nav>
+  <main class="main-with-aside">
+    <div class="flow">
+
+      <h1>Tech Conferences</h1>
+      <div class="filter">
+        <h2 class="visually-hidden">Filter by type of conference</h2>
+        <button class='filter-btn active' data-filter="all">All</button>
+        <button class='filter-btn' data-filter="frontend">Frontend</button>
+        <button class='filter-btn' data-filter="backend">Backend</button>
+        <button class='filter-btn' data-filter="fullstack">Fullstack</button>
+      </div>
+
+      <ul class="conference-list">
+        <li class="conference" data-category='fullstack'>
+          <div class="conference-details">
+            <span class="conference-date">January 30th - February 1st</span>
+            <span class="conference-category">Fullstack</span>
+          </div>
+          <h2 class="conference-name">THAT Conference Texas</h2>
+        </li>
+
+        <li class="conference" data-category='fullstack'>
+          <div class="conference-details">
+            <span class="conference-date">February 29th - March 1st</span>
+            <span class="conference-category">Fullstack</span>
+          </div>
+          <h2 class="conference-name">DEVWorld</h2>
+        </li>
+
+        <li class="conference" data-category='backend'>
+          <div class="conference-details">
+            <span class="conference-date">March 19th - March 23rd</span>
+            <span class="conference-category">Backend</span>
+          </div>
+          <h2 class="conference-name">SQLBits</h2>
+        </li>
+
+        <li class="conference" data-category='frontend'>
+          <div class="conference-details">
+            <span class="conference-date">June 6th - June 7th</span>
+            <span class="conference-category">Frontend</span>
+          </div>
+          <h2 class="conference-name">CSS Day</h2>
+        </li>
+
+        <li class="conference" data-category='frontend'>
+          <div class="conference-details">
+            <span class="conference-date">September 9th - September 11th</span>
+            <span class="conference-category">Frontend</span>
+          </div>
+          <h2 class="conference-name">SmashingConf Freiburg</h2>
+        </li>
+      </ul>
+    </div>
+    <aside class='sidebar flow'>
+      <h3>Discover</h3>
+      <div>
+        <h4>Lorem, ipsum dolor.</h4>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam nihil modi at?</p>
+      </div>
+      <div>
+        <h4>Aperiam, minima debitis!</h4>
+        <p>Perferendis unde possimus temporibus quia dolorem quibusdam ullam excepturi! Pariatur, saepe totam!</p>
+      </div>
+      <div>
+        <h4>Error, incidunt ab?</h4>
+        <p>Asperiores deleniti eum quos consectetur non eveniet error doloribus veniam dolores omnis.</p>
+      </div>
+      <div>
+        <h4>Perspiciatis, nesciunt amet.</h4>
+        <p>Ex impedit et molestias magni modi numquam doloremque repellat necessitatibus expedita porro?</p>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script>
+  const filterList = document.querySelector(".filter");
+  const filterButtons = filterList.querySelectorAll(".filter-btn");
+  const conferences = document.querySelectorAll(".conference");
+
+  let conferenceIndex = 0;
+
+  // Việc dùng view-transition-name hay không ta thấy chả khác mẹ gì
+  // Có define css var qua style với style="--color: red;"
+  conferences.forEach((conference) => {
+    conference.style.viewTransitionName = `conf-${++conferenceIndex}`;
+  });
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", (e) => {
+      let confCategory = e.target.getAttribute("data-filter");
+
+      if (!document.startViewTransition) {
+        updateActiveButton(e.target);
+        filterEvents(confCategory);
+        return;
+      }
+
+      document.startViewTransition(() => {
+        updateActiveButton(e.target);
+        filterEvents(confCategory);
+      });
+    });
+  });
+
+  function updateActiveButton(newButton) {
+    filterList.querySelector(".active").classList.remove("active");
+    newButton.classList.add("active");
+  }
+
+  function filterEvents(filter) {
+    conferences.forEach((conference) => {
+      // get each conferences category
+      let eventCategory = conference.getAttribute("data-category");
+
+      // check if that category matches with the filter
+      if (filter === "all" || filter === eventCategory) {
+        conference.removeAttribute("hidden");
+      } else {
+        conference.setAttribute("hidden", ""); // Vãi, chỉ cần set mỗi attribute này là được, k cần style display none
+      }
+    });
+  }
+</script>
