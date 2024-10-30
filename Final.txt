@@ -386,3 +386,22 @@ VD: @layer framework, reset, base, layout, components; => nhét ở đầu file 
 => !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau, vì nó chạy từ trên xuống thấy important sẽ k cho bất cứ style nào tương tự ở sau đó override cả
 
 
+
+# Tạo tab html thuần
+Trong react SPA thì dễ, trong html css phải tự implement.
+- Mỗi tab nên ở cùng pages và k chuyển pages. Vì chỉ đổi tab nhưng mọi phần code html chung lại phải copy ra nhiều file.
+Cũng phải lưu lại vị trí scroll với các state data khác vào sessionStorage, trước khi chuyển, và khi page onload phải lấy lại data rất rối.
+- 1 cách để chia html ra các file khác nhau khi thay đổi hiển thị là: ta viết index.html chung cho cả page, các phần riêng cứ viết ra file, khi cần hiển thị thì fetch file html đó và thế vào innerHTML
+- Đơn giản có thể viết nội dung tab hết 1 file rồi xử lý JS để display none hay hiện ra khi ngừoi dùng ấn vào tab
+- Để chuyển tab có thể dùng label checkbox để bắt và hiển thị content bằng HTML CSS thuần, hoặc dùng JS luôn được. Có thể animation content hiện ra ok.
+Có thể tạo animation slide từ 2 hướng khi chuyển tab, buộc phải dùng JS khi đó để xác định hướng cho animation, mỗi animation 1 keyframe riêng.
+- Có thể dùng window.history.pushState để đổi url mà k chuyển page, kèm xử lý onload. Để khi chuyển page sẽ đổi url, gõ url vào sẽ hiển thị đúng đang là tag nào.
+
+
+
+# import trong css
+Layer lồng layer được khong? import lồng trong layer được không luôn? làm sao nhét framework style vào @layer
+import thì tải theo thứ tự nào, có import trùng như use của scsss không
+Dùng @layer với scss
+nên import trong css rồi link mỗi nó vào file html thôi, hay import từng file vào hét index.html
+
