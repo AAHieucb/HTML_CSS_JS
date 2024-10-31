@@ -419,3 +419,10 @@ Khi dev có thể dùng @import, còn production nên dùng bundler gom lại th
 
 # Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js
 
+
+
+# Dùng type="module" sẽ đổi cách viết JS
+Mặc định mọi thứ là toàn cục. Biến ta khai báo ở file JS này sẽ truy cập được ở file js khác miễn là script tới cả 2 file và script file khai báo được load xong trước
+type="module" thì biến trong file đó k thể truy cập ở file khác, muốn là gì phải export import => nên luôn dùng type module, chỉ có code kiểu cũ mới k dùng
+
+
