@@ -386,3 +386,32 @@ VD: @layer framework, reset, base, layout, components; => nhét ở đầu file 
 => !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau, vì nó chạy từ trên xuống thấy important sẽ k cho bất cứ style nào tương tự ở sau đó override cả
 
 
+
+
+
+Code bên ngoài sẽ override code trong custom layer tự tạo ra, vì code bên ngoài thuộc author styles, còn code trong custom layer thuộc 1 layer con của author styles có spec nhỏ hơn
+@layer có thể lồng trong @layer khác và quy tắc vẫn tương tự
+@layer dùng trong scss như bth, cứ cho vào file là compile ra
+Dùng @use sẽ chỉ tự import file 1 lần đầu tiên ở vị trí đó, các lần sau thì bỏ. Còn @import 1 file nhiều lần có thể gây lặp code ở nhiều nơi.
+
+@forward trong scss chỉ chuyển tiếp biến chứ k dùng được trong file hiện tại, thêm @use để dùng trong file hiện tại
+Nếu file hiện tại và file @forward có cùng giá trị thì file hiện tại sẽ override vì nó được định nghĩa sau
+@forward khi được @use có namespace và theo thứ tự cái sau đè cái trước nên k bị conflict. Nó cũng đảm bảo k bị lặp code import nhiều lần.
+
+@layer định nghĩa list thứ tự layer buộc phải để đầu file mới có tác dụng. 
+Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer trước nó được, buộc phải nhét @layer vào 1 file scss riêng rồi @use nó ở đầu để xuất hiện ở đầu
+
+1 case đặc biệt là @import có thể dùng bên trong @layer, nhưng @use thì không. Cách khác là:
+@use 'sass:meta';
+@layer base, components, utilities;
+@layer components {
+  @include meta.load-css('components'); // Thế cho @use 'components'
+}
+
+-> 
+@import trong css không sợ bị trùng code vì tuy trùng nhưn css tự có cơ chế override style cái sau đè cái trước. 
+@import của css cũng phải để ở top mới có tác dụng
+@import trong css sẽ chạy tuần tự nên làm chậm quá trình tải trang.
+Khi dev có thể dùng @import, còn production nên dùng bundler gom lại thành 1 file index.css và minify nó chứ k chia ra nhiều file. VD parcel build tự làm luôn
+@import url("./2.css") layer(base); => nhét mọi code trong 1 file css nằm trong 1 layer
+
