@@ -415,3 +415,7 @@ Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer tr
 Khi dev có thể dùng @import, còn production nên dùng bundler gom lại thành 1 file index.css và minify nó chứ k chia ra nhiều file. VD parcel build tự làm luôn
 @import url("./2.css") layer(base); => nhét mọi code trong 1 file css nằm trong 1 layer
 
+
+
+# Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js
+
