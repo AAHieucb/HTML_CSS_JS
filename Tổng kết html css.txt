@@ -239,6 +239,8 @@ VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content 
 Để fix: phải dùng flex-basis, nó khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
 => Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex k xử lý trước trường hợp row cuối cùng k full
 
+Các phần tử trong flex sẽ mở rộng theo kích thước của chính các phần tử đó. Nhưng nếu mọi phần tử trong 1 flexbox đều được set flex-grow, thì kích thước từng cái sẽ chia theo tỷ lệ đó luôn => Cách để chia tỉ lệ phần tử trong flexbox, chạy như grid
+
 
 
 # Dùng display grid
@@ -266,8 +268,6 @@ VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-c
 grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
 
 -> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
-
--> Còn có masonry là 1 loại grid đẹp khác.
 
 
 

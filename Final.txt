@@ -429,3 +429,11 @@ Mặc định mọi thứ là toàn cục. Biến ta khai báo ở file JS này 
 type="module" thì biến trong file đó k thể truy cập ở file khác, muốn là gì phải export import => nên luôn dùng type module, chỉ có code kiểu cũ mới k dùng
 
 
+
+# Tạo masonry css với grid ok
+
+
+
+# 
+
+
