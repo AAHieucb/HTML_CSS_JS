@@ -50,7 +50,7 @@ URL: https://www.youtube.com/watch?v=B4Y9Ed4lLAI&list=WL&index=2&t=61s
 Ful tut: https://css-tricks.com/css-anchor-positioning-guide/
 ***popovertarget popover popovertargetaction giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần, tự responsive
 anchor trong css và html để gắn popover hiện theo thẻ nào
-:root:hash(#context:popover-open): Check popover đang được mở bằng css selector để style
+:root:has(#context:popover-open): Check popover đang được mở bằng css selector để style
 VD1: 
 <style>
   [popover] {
@@ -266,6 +266,8 @@ VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-c
 grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
 
 -> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
+
+-> Còn có masonry là 1 loại grid đẹp khác.
 
 
 

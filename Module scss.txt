@@ -32,6 +32,11 @@ Dùng placeholder khi class Cha k được dùng riêng bởi bất cứ 1 thẻ
 -> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào
 Dùng @content
 
+-> Dùng @use sẽ chỉ tự import file 1 lần đầu tiên ở vị trí đó, các lần sau thì bỏ. Còn @import 1 file nhiều lần có thể gây lặp code ở nhiều nơi.
+@forward trong scss chỉ chuyển tiếp biến chứ k dùng được trong file hiện tại, thêm @use để dùng trong file hiện tại
+Nếu file hiện tại và file @forward có cùng giá trị thì file hiện tại sẽ override vì nó được định nghĩa sau
+@forward khi được @use có namespace và theo thứ tự cái sau đè cái trước nên k bị conflict. Nó cũng đảm bảo k bị lặp code @forward nhiều lần.
+
 
 
 # Thiết kế 

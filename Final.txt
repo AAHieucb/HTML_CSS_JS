@@ -385,6 +385,19 @@ VD: @layer framework, reset, base, layout, components; => nhét ở đầu file 
 => Giải quyết TH khi cần custom style của framework sử dụng nhưng nó specifility k đủ để đổi, buộc phải thêm !important rất dở. Nếu thêm được style của framework vào @layer thì sửa ok
 => !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau, vì nó chạy từ trên xuống thấy important sẽ k cho bất cứ style nào tương tự ở sau đó override cả
 
+-> Code bên ngoài sẽ override code trong custom layer tự tạo ra, vì code bên ngoài thuộc author styles, còn code trong custom layer thuộc 1 layer con của author styles có spec nhỏ hơn
+@layer có thể lồng trong @layer khác và quy tắc vẫn tương tự
+@layer định nghĩa list thứ tự layer buộc phải để đầu file mới có tác dụng. 
+
+@layer dùng trong scss như bth, cứ cho vào file là compile ra
+Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer trước nó được, buộc phải nhét @layer vào 1 file scss riêng rồi @use nó ở đầu để xuất hiện ở đầu
+1 case đặc biệt là @import có thể dùng bên trong @layer, nhưng @use thì không. Cách khác là:
+@use 'sass:meta';
+@layer base, components, utilities;
+@layer components {
+  @include meta.load-css('components'); // Thế cho @use 'components'
+}
+
 
 
 # Tạo tab html thuần
@@ -399,9 +412,20 @@ Có thể tạo animation slide từ 2 hướng khi chuyển tab, buộc phải 
 
 
 
-# import trong css
-Layer lồng layer được khong? import lồng trong layer được không luôn? làm sao nhét framework style vào @layer
-import thì tải theo thứ tự nào, có import trùng như use của scsss không
-Dùng @layer với scss
-nên import trong css rồi link mỗi nó vào file html thôi, hay import từng file vào hét index.html
+# Dùng @import trong css
+@import trong css không sợ bị trùng code vì tuy trùng nhưng css tự có cơ chế override style cái sau đè cái trước. Cần tự code cẩn thận để k import nh lần.
+@import của css cũng phải để ở top mới có tác dụng
+@import trong css sẽ chạy tuần tự nên làm chậm quá trình tải trang => Do đó khi dev có thể dùng @import, còn production nên dùng bundler gom lại thành 1 file index.css và minify nó chứ k chia ra nhiều file. VD parcel build tự làm luôn
+@import url("./2.css") layer(base); => nhét mọi code trong 1 file css nằm trong 1 layer
+
+
+
+# Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js
+
+
+
+# Dùng type="module" sẽ đổi cách viết JS
+Mặc định mọi thứ là toàn cục. Biến ta khai báo ở file JS này sẽ truy cập được ở file js khác miễn là script tới cả 2 file và script file khai báo được load xong trước
+type="module" thì biến trong file đó k thể truy cập ở file khác, muốn là gì phải export import => nên luôn dùng type module, chỉ có code kiểu cũ mới k dùng
+
 
