@@ -1,0 +1,248 @@
+<!-- Vào là mode theo setting browser, có thể đè lên setting browser khi chọn. Có thể lưu vào localStorage khi chọn để reload ok -->
+
+<head>
+	<meta name="color-scheme" content="light dark">
+  <style>
+    .buttons,
+    form,
+    .single {
+      width: fit-content;
+      margin: 3rem auto;
+    }
+
+    form {
+      font-family: sans-serif;
+      padding: 1rem 2rem 2rem;
+      border: 1px solid silver;
+      border-radius: 1.5rem;
+      box-shadow: 0 0 2rem -1.25rem CanvasText;
+    }
+
+    .site-container {
+      color-scheme: light dark;
+      display: flex;
+      justify-content: center;
+    }
+
+    .unstyled-site {
+      background-color: Canvas;
+      color: CanvasText;
+      padding: 1rem 3rem 2rem;
+    }
+    #light {
+      color-scheme: light;
+    }
+    #dark {
+      color-scheme: dark;
+}
+  </style>
+</head>
+<body>
+	<div class="buttons">
+		<button onclick="darkMode()">Dark Mode</button>
+		<button onclick="lightMode()">Light Mode</button>
+		<button onclick="autoMode()">Auto Mode</button>
+	</div>
+	<form>
+		<h3>What a nice form!</h3>
+		<label>text field
+			<br><input type="text" placeholder="Hellooo">
+		</label>
+		<br><br>
+		<label>
+			check box <input type="checkbox">
+		</label>
+		<br><br>
+		<label>
+			radio <input type="radio">
+		</label>
+		<br><br>
+		<label>
+			car brands: <select name="cars" id="cars">
+				<option value="volvo">Volvo</option>
+				<option value="saab">Saab</option>
+				<option value="mercedes">Mercedes</option>
+				<option value="audi">Audi</option>
+			</select>
+		</label>
+	</form>
+
+	<div class="single">
+		<header>
+			<h1>Website name</h1>
+			<nav>
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="#blog">Blog</a></li>
+					<li><a href="/contact">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
+		<main>
+			<section>
+				<h2>Blog title</h2>
+				<article>
+					<h3>Blog post title</h3>
+					<p>Blog post content</p>
+				</article>
+				<aside>
+					<h4>By the Way:</h4>
+					<p>Interesting extra info</p>
+				</aside>
+			</section>
+			<section>
+				<h4>Comments</h4>
+				<article>First!</article>
+				<article>Great post!</article>
+				<article>Very informative!</article>
+			</section>
+		</main>
+		<footer>
+			<p>Copyright Me, 2022</p>
+		</footer>
+	</div>
+
+	<div class="site-container">
+		<div class="unstyled-site" id="dark">
+			<form>
+				<h3>What a nice form!</h3>
+				<label>text field
+					<br><input type="text" placeholder="Hellooo">
+				</label>
+				<br><br>
+				<label>
+					check box <input type="checkbox">
+				</label>
+				<br><br>
+				<label>
+					radio <input type="radio">
+				</label>
+				<br><br>
+				<label>
+					car brands: <select name="cars" id="cars">
+						<option value="volvo">Volvo</option>
+						<option value="saab">Saab</option>
+						<option value="mercedes">Mercedes</option>
+						<option value="audi">Audi</option>
+					</select>
+				</label>
+			</form>
+		</div>
+
+		<div class="unstyled-site" id="light">
+			<form>
+				<h3>What a nice form!</h3>
+				<label>text field
+					<br><input type="text" placeholder="Hellooo">
+				</label>
+				<br><br>
+				<label>
+					check box <input type="checkbox">
+				</label>
+				<br><br>
+				<label>
+					radio <input type="radio">
+				</label>
+				<br><br>
+				<label>
+					car brands: <select name="cars" id="cars">
+						<option value="volvo">Volvo</option>
+						<option value="saab">Saab</option>
+						<option value="mercedes">Mercedes</option>
+						<option value="audi">Audi</option>
+					</select>
+				</label>
+			</form>
+		</div>
+	</div>
+	<div class="site-container">
+		<div class="unstyled-site" id="light">
+			<header>
+				<h1>Website name</h1>
+				<nav>
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="#blog">Blog</a></li>
+						<li><a href="/contact">Contact</a></li>
+					</ul>
+				</nav>
+			</header>
+			<main>
+				<section id="blog">
+					<h2>Blog title</h2>
+					<article>
+						<h3>Blog post title</h3>
+						<p>Blog post content</p>
+					</article>
+					<aside>
+						<h4>By the Way:</h4>
+						<p>Interesting extra info</p>
+					</aside>
+				</section>
+				<section>
+					<h4>Comments</h4>
+					<article>First!</article>
+					<article>Great post!</article>
+					<article>Very informative!</article>
+				</section>
+			</main>
+			<footer>
+				<p>Copyright Me, 2022</p>
+			</footer>
+		</div>
+
+		<div class="unstyled-site" id="dark">
+			<header>
+				<h1>Website name</h1>
+				<nav>
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="#blog">Blog</a></li>
+						<li><a href="/contact">Contact</a></li>
+					</ul>
+				</nav>
+			</header>
+			<main>
+				<section>
+					<h2>Blog title</h2>
+					<article>
+						<h3>Blog post title</h3>
+						<p>Blog post content</p>
+					</article>
+					<aside>
+						<h4>By the Way:</h4>
+						<p>Interesting extra info</p>
+					</aside>
+				</section>
+				<section>
+					<h4>Comments</h4>
+					<article>First!</article>
+					<article>Great post!</article>
+					<article>Very informative!</article>
+				</section>
+			</main>
+			<footer>
+				<p>Copyright Me, 2022</p>
+			</footer>
+		</div>
+	</div>
+  <script>
+    function lightMode() {
+      document
+        .querySelector('meta[name="color-scheme"]')
+        .setAttribute("content", "light");
+    }
+
+    function darkMode() {
+      document
+        .querySelector('meta[name="color-scheme"]')
+        .setAttribute("content", "dark");
+    }
+
+    function autoMode() {
+      document
+        .querySelector('meta[name="color-scheme"]')
+        .setAttribute("content", "light dark");
+    }
+  </script>
+</body>
