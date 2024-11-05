@@ -70,7 +70,7 @@ VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp colum
 minmax nếu max nhỏ hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
 1fr đơn vị phân số fraction chia tỉ lệ nhưng bản thân nó k theo kích thước bất cứ container nào cả, chỉ là tỉ lệ các item. Bth nó kiểu max 100% ấy. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ hoạt động k như mong muốn, hay invalid property.
 repeat là hàm trong css có sẵn. Thường dùng là repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì đến grid. Mục số là điền số chứ đừng điền 1fr, có thể dùng minmax(200px,1fr) để full width mà max width.
-Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row.
+Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row, tức chỉ có 1 cột
 Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như nào thì dòng dưới phải có cột width như vậy. Nếu k muốn v thì dùng flex.
 
 -> Kỹ thuật responsive:
@@ -85,7 +85,7 @@ VD chỉ muốn bo góc ở màn hình lớn:
 .card {
   border-radius: max(0px, min(8px, calc((100vw - 4px - 100%)*9999)));
 }
-=> 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần như bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
+=> 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần như bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực)) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
 Tức if(!mobile) borderRadius=0px else borderRadius=8px
 
 =>***Cứ tưởng tượng màn hình lớn và màn hình nhỏ thì min max width là gì là chơi dược thôi
@@ -410,6 +410,9 @@ Cũng phải lưu lại vị trí scroll với các state data khác vào sessio
 Có thể tạo animation slide từ 2 hướng khi chuyển tab, buộc phải dùng JS khi đó để xác định hướng cho animation, mỗi animation 1 keyframe riêng.
 - Có thể dùng window.history.pushState để đổi url mà k chuyển page, kèm xử lý onload. Để khi chuyển page sẽ đổi url, gõ url vào sẽ hiển thị đúng đang là tag nào.
 
+-> Tương tự navigation style cho thẻ đang active thì mỗi page, ta sửa html đi cho nav đó highlight là được.
+Dùng kèm view transition api là thành animation đỉnh của chóp
+
 
 
 # Dùng @import trong css
@@ -434,6 +437,36 @@ type="module" thì biến trong file đó k thể truy cập ở file khác, mu�
 
 
 
-# 
+# Dùng color-mix
+color: color-mix(in lab, black, currentColor); => currentColor sẽ lấy thuộc tính color của thẻ hiện tại và ở case này làm tối màu đó đi, k set sẽ lấy theo cha, rồi tạo ra màu này
+VD ở light background cần chữ màu tối hơn, dark background cần chữ màu sáng hơn. Dù ta đã set đen trắng cho text rồi nhưng cần text có màu khác. Ta dùng:
+color: color-mix(in lab, currentColor, red 70%); => giả sử chữ đỏ sẽ tự có màu đỏ đậm đỏ nhạt tuỳ bg cho đúng
 
+linear-gradient cũng dùng được currentColor, dùng được mọi nơi cho màu
+
+
+
+# border-radius short hand nhận 4 giá trị
+Thay vì margin: 0 auto; ta dùng margin-inline: auto;
+body tự có 100% width, việc set 100vw là thừa và có thể sai vì k tính scrollbar
+gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
+
+
+
+# Dark mode thực tế có sẵn mà k cần phải code thủ công, trừ khi có màu nào phức tạp.
+Ta muốn mới vào web sẽ theo setting của browser. Nếu người dùng đổi mode sẽ lấy setting của người dùng. Nếu đã từng set rồi, mà ngừoi dùng đổi mdoe rồi reload, vẫn phải theo cái đã set trong web.
+
+-> Có 2 cách để set theme mode là dùng html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> 
+Khi dùng cả 2 giá trị "light dark" như này là theo setting của browser.
+Nếu set rõ ràng color-scheme: light; hay color-scheme: dark; sẽ dùng đúng mode đó.
+
+-> style trong @media (prefers-color-scheme: dark) { } sẽ được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => dùng cái này k ổn vì nếu browser set dark thật thì style bên trong k thể mất, tức đổi sang light éo được. Buộc trong nó lại phải định nghĩa màu của cả 2 mode
+
+-> Mặc định Canvas là màu của background, CanvasText là màu của text tự được thay đổi tuỳ vào mode hiện tại.
+VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
+
+-> Để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
+Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting 
+
+-> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
 

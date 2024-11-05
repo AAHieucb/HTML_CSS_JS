@@ -14,6 +14,8 @@ background-clip text => sẽ lồng background image vào trong text, buộc ph�
 background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
 background-attachment: scroll mặc định là trôi theo page scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
 
+background-repeat space tương tự repeat nhưng repeat bị cắt khi ra ngoài phạm vi vì kích thước content k thể luôn chia hết cho kích thước background được. Còn space sẽ xếp mà k bị cắt, khoảng trống thừa ra sẽ chia đều giữa các ảnh
+
 VD: background-origin apply cho cả background-color và background-image, k thể chỉnh riêng hay chia từng image
 
 -> Các thuộc tính image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters

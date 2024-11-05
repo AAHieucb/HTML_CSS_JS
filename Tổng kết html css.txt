@@ -40,6 +40,7 @@ contain: paint;
 
 -> -webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác
 Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-available; width: -webkit-fill-available;
+=> width auto nhiều lúc cũng tự take up rest space
 -> Chỉnh thứ tự in chữ với "writing-mode: vertical-rl;"
 -> hidden attribute set cho 1 thẻ sẽ ẩn thẻ đó đi
 
@@ -108,6 +109,9 @@ Gõ có gợi ý theo list có sẵn với: <datalist> + input list
 Nó có thuộc tính -webkit-appearance và appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
 K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn. K dùng pattern có sẵn vì nó k check từ lúc gõ, lúc submit mới báo message k rõ ràng
 
+input type number có min max value step, có thể style khi nhập vào ngoài khoảng với: 
+input[type="number"]:not(:in-range) { }
+
 input pattern [a-z] mà k có số lượng {2,} or {2,8} or + * ? đằng sau thì nó mặc định phải là 1 ký tự thôi
 
 -> Có thể dùng hidden tạo input ảnh hoặc file đẹp
@@ -145,6 +149,8 @@ uploadData.append("image", imageSending);
 const response = await client.post("/api/v1/event", uploadData, config);
 
 -> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
+
+-> input type="color"
 
 
 
@@ -239,7 +245,8 @@ VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content 
 Để fix: phải dùng flex-basis, nó khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
 => Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex k xử lý trước trường hợp row cuối cùng k full
 
-Các phần tử trong flex sẽ mở rộng theo kích thước của chính các phần tử đó. Nhưng nếu mọi phần tử trong 1 flexbox đều được set flex-grow, thì kích thước từng cái sẽ chia theo tỷ lệ đó luôn => Cách để chia tỉ lệ phần tử trong flexbox, chạy như grid
+Các phần tử trong flex sẽ mở rộng theo kích thước của chính các phần tử đó. Nhưng nếu mọi phần tử trong 1 flexbox đều được set flex-grow, thì kích thước từng cái sẽ chia theo tỷ lệ đó luôn => Cách để chia tỉ lệ phần tử trong flexbox, chạy như grid. Chú ý là tỉ lệ phần tử k tính padding, nếu item có padding sẽ to hơn bth.
+
 
 
 
@@ -267,7 +274,16 @@ VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-c
 -> grid-auto-flow: column; ưu tiên xếp hết từng col trước. 
 grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
 
+-> grid có thể dùng cho 1D layout để tạo khi các cột đều bằng nhau => tốt hơn flexbox. Dùng flex box khi cần các item theo kích thước riêng của chúng
+Chỉ cần dùng {
+  grid-auto-flow: column; // để nó xếp trong 1 hàng
+  grid-auto-columns: 1fr; // để các phần tử mới thêm vào grid đều cùng kích thước nhau
+}
+- flexbox có thể dùng cho 2D layout, chỉ cần set flex wrap, khác với grid là có thể để các cột không cùng kích thước nhau, cứ có kích thước đúng của nó là được
+ 
 -> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
+Dùng grid là container được: browser -> Elements -> Layout -> show line names để thấy grid line names
+URL: https://www.youtube.com/watch?v=c13gpBrnGEw
 
 
 
@@ -305,16 +321,16 @@ URL: https://topdev.vn/blog/responsive-giao-dien-cuc-dinh-voi-container-queries 
 container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
 @container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
 Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
-container: main / inline-size; => shorthands container- name / container-type
+container: main / inline-size; => shorthands container-name / container-type
 
 --> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
 
 ->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
 - flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 
-VD: container 100px, item1 50px, item2 30px. Nếu set width item1 là 1000px thì nó chỉ tới 70 thôi, nếu set width item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
+VD: container 100px, item1 50px, item2 30px. Nếu set flexbasis item1 là 1000px thì nó chỉ tới 70 thôi, nếu set flexbasis item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
 Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ được chia ra. Các thẻ mở rộng tuỳ vào flex-grow. Nếu container nhỏ hơn thì lại co theo tỉ lệ dựa vào flex-shrink
 - clamp(min,value,max): browser set giá trị là value, nếu value nhỏ hơn min sẽ set là min, lớn hơn max sẽ set là max. Value ở giữa thường là relative.
-- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách nhét nhiều cột hoặc hàng hơn nếu có đủ không gian. Nếu k đủ không gian sẽ điều chỉnh kích thước các phần tử bth => nên dùng auto-fill hơn
+- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách dãn phần tử => nên dùng auto-fill hơn vì nó cố điền nhiều cột nhất có thể
 - minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
 => Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
 
@@ -340,6 +356,7 @@ VD flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thướ
   flex-basis: calc(
     ((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999)
   ); // Tức flex-basis xếp trước vào vị trí, k đủ sẽ đẩy thẻ xuống (flex-basis là NN xuống dòng), sau đó mới tính flex-grow, flex-shrink các thứ
+  // Nếu vừa có flex-basis, vừa có flex-grow, nó vẫn chỉ cố grow đến mức đạt được flex-basis thì thôi, chứ đạt r sẽ k grow quá nữa làm gì
 } 
 .with-sidebar > :last-child {
   flex-basis: var(--sidebar-size);
@@ -362,10 +379,14 @@ VD code mẫu grid nhảy cột từ 1 tới 4:
     auto-fit, 
     minmax(
       min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), 
-      1fr)@
+      1fr)
     );
 }
 Có code mẫu tăng dần cột từ 1 tới 1 số chỉ định
+
+-> Thêm max-width 100% cho ảnh vì website luôn tự responsive co các item lại rồi => css reset 
+Tư duy responsive: kích thước ta set k cố định mà để cho browser tự set vì nó tự co item khi nó co lại. Ta chỉ cần set, min max để giới hạn k được nhỏ hay lớn hơn bao nhiêu thôi
+Tối ưu @media query, vd muốn màn lớn thì 2 col, màn nhỏ thì 1 col. Mà mặc định grid là 1 col, nên ta để mặc định 1 col, @media min-width thì set 2 cols. Chứ mặc định set 2cols, sau màn nhỏ lại phải chỉnh thì phải sửa grid-template-columns 2 lần lận => thường thì media query toàn dùng min-width
 
 
 
@@ -427,7 +448,7 @@ VD text dài thì min-content thì chỉ đủ kích thước 1 từ dài nhất
 
 # View transition API
 View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
-Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api tiện và sẽ tự tối ưu performance.
+Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api tiện và sẽ tự tối ưu performance
 
 -> Giải thích view transition api: https://www.youtube.com/watch?v=xZteiW-cun8
 Có thể đổi view-transition-name ở từng thẻ, customize animation của view transition api (mặc định là fade).
@@ -438,18 +459,27 @@ Có thể đổi view-transition-name ở từng thẻ, customize animation củ
 C1 ngu: fetch pages đó về rồi thế vào innerHTML pages hiện tại. Tức dùng như single page nhưng chả ai làm vậy.
 C2: view transition api có cách riêng để dùng cho cross-document. Nó chờ fetch xong hết rồi animation chuyển pages.
 
---> document.createDocumentTransition ấn tiến lùi thì ok chứ ấn thẻ a éo được
+--> document.createDocumentTransition ấn tiến lùi thì ok chứ ấn thẻ a éo được => éo dùng
 await document.createDocumentTransition().start(() => {
   window.location.href = 'y.html';
 });
 
---> Dùng: @view-transition {
+--> Cách khác là dùng: @view-transition {
 	navigation: auto;
 }
 ::view-transition-group(root) {
 	animation-duration: 0.5s;
 }
-=> Code hack: trong head phải có ít nhất 1 <script src="ignored"></script>
+=> Code hack: trong head phải có ít nhất 1 <script src="ignored"></script> nằm ở sau thẻ link css, hoặc nếu không thì phải viết đủ: 
+<script src="ignored" type="module" blocking="render"></script>
+
+VD có thể tạo animation navigate multiple page trước đó k thể làm được bằng css js thuần
+
+--> Mặc định nó chỉ fade, nếu muốn animation cụ thể, phải dùng view-transition-name
+VD: dòng text ở trang này bé, ở trang sau vẫn là dòng text đó nhưng to hơn, thì ta gán view-transition-name cho 2 tag ở 2 page cùng 1 giá trị là ok
+Chú ý nếu dùng page1 span -> page2 h1 thì sẽ phóng to, nhưng cả 2 page cùng tag thì lại k.
+
+URL khi cần custom animation toàn page, định hình hướng tiến hay lùi page: https://view-transitions.chrome.dev/stack-navigator/mpa-prerender/ 
 
 --> pageshow là sự kiện phát khi load pages lần đầu tiên, hoặc navigate tới
 pagereveal là sự kiện phát ra khi nội dung được render, bất kể nội dung từ cache, prerender hay refresh mới.
@@ -481,6 +511,7 @@ Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
 @property và css houdini can thiệp sâu vào animation
 https://www.frontendmentor.io/ => học Fremaster
+https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
 
 -> Tổng kết thiết kế tối thiểu: tạo dự án, darkmode, chia file css var và các style common, routing chuyển pages, responsive, BEM
 - Tạo dự án: parcel import npm; html thuần import cdn; react;

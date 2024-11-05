@@ -1,3 +1,5 @@
+// Chỉ là cách để xác định được tiến hay là lùi
+
 const basePath = '/stack-navigator/mpa';
 
 // K liên quan đến view transition api

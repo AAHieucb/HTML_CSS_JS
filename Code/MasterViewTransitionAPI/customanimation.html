@@ -1,0 +1,128 @@
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: #f0f0f0;
+    }
+
+    .block {
+        display: inline-block;
+        width: 12rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1.5rem;
+        padding: 1rem;
+        padding-top: 0;
+        flex-direction: column;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .e1 {
+        view-transition-name: e1;
+    }
+
+    .e2 {
+        view-transition-name: e2;
+    }
+
+    .block-trans {
+        view-transition-name: block-trans;
+    }
+
+    .block + .block {
+        margin-top: 1rem;
+    }
+
+    .block1 {
+        background: #ff6f61;
+    }
+
+    .block2 {
+        background: #6f61ff;
+    }
+
+    /* Để mặc định tự có fade animation rồi, ta có thể custom */
+    ::view-transition-old(block-trans) {
+        animation: .3s transition-out 0s ease;
+    }
+
+    ::view-transition-new(block-trans) {
+        animation: .3s transition-in 0s ease;
+    }
+
+    @keyframes transition-out {
+        from {
+            opacity: 1;
+            translate: 0;
+            rotate: 0;
+        }
+        to {
+            opacity: 0;
+            translate: 1rem -5rem;
+            rotate: 8deg;
+        }
+    }
+
+    @keyframes transition-in {
+        from {
+            opacity: 0;
+            translate: 3rem 5rem;
+            rotate: -8deg;
+        }
+        to {
+            opacity: 1;
+            translate: 0;
+            rotate: 0;
+        }
+    }
+</style>
+
+<!-- template sẽ k hiện ra trong page, thẻ này là để hiện ra về sau bằng clone + append vào body bằng JS -->
+<template id="view1">
+    <div class="block block1 block-trans">
+        <h1>View 1</h1>
+        <button onclick="swap('template#view2', '.block-trans')">Go to View 2</button>
+    </div>
+</template>
+
+<template id="view2">
+    <div class="block block2 block-trans">
+        <h1>View 2</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias, consectetur voluptatibus. Sed consequuntur, doloribus perspiciatis incidunt, explicabo provident excepturi fugit quod corporis, nisi animi eaque ex quidem odit nesciunt consequatur!</p>
+        <button onclick="swap('template#view1', '.block-trans')">Go to View 1</button>
+    </div>
+</template>
+
+<div class="content">
+    <div class="block block1 e1" >
+        <h1>Test</h1>
+        <p>Just a test to check how the rest of the dom reacts to transitions.</p>
+    </div>
+    <div class="block block1 block-trans">
+        <h1>View 1</h1>
+        <button onclick="swap('template#view2', '.block-trans')">Go to View 2</button>
+    </div>
+    <div class="block block2 e2" >
+        <h1>Test</h1>
+        <p>Just a test to check how the rest of the dom reacts to transitions.</p>
+    </div>
+</div>
+<script>
+    function swap(inTemplSelector, outSelector) {
+        let inTempl = document.querySelector(inTemplSelector);
+        let inEl = inTempl.content.cloneNode(true).firstElementChild;
+        let outEl = document.querySelector(outSelector);
+
+        if (document.startViewTransition) {
+            document.startViewTransition(() => {
+                outEl.replaceWith(inEl);
+            });
+        }
+        else outEl.replaceWith(inEl);
+    }
+</script>
