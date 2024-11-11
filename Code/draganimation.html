@@ -99,6 +99,7 @@
             if(m) clearTimeout(m);
             m = setTimeout(() => {
                 x.classList.remove("xxx");
+                x = null;
             }, [10]);
             console.log("dragleave");
         }
@@ -122,6 +123,7 @@
 
         function handleDragEnd(e) {
             x.classList.remove("xxx");
+            x = null;
             this.classList.remove('bg-blue-100');
             console.log("dragend");
         }

@@ -263,6 +263,9 @@ VD:
 => Các private var k ảnh hưởng tới scope khác. Nhìn custom var, ta hiểu ngay là đổi trong container của phần đó, thay vì tìm trên root, root chỉ đinh nghĩa các biến base
 => Giảm bớt số lượng selector. VD muốn đổi màu button trong bye thì đổi ngay css var của .bye thay vì viết selector ".bye button"
 
+->***Bản chất: Css var thường dùng khi ta có các style phụ thuộc vào nhau, sau này muốn đổi sẽ phải đổi tất cả. Thay vì vậy sẽ gom vào 1 biến css và relative tói nó để đổi.
+Trừ @media và @container mới fix cứng vì k dùng được css var, đồng nghĩa đổi chỗ khác cũng phải đổi nó
+
 
 
 # Responsive chuẩn với grid layout + @container query
@@ -469,4 +472,31 @@ VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
 Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting 
 
 -> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
+
+
+
+# CSS sprite animation
+Nhét mọi frames vào chung 1 bức ảnh và animate bằng cách hiển thị từng frame
+animation-timing-function có hàm step(<số>); sẽ chia đều các khoảng được khai báo thành 1 lượng frame rồi nhảy từng frame
+VD: animation: play 1s steps(10) infinite;
+@keyframes play {
+  0% { background-position: 0 0; }
+  10% { background-position: 100px 100px; }
+  100% { background-position: 0 0; }
+}
+=> thì nó sẽ hiển thị background ở các vị trí khác nhau. Từ 0% đến 10% sẽ chia làm 10 frames và hiển thị lần lượt, từ 10% đến 100% lại chia 10 frames và hiển thị lần lượt
+
+Có thể convert gif or video sang sprite image với https://ezgif.com/gif-to-sprite
+Có thể lấy hàng loạt ảnh gif trên trang giphy.
+Search sprite basic trên trang: https://opengameart.org/
+APNG cũng là 1 loại ảnh png nhưng có animated
+
+-> Tại sao k dùng video hay gif mà dùng sprite css animation?
+Vì css sprite animation có thể custom play, pause, chạy khi hover or click, kiểm soát frame rate, kết hợp với animation timeline cho scroll animation 
+Có thể tạo animation phức tạp như trong game.
+
+
+
+# border-bottom là cạnh dưới của phần tử.
+border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode
 

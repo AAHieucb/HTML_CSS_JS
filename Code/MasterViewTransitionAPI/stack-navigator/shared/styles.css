@@ -63,7 +63,7 @@ body {
 }
 
 ::view-transition-group(page) {
-	animation-duration: 1s;
+	animation-duration: 10s;
 }
 
 /* Custom animation cho từng case. Nếu tag html có data-transition=reload thì dùng animation này cho thẻ body */

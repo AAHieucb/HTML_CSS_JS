@@ -231,9 +231,8 @@
 
   }
   
-  /* root là áp dụng với thẻ root sẽ ảnh hưởng mọi thẻ bên trong. Sẽ gặp vấn đề nếu muốn 1 nhóm thẻ dùng view transition 1, 1 nhóm thẻ khác dùng view transition 2, view-transition-name k hoạt động đúng, k dùng
+  /* root là áp dụng với thẻ root sẽ ảnh hưởng mọi thẻ bên trong. Sẽ gặp vấn đề nếu muốn 1 nhóm thẻ dùng view transition 1, 1 nhóm thẻ khác dùng view transition 2, view-transition-name k hoạt động đúng => vẫn hoạt động mà
   https://www.youtube.com/watch?v=jZiZs8cZAKU */
-  */
 </style>
 
 <div class="content-grid">
@@ -373,10 +372,8 @@
 
   function filterEvents(filter) {
     conferences.forEach((conference) => {
-      // get each conferences category
       let eventCategory = conference.getAttribute("data-category");
 
-      // check if that category matches with the filter
       if (filter === "all" || filter === eventCategory) {
         conference.removeAttribute("hidden");
       } else {

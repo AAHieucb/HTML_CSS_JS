@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>16 Frame Sprite Animation</title>
+    <style>
+        .sprite-animation {
+            width: 256px;   /* 1024px ÷ 4 columns = 256px per sprite */
+            height: 256px;  /* 1024px ÷ 4 rows = 256px per sprite */
+            background-image: url('sprite-sheet.png');
+            background-repeat: no-repeat;
+            animation: play 1s steps(1) infinite;
+            cursor: pointer; /* Shows clickable cursor */
+        }
+
+        .sprite-animation.paused {
+            animation-play-state: paused;
+        }
+
+        @keyframes play {
+            0% { background-position: 0 0; }
+            6.25% { background-position: -256px 0; }
+            12.5% { background-position: -512px 0; }
+            18.75% { background-position: -768px 0; }
+            25% { background-position: 0 -256px; }
+            31.25% { background-position: -256px -256px; }
+            37.5% { background-position: -512px -256px; }
+            43.75% { background-position: -768px -256px; }
+            50% { background-position: 0 -512px; }
+            56.25% { background-position: -256px -512px; }
+            62.5% { background-position: -512px -512px; }
+            68.75% { background-position: -768px -512px; }
+            75% { background-position: 0 -768px; }
+            81.25% { background-position: -256px -768px; }
+            87.25% { background-position: -512px -768px; }
+            93.75% { background-position: -768px -768px; }
+            100% { background-position: 0 0; }
+        }
+
+        /* Center the sprite and add some style */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="sprite-animation"></div>
+    <div class="controls">
+        <button onclick="toggleAnimation()">Play/Pause</button>
+        <button onclick="changeSpeed('faster')">Faster</button>
+        <button onclick="changeSpeed('slower')">Slower</button>
+    </div>
+
+    <script>
+        const sprite = document.querySelector('.sprite-animation');
+        let currentSpeed = 1.6; // Initial animation duration in seconds
+
+        // Toggle play/pause
+        function toggleAnimation() {
+            sprite.classList.toggle('paused');
+        }
+
+        // Change animation speed
+        function changeSpeed(direction) {
+            if (direction === 'faster') {
+                currentSpeed = Math.max(0.4, currentSpeed - 0.2);
+            } else {
+                currentSpeed = Math.min(3.0, currentSpeed + 0.2);
+            }
+            sprite.style.animationDuration = currentSpeed + 's';
+        }
+
+        // You can also click the sprite itself to pause/play
+        sprite.addEventListener('click', toggleAnimation);
+    </script>
+</body>
+</html>

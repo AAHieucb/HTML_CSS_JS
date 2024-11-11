@@ -68,6 +68,7 @@ window.addEventListener("pagereveal", async (e) => {
 	// Khi đi từ same origin, e.viewTransition của pagereveal sẽ có giá trị=
 	if (e.viewTransition) {
 		// Nếu có hỗ trợ Navigation API thfi check được luôn, nếu k đến từ nơi nào cả thì skipTransition, tức gõ url vào browser trực tiếp sẽ k có animation
+		// Ta đang làm là reload thì có animation, còn gõ url vào từ 1 page khác thì k
 		if (!navigation.activation?.from) {
 			e.viewTransition.skipTransition();
 			return;

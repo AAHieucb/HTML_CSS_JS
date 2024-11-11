@@ -216,6 +216,22 @@ inherit: lấy giá trị thuộc tính kế thừa từ cha. Vì mọi thẻ đ
 unset: có parent thì set parent, nếu chưa từng set cho parent thì lấy initial valua. Initial là thông số kỹ thuật CSS ấy
 none: k set giá trị và coi như k có giá trị đó luôn, 3 thuộc tính trên có với mọi thẻ còn none kp thẻ nào cũng có
 
+-> css reset cho text:
+h1,h2,h3,h4,h5,h6 { text-wrap: balance; } => để các mục header có text balance khi bị break nhiều dòng trông đẹp hơn
+p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn
+
+-> css reset cho img {
+  max-width: 100%;
+  vertical-align: middle; // để tránh bị cách các thẻ trước và sau đó 1 khoảng cách do k cùng baseline
+  font-style: italic; // alt text khi hiện sẽ nghiêng để phân biệt
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  shape-margin: 1rem; // Đề phòng dùng shape-outside + floating cho image thì có sẵn 1 kc 
+}
+Vì để phòng khi ta dùng ảnh low res load trong background-image. Nên kết hợp với: 
+<link rel="preload" as=image href="./lowresimage.png" fetchpriority=high>
+Thẻ <img> nên luôn set width height ngay trong nó để tránh layout shift, kèm với background-image low res.
+
 
 
 # BEM
