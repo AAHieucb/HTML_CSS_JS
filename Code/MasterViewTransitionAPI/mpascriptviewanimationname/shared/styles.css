@@ -4,12 +4,10 @@
 	@view-transition {
 		navigation: auto;
 	}
-	::view-transition-group(name1), ::view-transition-group(avatar) {
+
+	::view-transition-group(name), ::view-transition-group(avatar) {
 		animation-duration: 10s;
 	}
-	/* ::view-transition-group(name), ::view-transition-group(avatar) {
-		animation-duration: 10s;
-	} */
 }
 
 @layer pages {

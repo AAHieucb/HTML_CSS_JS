@@ -109,6 +109,9 @@ Gõ có gợi ý theo list có sẵn với: <datalist> + input list
 Nó có thuộc tính -webkit-appearance và appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
 K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn. K dùng pattern có sẵn vì nó k check từ lúc gõ, lúc submit mới báo message k rõ ràng
 
+input type number có min max value step, có thể style khi nhập vào ngoài khoảng với: 
+input[type="number"]:not(:in-range) { }
+
 input pattern [a-z] mà k có số lượng {2,} or {2,8} or + * ? đằng sau thì nó mặc định phải là 1 ký tự thôi
 
 -> Có thể dùng hidden tạo input ảnh hoặc file đẹp
@@ -147,6 +150,7 @@ const response = await client.post("/api/v1/event", uploadData, config);
 
 -> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
 
+<<<<<<< HEAD
 -> Đưa validation form input css thuần lên tầm cao mới: https://www.youtube.com/watch?v=awNYtIAu6pI&list=WL
 Thay vì dùng: 
 input:valid {} // style khi input có valid data
@@ -161,6 +165,9 @@ input:not(:placeholder-shown):invalid {}
 => Nên kết hợp thêm required trong <input> cho các trường buộc phải có
 Khi người dùng chưa nhập xong mà báo invalid luôn k tốt, ta muốn đang nhập dở sẽ k check invalid thì dùng thêm ở cuối:
 input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
+=======
+-> input type="color"
+>>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
 
 
 
@@ -294,10 +301,13 @@ Chỉ cần dùng {
 -> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
 Dùng grid là container được: browser -> Elements -> Layout -> show line names để thấy grid line names
 URL: https://www.youtube.com/watch?v=c13gpBrnGEw
+<<<<<<< HEAD
 
 -> Căn giữa phần tử cuối cùng của grid: 
 Dùng flex box căn giữa ok nhưng sẽ full width, nếu ta set max-width chứ k full width thì khi màn hình co chỉ còn 1 column muốn full lại k được nx. Nếu k muốn như vậy thì dùng grid
 Có thể tạo kim tự tháp card bằng grid bằng cách tương tự
+=======
+>>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
 
 
 
@@ -462,7 +472,11 @@ VD text dài thì min-content thì chỉ đủ kích thước 1 từ dài nhất
 
 # View transition API
 View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
+<<<<<<< HEAD
 Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api chuẩn hơn và sẽ tự tối ưu performance
+=======
+Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api tiện và sẽ tự tối ưu performance
+>>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
 
 -> Giải thích view transition api: https://www.youtube.com/watch?v=xZteiW-cun8
 Có thể đổi view-transition-name ở từng thẻ, customize animation của view transition api (mặc định là fade).
@@ -478,7 +492,11 @@ await document.createDocumentTransition().start(() => {
   window.location.href = 'y.html';
 });
 
+<<<<<<< HEAD
 --> Cách chuẩn MPA + view transition api là dùng: @view-transition {
+=======
+--> Cách khác là dùng: @view-transition {
+>>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
 	navigation: auto;
 }
 ::view-transition-group(root) {
@@ -491,9 +509,15 @@ VD có thể tạo animation navigate multiple page trước đó k thể làm �
 
 --> Mặc định nó chỉ fade, nếu muốn animation cụ thể, phải dùng view-transition-name
 VD: dòng text ở trang này bé, ở trang sau vẫn là dòng text đó nhưng to hơn, thì ta gán view-transition-name cho 2 tag ở 2 page cùng 1 giá trị là ok
+<<<<<<< HEAD
 Chú ý nếu dùng page1 span -> page2 h1 thì sẽ phóng to, nhưng cả 2 page cùng tag span thì lại k.
 
 URL khi cần custom animation toàn page, định hình hướng tiến hay lùi page bằng JS: https://view-transitions.chrome.dev/stack-navigator/mpa-prerender/ 
+=======
+Chú ý nếu dùng page1 span -> page2 h1 thì sẽ phóng to, nhưng cả 2 page cùng tag thì lại k.
+
+URL khi cần custom animation toàn page, định hình hướng tiến hay lùi page: https://view-transitions.chrome.dev/stack-navigator/mpa-prerender/ 
+>>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
 
 --> pageshow là sự kiện phát khi load pages lần đầu tiên, hoặc navigate tới
 pagereveal là sự kiện phát ra khi nội dung được render, bất kể nội dung từ cache, prerender hay refresh mới.

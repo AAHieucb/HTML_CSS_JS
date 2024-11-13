@@ -473,6 +473,7 @@ Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ
 
 -> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
 
+<<<<<<< HEAD
 
 
 # CSS sprite animation
@@ -500,3 +501,5 @@ Có thể tạo animation phức tạp như trong game.
 # border-bottom là cạnh dưới của phần tử.
 border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode
 
+=======
+>>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
