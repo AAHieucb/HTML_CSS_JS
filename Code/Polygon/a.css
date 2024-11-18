@@ -1,3 +1,5 @@
+/* Cơ chế xếp grid, cơ chế đè lên nhau, cơ chế text thẻ before hiện trên từng block mà k tràn ra ngoài */
+
 .main {
   display: grid;
   grid-template-columns: repeat(auto-fit,calc(var(--s) + 2*var(--mh)));
@@ -9,7 +11,7 @@
   --v: 0.25; 
   --hc:calc(clamp(0,var(--h),0.5) * var(--s)) ;
   --vc:calc(clamp(0,var(--v),0.5) * var(--s) * var(--r)); 
-  white-space
+  
   /*margin */
   --mv: 2px; /* vertical */
   --mh: calc(var(--mv) + (var(--s) - 2*var(--hc))/2); /* horizontal */
@@ -24,7 +26,7 @@
   font-size: 0; /*disable white space between inline block element */
   position:relative;
   padding-bottom:50px;
-  filter:drop-shadow(2px 2px 1px #333);
+  filter:drop-shadow(2px 2px 1px #333)
 }
 
 .container div {
@@ -42,30 +44,18 @@
   width: calc(var(--s)/2 + var(--mh));
   float: left;
   height: 120%;
+  /* Cơ chế xếp grid là nó lấy thẻ before shape-outside thì các thẻ bên trong phải né thẻ :before ra. Chỉ cần set shape-outside chiếm diện tích ở mỗi hàng so le là được */
   shape-outside: repeating-linear-gradient(     
-                    transparent 0 calc(var(--f) - 2px),      
-                    #fff        0 var(--f));
+                   transparent 0 calc(var(--f) - 2px),      
+                   #fff        0 var(--f));
 }
 
-.XXX {
-  width: 200px;
-  height: 1000px;
-  position: relative;
-  background-image: repeating-linear-gradient(     
-    red 0 calc(var(--f) - 2px),      
-    #fff        0 var(--f));
-  clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
-}
-.XXX::before {
-  content:"Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10";
-  position:absolute;
-  inset:0;
-}
 
 .container div::before {
   padding-top:80px;
   content:"Thank you \A for reading";
   text-transform:uppercase;
+  /* white-space: pre; là white-space được giữ nguyên, preserve bởi browser, nó chỉ xuống dòng khi ta tự viết ký tự xuống dòng */
   white-space:pre;
   font-size:75px;
   font-family:sans-serif;
@@ -78,22 +68,40 @@
 }
 
 .container div {
-  /* animation:show 3s infinite; */
-  opacity:1;
+  animation:show 3s infinite;
+  opacity:0;
 }
-/* Css hỗ trợ for loop r */
+
+/* Code scss bị bỏ qua trong file css này */
 @for $i from 1 through 43 {
     .container div:nth-child(#{$i}) {
-      animation-delay:(2*random())*1s
+     animation-delay:(2*random())*1s
   }
 }
 
 @keyframes show{
   60% {
-      opacity:1;
+     opacity:1;
   }
 }
 
 body  {
   background:#ccc;
+}
+
+
+.XXX {
+  width: 200px;
+  height: 1000px;
+  position: relative;
+  background-image: repeating-linear-gradient(     
+    red 0 calc(var(--f) - 2px),      
+    #fff        0 var(--f));
+  /* clip-path cắt cả thẻ before của nó */
+  clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+}
+.XXX::before {
+  content:"Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10Thank you for reading lorem10";
+  position:absolute;
+  inset:0;
 }

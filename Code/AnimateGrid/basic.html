@@ -1,0 +1,31 @@
+<style>
+  /* ignore */
+  body {
+    margin: 0;
+  }
+  #grid {
+    height: 100vh;
+  }
+  #left {
+    background: crimson;
+  }
+
+  #right {
+    background: navajowhite;
+    border: 3rem solid rgb(0 0 0 / 10%);
+  }
+  /* Animate grid dễ dàng bằng cách animate grid-template-columns */
+  /* Có thể dùng giá trị mặc định cho var như này néu k tái sử dụng ở nhiều nơi, về sau set thì sẽ đổi */
+  #grid {
+    transition: 300ms;
+    display: grid;
+    grid-template-columns: var(--left, 48px) auto;
+  }
+  #grid:has(#left:hover) {
+    --left: 30%;
+  }
+</style>
+<div id="grid">
+  <div id="left"></div>
+  <div id="right"></div>
+</div>
