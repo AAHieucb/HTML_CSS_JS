@@ -6,7 +6,8 @@ function setScrollVar() {
   // htmlElement.clientHeight là height của view port, là height của phần web màn hình k tính thanh bar
   const percentOfScreenHeightScrolled =
     htmlElement.scrollTop / htmlElement.clientHeight
-  console.log(Math.min(percentOfScreenHeightScrolled * 100, 100))
+  console.log(Math.min(percentOfScreenHeightScrolled * 100, 100));
+  console.log(htmlElement.clientHeight);
   htmlElement.style.setProperty(
     "--scroll",
     Math.min(percentOfScreenHeightScrolled * 100, 100)
