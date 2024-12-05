@@ -101,7 +101,7 @@ Tức if(!mobile) borderRadius=0px else borderRadius=8px
 
 # IntersectionObserver
 Check khi chiều cao của thẻ hiển thị bao nhiêu phần trăm trên màn hình. Nó chỉ tính phần hiển thị trên màn, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-Nếu muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
+VD có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
 
 const handleIntersect = (entries: IntersectionObserverEntry[]) => {
   entries.forEach(entry => {
@@ -372,6 +372,10 @@ VD:
 }
 => Vì & coi là thế từ cục trên vào thành "main .text img {}" => luôn dùng & là đc
 
+VD: @scope (.parent) to (.content) {
+  /* Styles written here will only affect .parent but skip .content*/
+}
+
 --> Bản chất specifility => càng specific, càng quan trọng
 URL: https://specificity.keegan.st/
 Cascade là đinh nghĩa sau sẽ đè lên định nghĩa trước. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>. Cascade chỉ đúng khi cùng specifility, nếu khác thì specifility cao hơn ở bên phải qua sẽ override. VD (1,0,0) đè lên (0,1,10)
@@ -473,7 +477,6 @@ Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ
 
 -> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
 
-<<<<<<< HEAD
 
 
 # CSS sprite animation
@@ -501,5 +504,45 @@ Có thể tạo animation phức tạp như trong game.
 # border-bottom là cạnh dưới của phần tử.
 border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode
 
-=======
->>>>>>> 3db680d69a93906b07abd3b66e9d22f0bf0fdfc0
+
+
+# How to design website
+https://teleporthq.io/ai-website-builder => AI giúp thiết kế website basic
+Hocoos AI Website Builder => AI cực mạnh tạo website và có code luôn, có hosting luôn, multiple pages
+Leia AI website builder => AI tạo website, k có code, hosting luôn
+Pineapple AI => AI tạo website và hosting, k có code, nhưng free plan chỉ tạo được 1 
+KLeap AI Website Builder => AI tạo website, k có code, có hsosting, tạo responsive mobile luôn
+
+Cắp ý tưởng trên figma hoặc các trang web đã có, nhưng website thiết kế ra phải đảm bảo có 1 theme đồng bộ giữa các pages. Có tool chuyển website to figma.
+Tuân thủ color rules
+
+Phần header phải dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu
+Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật, cho núp sau ảnh object. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, có thể dùng gradient nếu cần nổi bật chữ
+Navigation: text navigation và logo nên cùng màu, logo nên gọn gàng vào
+Các phần phải đồng bộ nhau. VD trang có 3 cái header thì cả 3 nên có cùng 1 style
+Cân bằng giữa lượng ảnh và text, k nên để text dài cả 1 dòng, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ thôi, nên vắn tắt ít chữ nhất có thể
+Nếu có nhiều card đi kèm nhau, các card nên có cùng size, k nên cái cao cái thấp. Tạo độ tương phản cho heading text và details text bằng color, fontsize, fontweight
+Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full kích thước
+
+
+
+# Design trend
+Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card
+https://webflow.com/made-in-webflow/website/glowing-card-effect-on-hover
+https://glow-cards.webflow.io/
+
+
+
+# Đỉnh cao, dùng conic gradient tạo hình zigzag 
+.loader {
+  height: 47px; /* control the size */
+  aspect-ratio: 5;
+  background:
+    conic-gradient(from 135deg at top,#000 90deg,#0000 0) top,
+    conic-gradient(from 135deg at top,#0000 90deg,#000 0) bottom;
+  background-size: 20% 50%;
+  background-repeat: repeat-x;
+}
+
+
+

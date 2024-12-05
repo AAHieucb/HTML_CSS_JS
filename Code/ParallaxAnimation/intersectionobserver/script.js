@@ -13,8 +13,9 @@ const observer = new IntersectionObserver(entries => {
 
   rootMargin: "+100px", // co kích thước thẻ root view port. Vd dùng lazy load image thì cho root là +100px, khi đó ảnh vẫn lazy load nhưng cách viewport 100px thì load luôn trước để tăng trải nghiệm. Để giá trị âm gây lỗi
 
-  // root: document.querySelector('body') // thay đổi thẻ root, mặc định là thẻ null là view port
-})
+  // root: document.querySelector('body') // thay đổi thẻ root, mặc định là thẻ null là view port. Phần tử chỉ được kiểm tra intersect với view port nếu nó nằm trong vùng của thẻ root
+});
+// Cái này phát 2 lần, khi vào và khi ra vì tỉ lệ giao cắt tính cả lúc vào và ra. Nó sẽ phát mỗi khi tỉ lệ đổi và chuyển thành đúng giá trị cắt qua threshold
 
 cards.forEach(card => {
   observer.observe(card)

@@ -61,7 +61,6 @@ Nếu ta muốn 1 thẻ di chuyển theo scroll chuột, ta dùng position stick
 
 
 
-//!!!!!!!!!
 # Dùng css thuần animation-timeline tạo parallax
 Trước tiên để các thẻ đè lên nhau, còn 1 cách nữa là dùng grid-template-areas. Khi cho tất cả cùng 1 thuộc tính grid-area, chúng sẽ nằm cùng 1 chỗ
 Nó cũng hoạt động tốt kết hợp với position absolute. Nếu 1 thẻ con dùng position absolute, nó cũng nằm đúng ở vị trí hiện tại luôn, top left các thứ sẽ chỉnh từ vị trí grid-area đổ đi

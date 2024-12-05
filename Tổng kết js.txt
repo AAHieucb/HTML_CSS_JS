@@ -223,10 +223,12 @@ Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp 
 Promise chỉ coi là kết thúc khi gọi resolve hoặc reject.
 Gọi new Promise(<>) thì bên trong promise sẽ thực hiện bất đồng bộ ngay khi được gọi tới. Chú ý phân biệt điều này với var a = function() và bên trong function mới return new Promise thì promise sẽ k thực hiện ngay vì function k được thực hiện.
 
--> Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào, 1 cái failed sẽ lỗi và dừng luôn
+-> Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào, 1 cái failed sẽ lỗi và dừng luôn. Bản chất nó nhận các promise và trả ra 1 promise mới. Nếu 1 promise con bị failed thì promise ngoài sẽ reject luôn, k lấy được kết quả các promise thành công còn lại nữa.
 Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
 Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
 Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
+
+Chú ý gọi resolve(new Promsie(<hàm>)); chạy được đến resolve sẽ thực hiện hàm luôn
 
 
 

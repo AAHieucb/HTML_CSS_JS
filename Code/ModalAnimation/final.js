@@ -75,8 +75,7 @@ console.log(a(1));
 // function trả ra 1 promise:
 // const test = (x) => new Promise((resolve, reject) => {
 //   console.log(x);
-//   resolve(10); // nếu k có resolve, hàm then dưới k được thực hiện vì return ở đây k tính là resolve, chỉ có return 
-// trong hàm then mới tính là resolve thôi
+//   resolve(10); // nếu k có resolve, hàm then dưới k được thực hiện vì return ở đây k tính là resolve, chỉ có return trong hàm then mới tính là resolve thôi
 //   return 10;
 // }).then(x => console.log(x)); // Lúc khai báo thì k chạy luôn hàm nên k thực hiện promise
 // console.log("X");

@@ -6,7 +6,6 @@ https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon độ
 Tổng hợp component UI bằng html thuần*: https://uiverse.io/
 GSAP dùng được với css thuần: https://gsap.com/
 
-Có thể custom cursor
 CSS nesting có sẵn rồi
 
 -> Master border radius: outer radius = inner radius + distance giữa 2 border
@@ -44,6 +43,13 @@ Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-a
 -> Chỉnh thứ tự in chữ với "writing-mode: vertical-rl;"
 -> hidden attribute set cho 1 thẻ sẽ ẩn thẻ đó đi
 -> Thuộc tính content-visibility cho phép 1 thẻ render nội dung bên trong nó ra hay không
+
+-> Có thể custom cursor:
+C1: là cho cursor none rồi tự custom 1 thẻ ảnh khác cho transform theo mousemove. Có thể custom event mouse down thì phóng to ảnh, mouse up thì ảnh về bth
+=> Việc custom cursor như v k ổn k nên dùng vì text, input, button đôi khi cần các hình khác nhau thì custom sẽ phức tạp với từng thẻ
+C2: là dùng cursor: url() base64 
+Tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị
+URL: https://custom-cursor.com/ => lấy ảnh cursor free
 
 
 
@@ -508,6 +514,8 @@ pageswap là khi load hẳn 1 document mới, document cũ sẽ bị unload luô
 # Other:
 -> Nguồn ảnh free: https://www.pexels.com/ ảnh và video chất lượng
 https://unsplash.com/ ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
+
+-> Các kiểu thiết kế layout web: https://wordpress.com/blog/2024/11/14/website-layout-examples/
 
 -> Vd Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
 visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg. Nó khác với opacity vẫn có thể tương tác
