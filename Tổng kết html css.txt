@@ -51,6 +51,49 @@ C2: là dùng cursor: url() base64
 Tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị
 URL: https://custom-cursor.com/ => lấy ảnh cursor free
 
+-> defer js tải song song với html và thực thi sau khi html parse xong; async tải và thực thi song song; Mặc định k có thì parseblocking tải và thực thi xong mới chạy tiếp
+=> Dùng defer là đẹp nhất
+
+
+
+
+# Tạo tab
+Dùng thẻ a, k dùng button
+Nếu single page, dùng <a href="#idofelement"/>
+Progressive enhancement chạy kể cả disable js
+Thay vì add event click vào từng thẻ, ta chỉ cần add vào thẻ container sẽ tự phát khi các phần bên trong bị click
+
+-> Dán nhãn cho phần tử giúp tăng accessiblity của web, nhất là với các thẻ k có text mô tả mà chỉ có icon. Giúp link các thẻ có quan hệ lại giữa id và aria-labeledby
+Dùng với aria-label được: <button aria-label="Tìm kiếm">
+Dùng với aria-labeledby khi cần 1 hoặc nhiều thẻ khác làm nhãn cho thẻ hiện tại. VD:
+<p id="label1">Giỏ hàng:</p>
+<p id="label2">Bạn có 3 sản phẩm.</p>
+<div role="region" aria-labelledby="label1 label2">
+  <!-- Nội dung khu vực -->
+</div>
+
+Dùng cách thuộc tính aria, đảm bảo khi ấn nút tab và mũi tên có thể navigate được chứ bth chỉ ấn mỗi nút tab được.
+Cách dùng aria cho tabs: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
+
+role="tablist", role="presentation", tabindex, role="tab", role="tabpanel"
+Thuộc tính role sẽ loại bỏ ý nghĩa senmatic của thẻ, VD role="presentation" cho thẻ li chỉ định rằng phần tử có mục đích trình bày (decorative), không mang ý nghĩa semantic hay chức năng trong ngữ cảnh hiện tại, khiến cho thẻ li không còn biểu hiện cho list nữa, thẻ sẽ bị bỏ qua trong accessibility tree, công cụ hỗ trợ screen reader không đọc hoặc thông báo về nó.
+
+Mặc định ấn key tab sẽ navigate qua mọi thẻ a trên page. Nếu dùng tabindex="-1" cho 1 thẻ sẽ bị bỏ qua khi nhảy tab. Nếu dùng tabindex="0" cho các thẻ khác như div thì nó sẽ nhảy vào cả các thẻ đó. Điều này tiện cho việc ấn key tab vào 1 tab, và ấn key tab tiếp sẽ vào content của tab kể cả div đó chứ k nhảy qua
+Set bằng JS, ta cho mọi tab k active có tabindex="-1", tab đang active và nội dùng của nó có tabindex="0"
+
+Thuộc tính hidden k chỉ ẩn thẻ đi mà cũng ẩn nó khỏi accessibility tree, tương tự display none. Còn visibility: hidden chỉ ẩn trên UI mà k ẩn trên accessibility tree. 
+VD dùng display none xong aria-hidden="false" sẽ ẩn khỏi UI nhưng accessibility tree vẫn còn.
+
+aria-selected="true" bảo screen reader biết hiện đang ở tab nào
+
+aria-controls k nên dùng, nếu muốn thêm thông tin mô tả cho tab thì có thể dùng: aria-describedby="idofelement" và dùng 1 thẻ <div id="idofelement" hidden></div> để thêm nếu cần. Nội dung của thuộc tính này được sử dụng khi ngừoi dùng vào tab đó và screen reader đọc nó lên cho ngừoi dùng nghe.
+
+Ấn key left right để switch tab thì phải tự custom tạo hàm riêng thao tác với DOM thôi. Bắt sự kiện keydown.
+Điều đặc biệt là khi ta add event keydown cho tabContainer thì chỉ khi ấn tab focus vào tabContainer thì keydown của nó mới bắt chứ ngoài màn hình gõ sẽ k ảnh hưởng
+
+-> text-decoration-thickness, text-underline-offset 
+style dựa vào các thuộc tính aria, mà các thuộc tính aria set vào bằng JS. Nên nếu k có js, sẽ k có style gì cả. Ta đảm bảo chỉ style khi js được enabled, progressive enhancement.
+
 
 
 # Css anchor
@@ -495,7 +538,7 @@ await document.createDocumentTransition().start(() => {
 	animation-duration: 0.5s;
 }
 => Code hack: trong head phải có ít nhất 1 <script src="ignored"></script> nằm ở sau thẻ link css, hoặc nếu không thì phải viết đủ: 
-<script src="ignored" type="module" blocking="render"></script>
+<script src="ignored" type="module" blocking="render"></script> => blocking="render" k có ý nghĩa, trình duyệt k hiểu
 
 VD có thể tạo animation navigate multiple page trước đó k thể làm được bằng css js thuần
 
