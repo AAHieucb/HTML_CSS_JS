@@ -1,0 +1,411 @@
+# Cách dòng
+white-space: nowrap
+text-overflow + overflow hidden xử lý text tràn thì cut và hiển thị gì ra
+letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc các word bnh chứ kp là giá trị kc luôn
+text-ident để lùi đầu dòng paragraph
+text-align justify
+
+box-decoration-break => xử lý style inline element (span) khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
+line-height giúp căn kc các dòng trong 1 văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, VD dùng thay việc set paddingTop
+vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuống 1 tẹo so với vị trí hiện tại mà k cần dùng đến flexbox => nên thử mọi options khi dùng
+=> Thông thường ta bao tất cả bằng 1 component lớn với line-height, phần nào bên trong muốn chỉnh vị trí lên xuống thì nhét vertical-align cho nó
+
+-> Mặc định text tràn khung sẽ tự xuống dòng, nhưng 1 từ dài quá 1 dòng sẽ k cắt.
+word-wrap xử lý cut text như nào, dùng break-all sẽ cut được chữ dài => bỏ, thế bằng word-break
+word-break y hệt word-wrap nhưng cung thêm break-all. break-all thì 1 chữ k đủ dòng vẫn viết tiếp, mặc định thì chữ k đủ phần còn lại sẽ xuống dòng sau
+line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp / -webkit-line-clamp
+VD: 
+1) abcde trong khung max 5 chữ thì word-wrap break-word đảm bảo hiện là:
+abcd
+e
+2) ab def thì word-break keep-all hiện là:
+ab
+def
+vì nó kbh là cắt chữ
+3) ab def thì word-break break-all hiện là
+ab de
+f
+hiển thị như bth vì nó chỉ xuống khi tràn
+4) ab defghi ac và muốn nó vừa có kiểu bảo toàn chữ tràn khi full width, vừa break word nếu word quá dài kiểu:
+ab
+defgh
+i ac
+=> word-wrap/word-break: break-word; 
+
+-> Ngoài white-space, ta còn có text-wrap: wrap/no-wrap tương tự
+Có text-wrap: balance; khiến cho content chia vào nhiều dòng 1 cách cân bằng hơn giữa các dòng, chỉ có tác dụng với text < 6 lines. Dùng cho nhiều kiểu k chỉ text 
+VD: list có 10 items, nó sẽ chia mỗi 5 items 1 dòng khi có 2 dòng thay vì cứ giảm dần 9 1, 8 2, 7 3 khi co nhỏ màn lại.
+Nếu ít dòng và right gap lớn thì dùng text wrap pretty sẽ đẹp hơn balance. Pretty cũng tốt nếu cuối dòng có 1 icon và icon bị dài quá sang line2 nhìn rất chuối.
+=> Vấn đề text wrap balance bị khoảng trắng lớn ở bên phải, có thể dùng lib https://react-wrap-balancer.vercel.app/
+
+
+
+# 3D 2D transform
+Chỉ có: translate(1,2), rotate(20deg), scale(1,2), skewX(15deg,15deg) có thể dùng trực tiếp mà k cần transform
+Dùng transform-origin set tâm
+
+Hàm translate relative có 1 điểm đb là khi lùi tương đối, nó lùi so với kích thước của chính nó chứ kp kích thước cha => cách để cho thẻ ra tâm thẻ khác
+transform nhược điểm là vẫn chiếm vị trí cũ nên position relative ít dùng
+VD: position relative top -50px và transform translateY(-50px) chả khác gì nhau. Thực tế translate nó boost graphical performance of browser vì nó ra đời sau.
+
+-> transform-style: A chứa B thì xoay A, B cũng xoay theo. Vd thẻ A xoay trục Y 60 độ sẽ nhỏ lại và text bị méo, transform-style mặc định là flat khiến cho vị trí đó trở thành kích thước và vị trí của thẻ B luôn, nếu xoay B -60 độ thì nó xoay cái hình méo đó tiếp làm thẻ B nhỏ hơn nữa  (xoay xong flat ra thành mp r xoay tiếp mp đó). transform-style preserve-3d thì thẻ B tách rời với thẻ A và k bị flat nữa nên xoay -60 độ quay trở lại kích thước và vị trí ban đầu
+
+-> Perspective chỉnh kc từ mắt đến vật, mặc định nó nhìn từ rất xa. VD 1 hình vuông nghiêng mà nhìn từ kc xa sẽ thành hcn bth chứ k thấy độ lệch.
+Sample căn phòng 3d: https://codepen.io/ricardoolivaalonso/pen/mdPzrpe
+
+
+
+# Animation basic
+Tìm animation đủ loại => search #topcsseffects trong youtube kênh hơn 1000 video chỉ giới thiệu css animation
+
+-> transition: [thuộc tính chuyển động] [thời gian chuyển động] [thời gian delay] [kiểu chuyển động];
+Đổi trạng thái cho các thuộc tính liên quan đến số và màu, VD background-image k có tác dụng nhưng có thể fake chỉ bằng cách animate opacity các ảnh
+VD: transition: all 1s 0.5s ease-in; hoặc transition: width 2s, height 2s, transform 2s;
+cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm
+transition-delay
+
+transition k dùng được với width hay các giá trị k rõ như auto
+VD có thể set padding 0 -> unset, fontSize 0 -> unset, scaleY(0) -> scaleY(1)
+Trong React ta dùng style={appear ? {fontSize: "unset"} : {fontSize: 0, padding: 0, opacity: 0}} + transition là được
+pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
+
+-> animation: [animation-name] [animation-duration] [animation-timing-function] [animation-delay] [animation-iteration-count] [animation-direction] [animation-fill-mode] [animation-play-state];
+animation-duration là thời gian từ lúc bắt đầu cho đến khi kết thúc
+animation-delay là thời gian chờ trước khi hiệu ứng bắt đầu chạy
+animation-iteration-count dùng số or infinite, số float cho ra animation dừng giữa chừng
+animation-direction thì normal là đi về phía trước, reverse là về phía sau, alternate làm chuyển động được quay ngược lại kiểu 5s đầu là 0%->100% và 5s sau là 100%->0%, alternate-reverse ngược lại với alternate 
+animation-fill-mode: Khi kết thúc animation, nếu để none or k set gì thì mặc định dùng style ban đầu khi animation k thực thi, nếu set forwards sẽ dùng giá trị khung cuối, backwards dùng giá trị khung hình chính ở đầu animation (lúc 0%); both là hòa trộn forward và backwards; 
+animation-play-state: paused hay running
+=> Lưu ý để đảm bảo animation liên tiếp nhau k kiểu bị ngắt quãng thì nên setup sao cho giá trị mặc định lúc 0% bằng với giá trị lúc 100% để làm vô tận mượt hơn
+VD tạo animation hover mới có thì nên để animation-play-state là paused, hover thì running để tránh animation chạy mãi sẽ ngốn CPU: https://www.youtube.com/watch?v=M1qPpwVcF64
+
+VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal)
+=> animation còn có SVG, ảnh động, 3D. URL full: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM 
+URL animate loading: https://loading.io/spinner
+
+-> animation-timeline giúp control thuộc tính animation phụ thuộc vào hành động của user hoàn toàn bằng css. VD chỉ khi scroll thì animation mới chạy, tạo parallax
+view(), scroll(), scroll-timeline-name: --squareTimeline;
+
+-> Vd hover button to ra: 
+Nếu có thể, nên cho button to sẵn và scale nhỏ lại, hover thì trở về kích thước ban đầu
+Nếu không, cách tốt nhất là scale(1.2) lên và bị mờ. Để fix:
+- will-change: transform; sẽ đưa gợi ý cho browser biết sẽ thay đổi như nào để optimize, hạn chế dùng vì browser xử lý expensive có thể gây lag.
+- backface-visibility: hidden; chặn hiển thị mặt sau giúp giảm mờ.
+
+-> Hiểu nguyên tắc xếp chồng code css: style được thêm vào sau sẽ đè lên style được thêm vào trước đó. Ở mỗi thời điểm, ta chỉ cần hiểu nó có style gì là được. VD animation forwards thực tế là style cuối cùng được thêm vào thẻ và cố định như v luôn.
+transition sẽ luôn giúp thuộc tính css bị biến đổi từ từ nếu có sự thay đổi. 
+Nếu muốn khác đi, nên dùng animation keyframes. Mọi lúc animation có sự thay đổi khác biệt đều là 1 keyframes riêng. 
+VD: animation ẩn và hiện, néu dùng keyframes thì buộc lúc hiện và ẩn là 2 keyframes phải tạo ra.
+=> Tưởng tượng animation như các stack xếp chồng lên nhau khi set sẽ dễ hơn
+
+-> Trong js có event "transitionend" bắt khi quá trình transition kết thúc.
+VD: ta muốn 1 thẻ bị faded rồi biến mất. Nếu ta dùng keyframes với opacity sẽ k biến mất, nếu dùng display sẽ k có animation. Có thể dùng opacity rồi bắt sự kiện "transitionend" để gán display none là được.
+Cách khác là setTimeout đúng bằng thời gian transition rồi xoá thẻ.
+=> Tương tự có sự kiện animationend
+
+-> interpolate-size: allow-keywords; quá mạnh, cho phép animate theo các giá trị auto, min-content, max-content, fit-content
+VD text dài thì min-content thì chỉ đủ kích thước 1 từ dài nhất, max-content là khi text trải dài hết ra
+=> Luôn để ở :root sẽ áp dụng với mọi thẻ
+Còn transition với display none có thể dùng allow-discrete trong transition-behavior
+
+
+
+# Master animation với transform 
+1) Thứ tự transform có ảnh hưởng tới object di chuyển, rotateZ sẽ rotate cả trục tọa độ nên nếu rotateZ rồi translateX khác với translateX rồi rotateZ
+2) transform origin mặc định ở top left
+3) rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
+4) keyframe transform: rotateZ(-45deg) translateX(50px) rotateZ(45deg); => nó khiến object đi đường vòng cung và k bị xoay vì các animation thực hiện đồng thời. Nó sẽ rotateZ, đi trục x, rotateZ ngược lại. Tức là ở mỗi bước di chuyển, nó rotateZ và đi trục x đồng thời làm đường vòng cung. Sau đó rotateZ ngược lại khiến object quay về vị trí ban đầu. Quá trình cực nhanh ở mỗi bước. Nó k đi chéo luôn vì quá trình rotate và đi trục X đồng thời chứ kp rotate xong mới đi x, cuối cùng mới rotate ngược về
+5) Để animation 1 set thẻ, ta nhét vào 1 thẻ container và animation thẻ container là được
+6) Animation k tự chạy lại khi đã chạy xong đúng số lần, nếu muốn chạy lại, phải gán tiếp lại class có animation cho nó.
+7) Mỗi giai đoạn di chuyển khác nhau nên có 1 animation riêng. Khi đã có animation xuôi, k nên tái sử dụng animation ngược lại với direction reverse mà hãy tạo 1 keyframe mới vì nhiều lúc lỗi k hiểu tại sao.
+8) Nếu vị trí from của animation k trùng với vị trí ban đầu, vật sẽ nhảy sang state đó r animation tiếp rất xấu. State trước khi chạy animation cũng chính là from
+
+-> Multiple animation liên tiếp nhau sử dụng animation-delay và set phần trăm chuẩn trong @keyframes
+
+
+
+# Vấn đề trigger lại animation
+-> Playback 1 animation cũ: 
+1) Bth animation chạy 1 lần sẽ k trigger lại, nhưng nếu gán cho 1 animation khác r remove animation đó thì animation cũ sẽ trigger. Điều này chỉ được khi đổi animation-name.
+Nhờ v, có thể tạo 1 animation giống hệt nhau, rồi liên tục thêm bớt cái animation thứ 2 để animation trigger liên tục thực chất là 2 cái so le
+2) Đổi trạng thái animation từ nhanh sang chậm khi ấn nút, ta bao bằng 1 thẻ khác và animation ngược lại với cường độ nhỏ hơn, ấn thì đổi animation-play-state paused sang running
+
+-> Trong JS để tạo ra 1 animation, ta thêm 1 class animate vào thẻ đó, nhớ xoá đi khi k cần nữa.
+Mỗi lần xoá rồi thêm class sẽ chạy lại animation, nhưng VD nếu muốn animation thêm lần nữa theo đk của JS thì k được. Nếu remove rồi add lại class sẽ k chạy animation.
+Có nhièu cách fix:
+- Trigger reflow ép ở giữa sẽ khiến browser buộc render lại ngay:
+animatedElement.classList.remove('animate');
+void animatedElement.offsetWidth; // forces reflow
+animatedElement.classList.add('animate');
+
+- Dùng timeout cực ngắn: cách này k đảm bảo sẽ chạy animation ở mọi trường hợp 
+animatedElement.classList.remove('animate');
+setTimeout(() => {
+    animatedElement.classList.add('animate');
+}, 10); 
+=> Để 10ms là đủ khiến browser nhận ra và render lại.
+=> Có thể để là 0 thì chạy ngay event loop sau.
+
+-> Css only
+VD click 1 button thì trigger animation X chạy 1 lần (css only với flex box gán animation name), click lần nữa trigger tiếp sẽ k chạy
+
+Nếu k dùng css only, có giải pháp là đặt setTimeout cực ngắn ngay khi checked thì unchecked luôn. Cẩn thận toang khi ngừoi dùng ấn liên tục cực nhanh
+Néu dùng css only, cách duy nhất là đặt 2 animation giống nhau nhưng khác tên. Gán qua gán lại để đổi qua animation khác khi unchecked và checked là ok thôi
+=> Tức là animation css only sẽ k trigger lại, chỉ có cách đổi qua animation khác
+
+
+
+# Animate SVG
+stroke-dasharray: 5,3; tức là 5 pixel liền thì có 3 pixels đứt sau đó và cứ tiếp tục vẽ đến hết hình
+stroke-dashoffset xác định điểm bắt đầu vẽ của stroke-dasharray.
+
+Bản chất animate line svg là nó animate thuộc tính stroke-dashoffset thôi
+VD vẽ animation trên trang https://editor.method.ac/ rồi svg từng phần tử
+
+-> Animate svg khi hover: các tag svg dùng đc animation css như bth, dùng cho các thẻ path hay g bên trong để animate 1 phần của icon cũng được luôn
+Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, khi hover vào thì đổi lại thành running là ok
+
+
+
+# CSS sprite animation
+Nhét mọi frames vào chung 1 bức ảnh và animate bằng cách hiển thị từng frame
+animation-timing-function có hàm step(<số>); sẽ chia đều các khoảng được khai báo thành 1 lượng frame rồi nhảy từng frame
+VD: animation: play 1s steps(10) infinite;
+@keyframes play {
+  0% { background-position: 0 0; }
+  10% { background-position: 100px 100px; }
+  100% { background-position: 0 0; }
+}
+=> thì nó sẽ hiển thị background ở các vị trí khác nhau. Từ 0% đến 10% sẽ chia làm 10 frames và hiển thị lần lượt, từ 10% đến 100% lại chia 10 frames và hiển thị lần lượt
+
+Có thể convert gif or video sang sprite image với https://ezgif.com/gif-to-sprite
+Có thể lấy hàng loạt ảnh gif trên trang giphy.
+Search sprite basic trên trang: https://opengameart.org/
+APNG cũng là 1 loại ảnh png nhưng có animated
+
+-> Tại sao k dùng video hay gif mà dùng sprite css animation?
+Vì css sprite animation có thể custom play, pause, chạy khi hover or click, kiểm soát frame rate, kết hợp với animation timeline cho scroll animation 
+Có thể tạo animation phức tạp như trong game.
+
+
+
+# View transition API
+View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
+Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api chuẩn hơn và sẽ tự tối ưu performance
+
+-> Giải thích view transition api: https://www.youtube.com/watch?v=xZteiW-cun8
+Có thể đổi view-transition-name ở từng thẻ, customize animation của view transition api (mặc định là fade).
+
+-> Để đổi DOM bth trong SPA, chỉ cần cho hàm update DOM vào document.startViewTransition => dùng css thuần sẽ phải ốp animation mọi tag là ngu xuẩn.
+
+-> Để cross-document transition cùng origin:
+C1 ngu: fetch pages đó về rồi thế vào innerHTML pages hiện tại trong startViewTransition. Tức dùng như single page nhưng chả ai làm vậy.
+C2: view transition api có cách riêng để dùng cho cross-document. Nó chờ fetch xong hết rồi animation chuyển pages.
+
+--> document.createDocumentTransition ấn tiến lùi thì ok chứ ấn thẻ a éo được => éo dùng
+await document.createDocumentTransition().start(() => {
+  window.location.href = 'y.html';
+});
+
+--> Cách chuẩn MPA + view transition api là dùng: @view-transition {
+	navigation: auto;
+}
+::view-transition-group(root) {
+	animation-duration: 0.5s;
+}
+=> Code hack: trong head phải có ít nhất 1 <script src="ignored"></script> nằm ở sau thẻ link css, hoặc nếu không thì phải viết đủ: 
+<script src="ignored" type="module" blocking="render"></script> => blocking="render" k có ý nghĩa, trình duyệt k hiểu
+
+VD có thể tạo animation navigate multiple page trước đó k thể làm được bằng css js thuần
+
+--> Mặc định nó chỉ fade, nếu muốn animation cụ thể, phải dùng view-transition-name
+VD: dòng text ở trang này bé, ở trang sau vẫn là dòng text đó nhưng to hơn, thì ta gán view-transition-name cho 2 tag ở 2 page cùng 1 giá trị là ok
+Chú ý nếu dùng page1 span -> page2 h1 thì sẽ phóng to, nhưng cả 2 page cùng tag thì lại k.
+
+URL khi cần custom animation toàn page, định hình hướng tiến hay lùi page: https://view-transitions.chrome.dev/stack-navigator/mpa-prerender/ 
+
+--> pageshow là sự kiện phát khi load pages lần đầu tiên, hoặc navigate tới
+pagereveal là sự kiện phát ra khi nội dung được render, bất kể nội dung từ cache, prerender hay refresh mới.
+pageswap là khi load hẳn 1 document mới, document cũ sẽ bị unload luôn sẽ phát
+
+
+
+# Css anchor
+URL: https://www.youtube.com/watch?v=B4Y9Ed4lLAI&list=WL&index=2&t=61s
+Ful tut: https://css-tricks.com/css-anchor-positioning-guide/
+***popovertarget popover popovertargetaction giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần, tự responsive
+anchor trong css và html để gắn popover hiện theo thẻ nào
+:root:has(#context:popover-open): Check popover đang được mở bằng css selector để style
+VD1: 
+<style>
+  [popover] {
+    inset: unset;
+    bottom: anchor(top);
+    left: anchor(center);
+    translate: -50%;
+    margin: 0.25rem 0;
+  }
+</style>
+<button popovertarget="info" id="btn">Field</button>
+<div popover id="info" anchor="btn">Extra</div>
+VD2: 
+<style>
+  #btn {
+    anchor-name: --i-btn;
+  }
+  [popover] {
+    anchor-default: --i-btn;
+    inset: unset;
+    translate: -50%;
+    margin: 0.25rem 0;
+    position-fallback: --top-to-bottom;
+  }
+  @position-fallback --top-to-bottom { /* @position-fallback check dùng các position @try, nếu k được thì cứ lấy tiếp cái sau */
+    @try {
+      bottom: anchor(top);
+      left: anchor(center);
+    }
+    @try {
+      bottom: anchor(bottom); /* K fit top thì anchor xuống bottom => auto positioning */
+      left: anchor(center);
+    }
+  }
+</style>
+<button popovertarget="info" id="btn">Field</button>
+<div popover id="info">Extra</div>
+
+-> Dùng @starting-style và transition-behavior allow-discrete
+
+-> dialog là 1 loại popover và có thể dùng kèm API của popover => tạo ra dialog tự có click outside to close.
+
+
+
+# Custom thẻ input
+Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
+
+Dùng event "input" giống onChange của react, dùng thay event "change"
+
+Gõ có gợi ý theo list có sẵn với: <datalist> + input list
+
+-> Nếu muốn có 1 group input radio chỉ cho chọn 1 thì phải đặt chung trường name với nhau
+
+-> input type number custom nút spin button, trỏ vào shadow DOM với: input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button
+Nó có thuộc tính -webkit-appearance và appearance ta chỉnh là none chẳng hạn thì nó sẽ k hiện
+K an toàn vì dùng -webkit, với browser khác nên dùng type text và lọc thủ công sẽ chuẩn hơn. K dùng pattern có sẵn vì nó k check từ lúc gõ, lúc submit mới báo message k rõ ràng
+
+input type number có min max value step, có thể style khi nhập vào ngoài khoảng với: 
+input[type="number"]:not(:in-range) { }
+
+input pattern [a-z] mà k có số lượng {2,} or {2,8} or + * ? đằng sau thì nó mặc định phải là 1 ký tự thôi
+
+-> Có thể dùng hidden tạo input ảnh hoặc file đẹp
+C1: <CustomButton2 variant="outlined" onClick={() => fileInputRef.current.click()}>
+  Upload File
+</CustomButton2>
+<input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={getFile} />
+
+Đọc text từ file:
+const getFile = (event) => {
+  const reader = new FileReader();
+  reader.onload = (e) => { console.log(e.target.result); };
+  reader.readAsText(event.target.files[0]);
+}
+C2: Input image, hiển thị và gửi qua API
+<input accept="image/*" hidden id="raised-button-file" type="file" onChange={onImageChange}/>
+<label htmlFor="raised-button-file">
+  <Box style={{ width: "299px", height: "300px" }}>
+    <img
+      width="100%"
+      height="100%"
+      style={{ borderRadius: "15px" }}
+      src={image}
+    />
+  </Box>
+</label>
+const onImageChange = (event) => {
+  if (event.target.files && event.target.files[0]) {
+    setImage(URL.createObjectURL(event.target.files[0]));
+  }
+  setImageSending(event.target.files[0]);
+};
+const uploadData = new FormData();
+uploadData.append("image", imageSending);
+const response = await client.post("/api/v1/event", uploadData, config);
+
+-> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
+
+-> Đưa validation form input css thuần lên tầm cao mới: https://www.youtube.com/watch?v=awNYtIAu6pI&list=WL
+Thay vì dùng: 
+input:valid {} // style khi input có valid data
+input:invalid {} // style khi input có invalid data
+Ta dùng:
+input:user-valid {} // style khi input có data, và data đó valid
+input:user-invalid {} // style khi input có data, và data đó invalid
+Hoặc better browser support: 
+input:not(:placeholder-shown):valid {} 
+input:not(:placeholder-shown):invalid {}
+
+=> Nên kết hợp thêm required trong <input> cho các trường buộc phải có
+Khi người dùng chưa nhập xong mà báo invalid luôn k tốt, ta muốn đang nhập dở sẽ k check invalid thì dùng thêm ở cuối:
+input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
+
+-> Có form.reset() 
+
+
+# CSS Selector
+-> Cùng Specifility thì lấy cái set sau: !important > inline style > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
+dialog.hide > dialog[open] > .hide
+VD: style theo pseudo-class: .test:hover { }
+style theo attributes: div[id=test] { }
+style theo pseudo-element: .test:before { }
+VD: a[href$=".abc" i]  /  [href*="google.com"]  /  img:not([alt]) 
+VD: input[type='file'][multiple] khi chọn nhiều thuộc tính
+
+space là descendant mọi cấp
+>  child trực tiếp
+~  mọi sibling sau
++  1 sibling ngay sau 
+
+-> Vd 1 thẻ a mà có cả 4 thuộc tính thì phải viết css đúng thứ tự sự kiện nếu k sẽ k có hiệu ứng :link/:visited -> ::selection -> :hover -> :active (click chuột)
+::active là đang ấn, ::selection là bôi đen
+
+input:checked/:disabled/:enabled/:required => khi input buộc nhập giá trị 
+input:optional/:read-only X :read-write/:valid X :invalid/:out-of-range tức khi lỗi out-of-range thì mang style css gì X :in-range
+
+Pb: :is(<>) thì cho độ ưu tiên cao nhất là 100 còn :where(<>) với cú pháp giống hệt nhưng luôn cho độ ưu tiên thấp nhất là 0 như dùng cho css reset
+:is thực tế có độ ưu tiên bằng với việc liệt kê bth, nó có tác dụng gom viẹc liệt kê gọn hơn
+VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
+:is cũng khiến cho các phần tử trong ngoặc () có cùng specifility là cái cao nhất trong list. VD ở trên thì h1, h2 sẽ có cùng specific như class .link dù nó chỉ là thẻ thường.
+VD: a:is(:hover, :focus) {} tương đương a:hover,a:focus {}
+VD dùng :root css reset nó bị cao hơn bth, ta nhét vào ép specifility về 0 với :where(:root) { }. Ngược lại thì :where(.parent) .child {} thì .chịld vẫn giữ specifility của nó chứ k theo cha.
+
+Pb :focus là chính thẻ đó được focus, :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này bị focus thì thẻ này sẽ mang style nào (bao cả việc ấn tab để focus)
+VD ta ấn button và show dropdown thì dùng button:focus .dropdown { display: flex; } nhưng ấn vào dropdown thì button mất focus sẽ ẩn dropdown, dùng :focus-within cho thẻ bao ngoài 2 cái đó để fix
+:focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey
+
+p:empty là khi thẻ p k có text bên trong thì có style như nào
+:nth-last-of-type(2) => sibling cuối cùng thứ 2
+p:lang(it) { } => thẻ p có lang là italia. VD: <p lang="it">Ciao bella!</p>
+div:nth-child(n) => thẻ div là con thứ n
+p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
+::initial-letter tương đương selector ::first-letter giúp tạo chữ đầu tiên to đùng như đầu bài báo article
+
+VD: button:not(:first-child){} => mọi thẻ button không là first-child trong web 
+button:has(svg){} => mọi button có thẻ svg là child 
+VD giả sử tạo checkbox với option light/dark mode thì cách css hay nhất là: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; } => chú ý phải đổi từ thẻ body vì nó chỉ effect thẻ hiện tại và các con của nó khi ta reassign css vars
+
+-> X:before và X:after như 1 thẻ khác nằm bên trong X có kích thước fit content, k có content thì mặc định là 0 0.
+before hiện ở left 0 top 0 của thẻ, after ở top right, kp hiện đằng trc vị trí thẻ hiện tại mà nó chiếm vị trí thẻ và đẩy text thẻ ra sau nó
+VD cho x là relative và before là absolute thì vị trí thẻ before sẽ tính theo thẻ x
+
+-> VD Event click chuột vào 1 phần tử trong list thì đổi style đơn giản: Từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó ::focus r chỉnh style thoải mái. 
+
+VD tính năng readmore với CSS only: dùng 2 cái radio button cho 2 dòng Read more và Read less để trigger thông qua label r style css :checked để ẩn hiện dòng text 
+
+-> :target là kiểu phần tử target khi bị href tới thì mang style gì. VD: <p><a href="#news1">Đến nội dung số 1</a></p> <p id="news1"><b>Nội dung số 1</b></p>
+VD ấn vào ảnh để phóng to ảnh, click button để thu nhỏ ảnh đó. Chơi ấn vào ảnh thì click thẻ a ref tới ảnh và style img:target to lên, click nút close thì là thẻ a ref ra ngoài ref="#" là xong.
+Cách khác là dùng input checkbox 
+
+-> oninvalid this.setCusstomValidity("Lỗi này đây")
+
+

@@ -9,3 +9,17 @@ Các bức ảnh có thể mang bất kỳ màu gì k ảnh hưởng, nhưng n�
 Còn phụ thuộc vào font chữ, animation, bo góc.
 
 
+
+# Sidebar design UX
+Min width 48-64px, max width 240-300px. Min width thì nên có tooltip khi hover vào icon. Cho phép user kéo co kích thước sidebar.
+Mỗi items nên có phím tắt, và hover có tooltip hiện phím tắt luôn
+Sidebar có thể navigate tới sidebar con và back lại được, các pages cũng có thể mang sidebar khác nhau để thực hiện các actions khác nhau.
+Sidebar có chia level dropdown xuống các subitem
+Sidebar thường có thể switch accounts, chứa darkmode, chứa thông báo update ở cuối có thể tắt đi
+Chia 3 vùng màu rõ ràng cho item unselected, selected, hovered.
+Cho phép user đổi vị trí các item trong sidebar, ưu tiên hightlight các vùng quan trọng thường dùng.
+Sidebar nên có search bar hiển thị modal search data global phức tạp.
+1 secondary sidebar nhỏ ở bên trái main sidebar để quick access
+Mỗi item trong sidebar có button manage riêng các mục như create, view, update, leave, or hiển thị thông tin ví dụ số lượng notifications
+
+

@@ -230,6 +230,12 @@ Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều l
 
 Chú ý gọi resolve(new Promsie(<hàm>)); chạy được đến resolve sẽ thực hiện hàm luôn
 
+-> Chốt khi nào chạy promise:
+Function trả ra promise thì khi gọi function sẽ thực hiện promise luôn. 
+Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
+Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
+Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
+
 
 
 # setTimeout, setInterval, setImmediate

@@ -172,3 +172,5 @@ Memphis design: dùng màu sắc sống động với các dạng hình học, k
 
 -> MicroInteraction: animation các thứ nhỏ nhặt khi hover và click. Animation càng nhỏ, càng đơn giản càng đẹp.
 Lib react: react-useanimations
+
+-> Trong devtool browser có Elements Accessibility tool

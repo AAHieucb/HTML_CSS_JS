@@ -10,7 +10,7 @@ background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y 
 background: red url("./image.png") no-repeat local right top
 
 background-origin xác định vị trí của background image theo content. 
-background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient cho text color đc
+background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient color cho text color đc
 background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
 background-attachment: scroll mặc định là trôi theo page scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
 
@@ -23,7 +23,7 @@ VD: background-origin apply cho cả background-color và background-image, k th
 -> Layer mask: mask là shorthand của mọi thuộc tính mask-* trong css
 Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. VD hiển thị bức ảnh theo phần ảnh của 1 bức ảnh khác, ta cho bức ảnh khác đó lên 1 lớp bên trên.
 VD mask-image: linear-gradient(black, transparent);
-VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px
+VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px, lấy thẻ có id là star trong hình svg
 VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
 Dùng mask: linear-gradient(90deg, transparent, white 20%, white 100%, transparent);
 
@@ -31,32 +31,33 @@ Dùng mask: linear-gradient(90deg, transparent, white 20%, white 100%, transpare
 Setup ảnh object-fit contain, object-position center center, min-width width aspect-ratio, border-radius, overflow hidden
 
 --> Setup image placeholder
-Luôn set min-width min-height giảm layoutshift khi load xong
 Dùng 1 bức ảnh mặc định loading or skeleton làm background image, or background xám
-Nếu biết trước ảnh là gì có thể tạo 1 phiên bản cực nhẹ là thu nhỏ ảnh lại rồi phóng to lên làm background image là được.
+Hoặc blur khi load ảnh: Nếu biết trước ảnh là gì có thể tạo 1 phiên bản cực nhẹ là thu nhỏ ảnh lại rồi phóng to lên cho vào background image là được 
+=> Chọn 1 trong 2
 
 --> Dùng onError check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
 HTML có thẻ object show mọi loại media, nếu bị lỗi sẽ tự show thẻ con của thẻ object rất hay => ít dùng vì kp chuyên cho ảnh.
-onLoad check ảnh tải xong => k cần dùng
+onLoad check ảnh tải xong => có thể dùng ẩn spinner nếu dùng 1 thẻ spinner riêng hay lấy kích thước ảnh sau khi tải xong.
 
 VD: <img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/defaultiamge';" >
 Việc dùng this.onerror=null chống lỗi infinity loop. Lỗi này xảy ra ở 1 số trình duyệt khi chính ảnh để ta fix lại bị lỗi xong lại chạy onerror lại lỗi và cứ lặp vô tận
-Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh backup onerror local đảm bảo luôn tồn tại là được => nếu sợ lỗi mạng, dùng base64 cho blur image đảm bảo ảnh đó sẽ luôn exist.
+Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh backup onerror local đảm bảo luôn tồn tại là được => ***nếu sợ lỗi mạng, dùng base64 cho blur image đảm bảo ảnh đó sẽ luôn exist.
 
-Khi làm với react thì onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
+--> Dùng lib: Khi làm với react thì onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
 Thuộc tính PlaceholderSrc của LazyLoadImage nhận 1 ảnh kích thước nhỏ để hiển thị ra trước khi ảnh lớn được load. Ta có thể giảm độ phân giải ảnh bằng các công cụ chỉnh sửa để thế vào, thêm effect="blur" để làm mờ ảnh placeholder được
 Lib react-progressive-graceful-image rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
 
 --> Lazy loading ảnh: thuộc tính loading="lazy"/"eager" có sẵn của html
 
 --> Ảnh nên nhét vào 1 container có aspect ratio và width responsive: có thể set contain và hiện trong khung, hoặc cover theo 1 trong 2 chiều, hiện ở tâm
+Luôn set min-width min-height cho ảnh giảm layoutshift khi load xong
 
 -> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation.
 SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
 Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
 
--> Các pp tạo ảnh mờ:
-- Tạo ảnh mở mà ta có sẵn thì thu nhỏ phóng to là xong
+-> Các pp tạo ảnh mờ làm placeholder thay vì 1 màu xám hoặc skeleton loading:
+- Tạo ảnh mờ mà ta có sẵn thì thu nhỏ phóng to là xong
 - Ảnh người dùng nhập có thể dùng BlurHash - lib giúp tạo ảnh mờ từ 1 ảnh khác, paste ảnh vào và lấy ra hash làm mờ.
 - Data URL là 1 cách load ảnh bằng code với base64. Khi nhúng ảnh base64 vào code, tốc độ transfer ảnh tới client sẽ nhanh hơn nhưng trên mobile lại chậm hơn vì ngốn CPU render ảnh. Khi nhúng src http thì web phải fetch lần nữa tới src đó nên có thể lâu hơn nhưng k bị ngu trên mobile
 1 cách khác là load image blur với base64, giảm chất lượng và chuyển sang base64 bằng tool khác, image thực thì để link url bth
@@ -74,66 +75,12 @@ Hoặc dùng cloudinary hay thư viện browser-image-compression để compress
 Các framework như NextJS cung sẵn khi ta cho optimized true trong file config, nó còn optimize theo kích thước màn hình
 Có thể tự chuẩn bị sẵn các bức ảnh khác nhau thủ công và cho load theo kích thước màn hình => có thư viện react giúp
 
+-> Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js
 
-
-# Dùng float:
-Float khiến 1 thẻ block thành inline không chiếm height và trôi sang 2 bên. Các thẻ khác vẫn hiện cùng dòng và né width nó ra.
-clear: both => khiến thẻ float chiếm height, các thẻ khác k thể ở cùng dòng với nó nữa
-
--> VD thẻ div chỉ có các thẻ float bên trong thì height thẻ div đó là 0 vì thẻ float k chiếm height của cha nó mà
-ClearFix trong CSS giúp thẻ cha mang kích thước của thẻ con kể cả dùng float, chỉ cần cho 1 thẻ con dưới float để kéo dài cha quá float là được.
-VD: .clearfix:after{
-  content: ".";
-  clear: both;
-  display: block;
-  width: 0px;
-  height: 0px;
-}
-
-
-
-# Cách dòng
-white-space: nowrap
-text-overflow + overflow hidden xử lý text tràn thì cut và hiển thị gì ra
-letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc các word bnh chứ kp là giá trị kc luôn
-text-ident để lùi đầu dòng paragraph
-text-align justify
-
-box-decoration-break => xử lý style inline element (span) khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
-line-height giúp căn kc các dòng trong 1 văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, VD dùng thay việc set paddingTop
-vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuống 1 tẹo so với vị trí hiện tại mà k cần dùng đến flexbox => nên thử mọi options khi dùng
-=> Thông thường ta bao tất cả bằng 1 component lớn với line-height, phần nào bên trong muốn chỉnh vị trí lên xuống thì nhét vertical-align cho nó
-
--> Mặc định text tràn khung sẽ tự xuống dòng, nhưng 1 từ dài quá 1 dòng sẽ k cắt.
-word-wrap xử lý cut text như nào, dùng break-all sẽ cut được chữ dài => bỏ, thế bằng word-break
-word-break y hệt word-wrap nhưng cung thêm break-all. break-all thì 1 chữ k đủ dòng vẫn viết tiếp, mặc định thì chữ k đủ phần còn lại sẽ xuống dòng sau
-line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp / -webkit-line-clamp
-VD: 
-1) abcde trong khung max 5 chữ thì word-wrap break-word đảm bảo hiện là:
-abcd
-e
-2) ab def thì word-break keep-all hiện là:
-ab
-def
-vì nó kbh là cắt chữ
-3) ab def thì word-break break-all hiện là
-ab de
-f
-hiển thị như bth vì nó chỉ xuống khi tràn
-4) ab defghi ac và muốn nó vừa có kiểu bảo toàn chữ tràn khi full width, vừa break word nếu word quá dài kiểu:
-ab
-defgh
-i ac
-=> word-wrap/word-break: break-word; 
-
--> Ngoài white-space, ta còn có text-wrap: wrap/no-wrap tương tự
-Có text-wrap: balance; khiến cho content chia vào nhiều dòng 1 cách cân bằng hơn giữa các dòng. Dùng cho nhiều kiểu k chỉ text
-VD: list có 10 items, nó sẽ chia mỗi 5 items 1 dòng khi có 2 dòng thay vì cứ giảm dần 9 1, 8 2, 7 3 khi co nhỏ màn lại.
- 
 
 
 # Metadata SEO
-<title> <meta name="description> <meta name="keywords"/>
+<title> <meta name="description"> <meta name="keywords"/>
 <link rel = "canonical" href = "http://example.com/"/> => Khi 1 web có nhiều url dẫn tới cùng 1 nội dung, google không biết url nào nên hiển thị trên kết quả tìm kiếm. Luôn dùng thẻ canonical trỏ tới web gốc để thông báo cho search engine URL này là trang chính và tránh lập chỉ mục với URL của các trang trùng lặp khác
 Đủ alt cho hình ảnh
 <link rel="icon" href="/logo.svg"/>
@@ -185,20 +132,6 @@ VD cho robots.txt cản pages2, nhưng trong pages 2 lại dùng thẻ meta robo
 
 
 
-# 3D 2D transform
-Chỉ có: translate(1,2), rotate(20deg), scale(1,2), skewX() có thể dùng trực tiếp mà k cần transform
-Dùng transform-origin set tâm
-
-Hàm translate có 1 điểm đặc biệt là khi lùi tương đối, nó lùi so với kích thước của chính nó chứ kp kích thước cha => cách để cho thẻ ra tâm thẻ khác
-transform nhược điểm là vẫn chiếm vị trí cũ nên position relative ít dùng
-VD: position relative top -50px và transform translateY(-50px) chả khác gì nhau. Thực tế translate nó boost graphical performance of browser vì nó ra đời sau.
-
--> transform-style: A chứa B thì xoay A, B cũng xoay theo. Vd thẻ A xoay trục Y 60 độ sẽ nhỏ lại và text bị méo, transform-style mặc định là flat khiến cho vị trí đó trở thành kích thước và vị trí của thẻ B luôn, nếu xoay B -60 độ thì nó xoay cái hình méo đó tiếp làm thẻ B nhỏ hơn nữa  (xoay xong flat ra thành mp r xoay tiếp mp đó). transform-style preserve-3d thì thẻ B tách rời với thẻ A và k bị flat nữa nên xoay -60 độ quay trở lại kích thước và vị trí ban đầu
-
--> Perspective chỉnh kc từ mắt đến vật, mặc định nó nhìn từ rất xa. VD 1 hình vuông nghiêng mà nhìn từ kc xa sẽ thành hcn bth chứ k thấy độ lệch.
-
-
-
 # CSS reset
 * refer đến mọi thẻ và :root là refer đến cha của mọi thẻ. Trong react thì có thẻ id là root bao mọi thẻ khác.
 Luôn set html và body từ đầu là 100% kích thước, overflow scrollbar
@@ -218,7 +151,7 @@ none: k set giá trị và coi như k có giá trị đó luôn, 3 thuộc tính
 
 -> css reset cho text:
 h1,h2,h3,h4,h5,h6 { text-wrap: balance; } => để các mục header có text balance khi bị break nhiều dòng trông đẹp hơn
-p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn
+p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn. Tính toán bị expensive.
 
 -> css reset cho img {
   max-width: 100%;
@@ -284,6 +217,10 @@ scroll-behavior: smooth hay auto để nhảy đến hay trượt đến
 scroll-padding dùng ở container sẽ cho mọi item bên trong được quyền hiển thị cách mép 1 khoảng bnh
 scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào được phép hiển thị cách mép bnh
 => dùng được 4 chiều left right top down. Thường để kích thước container chia hết cho kích thước card bên trong
+
+-> Scrollbar nên tạo chuẩn 1 thẻ con chứ body và html nên để overflow hidden cho dễ customize về sau:
+- Khi scroll các thẻ liên quan, sẽ k ảnh hưởng đến scrollbar các thẻ khác
+- Style chuẩn trong 1 phạm vi nhất định
 
 
 
@@ -405,11 +342,12 @@ font-systhesis quyết định browser có giả style hay không, nếu set là
 -> Dùng text-rendering
 Có: optimizeSpeed, optimizeLegibility, geometricPrecision, auto (phụ thuộc vào browser)
 optimizeLegibility là giúp vc chữ hiển thị dễ đọc, phân biệt "f l i" bằng cách in với kích thước hơi khác biệt 1 chút cho người dùng tránh nhầm
-=> Thực tế cái này để thế nào cũng được, người đọc chữ nếu k sợ nhầm thì cứ optimizeSpeed nếu cần vì trông chữ nó chả khác biệt mấy
+=> Thực tế cái này để thế nào cũng được, VD người đọc chữ nếu k sợ nhầm thì cứ optimizeSpeed nếu cần vì trông chữ nó chả khác biệt mấy
 
 -> Dùng font-smooth: xử lý antialias khi render font
 Dùng kèm -webkit-font-smoothing: auto/none/antialiased/subpixel-antialiased(nét chữ sắc nhất) => MacOS Webkit
 -moz-osx-font-smoothing: auto/grayscale => Firefox MacOS 
+=> luôn để always là luôn tối ưu smooth cho các thiét bị
 
 -> Font size tự động đổi theo kích thước màn hình:
 min và max trong css giúp lấy min và max của giá trị gì, khi kết hợp với kích thước relative sẽ rất mạnh
@@ -420,7 +358,7 @@ VD ta muốn màn hình dưới 700px có font-size là 16px, sau đó tăng d�
 Khi 700px, nó sẽ là clamp(16px, 16px, 22px) thì lấy 16px. Font size tuyến tính tăng lên 1300px thì clamp(16px, 22px, 22px) thì lấy 22px
 Vd muốn màn hình tăng đến đúng 1500px thì fontsize mới là 22px ta chỉ cần giải phương trình là được
 
-Or dùng generator: https://clamp.font-size.app => đổi rem ở vị trí đầu và vị trí thứ 3 thành px để tránh nhiều case bị sai
+Or dùng generator: https://clamp.font-size.app => đổi rem ở vị trí đầu và vị trí thứ 3 thành px để tránh nhiều case bị saisa, cho root font-size là là 16px là được mà
 
 --> Gợi ý size:
 1) Màn hình lớn: text thường 16px, chữ to 20px, title 24px, chữ khổng lồ 48px, button 16px
