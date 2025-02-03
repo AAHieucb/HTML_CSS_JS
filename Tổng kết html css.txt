@@ -376,7 +376,7 @@ Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 -> Dừng:
 { display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
 Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-@property và css houdini can thiệp sâu vào animation
+@property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
 https://www.frontendmentor.io/ => học Fremaster
 https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
 

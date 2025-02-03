@@ -74,6 +74,21 @@ forEach chỉ dùng cho mảng vì nó thuộc Array.prototype
 2 tham số: 1 là function(currentValue, index, array), 2 là thisValue là giá trị pass vào function để dùng từ khóa this. Tuy nhiên để dùng được đối số 2 thì đối số 1 k được dùng arrow function, nếu k this sẽ luôn là cái bao ngoài hàm. 
 VD: var object = { id: 1 }; const item = [1,2,3].map(function(currentVal, index, arr){ return currentVal + this.id + arr[index]; }, object); // [3, 5, 7]
 
+-> Dùng tagged template
+function tag(strings, ...values) {
+  console.log("Chuỗi tĩnh:", strings);
+  console.log("Giá trị nội suy:", values);
+  return "Kết quả được tùy chỉnh!";
+}
+const name = "Minh";
+const age = 25;
+const result = tag`Xin chào ${name}, bạn ${age} tuổi.`;
+console.log(result);
+// Output:
+// Chuỗi tĩnh: [ 'Xin chào ', ', bạn ', ' tuổi.' ]
+// Giá trị nội suy: [ 'Minh', 25 ]
+// Kết quả được tùy chỉnh!
+
 
 
 # Dùng postMessage
@@ -135,7 +150,7 @@ Sự kiện hay dùng: https://freetuts.net/su-kien-event-trong-javascript-368.h
 -> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
 
 -> addEventListener
-Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase rồi đến Bubbling phase, tức từ cha đến con trước. Khi chạy, thấy thẻ nào bắt capture hay bubbling mà chạy event thẻ đó tương ứng. Có thể dùng object { capture: true, once: true }
+Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase rồi đến Bubbling phase, nó check sự kiện nào useCapture true sẽ xử lý trong capture phase, false sẽ chỉ xử lý bubbling phase. Nếu kxđ sẽ mặc định xử lý ở bubbling phase. Có thể dùng object { capture: true, once: true }
 
 removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase. Tham số thứ 3 boolean tương tự.
 
@@ -201,7 +216,10 @@ fetch(url, {
   credentials: 'include'; // include là có gửi kèm thông tin xác thực cookie
 })
 
--> Các response.type: basic nếu ứng dụng gửi request cho server cùng nhà, k có giới hạn vc xem thông tin trên response; cors: tức server và client cách xa nhau, lúc đó sẽ bị giới hạn, chỉ biết đc ít thông tin hơn.
+-> Các response.type: 
+basic nếu ứng dụng gửi request cho server cùng nhà, k có giới hạn vc xem thông tin trên response. Hoặc request mode "no-cors" và phản hồi là 1 simple origin
+cors: Khi yêu cầu cross origin và server đã cấu hình CORS để cho phép truy cập.
+"opaqueredirect" hoặc "opaque": éo xem được response, chỉ xem được vài header cơ bản
 
 -> Trong fetch có option mode:
 cors: mặc định, cho phép yêu cầu từ một nguồn khác (cross-origin) và gửi kèm header CORS. Nếu server không cho phép yêu cầu từ nguồn đó, trình duyệt sẽ chặn phản hồi => luôn dùng

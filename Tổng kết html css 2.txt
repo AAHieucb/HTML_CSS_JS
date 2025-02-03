@@ -108,7 +108,7 @@ Twitter tag tương tự nhưng chỉ dành cho twitter: <meta name = "twitter:d
 => 1 số thiết bị có tính năng zoom text only, nhưng nếu text zoom to mà layout k zoom sẽ break design, do đó code height của thẻ nên phụ thuộc vào content chứ k được fix cứng
 
 -> Nên dùng senmatic element sẽ tốt cho SEO vì tạo cấu trúc nội dung rõ ràng hơn cho search engine hiểu.
-header và footer ở đầu cuối page; figure chứa img và figcaption; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và mark để highlight important text
+header và footer ở đầu cuối page; figure chứa img và figcaption; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và <mark> để highlight important text
 Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
 => 1 số thẻ có thể có tính chất đặc biệt như thẻ time có thể dùng attribute. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn
 
@@ -120,6 +120,7 @@ Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động 
   https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=828 828w,
 " imagesizes="100vw"/>
 => imagesrcset tự set thumbnail là ảnh nào tuỳ theo kích thước màn hình. Chỉ cần để nó trong header là browser chạy tới sẽ load và lưu cache luôn. Bất cứ chỗ nào trong web dùng mà trùng y hệt url đó sẽ lấy từ cache luôn mà k load lại.
+=> Tinh kích thước hình ảnh theo 100vw
 
 -> Google bot luôn tự đánh chỉ mục với mọi trang web mà nó truy cập được. Trừ khi có robots.txt hay thẻ meta robots cản nó.
 C1: robots.txt có tác dụng trong toàn page, chỉ cần đặt file vào cùng file gốc index.html
@@ -203,7 +204,7 @@ URL: https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp
 K dùng kèm scrollbar-width thin được mà set trong shadow dom, k sẽ lỗi
 
 -> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng tag a href đến #đó là được
-scroll-behavior: smooth hay auto để nhảy đến hay trượt đến
+scroll-behavior: smooth hay auto để trượt đến hay nhảy đến
 
 -> overscroll-behavior: khi 2 scroll lồng nhau, cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
 
@@ -219,13 +220,13 @@ scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào đư�
 => dùng được 4 chiều left right top down. Thường để kích thước container chia hết cho kích thước card bên trong
 
 -> Scrollbar nên tạo chuẩn 1 thẻ con chứ body và html nên để overflow hidden cho dễ customize về sau:
-- Khi scroll các thẻ liên quan, sẽ k ảnh hưởng đến scrollbar các thẻ khác
+- Khi scroll các thẻ liên quan, sẽ k ảnh hưởng đến scrollbar các thẻ khác, chứ scroll thẻ body sẽ ép mọi thẻ scroll
 - Style chuẩn trong 1 phạm vi nhất định
 
 
 
 # Kích thước khoảng cách trong CSS
--> auto do browser tự tính, chiều dọc lấy 0, chiều ngang lấy hết phần có thể lấy, nếu có nhiều cái cùng auto thì chia đều giá trị cho từng cái => Cần nếu muốn kích thước 1 thẻ bị kéo dài theo thẻ cha tự lấp đầy vào khoảng trống, bây giờ dùng -webkit-fill-available rồi
+-> auto do browser tự tính, chiều dọc lấy 0, chiều ngang lấy hết phần có thể lấy mà k ảnh hưởng các thẻ khác, nếu có nhiều cái cùng auto thì chia đều giá trị cho từng cái => Cần nếu muốn kích thước 1 thẻ bị kéo dài theo thẻ cha tự lấp đầy vào khoảng trống, bây giờ dùng -webkit-fill-available rồi
 Hàm calc có thể tính các kiểu như 50% - 10px là 50% thẻ cha giảm 10px 
 
 -> Đơn vị tuyệt đối: Chỉ đúng trên các thiết bị độ phân giải cao như máy in, còn trên laptop và di động kết quả cho có thể sai khác. VD 1in = 96px = 2.54 cm

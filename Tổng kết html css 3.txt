@@ -5,7 +5,7 @@ letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc
 text-ident để lùi đầu dòng paragraph
 text-align justify
 
-box-decoration-break => xử lý style inline element (span) khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style đó riêng. 
+box-decoration-break => xử lý style inline element (span) khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style riêng. 
 line-height giúp căn kc các dòng trong 1 văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, VD dùng thay việc set paddingTop
 vertical-align có thể dùng nhanh khi cần chỉnh vị trí lên hay xuống 1 tẹo so với vị trí hiện tại mà k cần dùng đến flexbox => nên thử mọi options khi dùng
 => Thông thường ta bao tất cả bằng 1 component lớn với line-height, phần nào bên trong muốn chỉnh vị trí lên xuống thì nhét vertical-align cho nó
@@ -15,7 +15,7 @@ word-wrap xử lý cut text như nào, dùng break-all sẽ cut được chữ d
 word-break y hệt word-wrap nhưng cung thêm break-all. break-all thì 1 chữ k đủ dòng vẫn viết tiếp, mặc định thì chữ k đủ phần còn lại sẽ xuống dòng sau
 line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp / -webkit-line-clamp
 VD: 
-1) abcde trong khung max 5 chữ thì word-wrap break-word đảm bảo hiện là:
+1) abcde trong khung max 4 chữ thì word-wrap break-word đảm bảo hiện là:
 abcd
 e
 2) ab def thì word-break keep-all hiện là:
@@ -30,7 +30,7 @@ hiển thị như bth vì nó chỉ xuống khi tràn
 ab
 defgh
 i ac
-=> word-wrap/word-break: break-word; 
+=> word-wrap/word-break: break-word; => ok nhất nè
 
 -> Ngoài white-space, ta còn có text-wrap: wrap/no-wrap tương tự
 Có text-wrap: balance; khiến cho content chia vào nhiều dòng 1 cách cân bằng hơn giữa các dòng, chỉ có tác dụng với text < 6 lines. Dùng cho nhiều kiểu k chỉ text 
@@ -52,6 +52,12 @@ VD: position relative top -50px và transform translateY(-50px) chả khác gì 
 
 -> Perspective chỉnh kc từ mắt đến vật, mặc định nó nhìn từ rất xa. VD 1 hình vuông nghiêng mà nhìn từ kc xa sẽ thành hcn bth chứ k thấy độ lệch.
 Sample căn phòng 3d: https://codepen.io/ricardoolivaalonso/pen/mdPzrpe
+
+-> Breakmind 3d:
+VD perspective 1000px và 1 mp translateZ 500 sẽ nhìn tương tự perspective 100 và mp cách mắt 50, vì qtr là ratio như nhau
+Nhưng nếu perspective và kc từ mp đến mắt nhỏ khi rotate sẽ bị nhìn gần quá, ảnh bị phóng to méo nên xấu. Nên ta thường thấy perspective lớn.
+perspective responsive theo vw giúp co nhỏ khi thu nhỏ màn hình mobile ok.
+URL: https://www.youtube.com/watch?v=niwUUtgn4-o
 
 
 
@@ -352,6 +358,7 @@ input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đ
 -> Có form.reset() 
 
 
+
 # CSS Selector
 -> Cùng Specifility thì lấy cái set sau: !important > inline style > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
 dialog.hide > dialog[open] > .hide
@@ -407,5 +414,7 @@ VD ấn vào ảnh để phóng to ảnh, click button để thu nhỏ ảnh đ�
 Cách khác là dùng input checkbox 
 
 -> oninvalid this.setCusstomValidity("Lỗi này đây")
+
+-> nth-child dùng n được. VD: .grid > :nth-child(4n) { }
 
 
