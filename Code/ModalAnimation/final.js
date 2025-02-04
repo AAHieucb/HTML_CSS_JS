@@ -82,7 +82,7 @@ console.log(a(1));
 // test(1); // Thực hiện hàm sẽ thực hiện luôn promise
 // console.log(test); // Trả ra cả function bth
 // console.log(test(1)); // Trả ra promise trạng thái pending
-// console.log(test(1).then(console.log)); // in ra undefined vì hàm then cuối k resolve gì cả
+// console.log(test(1).then(console.log)); // in ra undefined vì hàm then cuối return là resolve ra console.log tức undefined
 
 // function lồng trả ra promise ở cuối => promise k bh được thực hiện ở dưới vì ta k gọi hàm trong
 // const test = (x) => () => new Promise((resolve, reject) => {

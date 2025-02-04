@@ -52,3 +52,23 @@ VD: Cache-Control: public, max-age=3600, s-maxage=1200 => cache lưu cả client
 "@parcel/transformer-css": {
   "errorRecovery": true => Cho phép Parcel tiếp tục build khi có lỗi trong CSS thay vì dừng lại.
 }
+
+
+
+-> Cookie string:
+name=value; =>*
+Expires=Wed, 09 Nov 2023 10:00:00 GMT; => absolute hết hạn
+Max-Age=3600; =>* relative seconds. Dùng 1 trong 2 expires or max-age thôi, k có cả 2 sẽ thành session cookie, mất khi close
+Path=/dashboard; =>* cookie chỉ tồn tại ở path này, k có sẽ chỉ ở path hiện tại
+Secure; =>* k có sẽ dùng cả trong http và https
+HttpOnly; =>* k có sẽ truy cập được bằng JS
+SameSite=Strict; =>*
+Partitioned; => khi có thì cookie tự bị giới hạn trong 1 context cụ thể Vd 1 iframe hay 1 web. K thể gửi kèm các yêu cầu http ngoài phạm vi đó.
+Priority=High; => cookies sẽ k ưu tiên trong việc bị xóa, VD khi bộ nhớ đầy browser tự xóa.
+Domain=example.com; => cookie chỉ valid khi ở domain này, k có sẽ chỉ ở web hiện tại
+
+--> SameSite:
+Strict: ngăn hoàn toàn việc gửi cookie cho mọi cross-site. Vd web A đăng nhập rồi, xong vào A từ 1 link khác sẽ báo là chưa đăng nhập vì cookie k được gửi kèm
+Lax (Default): Tương tự nhưng vẫn gửi được cross-site với request GET, request POST sẽ bị chặn
+None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để chỉ HTTPs
+

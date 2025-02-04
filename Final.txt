@@ -306,7 +306,8 @@ Nếu set rõ ràng color-scheme: light; hay color-scheme: dark; sẽ dùng đú
 VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
 
 -> Để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
-Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting 
+Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser
+Để dùng ligh-dark, phải có "color-scheme: light dark;" trong :root
 
 -> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
 
