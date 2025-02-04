@@ -384,8 +384,9 @@ Icon thì nên có aria-hidden hoặc mô tả bằng aria label cho tag bao nó
 
 
 # Tự tạo dialog css thuần hiện ra
-Để tạo tính năng click ra ngoài thì ẩn dialog, có thể bắt sự kiện click global rồi check target được click k chứa dialog thì close dialog.
-1 cách khác là phủ 1 thẻ màu tối toàn màn hình rồi đè dialog lên. Click vào dialog thì k sao nhưng click vào thẻ đó bên ngoài sẽ close dialog
+-> Safari lỗi: cách tốt nhất tạo dialog hiện tại là:
+Dùng @keyframes và js animationend thay vì @styles transition.
+Ấn ra ngoài ẩn dialog thì bắt sự kiện click global rồi check target khác dialog để close dialog thay vì dùng dialog + popup.
 
 -> Mở dialog thì cản scroll: 
 3 vấn đề: Vị trí scroll phải giữ nguyên khi tắt dialog đi; content k bị di chuyển khi mở và đóng dialog; Hoạt động trên cả mobile.
@@ -402,11 +403,11 @@ VD2: html:has(dialog[open]){
 => Cách này tối ưu nên dùng khi dialog hiển thị khi scrollbar ở trên cùng hoặc k có
 VD3: Dùng JS để đóng dialog thì set position fixed như VD2, nhưng lưu vị trí scroll lại để scroll jump tới là được.
 
--> Scrollbar hiển thị tối ưu là: khi k overflow thì k hiện scrollbar nhưng scrollbar vẫn chiếm kích thước bth; khi overflow thì hiện scrollbar bth; scrollbar thực tế sẽ ẩn đi và chỉ hiện khi hover vào hoặc khi scroll, đồng thời background transparent chỉ hiện mỗi thumb;
-
-Nếu muốn scrollbar luôn hiện "overflow: scroll;"
-Nếu muốn scrollbar luôn chiếm kích thước dù hiện hay k "scrollbar-gutter: stable" => Điều đb là nó bằng đúng kích thước width set của ::-webkit-scrollbar
-=> Ta nên dùng overflow scroll + custom cái scrollbar track là transparent sẽ tốt hơn scrollbar-gutter vì position fixed sẽ khiến scrollbar-gutter k chiếm nx
+-> Scrollbar hiển thị: 
+Cho background transparent chỉ hiện mỗi thumb
+Nếu muốn scrollbar luôn hiện "overflow: scroll;" => dùng ok
+Nếu muốn scrollbar luôn chiếm kích thước dù hiện hay k "scrollbar-gutter: stable" => Điều đb là nó bằng đúng kích thước width set của ::-webkit-scrollbar => k dùng vì position fixed dialog khiến scrollbar-gutter k chiếm nx
+Tối ưu là khi k overflow thì k hiện scrollbar nhưng scrollbar vẫn chiếm kích thước bth => k làm được trừ khi tự tạo thẻ scroll
 
 
 
