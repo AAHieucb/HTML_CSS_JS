@@ -122,6 +122,10 @@ framer-motion => basic
 -> Prj Unplash Figma framermotion parallax: https://www.youtube.com/watch?v=29UWA-GdA7k
 useScroll, useTransform của framer motion rất mạnh có thể dùng cho parallax thay thế các thư viện khác mà k cần đổi css var
 
+-> File vite.config.ts settings base url của ứng dụng với:
+base: '/react-next-parallax_demo',
+
+//!!!!!!!!!
 -> Prj parallax pvới photoshop: https://www.youtube.com/watch?v=Yo3j_Dx4u7c
 
 Cơ chế để move chuột thì các thẻ di chuyển full màn như v thì ảnh phải to hơn màn hình, khi ta di chuột thì transform các ảnh layer với tốc độ khác nhau. Dùng cubic bezier để transition hiệu ứng từ nhanh sang chậm dần.
@@ -143,9 +147,6 @@ Cần đảm bảo khi load lần đầu tiên, mọi actions và animation khá
 
 -> Tạo infinite horizontal scroll: https://www.youtube.com/watch?v=iLmBy-HKIAw
 Giải pháp là dùng gấp 2 thẻ html và align animation hoàn hảo cho lần jump ở giữa với translate calc(50% - 0.5rem) = calc(50% - gap/2)
-
--> File vite.config.ts settings base url của ứng dụng với:
-base: '/react-next-parallax_demo',
 
 -> Dùng IntersectionObserver
 Là 1 cách kiểm tra 1 phần tử có xuất hiện trên view port hay không. Cho 1 biến IntersectionObserver lắng nghe 1 thẻ bất kỳ thì nó sẽ check nếu thẻ đó có giao với viewport thì gọi hàm tương ứng.
