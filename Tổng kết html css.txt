@@ -55,6 +55,7 @@ URL: https://custom-cursor.com/ => lấy ảnh cursor free
 => Dùng defer là đẹp nhất
 
 -> pointer-events: none; sẽ cản sự kiện của 1 thẻ. VD ứng dụng navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
+field-sizing: content; => element tự mở rộng kích thước phụ thuộc vào content. Vd text-area tự mở rộng
 
 
 
@@ -373,13 +374,6 @@ Google có tool Lit giúp tạo web component dễ hơn. React19 cũng hỗ tr�
 - Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. Dev dùng k thể custom shadow DOM. VD nut pause start trong <video>
 Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 
--> Dừng:
-{ display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
-Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-@property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
-https://www.frontendmentor.io/ => học Fremaster
-https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
-
 -> Tổng kết thiết kế tối thiểu: tạo dự án, darkmode, chia file css var và các style common, routing chuyển pages, responsive, BEM
 - Tạo dự án: parcel import npm; html thuần import cdn; react;
 - Hosting: Github pages, netlify.
@@ -389,8 +383,15 @@ https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002
 - Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
 - Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
 
--> Design trend: Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card
-https://glow-cards.webflow.io/
-
 -> https://htmlrev.com/ => 1500 template free tạo dự án
+
+-> Dừng:
+{ display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
+Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
+@property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
+https://www.frontendmentor.io/ => học Fremaster
+https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
+Design trend: Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card. https://glow-cards.webflow.io/
+https://css-tricks.com/positioning-text-around-elements-with-css-offset/ => tạo text di chuyển xung quanh element với offset
+
 

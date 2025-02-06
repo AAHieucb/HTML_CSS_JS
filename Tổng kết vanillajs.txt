@@ -2,19 +2,12 @@
 Có thể tạo quy mô dự án lớn mấy cũng được
 
 -> Chuyển trang bằng html or js đều được
-
--> Chia file từng pages. 
-Dùng SCSS, CSS đặt tên bằng BEM.
+Chia file từng pages. Dùng SCSS, CSS đặt tên bằng BEM.
 
 -> Khởi tạo dự án: tuỳ biến
 Có thể tạo file html cho mỗi pages code UI, có thể tạo file html rỗng rồi viết code JS thêm element vào
 Có thể tự chạy với live server, có thể dùng bundler tool để tối ưu code và chạy trên 1 cổng theo config, quản lý package library.
-
-Các tool khác nhau tạo dự án khác nhau dùng kiểu nào cũng được, ta đều config về tuỳ ý ta được hết. 
-VD: 
-- Dùng live server với file html css js thuần.
-Thích dùng package nào thì CDN vào hoặc tự cài npm k cần bundler, hoặc cop mẹ file js của nó vào dự án. Dùng thêm bundler thì quản lý version tốt hơn thôi
-- Tạo với vite nó ra dự án thuần nhưng theo kiểu SPA, file html trống và file js tự code vào.
+VD: Dùng live server với file html css js thuần. Thích dùng package nào thì CDN vào hoặc tự cài npm k cần bundler, hoặc cop mẹ file js của nó vào dự án. Bundler giúp quản lý version tốt thôi.
 
 
 

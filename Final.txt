@@ -76,7 +76,7 @@ Dùng html thuần nhưng tự cài node_modules: npm i mọi thứ vào đó r�
   --clr-primary: rgb(var(--clr-primary-rgb));
 
   --clr-secondary-rgb: 0 255 25;
-  --clr-secondary: rgb(var(--clr-primary-rgb));
+  --clr-secondary: rgb(var(--clr-secondary-rgb));
 }
 Dùng đổi opacity:
 background: rgb(var(-clr-primary-rgb) / .5);
@@ -173,7 +173,8 @@ Trừ @media và @container mới fix cứng vì k dùng được css var, đồ
 
 
 # Dùng css @scope và @layer
-Specifility: @layer > @scope > thứ tự định nghĩa trong css
+Specifility: @layer > @scope > thứ tự định nghĩa trong css => sai vì @scope k tăng specifility
+@scope đơn giản là thay thế việc dùng nested selector bth, điểm khác biệt duy nhất là selector gốc của @scope không đóng góp vào specificity.
 
 -> CSS rule mặc định theo thứ tự đinh nghĩa trong css. @scope khiến cho nó theo thứ tự nested tag trong html. VD:
 // index.html
@@ -185,7 +186,7 @@ Specifility: @layer > @scope > thứ tự định nghĩa trong css
 .container p { color: white; }
 => Chữ sẽ là màu trắng vì 2 class cùng specifility sẽ theo thứ tự đinh nghĩa
 
-@scope sẽ lấy css lên dần các thẻ cha cho đến khi gặp @scope gần nhất, gắp text thì k theo container nữa
+@scope sẽ lấy css lên dần các thẻ cha cho đến khi gặp @scope gần nhất, gặp text thì k theo container nữa
 @scope (.text) to (button.xxx) {
   :scope { } // tương đương với & { }
   p { color: red; }
@@ -193,7 +194,8 @@ Specifility: @layer > @scope > thứ tự định nghĩa trong css
 }
 .container p { color: white; }
 .container button { color: black; }
-=> Giả sử ở đây ta muốn @scope k ảnh hưởng tới các button ở trong mà mang class xxx và các tag trong button đó
+=> nhớ to (.not-these) { } vì cái trong to k tính 
+=> ở đây lấy hết style ở ngoài vì specifility trong scope rất thấp do .text k tính
 
 VD: @scope (.text) to (button.xxx, a, p[class]) { 
   // Code css
@@ -201,10 +203,11 @@ VD: @scope (.text) to (button.xxx, a, p[class]) {
 => tag nằm trong .text sẽ ưu tiên mang code css đó hơn ưu tiên hơn bth, nhưng nếu tag có dạng selector là button.xxx or a or p[class] sẽ inherrit, tức mang specifility thấp, chỉ dùng giá trị đó nếu bên ngoài k set style gì cho thẻ đó.
 
 --> VD :scope dùng y như & được
-@scope (article) to (> figure) {} => áp dụng cho con của article, trừ con trực tiếp là tag figure
-@scope (article) to (aside :scope) {} => áp dụng nếu article là con của aside
+@scope (article) to (> figure) {} => áp dụng cho mọi con của article, trừ con trực tiếp là tag figure
+@scope (article) to (aside :scope) {} => áp dụng cho article tới thẻ cha là aside mà k tính thẻ cha tức là áp dụng cho thẻ con của article nếu article là con của aside
+Tức @scope(aside) { @scope (article) { ... } }
 
---> Dùng trong HTML tag: k cần định nghĩa scope cho thẻ nào, tự hiểu là dùng cho thẻ bao sát thẻ style chứa nó, ở đây là @scope (article) { }
+--> Dùng trong HTML tag: k cần định nghĩa scope cho thẻ nào, tự hiểu là dùng cho thẻ bao sát thẻ style chứa nó, ở đây là @scope (article) { } nhưng chỉ với duy nhất thẻ article bao style này chứ k ảnh hưởng các article ngoài
 <article>
   <style>
     @scope {
@@ -233,7 +236,7 @@ VD:
 @scope (main .text) to (button.xxx) {
   & img { } // (0, 1, 2)
 }
-=> Vì & coi là thế từ cục trên vào thành "main .text img {}" => luôn dùng & là đc
+=> Vì & coi là thế từ cục trên vào thành "main .text img {}" => dùng & thì y hệt nested bth, còn dùng :scope thì y như khi k có :scope
 
 VD: @scope (.parent) to (.content) {
   /* Styles written here will only affect .parent but skip .content*/
@@ -247,13 +250,13 @@ VD: 2 cái cùng !important thì cái khai báo sau sẽ đè lên trước
 
 -> Có 3 loại layer theo thứ tự đè nhau: user agent styles -> user styles -> author styles
 user agent styles có sẵn style cho các thẻ theo setting kỹ thuật của browser, ta k thể đụng vào. Ta chỉ có thể tác động vào layer cuối là author style.
-@layer giúp định nghĩa thêm các layer trong author styles.
-Các layer sẽ có specifility độc lập, ngoại trừ 3 layer có sẵn, các layer tự tạo có specifility theo thứ tự định nghĩa. Cái khai báo sau đè cái trước, bất chấp speicifility của các phần tử bên trong.
+@layer giúp định nghĩa thêm các layer trong layer author styles.
+Các layer sẽ có specifility độc lập, ngoại trừ 3 layer có sẵn, các layer tự tạo có specifility theo thứ tự định nghĩa. Cái khai báo sau đè cái trước, bất chấp specifility của các phần tử bên trong.
 
 VD: viết style layer1 -> viết style layer2 -> viết thêm style cho layer1 => style layer2 sẽ đè lên mọi thứ của layer1 vì thứ tự khai báo layer2 sau layer1
 VD: @layer framework, reset, base, layout, components; => nhét ở đầu file để khai báo thứ tự, thì khai báo bên dưới thế nào vẫn luôn tuân theo thứ tự này
 => Giải quyết TH khi cần custom style của framework sử dụng nhưng nó specifility k đủ để đổi, buộc phải thêm !important rất dở. Nếu thêm được style của framework vào @layer thì sửa ok
-=> !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau, vì nó chạy từ trên xuống thấy important sẽ k cho bất cứ style nào tương tự ở sau đó override cả
+=> !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau
 
 -> Code bên ngoài sẽ override code trong custom layer tự tạo ra, vì code bên ngoài thuộc author styles, còn code trong custom layer thuộc 1 layer con của author styles có spec nhỏ hơn
 @layer có thể lồng trong @layer khác và quy tắc vẫn tương tự
@@ -274,7 +277,7 @@ Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer tr
 @import trong css không sợ bị trùng code vì tuy trùng nhưng css tự có cơ chế override style cái sau đè cái trước. Cần tự code cẩn thận để k import nh lần.
 @import của css cũng phải để ở top mới có tác dụng
 @import trong css sẽ chạy tuần tự nên làm chậm quá trình tải trang => Do đó khi dev có thể dùng @import, còn production nên dùng bundler gom lại thành 1 file index.css và minify nó chứ k chia ra nhiều file. VD parcel build tự làm luôn
-@import url("./2.css") layer(base); => nhét mọi code trong 1 file css nằm trong 1 layer
+***@import url("./2.css") layer(base); => nhét mọi code trong 1 file css nằm trong 1 layer
 
 
 
@@ -294,7 +297,7 @@ border-block-end là cạnh dưới của văn bản trong phần tử, tính th
 
 
 # Dark mode thực tế có sẵn mà k cần phải code thủ công, trừ khi có màu nào phức tạp.
-Ta muốn mới vào web sẽ theo setting của browser. Nếu người dùng đổi mode sẽ lấy setting của người dùng. Nếu đã từng set rồi, mà ngừoi dùng đổi mdoe rồi reload, vẫn phải theo cái đã set trong web.
+Ta muốn mới vào web sẽ theo setting của browser. Nếu người dùng đổi mode sẽ lấy setting của người dùng. Nếu đã từng set rồi, mà ngừoi dùng đổi mode rồi reload, vẫn phải theo cái đã set trong web.
 
 -> Có 2 cách để set theme mode là dùng html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> 
 Khi dùng cả 2 giá trị "light dark" như này là theo setting của browser.
@@ -306,8 +309,7 @@ Nếu set rõ ràng color-scheme: light; hay color-scheme: dark; sẽ dùng đú
 VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
 
 -> Để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
-Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser
-Để dùng ligh-dark, phải có "color-scheme: light dark;" trong :root
+Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser. Để dùng ligh-dark, phải có "color-scheme: light dark;" trong :root
 
 -> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
 

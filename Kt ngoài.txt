@@ -62,6 +62,20 @@ Ta có thể cấu hình config thủ công cho nó tự động làm các task 
 
 
 
+# Pre-processors như sass, less
+Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser.
+=> hầu hết các bundler như Vite build đều hỗ trợ sẵn post processors.
+VD chuyển: body {
+  background-color: oklch(51.98% 0.1768 142.5);
+} thành body {
+  background-color: green;
+  background-color: color(display-p3 0.216141 0.494224 0.131781);
+  background-color: lab(46.2829% -47.5413 48.5542);
+} giúp tương thích mọi browser.
+VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên luôn dùng
+
+
+
 # AJAX
 Asynchronous Javascript And XML chỉ là phương thức dùng ở FE gọi vào server lấy data và load dữ liệu vào 1 phần web, chứ k request html, css, js như ngày xưa. Các hàm như v gọi là AJAX.
 Ngày xưa AJAX dùng window.XmlHttpRequest Object(XHR) để gọi request và trả về response dạng XML biểu diễn DOM element or HTML dạng string
