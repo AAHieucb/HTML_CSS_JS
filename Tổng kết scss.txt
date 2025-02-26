@@ -1,36 +1,19 @@
 # Basic
-Cú pháp SASS(Syntactically Awesome Style Sheets) và SCSS(Sassy Cascading Style Sheets) như nhau chỉ là: SASS k có {} mà dùng tab và enter để phân cấp và xuống dòng, còn SCSS có {} => mặc định code SCSS vì nó giúp cú pháp rõ ràng hơn. Bỏ {} là thành SASS.
-Code css3 trong file.scss thoải mái
+SASS k có {} mà dùng tab và enter để phân cấp và xuống dòng, còn SCSS có {} => mặc định code SCSS vì nó giúp cú pháp rõ ràng hơn. Bỏ {} là thành SASS.
 
 -> Cài trong VSC:
 Để dùng command line: npm i -g sass 
 Để có sass live compiler: Tải extension sass live compiler -> ấn nút sass watcher -> khi save file scss sẽ tự compile ra css live
---> Dùng sass trong React
-npm i sass => import file scss dùng trực tiếp như bth thôi
+Dùng sass trong React: npm i sass => cài vào project r thì import file scss dùng trực tiếp như bth thôi
 
 sass <link file>.scss <link file đích>.css --style compressed => bỏ khoảng trắng để nén file thành 1 hàng
 sass <link file>.scss <link file đích>.css --style expanded => mở rộng chuẩn đẹp như code tay dùng 2 space
-
---> sass --no-source-map .:../css => compile mọi file scss trong thư mục hiện tại vào thư mục css
 sass --watch .:../css
+sass --no-source-map .:../css => compile mọi file scss trong thư mục hiện tại vào thư mục css. sourcemap url giúp trình duyệt hiển thị style đang nằm ở file scss nào, nếu k có chỉ hiện file css, ta phải tự tìm ngược về scss để sửa
 
-sourcemap url giúp trình duyệt hiển thị style đang nằm ở file scss nào, nếu k có chỉ hiện file css, ta phải tự tìm ngược về scss để sửa
+scss updates liên tục, dùng sass-migrator module <path> để luôn chuyển đổi mọi file scss ở phiên bản cũ sang bản mới tự động
 
---> Khi scss sang phiên bản mới. Vd giới thiệu các module riêng, Vd dùng @use và @forward thay thế @import. Có thể dùng sass-migrator module <path> để chuyển đổi mọi file scss ở phiên bản cũ sang bản mới tự động => kqtr
-Dùng @import không xử lý trùng lặp khi @import cùng 1 file ở nhiều file, buộc phải dùng @use.
-
--> Dùng câu điều kiện if else
-Dùng vòng loop for, while, each
-Dùng function return ra giá trị cho thuộc tính
-Xử lý chuỗi, số
-
--> Nested selector: cho phép dùng lồng nhau với & biểu diễn thẻ hiện tại để style
-
--> Dùng kế thừa:
-Dùng placeholder khi class Cha k được dùng riêng bởi bất cứ 1 thẻ nào mà luôn dùng thông qua class Con
-
--> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào
-Dùng @content
+-> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào. Kết hợp @content
 
 -> Dùng @use sẽ chỉ tự import file 1 lần đầu tiên ở vị trí đó, các lần sau thì bỏ. Còn @import 1 file nhiều lần có thể gây lặp code ở nhiều nơi.
 @forward trong scss chỉ chuyển tiếp biến chứ k dùng được trong file hiện tại, thêm @use để dùng trong file hiện tại
@@ -39,12 +22,24 @@ Nếu file hiện tại và file @forward có cùng giá trị thì file hiện 
 
 
 
-# Thiết kế 
--> Dùng map bắt đầu bằng () tạo nhiều theme mode
+# Khi dùng trong dự án
+-> Tạo theme mode trong scss với map bắt đầu bằng ()
 
--> Dùng kết hợp BEM với &__header { &--container { } }
+-> Dùng BEM tốt hơn là css selector, css selector chỉ nên 1 cấp thôi:
+.button {
+  background-color: var(--primary-color);
+  &--primary {
+    background-color: var(--primary-color);
+  }
+  &--secondary {
+    background-color: var(--secondary-color);
+  }
+  &__icon {
+    margin-right: rem(8);
+  }
+}
 
--> Tạo responsive trong scss: tạo hàng loạt mixin
+-> Tạo responsive trong scss với hàng loạt mixin
 VD: 
 @mixin xxxs {
 	@media screen and (max-width: 375.98px) {
@@ -83,7 +78,7 @@ Dùng cho css hack:
 	-o-transform: $args;
 }
 
-Điều kiện if else phức tạp:
+Kết hợp điều kiện if else:
 @mixin fullscreen($fixed: false) {
 	width: 100%;
 	height: 100%;
@@ -96,7 +91,7 @@ Dùng cho css hack:
 	}
 }
 
-Gom thuộc tính:
+Gom nhiều thuộc tính thành 1 hàm:
 @mixin overtext($lines) {
 	display: -webkit-inline-box;
 	-webkit-line-clamp: $lines;
@@ -118,7 +113,6 @@ Gom thuộc tính:
 
 
 
-
 # Nhanh
 Phải hiểu nó dùng các thứ trong phạm vi nào:
 - function tái sử dụng logic tính toán giá trị 
@@ -132,9 +126,8 @@ Phải hiểu nó dùng các thứ trong phạm vi nào:
 - Tuân thủ BEM, tối ưu hoá code với kế thừa, biến, mixin, placeholder. Gom style common, themes, variables, css reset chung. Chia nhỏ style từng phần tử riêng.
 - Có thể chia 1 folder scss riêng chứa mọi thứ và chia theo module. Hoặc từng file scss ở cùng cấp với file html từng components.
 
-VD: 1 folder scss riêng chia module mọi thứ. Các file common chia riêng, các file từng module chia riêng. File main.scss ngoài cùng @use file common trước, @use các file module sau để bên trong file scss từng module dùng biến, mixin, hàm common thoải mái. Tuyệt đối k dùng @import tránh lặp.
+VD1: 1 folder scss riêng chia module mọi thứ. Các file common chia riêng, các file từng module chia riêng. File main.scss ngoài cùng @use file common trước, @use các file module sau để bên trong file scss từng module dùng biến, mixin, hàm common thoải mái. Tuyệt đối k dùng @import tránh lặp.
 File main.scss @use mọi thứ, rồi chỉ cần compile duy nhất 1 file đó thành main.css là xong.
-
 scss/
 ├── base/
 │   ├── _reset.scss
@@ -211,10 +204,7 @@ body {
   padding: rem(16);
 }
 
-VD2: trong các dự án như React thường viết file scss cùng cấp với thư mục từng component của nó. Các file scss common viết ngoài cùng và thêm vào index.jsx ngoài cùng
-Vì là SPA nên thêm vào ngoài cùng sẽ dùng được mọi nơi trong dự án nên file scss dùng trực tiếp mọi thứ. import trực tiếp scss vào jsx, k cần lo về qtr compile
-
---> ref tới "HTML CSS JS / Finance flow" thiết kế rất hay
+=> ref tới "HTML CSS JS / Finance flow" thiết kế rất hay
 reset.scss
 mixins.scss => gom lại responsive, css hack, common code nhận biến
 variables.scss => tạo biến cho từng kích thươc màn hình được
@@ -222,18 +212,7 @@ layout.scss
 components.scss => sửa thẻ common, thêm các class common, tái sử dụng nhiều component
 lib.scss => css thêm từ library or sửa library
 
---> Chú ý tuân thủ BEM, tốt hơn là css selector, ngừoi ta bảo css selector chỉ nên 1 cấp thôi
-.button {
-  background-color: var(--primary-color);
-  &--primary {
-    background-color: var(--primary-color);
-  }
-  &--secondary {
-    background-color: var(--secondary-color);
-  }
-  &__icon {
-    margin-right: rem(8);
-  }
-}
+VD2: trong các dự án như React thường viết file scss cùng cấp với thư mục từng component của nó. Các file scss common viết ngoài cùng và thêm vào index.jsx ngoài cùng
+Vì là SPA nên thêm vào ngoài cùng sẽ dùng được mọi nơi trong dự án nên file scss dùng trực tiếp mọi thứ.
 
 

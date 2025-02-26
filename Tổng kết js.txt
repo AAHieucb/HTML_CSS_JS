@@ -1,20 +1,11 @@
-## JS
 # Basic
 script tới file js ở cuối page để đảm bảo mọi component đã load xong, hoặc dùng defer
-
--> Thao tác với chuột clientX, clientY
-window.scrollTo(0, document.body.scrollHeight); để scroll xuống vị trí dưới cùng của thẻ body
-BigInt trong JS
 
 -> Thao tác với file json:
 Có thể dùng JSON làm nguồn cung data, lưu file config xong import vào file js dùng trực tiếp dưới dạng object
 Có thể dùng JSON lưu function bằng function constructor
 
--> Tạo unique id với Date.now() trả ra milisecond từ epoch time nếu k quá khắt khe vì vẫn có xs trùng nếu có quá nhiều request lấy id cùng 1 lúc
-
--> Dùng biến global 
-BOM(Browser Object Model) là thứ cho phép ta thao tác với browser như cookies, history, window, screen, navigator, location.
-Có thể xem trạng thái load của document, tình trạng pin, tốc độ internet, onerror để handle window error, có chuyển tab, bật devtool
+-> Biến global BOM (Browser Object Model) cho ta thao tác với browser như cookies, history, window, screen, navigator, location.
 
 
 
@@ -35,9 +26,7 @@ $: Khớp với cuối chuỗi.
 |: Hoặc (OR).
 VD lọc mail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
--> padEnd, padStart
-
--> Check string có thoả mãn 1 regexp hay không: 
+--> Check string có thoả mãn 1 regexp hay không: 
 const str = "Hello, World!";
 const regex = /Hello/i; // Biểu thức chính quy để kiểm tra "Hello"
 const isMatch = regex.test(str); // Kiểm tra
@@ -140,6 +129,14 @@ with(this) { ... }
 -> Dùng call bind apply
 Dùng bind có điểm lơi là return 1 function mới với giá trị biến this xác định mà có thể tái sử dụng gọi function đó nhiều lần
 call và apply giống nhau chỉ khác cú pháp: o.call(this, args1, args2) và o.apply(this, [args1, args2]); là khi gọi mới gán giá trị this là gì, k thể tái sử dụng.
+
+--> Bind chia được tham số kiểu này
+function greet(greeting, punctuation) {
+    console.log(greeting + ', ' + this.name + punctuation);
+}
+const person = { name: 'John' };
+const greetPerson = greet.bind(person, 'Hello');
+greetPerson('!');
 
 
 
@@ -285,6 +282,35 @@ Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTic
 
 
 
+# IntersectionObserver
+Cho 1 biến IntersectionObserver lắng nghe 1 thẻ bất kỳ thì nó sẽ check nếu thẻ đó có giao với viewport thì gọi hàm tương ứng.
+Chú ý nó chỉ tính phần hiển thị trên màn, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
+VD có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
+
+const handleIntersect = (entries: IntersectionObserverEntry[]) => {
+  entries.forEach(entry => {
+    const ratio = entry.intersectionRatio;
+    console.log(ratio);
+  });
+};
+const observer = new IntersectionObserver(handleIntersect, {
+  threshold: [0.25, 0.5, 0.75]
+});
+observer.observe(ref.current);
+observer.unobserve(ref.current);
+
+-> intersectionRatio: tỉ lệ phần hiển thị với thẻ root
+target: css selector thẻ đang nhắm tới
+isIntersecting: có giao với thẻ root hay không
+rootBounds: kích thước thẻ root, mặc định là màn hình
+intersectionRect: kích thước và vị trí phần giao
+
+
+
+# Web worker
+
+
+
 # Other
 -> Typescript sẽ ngăn các trường hợp kỳ lạ xảy ra, đảm bảo operator phải cùng type. Vd: ("b" + "a" + + "a" + "a").toLowerCase(); => banana
 
@@ -303,6 +329,5 @@ Dev khác vào web sẽ thấy source code là của web kia và k có code js n
 
 -> try catch error, hoặc có thể tạo wrapper function dùng then catch để custom trả ra [undefined, T] | [Error] cũng được (T là type của data).
 
--> Trong JS có kiểu dữ liệu struct và shared struct tương tự nhưng truy cập được từ multithread, web worker
-
+-> Tạo unique id với Date.now() trả ra milisecond từ epoch time nếu k quá khắt khe vì vẫn có xs trùng nếu có quá nhiều request lấy id cùng 1 lúc
 

@@ -47,6 +47,7 @@ Dùng transform-origin set tâm
 Hàm translate relative có 1 điểm đb là khi lùi tương đối, nó lùi so với kích thước của chính nó chứ kp kích thước cha => cách để cho thẻ ra tâm thẻ khác
 transform nhược điểm là vẫn chiếm vị trí cũ nên position relative ít dùng
 VD: position relative top -50px và transform translateY(-50px) chả khác gì nhau. Thực tế translate nó boost graphical performance of browser vì nó ra đời sau.
+Shorthand transform: perspective(500px) translate(100px, 50px) scale(1.5, 1.5) rotate(45deg) skew(10deg, 15deg);
 
 -> transform-style: A chứa B thì xoay A, B cũng xoay theo. Vd thẻ A xoay trục Y 60 độ sẽ nhỏ lại và text bị méo, transform-style mặc định là flat khiến cho vị trí đó trở thành kích thước và vị trí của thẻ B luôn, nếu xoay B -60 độ thì nó xoay cái hình méo đó tiếp làm thẻ B nhỏ hơn nữa  (xoay xong flat ra thành mp r xoay tiếp mp đó). transform-style preserve-3d thì thẻ B tách rời với thẻ A và k bị flat nữa nên xoay -60 độ quay trở lại kích thước và vị trí ban đầu
 
@@ -71,7 +72,7 @@ cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, e
 transition-delay
 
 transition k dùng được với width hay các giá trị k rõ như auto
-VD có thể set padding 0 -> unset, fontSize 0 -> unset, scaleY(0) -> scaleY(1)
+VD có thể set padding 0 -> unset, fontSize 0 -> unset => h thì được r
 Trong React ta dùng style={appear ? {fontSize: "unset"} : {fontSize: 0, padding: 0, opacity: 0}} + transition là được
 pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
 
@@ -85,7 +86,7 @@ animation-play-state: paused hay running
 => Lưu ý để đảm bảo animation liên tiếp nhau k kiểu bị ngắt quãng thì nên setup sao cho giá trị mặc định lúc 0% bằng với giá trị lúc 100% để làm vô tận mượt hơn
 VD tạo animation hover mới có thì nên để animation-play-state là paused, hover thì running để tránh animation chạy mãi sẽ ngốn CPU: https://www.youtube.com/watch?v=M1qPpwVcF64
 
-VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal)
+VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal) both running;
 => animation còn có SVG, ảnh động, 3D. URL full: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM 
 URL animate loading: https://loading.io/spinner
 
@@ -279,10 +280,6 @@ VD2:
 </style>
 <button popovertarget="info" id="btn">Field</button>
 <div popover id="info">Extra</div>
-
--> Dùng @starting-style và transition-behavior allow-discrete
-
--> dialog là 1 loại popover và có thể dùng kèm API của popover => tạo ra dialog tự có click outside to close.
 
 
 

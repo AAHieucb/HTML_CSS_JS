@@ -1,14 +1,15 @@
 # Basic
-Có thể tạo quy mô dự án lớn mấy cũng được
+Chuyển trang bằng <a>, js chuyển trang thực sự window.location, js đổi url k chuyển trang history.pushState(null, "", url);
+Chia mỗi pages 1 files. Dùng BEM, scss.
 
--> Chuyển trang bằng html or js đều được
-Chia file từng pages. Dùng SCSS, CSS đặt tên bằng BEM.
+-> Setup dự án: Dùng HTML thuần với live server
+Dùng bundler hỗ trợ hết như vite
+Dùng bundler tự động như parcel cho dự án đơn giản. Hỗ trợ live reload, build và start ở 1 port, cài package npm và import vào file js.
+Dùng html thuần nhưng tự cài node_modules để quản lý version, còn lại vẫn dùng live server bth.
+Dùng html thuần vói live server, các package thì cài CDN hoặc copy luôn CDN file js vào dự án.
 
--> Khởi tạo dự án: tuỳ biến
-Có thể tạo file html cho mỗi pages code UI, có thể tạo file html rỗng rồi viết code JS thêm element vào
-Có thể tự chạy với live server, có thể dùng bundler tool để tối ưu code và chạy trên 1 cổng theo config, quản lý package library.
-VD: Dùng live server với file html css js thuần. Thích dùng package nào thì CDN vào hoặc tự cài npm k cần bundler, hoặc cop mẹ file js của nó vào dự án. Bundler giúp quản lý version tốt thôi.
-
+-> Các biến khai báo js mà không trong 1 block, nó sẽ là global var và dùng được ở mọi file js khác miễn các file js khác được tải sau file js này (không dùng module).
+File js tải trước có thể dùng biến globalvar của file js tải sau nếu đảm bảo thời điểm dùng biến, file js tải sau đã hoàn tất việc load qua biến.
 
 
 # React -> Vanilla
@@ -47,11 +48,11 @@ const state = {
 
 -> Trong react có sự kiện "onChange", trong vanillajs có sự kiện "change" chỉ trigger khi không còn focus vào ô input, ta có thể dùng sự kiện "input" sẽ trigger mọi lúc value thay đổi giống y hệt onChange
 
--> Các biến khai báo js mà không trong 1 block, nó sẽ là global var và dùng được ở mọi file js khác miễn các file js khác được tải sau file js này
-File js tải trước có thể dùng biến globalvar của file js tải sau nếu đảm bảo thời điểm dùng biến, file js tải sau đã hoàn tất việc load qua biến.
 
--> Khi thay thuộc tính phần tử trong vanilla js, trình duyệt sẽ nhận ra thay đổi này và tính toán lại các styles cho phần tử bị thay đổi và các phần tử con của nó nếu cần thiết.
-Reflow: Nếu sự thay đổi CSS ảnh hưởng đến bố cục (layout) của trang, trình duyệt sẽ thực hiện "reflow" để tính toán lại vị trí và kích thước của các phần tử trong tài liệu.
+
+# Vanilla JS 
+-> Khi thay thuộc tính phần tử trong vanilla js, trình duyệt sẽ nhận ra thay đổi này và tính toán lại các styles cho phần tử bị thay đổi và các phần tử con của nó nếu cần thiết
+Reflow: Nếu sự thay đổi CSS ảnh hưởng đến bố cục (layout) của trang, trình duyệt sẽ thực hiện "reflow" để tính toán lại vị trí và kích thước của các phần tử trong tài liệu
 Repaint: Sau khi reflow, nếu có bất kỳ sự thay đổi nào ảnh hưởng đến sự xuất hiện của các phần tử (như màu sắc, hình ảnh, hoặc đường viền), trình duyệt sẽ thực hiện "repaint" để vẽ lại các phần tử trên màn hình.
 Cuối cùng, trình duyệt sẽ tổng hợp tất cả các lớp đồ họa và hiển thị chúng trên màn hình.
 => Điều đặc biệt là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết.
@@ -59,21 +60,20 @@ Cuối cùng, trình duyệt sẽ tổng hợp tất cả các lớp đồ họa
 VD: box.style.width = '200px'; // Thay đổi kích thước (gây reflow và repaint)
 box.style.backgroundColor = 'blue'; // Thay đổi màu sắc (chỉ gây repaint)
 
-Reflow là quá trình tốn kém tài nguyên, vì vậy nên hạn chế số lần reflow bằng cách gộp các thay đổi CSS lại với nhau hoặc sử dụng các kỹ thuật như documentFragment để giảm thiểu số lần reflow. VD:
-// Thay vì:
+Reflow là quá trình tốn kém tài nguyên, vì vậy nên hạn chế số lần reflow bằng cách gộp các thay đổi CSS lại với nhau để giảm thiểu số lần reflow. 
+VD: // Thay vì:
 element.style.width = '200px';
 element.style.height = '200px';
 element.style.backgroundColor = 'blue';
 // Dùng:
 element.classList.add('new-style');
 
--> Vấn đề khó chịu nhất khi dùng VanillaJS là global state bị reset mỗi khi chuyển trang. Do kp là SPA nên mỗi khi chuyển trang là 1 set data mới. May mà browser có cache nên các file js css html k cần tải lại.
-Giải pháp là lưu global state lại trong localStorage, cookie, indexed db, url params. Có thể làm kiểu mới vào pages là lấy và xoá, trước khi chuyển page thì set data tuỳ biến.
+-> Khi chuyển page MPA thì global state bị reset. Có thể lưu vào sessionStorage, localStorage, indexed db, url params để lấy lại state cũ khi chuyển pages.
+Còn các file js, css, html k cần lo tải lại vì browser có cache để chỉ tải 1 lần.
 
--> Để fetch data mỗi khi vào web chỉ cần viết ngay trong script ngoài cùng là được. 
-Pb: 
-- document.addEventListener('DOMContentLoaded', function() { }); => sự kiện khi toàn bộ HTML đã được tải xong, k chờ tài nguyên như ảnh, stylesheet.
+-> Pb: - document.addEventListener('DOMContentLoaded', function() { }); => sự kiện khi toàn bộ HTML đã được tải xong, k chờ tài nguyên như ảnh, stylesheet.
 - window.onload => sự kiện khi toàn bộ trang đã được tải xong, bao gồm tất cả các tài nguyên phụ như hình ảnh, stylesheet, và iframe.
+=> useEffect trong React khi chạy đã đảm bảo hiện cho người dùng xem 1 lần rồi. Nó cũng tương đương DOMContentLoaded.
 
 Vấn đề là DOMContentLoaded luôn trigger khi sang 1 pages mới, mà ta luôn cần là DOM load xong thì mới fetch data để đảm bảo data có thể hiện ra. VD:
 <body>
@@ -97,7 +97,7 @@ Vấn đề là DOMContentLoaded luôn trigger khi sang 1 pages mới, mà ta lu
     }
   </script>
 </body>
-Nhưng ta cần khi vào là fetch data sơm hơn ngay khi vào pages, còn khi nào DOM load xong mới show ra data, chưa load DOM xong thì chưa show ra, load dom xong mà chưa fetch data xong thì show loading. VD:
+Nhưng ta cần tối ưu khi vào là fetch data sơm hơn ngay khi vào pages, còn khi nào DOM load xong mới show ra data, chưa load DOM xong thì chưa show ra, load dom xong mà chưa fetch data xong thì show loading. VD:
 <body>
   <div id="data-container">Loading data...</div>
   <script>
@@ -132,8 +132,8 @@ Nhưng ta cần khi vào là fetch data sơm hơn ngay khi vào pages, còn khi 
   </script>
 </body>
 
--> Ta biết khi chuyển pages thì luôn phải fetch lại data, cần lưu vào localStorage lấy ra mới cache được. Giả sử lấy được thì cần có cơ chế tách tên biến k bị trùng giữa các pages. Có thể chia theo namespace:
-// Global namespace object
+-> Có thể lưu data đã fetch để k fetch lại trong phạm vi 1 page như này:
+- Dùng global namespace object 
 var MyApp = MyApp || {};
 // Storing data in the namespace
 MyApp.globalData = {
@@ -147,8 +147,6 @@ MyApp.fetchData = async function() {
   }
   return MyApp.globalData.fetchedData;
 };
-
--> Trong phạm vi 1 pages, có thể cache lại data để kp gọi lại nhiều lần:
 - Dùng Immediately Invoked Function Expression: cung hàm fetch data nếu chưa từng được fetch
 (function() {
   var privateData = null;
@@ -175,7 +173,11 @@ export const fetchData = async () => {
 };
 export const getData = () => globalData;
 
-- Dùng service worker lưu cache => tắt browser bật lại vẫn có data, thậm chí bật lại mà offline vẫn dùng được web. 
+
+
+# Dùng service worker lưu cache 
+Tắt browser bật lại vẫn có data, thậm chí bật lại mà offline vẫn dùng được web. Có thể implement revalidate hoặc time to live cho data.
+
 // serviceWorker.js
 self.addEventListener('fetch', function(event) {
   event.respondWith(
@@ -190,9 +192,7 @@ self.addEventListener('fetch', function(event) {
     })
   );
 });
-Cần cơ chế đảm bảo nếu k hỗ trợ service worker thì bỏ qua. Nêú dùng service worker, đang offline và online sẽ tự discard và fetch data mới.
-
-=> Tương tự có thể implement revalidate hoặc time to live cho data.
+Cần cơ chế đảm bảo nếu k hỗ trợ service worker thì bỏ qua. Nêú dùng service worker, đang offline thành online sẽ tự discard và fetch data mới.
 
 -> Đó là dùng service worker cache api data, có thẻ cache file html css js như bth
 VD: 

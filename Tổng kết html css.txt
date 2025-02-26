@@ -1,48 +1,28 @@
 # Basic
-text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/  |  drop-shadow theo hình dạng ảnh có nền transparent
-Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
-https://www.flaticon.com => trang cho lấy icon miễn phí(có cả icon động) chỉ với điều kiện thêm thẻ div này vào mã nguồn: <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-
 Tổng hợp component UI bằng html thuần*: https://uiverse.io/
 GSAP dùng được với css thuần: https://gsap.com/
 
-CSS nesting có sẵn rồi
+Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
+padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
+
+-> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
+drop-shadow theo hình dạng ảnh có nền transparent
+Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
 
 -> Master border radius: outer radius = inner radius + distance giữa 2 border
 border-radius: https://9elements.github.io/fancy-border-radius/
 Dùng border-image
-
--> Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
-
--> Hack CSS: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
-Cũng có thể dùng cho thuộc tính kiểu height: -moz-fit-content;
-
--> Biến trong css định nghĩa với -- trong 1 tag chỉ dùng được trong tag đó và tag con của nó, truy cập với var()
-VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click là được.
+Shorthand border-radius: 10% 30% 50% 70%;
 
 -> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
 zIndex nên luôn đi với position relative
 
-padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
+-> Tạo tooltip: Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
+Dùng title tốt hơn dùng style css content: attr(data-image-to-show) => trong js lấy sang camel case tag.dataset.imageToShow
 
--> resize: both; direction: ltr; => biến mọi thẻ thành resizable
-contenteditable => biến mọi thẻ thành editable nhưng khá xấu
-Dùng <dialog> có sẵn
-Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn => dùng content: attr(data-image-to-show) => trong js lấy sang camel case tag.dataset.imageToShow
-ul li, ol li, dl dt dd
-Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết. Có none, open, dot, circle, triangle, seseam, 1 <character> bất kỳ
-Tag video chứa tag source. VD: preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
-Thuộc tính inert đặc biệt trong html, khi dùng sẽ vô hiệu hóa mọi tương tác của người dùng với các tag.
-Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
-contain: paint;
-
--> -webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác
-Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-available; width: -webkit-fill-available;
-=> width auto nhiều lúc cũng tự take up rest space
--> Chỉnh thứ tự in chữ với "writing-mode: vertical-rl;"
--> hidden attribute set cho 1 thẻ sẽ ẩn thẻ đó đi
--> Thuộc tính content-visibility cho phép 1 thẻ render nội dung bên trong nó ra hay không
+--> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
+visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
 
 -> Có thể custom cursor:
 C1: là cho cursor none rồi tự custom 1 thẻ ảnh khác cho transform theo mousemove. Có thể custom event mouse down thì phóng to ảnh, mouse up thì ảnh về bth
@@ -51,11 +31,24 @@ C2: là dùng cursor: url() base64
 Tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị
 URL: https://custom-cursor.com/ => lấy ảnh cursor free
 
--> defer js tải song song với html và thực thi sau khi html parse xong; async tải và thực thi song song; Mặc định k có thì parseblocking tải và thực thi xong mới chạy tiếp
-=> Dùng defer là đẹp nhất
-
--> pointer-events: none; sẽ cản sự kiện của 1 thẻ. VD ứng dụng navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
+-> resize: both; direction: ltr; => biến mọi thẻ thành resizable
+contenteditable => biến mọi thẻ thành editable nhưng khá xấu
+Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết. Có none, open, dot, circle, triangle, seseam, 1 <character> bất kỳ
+Tag video chứa tag source. VD: preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
+Thuộc tính inert đặc biệt trong html, khi dùng sẽ vô hiệu hóa mọi tương tác của người dùng với các tag.
+contain: paint; => đảm bảo mọi thứ bên trong k thể paint ra ngoài thẻ đó, mạnh hơn overflow hidden.
+Thuộc tính content-visibility cho phép 1 thẻ render nội dung bên trong nó ra hay không
+writing-mode: vertical-rl; => chỉnh thứ tự in chữ
 field-sizing: content; => element tự mở rộng kích thước phụ thuộc vào content. Vd text-area tự mở rộng
+Thay vì margin: 0 auto; ta dùng margin-inline: auto;
+gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
+border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode.
+text-decoration-thickness, text-underline-offset => style underline
+HTML <template> là tag đặc biệt mà nội dung k được render trực tiếp mà phải được copy rồi mới render ra
+
+-->*** -webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác
+Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-available; width: -webkit-fill-available;
+width auto nhiều lúc cũng tự take up rest space
 
 
 
@@ -65,7 +58,7 @@ position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hư
 
 -> Relative là thay đổi vị trí so với bình thường bao nhiêu, vẫn chiếm không gian
 
--> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ dính màn hình theo vị trí top left ta set. Phạm vi là trong 1 thẻ relative khác hoặc body, nếu thẻ relative scroll hết sẽ trôi cả sticky.
+-> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ stick vào thẻ parent relative đầu tiên của nó, k thì sẽ theo màn hình. Nếu thẻ parent scroll hết thì k stick nữa
 
 -> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
 VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
@@ -90,13 +83,12 @@ VD: .clearfix:after{
 
 # Flexbox
 Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
-Dùng kèm flex-grow và flex-shrink, order. Mặc định flex-shrink = 1, flex-grow = 0 nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
-Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để mọi con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
+Dùng kèm flex-grow và flex-shrink, order. Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để mọi con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
 
 -> Nhanh: flex: 2 2 10%; // grow shrink basis 
 flex: 2 2; // grow shrink
 flex: 2 // = 2 1 0%
-=> flex shrink default 1, flex grow default 0, flex-basis 0%
+=> flex shrink default 1, flex grow default 0, flex-basis 0% nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
 flex-flow: row wrap;
 place-content: center space-between; /* align-content: center; justify-content: space-between; */
 place-items: center stretch; /* align-items: center; justify-items: stretch; */ => k có stretch
@@ -136,6 +128,7 @@ Tương tự display table khi muốn hoạt động như table. VD display tabl
 # Dùng display grid
 Giống flexbox nhưng custom chia vị trí từng ô tốt hơn.
 Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
+Playground: https://flexboxlabs.netlify.app/grid
 
 -> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
 
@@ -235,7 +228,7 @@ Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như n
 1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
 Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => kết hợp min max kiểu lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px
 2) Max số cột:
-Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
+Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho min-width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
 
 VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
 
@@ -252,8 +245,6 @@ Tức if(!mobile) borderRadius=0px else borderRadius=8px
 
 # Responsive css
 Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có thể gấp 3 lần height và height cực kỳ nhỏ.
-
--> color-scheme: light/normal/dark sẽ tự đổi màu đen trắng mà k cần set màu thủ công, dùng ở :root để đổi tất cả.
 
 -> Dùng @media:
 @media not|only mediatype and (mediafeature and|or|not mediafeature) { CSS-Code; }
@@ -297,7 +288,7 @@ Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ đư�
 - minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
 => Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
 
-VD: Chỉ cần grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); là đã tự responsive chia cột, nếu mỗi phần tử k thể nhỏ hơn 100px sẽ tự giảm 1 cột
+VD: Chỉ cần grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); là đã tự responsive chia cột, nếu mỗi phần tử k thể lớn hơn 100px sẽ tự giảm 1 cột
 auto-fit hết container, cố gắng fit full width với các phần tử hiện tại khi chỉ có 1 row
 auto-fill những cột còn lại, thì sẽ lấy min width và cố gắng tưởng tượng còn nhiều cột khác xép vào
 VD: (200px - 100%)*999  là check nếu container lớn hơn 200px sẽ trả ra số âm cực bé, và ngược lại là dương cực lớn
@@ -354,25 +345,19 @@ Tối ưu @media query, vd muốn màn lớn thì 2 col, màn nhỏ thì 1 col. 
 
 
 # Other:
+-> Khi ta cần style chỉ khi có JS, k có JS thì k style gì cả: giải pháp là dùng JS thêm vào aria, rồi css style theo aria, thì khi k disable JS sẽ k style gì cả. 
+
 -> Nguồn ảnh free: https://www.pexels.com/ ảnh và video chất lượng
 https://unsplash.com/ ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
+Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css thuần: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
+https://www.flaticon.com => Best site cho icon động.
 
 -> Các kiểu thiết kế layout web: https://wordpress.com/blog/2024/11/14/website-layout-examples/
-
--> Vd Tạo tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg. Nó khác với opacity vẫn có thể tương tác
-
-Vd Tạo navigation thì dùng ul list thẻ a: Cho text-decoration là none và :hover vào thì đổi thành gì, :active tức link hiện tại đang được chọn thì style như thế nào. Dùng list-style-type: none; cho list. Navigation bar dọc thì li dùng display:block, navigation bar ngang ta dùng thẻ li có display: inline;
-
-VD Tạo stack card khi scroll: Cơ chế là cho position sticky với padding top để các thẻ k bị scroll đi mất mà luôn đính ở 1 chỗ như v
-Để tạo animation phức tạp khi scroll, dùng JS sửa 1 biến --scroll là được: https://css-tricks.com/books/greatest-css-tricks/scroll-animation/
+https://htmlrev.com/ => 1500 template free tạo dự án
 
 -> WebComponent: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework có thể tạo ra các tag html thuần để dùng được ở mọi framework.
 Google có tool Lit giúp tạo web component dễ hơn. React19 cũng hỗ trợ webcomponent dễ dàng hơn r.
-
-1 tag html thuần gồm: - HTML <template> là tag đặc biệt mà nội dung k được render trực tiếp mà phải được copy rồi mới render ra
-- Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. Dev dùng k thể custom shadow DOM. VD nut pause start trong <video>
-Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
+Khi đó phải code thành shadow DOM. Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. Dev dùng k thể custom shadow DOM. VD nut pause start trong <video>
 
 -> Tổng kết thiết kế tối thiểu: tạo dự án, darkmode, chia file css var và các style common, routing chuyển pages, responsive, BEM
 - Tạo dự án: parcel import npm; html thuần import cdn; react;
@@ -382,16 +367,5 @@ Có thể enable google devtool để nhìn thấy shadow DOM của các thẻ
 - BEM: scss dùng &--container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
 - Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
 - Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
-
--> https://htmlrev.com/ => 1500 template free tạo dự án
-
--> Dừng:
-{ display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
-Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-@property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
-https://www.frontendmentor.io/ => học Fremaster
-https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
-Design trend: Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card. https://glow-cards.webflow.io/
-https://css-tricks.com/positioning-text-around-elements-with-css-offset/ => tạo text di chuyển xung quanh element với offset
 
 

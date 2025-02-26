@@ -1,4 +1,6 @@
-# Basic
+# Basic 
+Thường dùng cho Angular thôi
+
 Observer -- subscription--> Observable
     ^                           |
     |__________invoke___________|
