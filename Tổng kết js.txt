@@ -7,6 +7,8 @@ Có thể dùng JSON lưu function bằng function constructor
 
 -> Biến global BOM (Browser Object Model) cho ta thao tác với browser như cookies, history, window, screen, navigator, location.
 
+-> mousemove, mouseenter, mouseleave, mouseover (phát ra cả khi mới di chuyển vào child)
+
 
 
 # Thao tác với string

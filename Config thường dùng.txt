@@ -114,6 +114,7 @@ html {
   -webkit-touch-callout: none;
   interpolate-size: allow-keywords;
   overscroll-behavior: contain;
+  font-display: swap;
 }
 body{
   min-height: 100%;

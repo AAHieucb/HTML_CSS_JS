@@ -421,3 +421,6 @@ Cái gì global thì rem, cái gì chỉ phụ thuộc font-size phần tử hi�
 Khi font-size tăng, ta cũng muốn padding hay margin của nó tăng. Do đó kích thước nên dùng em, font-size nên dùng rem. Media query dùng rem, khoảng trắng nên dùng rem.
 box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k muốn phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
 
+-> Kiểm soát tải font với css font-display, default auto.
+block: text sẽ bị ẩn (tối đa 3 giây) trong khi chờ font tải xong, sau đó sẽ hiển thị với font mong muốn.
+swap: text hiển thị ngay lập tức bằng font dự phòng, sau đó thay thế bằng font mong muốn khi tải xong => luôn dùng css reset
