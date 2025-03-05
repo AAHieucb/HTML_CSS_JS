@@ -24,9 +24,6 @@ params.set('name', 'gpt-4');
 params.append('lang', 'en'); => append sẽ thêm value vào key như mảng, set sẽ thay thế giá trị nếu đã có
 params.getAll("lang");
 
--> Xử lý XSS: hiển thị user input trên web: Trên màn hình gán textContent là xong, trên url dùng encodeURIComponent là xong.
-
-
 
 
 # Thao tác với string
@@ -270,6 +267,12 @@ Function trả ra promise thì khi gọi function sẽ thực hiện promise lu�
 Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
 Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
 Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
+
+-> Usecase: tìm best url trong list url
+VD có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào.
+Mỗi khi user vào trang web sẽ query thử 1 lệnh đơn giản (như getBlockNumber) cả list rpc với Promise.any xem cái nào trả nhanh nhất thì lấy
+Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại, ở FE thì khi refresh lại pages sẽ chọn lại url luôn.
+=> ref tới projects "Vatra"
 
 
 

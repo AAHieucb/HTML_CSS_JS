@@ -396,3 +396,6 @@ https://css-tricks.com/positioning-text-around-elements-with-css-offset/ => tạ
 https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
 https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
 https://www.youtube.com/watch?v=Fu4Pl5k-3yQ => dùng mix-blend-mode để đè các layer ảnh, animation ảnh như đang chuyển động, tạo layer và animation với layer bằng clip-path
+@function in css và if()
+https://www.youtube.com/watch?v=VA975GOUFmM => css new feature
+https://www.youtube.com/watch?v=tNBufpGQihY => selectedcontent css new feature
