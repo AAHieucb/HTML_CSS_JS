@@ -7,7 +7,8 @@ URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
 -> Có multiple background image. background-size background-image background-repeat background-color (dùng kèm background image được sẽ nằm ở dưới)
 background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung. background-image hiện trong phạm vi content, nếu dịch tràn ra ngoài sẽ k dịch chuyển trừ khi cho repeat hoặc background-size lớn 
 
-background: red url("./image.png") no-repeat local right top
+background: <background-color> <background-image> <background-position> / <background-size> <background-repeat> <background-attachment> <background-origin> <background-clip>;
+VD: background: red url('image.jpg') center / cover no-repeat fixed padding-box content-box;
 
 background-origin xác định vị trí của background image theo content. 
 background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient color cho text color đc
@@ -25,15 +26,13 @@ Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. 
 VD mask-image: linear-gradient(black, transparent);
 VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px, lấy thẻ có id là star trong hình svg
 VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
-Dùng mask: linear-gradient(90deg, transparent, white 20%, white 100%, transparent);
+VD Mask mờ 2 bên thẻ:
+mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0, 0, 0, 0) 100%);
+-webkit-mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0, 0, 0, 0) 100%);
+Còn có mask composite
 
 -> Setup image:
 Setup ảnh object-fit contain, object-position center center, min-width width aspect-ratio, border-radius, overflow hidden
-
---> Setup image placeholder
-Dùng 1 bức ảnh mặc định loading or skeleton làm background image, or background xám
-Hoặc blur khi load ảnh: Nếu biết trước ảnh là gì có thể tạo 1 phiên bản cực nhẹ là thu nhỏ ảnh lại rồi phóng to lên cho vào background image là được 
-=> Chọn 1 trong 2
 
 --> Dùng onError check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
 HTML có thẻ object show mọi loại media, nếu bị lỗi sẽ tự show thẻ con của thẻ object rất hay => ít dùng vì kp chuyên cho ảnh.
@@ -56,8 +55,8 @@ Luôn set min-width min-height cho ảnh giảm layoutshift khi load xong
 SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
 Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
 
--> Các pp tạo ảnh mờ làm placeholder thay vì 1 màu xám hoặc skeleton loading:
-- Tạo ảnh mờ mà ta có sẵn thì thu nhỏ phóng to là xong
+-> Các pp tạo ảnh mờ làm placeholder thay vì 1 màu xám hoặc 1 ảnh default hoặc skeleton loading:
+- Tạo ảnh mờ mà ta có sẵn thì thu nhỏ r phóng to là xong
 - Ảnh người dùng nhập có thể dùng BlurHash - lib giúp tạo ảnh mờ từ 1 ảnh khác, paste ảnh vào và lấy ra hash làm mờ.
 - Data URL là 1 cách load ảnh bằng code với base64. Khi nhúng ảnh base64 vào code, tốc độ transfer ảnh tới client sẽ nhanh hơn nhưng trên mobile lại chậm hơn vì ngốn CPU render ảnh. Khi nhúng src http thì web phải fetch lần nữa tới src đó nên có thể lâu hơn nhưng k bị ngu trên mobile
 1 cách khác là load image blur với base64, giảm chất lượng và chuyển sang base64 bằng tool khác, image thực thì để link url bth
@@ -75,7 +74,11 @@ Hoặc dùng cloudinary hay thư viện browser-image-compression để compress
 Các framework như NextJS cung sẵn khi ta cho optimized true trong file config, nó còn optimize theo kích thước màn hình
 Có thể tự chuẩn bị sẵn các bức ảnh khác nhau thủ công và cho load theo kích thước màn hình => có thư viện react giúp
 
--> Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js
+-> Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js. <source> chỉ cung url, còn lại vẫn dùng tag image để chèn ảnh vào
+VD: <picture class="image_container">
+  <source media="(min-width:650px)" srcset="https://www.w3schools.com/tags/img_pink_flowers.jpg" type="image/jpg">
+  <img src="" alt="" onerror="this.onerror=null;this.src='base64image';" loading="lazy">
+</picture>
 
 
 
@@ -108,7 +111,7 @@ Twitter tag tương tự nhưng chỉ dành cho twitter: <meta name = "twitter:d
 => 1 số thiết bị có tính năng zoom text only, nhưng nếu text zoom to mà layout k zoom sẽ break design, do đó code height của thẻ nên phụ thuộc vào content chứ k được fix cứng
 
 -> Nên dùng senmatic element sẽ tốt cho SEO vì tạo cấu trúc nội dung rõ ràng hơn cho search engine hiểu.
-header và footer ở đầu cuối page; figure chứa img và figcaption; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và <mark> để highlight important text
+header và footer ở đầu cuối page; figure chứa img và figcaption khi cần ảnh có chú thích; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và <mark> để highlight important text
 Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
 => 1 số thẻ có thể có tính chất đặc biệt như thẻ time có thể dùng attribute. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn
 
@@ -165,6 +168,8 @@ p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi d�
 Vì để phòng khi ta dùng ảnh low res load trong background-image. Nên kết hợp với: 
 <link rel="preload" as=image href="./lowresimage.png" fetchpriority=high>
 Thẻ <img> nên luôn set width height ngay trong nó để tránh layout shift, kèm với background-image low res.
+
+-> body tự có 100% width, việc set 100vw là thừa và có thể sai vì nó k tính scrollbar
 
 
 
@@ -261,14 +266,15 @@ Tool sinh code gradient: https://angrytools.com/gradient/
 VD: background: linear-gradient(direction, color1, color2, color3, color4, ...);
 VD: radial-gradient(circle closest-corner at 100px 100px, red 10%, yellow 20%, pink 10%); 
 shape là circle, elipse (default, bóp méo theo khung bên ngoài)
-size có thể là closest-side, farthest-side(default), closest-corner, farthest-corner at ... để set kích thước
+size có thể là closest-side, farthest-side(default), closest-corner, farthest-corner at ... để set kích thước => tức màu cuối của radient chạm cạnh nào của box bao nó thì dừng
+--> repeating-linear-gradient
 
 -> Các cách lấy màu: rgba(255,0,0,0.5); rgb(255,0,0); hsl(0, 1005, 50%), hsla(0,100%,10%,0.3); #ffffff; dùng tên trực tiếp red, yellow
 hsl thì hue có giá trị từ 0 đến 360, 0 và 360 cùng là đỏ.
 color-mix giúp mix 2 màu trong không gian màu nào
 
 -> mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
-backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element
+backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element => tạo glass morphism
 
 -> Còn có sự sai lệch về màu sắc khi dùng browser khác nhau, đặc biệt là Safari so với Webkit. 
 Ta k nên giả định 2 màu là giống nhau ở 1 thẻ so với 1 bức ảnh hay video. VD: video có màu nền là #f12312 vì ta dùng devtool để lấy màu => ta k thể dùng 1 thẻ cũng có màu #f12312 và giả định rằng 2 màu giống nhau được, đặt video bên cạnh thẻ kia sẽ thấy khác màu ở 1 số browser khác.
@@ -277,6 +283,31 @@ Có những màu đẹp có sẵn được support chuẩn ở mọi browser nê
 
 -> gradient nhìn đẹp hơn khi dùng không gian màu oklch thêm vào đầu
 VD: linear-gradient(in oklch, red, blue);
+
+-> Dùng relative color
+:root {
+  --clr-primary-rgb: 255 120 0;
+  --clr-primary: rgb(var(--clr-primary-rgb));
+
+  --clr-secondary-rgb: 0 255 25;
+  --clr-secondary: rgb(var(--clr-secondary-rgb));
+}
+Dùng đổi opacity:
+background: rgb(var(-clr-primary-rgb) / .5); => k chạy nhé, muốn tạo relative phải dùng from
+
+--> Cách trên phức tạp, tạo 2 biến cho mỗi màu. Có thể dùng from tạo màu từ 1 màu khác và custom:
+hsl(from #ff0000 / 0.5); => giảm opacity đi 0.5
+hsl(from red h s calc(l - 20) / 0.5); => lấy màu đỏ và giảm light đi 20
+hsl(from var(--clr-primary) h s 20%); => đổi rgb sang hsl, sau đó map thông số h và s, còn light set là 20%
+rgb(from #ffff r g g / 0.5); => tương tự nhưng lấy màu green làm màu blue
+oklch(from red calc(l * .5) calc(c * .1) h / 0.5); => oklch() là hàm tạo màu như lch() nhưng màu sắc cân bằng hơn. lightness, chroma (như saturation), hue.
+
+--> Dùng color-mix
+color: color-mix(in lab, black, currentColor); => currentColor sẽ lấy thuộc tính color của thẻ hiện tại và ở case này làm tối màu đó đi, k set sẽ lấy theo cha, rồi tạo ra màu này
+VD ở light background cần chữ màu tối hơn, dark background cần chữ màu sáng hơn. Dù ta đã set đen trắng cho text rồi nhưng cần text có màu khác. Ta dùng:
+color: color-mix(in lab, currentColor, red 70%); => giả sử chữ đỏ sẽ tự có màu đỏ đậm đỏ nhạt tuỳ bg cho đúng
+
+linear-gradient cũng dùng được currentColor, dùng được mọi nơi cho màu
 
 
 
@@ -333,7 +364,6 @@ Short hand nhiều url:
        url(../fonts/Klavika-Bold.otf) format('truetype') font-weight-bold,
        url(../fonts/Klavika-Bold-Italic.otf) format('truetype') font-italic font-weight-bold;
 }
-
 --> Có thể dùng @import url(<>); trong css để thêm font chữ vào và dùng trực tiếp trong font-family. Chỉ được với remote url, k dùng được url local file.
 
 -> Dùng font-systhesis
@@ -385,4 +415,12 @@ https://www.w3schools.com/cssref/css_fonts_fallbacks.php
   font-palette: --identifier;
 }
 
+-> :root và html gần tương đương nhau, nhưng thường dùng html để set default style cho mọi thẻ, dùng :root để set global variables.
+Browser có thể đổi font-size, dùng pixel k tốt vì nó override settings đó của browser.
+Cái gì global thì rem, cái gì chỉ phụ thuộc font-size phần tử hiện tại thì em (theo kích thước font-size của phần tử hiện tại).
+Khi font-size tăng, ta cũng muốn padding hay margin của nó tăng. Do đó kích thước nên dùng em, font-size nên dùng rem. Media query dùng rem, khoảng trắng nên dùng rem.
+box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k muốn phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
 
+-> Kiểm soát tải font với css font-display, default auto.
+block: text sẽ bị ẩn (tối đa 3 giây) trong khi chờ font tải xong, sau đó sẽ hiển thị với font mong muốn.
+swap: text hiển thị ngay lập tức bằng font dự phòng, sau đó thay thế bằng font mong muốn khi tải xong => luôn dùng css reset

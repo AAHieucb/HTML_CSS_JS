@@ -4,7 +4,7 @@ URL: https://www.youtube.com/watch?v=PL3Odw-k8W4
 
 
 # Transform stream
-1 loại stream xử lý data, pipe vào các stream khác như bth.
+1 loại stream xử lý data, pipe vào các stream khác như bth, dùng stream giúp tiết kiệm băng thông.
 
 Vd tạo một TransformStream để chuyển đổi văn bản thành chữ hoa trước khi đọc nó thì dùng transform stream ở giữa để viết hoa chữ:
 const transformStream = new TransformStream({
@@ -41,73 +41,11 @@ readableStream
     }
   }));
 
-
-
-# IntersectionObserver
-Check khi chiều cao của thẻ hiển thị bao nhiêu phần trăm trên màn hình. Nó chỉ tính phần hiển thị trên màn, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-VD có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
-
-const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-  entries.forEach(entry => {
-    const ratio = entry.intersectionRatio;
-    console.log(ratio);
-  });
-};
-const observer = new IntersectionObserver(handleIntersect, {
-  threshold: [0.25, 0.5, 0.75]
-});
-observer.observe(ref.current);
-observer.unobserve(ref.current);
-
-
-
-# Setup dự án:
-Dùng bundler chuẩn: vite tự setup
-Dùng bundler tự động: parcel cài nhẹ cái là xong nếu dự án k dùng gì phức tạp. Hỗ trợ livereload, build và start ở 1 port, cài package npm và import vào file js cho dự án html thuần ok
-Dùng HTML thuần với live server
-Dùng html thuần nhưng tự cài node_modules: npm i mọi thứ vào đó rồi tự quản lý version, tự import vào dự án, vẫn dùng live server bth.
-
-
-
-# Dùng relative color
--> Basic
-:root {
-  --clr-primary-rgb: 255 120 0;
-  --clr-primary: rgb(var(--clr-primary-rgb));
-
-  --clr-secondary-rgb: 0 255 25;
-  --clr-secondary: rgb(var(--clr-secondary-rgb));
-}
-Dùng đổi opacity:
-background: rgb(var(-clr-primary-rgb) / .5);
-
--> Cách trên phức tạp, tạo 2 biến cho mỗi màu. Có thể dùng from tạo màu từ 1 màu khác và custom:
-hsl(from #ff0000 / 0.5); => giảm opacity đi 0.5
-hsl(from red h s calc(l - 20) / 0.5); => lấy màu đỏ và giảm light đi 20
-hsl(from var(--clr-primary) h s 20%); => đổi rgb sang hsl, sau đó map thông số h và s, còn light set là 20%
-rgb(from #ffff r g g / 0.5); => tương tự nhưng lấy màu green làm màu blue
-oklch(from red calc(l * .5) calc(c * .1) h / 0.5); => oklch() là hàm tạo màu như lch() nhưng màu sắc cân bằng hơn. lightness, chroma (như saturation), hue.
-
--> Dùng color-mix
-color: color-mix(in lab, black, currentColor); => currentColor sẽ lấy thuộc tính color của thẻ hiện tại và ở case này làm tối màu đó đi, k set sẽ lấy theo cha, rồi tạo ra màu này
-VD ở light background cần chữ màu tối hơn, dark background cần chữ màu sáng hơn. Dù ta đã set đen trắng cho text rồi nhưng cần text có màu khác. Ta dùng:
-color: color-mix(in lab, currentColor, red 70%); => giả sử chữ đỏ sẽ tự có màu đỏ đậm đỏ nhạt tuỳ bg cho đúng
-
-linear-gradient cũng dùng được currentColor, dùng được mọi nơi cho màu
-
-
-
-# Bind chia được tham số kiểu này
-function greet(greeting, punctuation) {
-    console.log(greeting + ', ' + this.name + punctuation);
-}
-const person = { name: 'John' };
-const greetPerson = greet.bind(person, 'Hello');
-greetPerson('!');
-
-
+  
 
 # Private custom variables trong css
+VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click thay vì gán lại style từng thẻ
+
 Thiết kế css var cho dự án lớn: dùng fallback var + kế thừa css var, đảm bảo css var được đinh nghĩa trong 1 scope tối ưu
 VD: 
 <div class="container">
@@ -172,9 +110,10 @@ Trừ @media và @container mới fix cứng vì k dùng được css var, đồ
 
 
 
-# Dùng css @scope và @layer
+# Dùng css @scope và @layer, specifility
 Specifility: @layer > @scope > thứ tự định nghĩa trong css => sai vì @scope k tăng specifility
-@scope đơn giản là thay thế việc dùng nested selector bth, điểm khác biệt duy nhất là selector gốc của @scope không đóng góp vào specificity.
+@scope (article) to (aside :scope) {} => article tới thẻ cha là aside mà k tính thẻ cha tức là áp dụng cho thẻ con của article nếu article là con của aside trực tiếp => sai bỏ
+@scope đơn giản là thay thế việc dùng nested selector bth, điểm khác biệt duy nhất là selector gốc của @scope không đóng góp vào specificity, tức làm giảm specificity.
 
 -> CSS rule mặc định theo thứ tự đinh nghĩa trong css. @scope khiến cho nó theo thứ tự nested tag trong html. VD:
 // index.html
@@ -182,7 +121,7 @@ Specifility: @layer > @scope > thứ tự định nghĩa trong css => sai vì @s
   <p class="text">Hello <button class="xxx">Button</button></p>
 </div>
 // index.css
-.text p { color: red; }
+p.text { color: red; }
 .container p { color: white; }
 => Chữ sẽ là màu trắng vì 2 class cùng specifility sẽ theo thứ tự đinh nghĩa
 
@@ -204,7 +143,6 @@ VD: @scope (.text) to (button.xxx, a, p[class]) {
 
 --> VD :scope dùng y như & được
 @scope (article) to (> figure) {} => áp dụng cho mọi con của article, trừ con trực tiếp là tag figure
-@scope (article) to (aside :scope) {} => áp dụng cho article tới thẻ cha là aside mà k tính thẻ cha tức là áp dụng cho thẻ con của article nếu article là con của aside
 Tức @scope(aside) { @scope (article) { ... } }
 
 --> Dùng trong HTML tag: k cần định nghĩa scope cho thẻ nào, tự hiểu là dùng cho thẻ bao sát thẻ style chứa nó, ở đây là @scope (article) { } nhưng chỉ với duy nhất thẻ article bao style này chứ k ảnh hưởng các article ngoài
@@ -256,7 +194,6 @@ Các layer sẽ có specifility độc lập, ngoại trừ 3 layer có sẵn, c
 VD: viết style layer1 -> viết style layer2 -> viết thêm style cho layer1 => style layer2 sẽ đè lên mọi thứ của layer1 vì thứ tự khai báo layer2 sau layer1
 VD: @layer framework, reset, base, layout, components; => nhét ở đầu file để khai báo thứ tự, thì khai báo bên dưới thế nào vẫn luôn tuân theo thứ tự này
 => Giải quyết TH khi cần custom style của framework sử dụng nhưng nó specifility k đủ để đổi, buộc phải thêm !important rất dở. Nếu thêm được style của framework vào @layer thì sửa ok
-=> !important vẫn đè mọi thứ nhưng khai báo trước ưu tiên hơn khai báo sau
 
 -> Code bên ngoài sẽ override code trong custom layer tự tạo ra, vì code bên ngoài thuộc author styles, còn code trong custom layer thuộc 1 layer con của author styles có spec nhỏ hơn
 @layer có thể lồng trong @layer khác và quy tắc vẫn tương tự
@@ -281,41 +218,26 @@ Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer tr
 
 
 
-# Dùng type="module" sẽ đổi cách viết JS
-Mặc định mọi thứ là toàn cục. Biến ta khai báo ở file JS này sẽ truy cập được ở file js khác miễn là script tới cả 2 file và script file khai báo được load xong trước
-type="module" thì biến trong file đó k thể truy cập ở file khác, muốn là gì phải export import => nên luôn dùng type module, chỉ có code kiểu cũ mới k dùng
-
-
-
-# border-radius short hand nhận 4 giá trị
-Thay vì margin: 0 auto; ta dùng margin-inline: auto;
-body tự có 100% width, việc set 100vw là thừa và có thể sai vì k tính scrollbar
-gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
-border-bottom là cạnh dưới của phần tử.
-border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode
-
-
-
 # Dark mode thực tế có sẵn mà k cần phải code thủ công, trừ khi có màu nào phức tạp.
-Ta muốn mới vào web sẽ theo setting của browser. Nếu người dùng đổi mode sẽ lấy setting của người dùng. Nếu đã từng set rồi, mà ngừoi dùng đổi mode rồi reload, vẫn phải theo cái đã set trong web.
+Vào web default sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu localStorage và theo settings đó và luôn ghi đè setting browser.
 
--> Có 2 cách để set theme mode là dùng html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> 
+-> Có 2 cách để set theme mode là dùng html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
 Khi dùng cả 2 giá trị "light dark" như này là theo setting của browser.
 Nếu set rõ ràng color-scheme: light; hay color-scheme: dark; sẽ dùng đúng mode đó.
-
--> style trong @media (prefers-color-scheme: dark) { } sẽ được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => dùng cái này k ổn vì nếu browser set dark thật thì style bên trong k thể mất, tức đổi sang light éo được. Buộc trong nó lại phải định nghĩa màu của cả 2 mode
-
--> Mặc định Canvas là màu của background, CanvasText là màu của text tự được thay đổi tuỳ vào mode hiện tại.
-VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
-
--> Để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
 Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser. Để dùng ligh-dark, phải có "color-scheme: light dark;" trong :root
 
--> Nhanh: dùng color-scheme light dark + đổi mode thì thay đổi color-scheme là được + dùng Canvas CanvasText light-dark color-mix, biến css
+-> style trong @media (prefers-color-scheme: dark) { } sẽ được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => Bỏ k dùng
+K ổn vì nếu browser set dark thật thì style bên trong k thể mất, tức đổi sang light éo được. Buộc trong nó lại phải định nghĩa màu của cả 2 mode
+
+-> Mặc định Canvas là màu của background, CanvasText là màu của text tự được thay đổi tuỳ vào mode hiện tại => Bỏ k dùng
+VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
+Để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
+
+-> Cách tốt nhất là dùng JS: Check darkmode browser với window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; rồi lưu vào localStorage.
 
 
 
-# Đỉnh cao, dùng conic gradient tạo hình zigzag 
+# Đỉnh cao dùng conic gradient tạo hình zigzag 
 .loader {
   height: 47px; /* control the size */
   aspect-ratio: 5;
@@ -329,20 +251,19 @@ Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ
 
 
 # Tạo tab a11y
-Dùng thẻ a, k dùng button
-Nếu single page, dùng <a href="#idofelement"/>
+Khi chuyển trang, ưu tiên dùng thẻ a thay vì button. Còn single page thì dùng <a href="#idofelement"/>
 Thay vì add event click vào từng thẻ, ta chỉ cần add vào thẻ container sẽ tự phát khi các phần bên trong bị click
 
--> Dán nhãn cho phần tử giúp tăng accessiblity của web, nhất là với các thẻ k có text mô tả mà chỉ có icon. Giúp link các thẻ có quan hệ lại giữa id và aria-labeledby
+-> Các thẻ chi tiết phải luôn dán nhãn, nhất là các thẻ chỉ có icon k có text mô tả:
 Dùng với aria-label được: <button aria-label="Tìm kiếm">
 Dùng với aria-labeledby khi cần 1 hoặc nhiều thẻ khác làm nhãn cho thẻ hiện tại. VD:
 <p id="label1">Giỏ hàng:</p>
 <p id="label2">Bạn có 3 sản phẩm.</p>
 <div role="region" aria-labelledby="label1 label2">
-  <!-- Nội dung khu vực -->
+  <!-- Nội dung -->
 </div>
 
-Dùng cách thuộc tính aria, đảm bảo khi ấn nút tab và mũi tên có thể navigate được chứ bth chỉ ấn mỗi nút tab được.
+-> Để có a11y tốt khi dùng tab, đảm bảo ấn tab và mũi tên là có thể navigate được.
 Cách dùng aria cho tabs: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
 
 role="tablist", role="presentation", tabindex, role="tab", role="tabpanel"
@@ -352,64 +273,81 @@ Mặc định ấn key tab sẽ navigate qua mọi thẻ a trên page. Nếu dù
 Set bằng JS, ta cho mọi tab k active có tabindex="-1", tab đang active và nội dùng của nó có tabindex="0"
 
 Thuộc tính hidden k chỉ ẩn thẻ đi mà cũng ẩn nó khỏi accessibility tree, tương tự display none. Còn visibility: hidden chỉ ẩn trên UI mà k ẩn trên accessibility tree. 
-VD dùng display none xong aria-hidden="false" sẽ ẩn khỏi UI nhưng accessibility tree vẫn còn.
+VD dùng display none / hidden + aria-hidden="false" => k hoạt động, sẽ ẩn khỏi tree. Dùng visibility hidden + aria-hidden="false" ok UI k có mà a11y vẫn hđ
 
 aria-selected="true" bảo screen reader biết hiện đang ở tab nào, nó cũng tác động vào style tag nào là tag đang được chọn
 
-aria-controls k nên dùng, nếu muốn thêm thông tin mô tả cho tab thì có thể dùng: aria-describedby="idofelement" và dùng 1 thẻ <div id="idofelement" hidden></div> để thêm nếu cần. Nội dung của thuộc tính này được sử dụng khi ngừoi dùng vào tab đó và screen reader đọc nó lên cho ngừoi dùng nghe.
+aria-controls k nên dùng, nếu muốn thêm thông tin mô tả cho tab thì có thể dùng: aria-describedby="idofelement" và dùng 1 thẻ <div id="idofelement" aria-hidden="false" style="visibility:hidden;"></div> để thêm nếu cần. Nội dung của thuộc tính này được sử dụng khi ngừoi dùng vào tab đó và screen reader đọc nó lên cho ngừoi dùng nghe.
 
 Ấn key left right để switch tab thì phải tự custom tạo hàm riêng thao tác với DOM thôi. Bắt sự kiện keydown.
 Điều đặc biệt là khi ta add event keydown cho tabContainer thì chỉ khi ấn tab focus vào tabContainer thì keydown của nó mới bắt chứ ngoài màn hình gõ sẽ k ảnh hưởng
 
--> text-decoration-thickness, text-underline-offset 
-style dựa vào các thuộc tính aria, mà các thuộc tính aria set vào bằng JS. Nên nếu k có js, sẽ k có style gì cả. Ta đảm bảo chỉ style khi js được enabled, progressive enhancement.
-
--> offsetWidth, offsetLeft là kích thước và vị trí của thẻ so với thẻ cha của nó
-
 -> Tạo tab html thuần
-Trong react SPA thì dễ, trong html css phải tự implement.
 - Mỗi tab nên ở cùng pages và k chuyển pages. Vì chỉ đổi tab nhưng mọi phần code html chung lại phải copy ra nhiều file.
 Cũng phải lưu lại vị trí scroll với các state data khác vào sessionStorage, trước khi chuyển, và khi page onload phải lấy lại data rất rối.
-- 1 cách để chia html ra các file khác nhau khi thay đổi hiển thị là: ta viết index.html chung cho cả page, các phần riêng cứ viết ra file, khi cần hiển thị thì fetch file html đó và thế vào innerHTML
 - Đơn giản có thể viết nội dung tab hết 1 file rồi xử lý JS để display none hay hiện ra khi ngừoi dùng ấn vào tab
 - Để chuyển tab có thể dùng label checkbox để bắt và hiển thị content bằng HTML CSS thuần, hoặc dùng JS luôn được. Có thể animation content hiện ra ok.
 Có thể tạo animation slide từ 2 hướng khi chuyển tab, buộc phải dùng JS khi đó để xác định hướng cho animation, mỗi animation 1 keyframe riêng.
 - Có thể dùng window.history.pushState để đổi url mà k chuyển page, kèm xử lý onload. Để khi chuyển page sẽ đổi url, gõ url vào sẽ hiển thị đúng đang là tag nào.
+- Dùng kèm view transition api là thành animation đỉnh chóp
 
--> Tương tự navigation style cho thẻ đang active thì mỗi page, ta sửa html đi cho nav đó highlight là được.
-Dùng kèm view transition api là thành animation đỉnh của chóp
-
--> Nhanh chỉ cần set: aria-label, aria-labelledby, aria-describedby, aria-hidden, aria-selected, aria-controls, aria-current, aria-autocomplete, title, alt, role, aria-expanded
-aria-controls xác định quan hệ điều khiển, phần tử này điều khiển phần tử khác. Vd 1 button điều khiển dialog, menu, tab panel. Dùng label for để toggle thì k cần
+-> Nhanh chỉ cần set: aria-label, aria-labelledby, aria-describedby, aria-hidden, aria-selected, aria-controls, aria-current, aria-autocomplete (kèm input autocomplete), title, alt, role, aria-expanded
 Icon thì nên có aria-hidden hoặc mô tả bằng aria label cho tag bao nó
+aria-controls xác định quan hệ điều khiển, phần tử này điều khiển phần tử khác. Vd 1 button điều khiển dialog, menu, tab panel. Dùng label for để toggle thì k cần
+VD: <button aria-controls="idofdialog">. Tương tự aria-expanded cho button ấn button là mở rộng gì đó, cập nhật bằng JS khi mở và đóng là true và false, nó thể hiện trạng thái hiện tại của dialog
+
+--> Bộ 3 aria-errormessage, aria-invalid dùng cho thẻ input khi bị lỗi, aria-required báo input này k thể để trống:
+<input id="email" type="email" aria-invalid="true" aria-errormessage="email-error" aria-required="true">
+<span id="email-error" role="alert">Email không hợp lệ</span>
+Bộ 3 aria-controls, aria-expand và aria-haspopup cho button thể hiện có menu hay danh sách thả hay hộp thoại:
+<button aria-haspopup="dialog" aria-controls="login-dialog">
+  Đăng nhập
+</button>
+<div id="login-dialog" role="dialog" hidden>
+  <p>Vui lòng nhập thông tin đăng nhập.</p>
+</div>
+Bộ 2 aria-selected và aria-multiselectable báo có thể chọn nhiều options:
+<ul role="listbox" aria-multiselectable="true">
+  <li role="option" aria-selected="true">Mục 1</li>
+  <li role="option" aria-selected="false">Mục 2</li>
+  <li role="option" aria-selected="true">Mục 3</li>
+</ul>
+aria-readonly là 1 phần tử chỉ đọc k thể tương tác:
+<label for="username">Tên đăng nhập:</label>
+<input id="username" type="text" aria-readonly="true" value="user123">
+
+-> pointer-events: none; sẽ cản sự kiện của 1 thẻ. VD ứng dụng navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
+
+-> Trong devtool browser có Elements Accessibility tool
 
 
 
 # Tự tạo dialog css thuần hiện ra
--> Safari lỗi: cách tốt nhất tạo dialog hiện tại là:
-Dùng @keyframes và js animationend thay vì @styles transition.
+-> <dialog> có thể mở đóng bằng HTML, CSS để style nhưng sẽ k có animation.
+Dùng css thuần @starting-style và transition-behavior allow-discrete sẽ có animation nhưng k hoạt động với safari
+Dialog là 1 loại popover và có thể dùng kèm API của popover => tạo ra dialog tự có click outside to close nhưng k hđ với safari.
+
+--> Cách tốt nhất hoạt động với safari:
+Dùng @keyframes và js event animationend thay vì @styles transition.
 Ấn ra ngoài ẩn dialog thì bắt sự kiện click global rồi check target khác dialog để close dialog thay vì dùng dialog + popup.
 
--> Mở dialog thì cản scroll: 
-3 vấn đề: Vị trí scroll phải giữ nguyên khi tắt dialog đi; content k bị di chuyển khi mở và đóng dialog; Hoạt động trên cả mobile.
-VD1: html:has(dialog[open]){
+-> Vấn đề mở dialog thì cản scroll, vị trí scroll ngoài phải giữ nguyên khi tắt dialog, content k bị di chuyển sang trái khi mở, hoạt động trên cả mobile.
+- Dùng <dialog> vốn tự cản scroll rồi
+- VD: html:has(dialog[open]){
   overflow: hidden;
   padding-right: 15px;
 }
-=> Giải quyết vấn đề 2 nhưng 1 thì vẫn mất vị trí scroll, trên safari iOS vẫn bị lỗi content dịch chuyển
-=> padding-right bằng kích thước scrollbar, default là 15px nhưng nên set width ::-webkit-scrollbar để đảm bảo cũng bằng kích thước 15px + phải set scrollbar luôn luôn chiếm kích thước mới được
-VD2: html:has(dialog[open]){
+=> padding-right bằng kích thước scrollbar, default là 15px nhưng nên set width ::-webkit-scrollbar để đảm bảo cũng bằng kích thước 15px => Giải quyết vấn đề 3 nhưng 2 thì vẫn mất vị trí scroll, trên safari iOS vẫn bị lỗi content dịch chuyển
+- VD: html:has(dialog[open]){
   position: fixed;
 }
-=> Tương tự nhưng giải quyết được safari iOS + scrollbar có hay k đều chạy ngon. Nhưng vẫn bị 1 vấn đề là mất vị trí scroll
-=> Cách này tối ưu nên dùng khi dialog hiển thị khi scrollbar ở trên cùng hoặc k có
-VD3: Dùng JS để đóng dialog thì set position fixed như VD2, nhưng lưu vị trí scroll lại để scroll jump tới là được.
+=> Tương tự nhưng safari iOS chạy ngon. Vấn đề duy nhất là mất vị trí scrollbar.
+- Cách hoàn hảo nhất là làm như VD trên nhưng thêm 1 biến css lưu vị trí scroll bằng event "scroll", khi đóng dialog thì dùng JS jump tới là được.
 
--> Scrollbar hiển thị: 
-Cho background transparent chỉ hiện mỗi thumb
-Nếu muốn scrollbar luôn hiện "overflow: scroll;" => dùng ok
-Nếu muốn scrollbar luôn chiếm kích thước dù hiện hay k "scrollbar-gutter: stable" => Điều đb là nó bằng đúng kích thước width set của ::-webkit-scrollbar => k dùng vì position fixed dialog khiến scrollbar-gutter k chiếm nx
-Tối ưu là khi k overflow thì k hiện scrollbar nhưng scrollbar vẫn chiếm kích thước bth => k làm được trừ khi tự tạo thẻ scroll
+-> Scrollbar hiển thị: nên cho background transparent chỉ hiện mỗi thumb
+Nếu muốn scrollbar luôn hiện "overflow: scroll;" => ok
+Nếu muốn scrollbar luôn chiếm kích thước kể cả khi k hiện "scrollbar-gutter: stable". Điều đb là nó bằng đúng kích thước width set của ::-webkit-scrollbar => k dùng vì khi kết hợp position fixed dialog khiến scrollbar-gutter k chiếm nx
+Tối ưu là khi k overflow thì k hiện scrollbar nhưng scrollbar vẫn chiếm kích thước bth kể cả position fixed dialog => k làm được trừ khi tự tạo thẻ scroll
 
 
 
@@ -434,4 +372,27 @@ Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full k
 -> AI giúp design component như figma: https://www.youtube.com/watch?v=iSReYz7B4i0
 URL: https://creatie.ai/files/home
 
+-> New morphism : kiểu design tạo clean effect rất ảo
+Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng
+Skeuomorphism hình thực tế => k dùng
+Flat design: web như 1 mặt phẳng với hình vẽ đơn giản, k có shadow hay hiệu ứn nổi lên gì cả
+Material design mở rộng của flat design, có hiệu ứng nổi lên mọi nơi. Màu và shape cần thay đổi. Mọi chuyển động phải liên tục, k đột ngột ẩn hiện.
+Retro/Vintage Styles: web phong cách tinh tế, cổ kính, sang trọng, quý tộc, cổ điển. 
+Brutalism design: web hiệu ứng mạnh, thô mộc, tương phản cao, font chữ nhiều lúc rất ảo
+Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi, đơn giản, có thể đơn sắc, là loại web dễ tạo và dễ nhìn nhất.
+Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
+Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng, trông như được xếp ngẫu nhiên. 
 
+
+
+# Dừng
+{ display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
+Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
+@property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
+https://www.frontendmentor.io/ => học Fremaster
+https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
+Design trend: Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card. https://glow-cards.webflow.io/
+https://css-tricks.com/positioning-text-around-elements-with-css-offset/ => tạo text di chuyển xung quanh element với offset
+https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
+https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
+https://www.youtube.com/watch?v=Fu4Pl5k-3yQ => dùng mix-blend-mode để đè các layer ảnh, animation ảnh như đang chuyển động, tạo layer và animation với layer bằng clip-path
