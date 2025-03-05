@@ -5,7 +5,7 @@
   /* 
     K thể dùng overlfow hidden kết hợp với animation-timeline vì sẽ mất tác dụng của scroll
     Cách fix cho thẻ main-content background-color để color đó đè lên thẻ này
-    Cách fix khác là dùng contain: paint; Nó sẽ khiến cho 1 thẻ có kích thước ban đầu là 1 hcn sẽ kbh lấn ra ngoài hcn đó dưới bất kể hình thức nào
+    Cách fix khác là dùng contain: paint; Nó sẽ khiến cho 1 thẻ có kích thước ban đầu là 1 hcn sẽ kbh lấn ra ngoài hcn đó dưới bất kể hình thức nào mà vẫn có scroll
   */
   contain: paint;
 

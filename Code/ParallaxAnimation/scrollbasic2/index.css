@@ -21,7 +21,7 @@
 .scroll-reveal p span {
   animation-range-start: cover calc(30vh - 33.2px); 
   /*Chuẩn với mọi responsive, ở đây ta để thẻ h2/span khi mà cả thẻ vượt quá mốc 30vh thì thẻ p/span sẽ bắt đầu animation luôn vì nó mới nhú lên 30vh ở ngay dưới nhưng do h2/span có margin nên trừ đi đúng lượng margin, trừ thêm height của h2/span nữa sẽ liên tiếp luôn */
-  animation-range-end: cover 50vh; 
+  animation-range-end: cover 90vh; 
 }
 
 @keyframes scroll-reveal {

@@ -122,10 +122,6 @@ framer-motion => basic
 -> Prj Unplash Figma framermotion parallax: https://www.youtube.com/watch?v=29UWA-GdA7k
 useScroll, useTransform của framer motion rất mạnh có thể dùng cho parallax thay thế các thư viện khác mà k cần đổi css var
 
--> File vite.config.ts settings base url của ứng dụng với:
-base: '/react-next-parallax_demo',
-
-//!!!!!!!!!
 -> Prj parallax pvới photoshop: https://www.youtube.com/watch?v=Yo3j_Dx4u7c
 
 Cơ chế để move chuột thì các thẻ di chuyển full màn như v thì ảnh phải to hơn màn hình, khi ta di chuột thì transform các ảnh layer với tốc độ khác nhau. Dùng cubic bezier để transition hiệu ứng từ nhanh sang chậm dần.

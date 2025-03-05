@@ -18,6 +18,24 @@ Có thể xem trạng thái load của document, tình trạng pin, tốc độ 
 
 
 
+# URLSearchParams và URL
+-> const myURL = new URL('https://example.com/path?name=chatgpt&age=25');
+myURL.hostname => "example.com"
+myURL.pathname => "/path"
+myURL.search => "?name=chatgpt&age=25"
+myURL.searchParams là URLSearchParams
+
+-> const params = new URLSearchParams('?name=chatgpt&age=25');
+params.get('name')
+params.set('name', 'gpt-4');
+params.append('lang', 'en'); => append sẽ thêm value vào key như mảng, set sẽ thay thế giá trị nếu đã có
+params.getAll("lang");
+
+-> Xử lý XSS: hiển thị user input trên web: Trên màn hình gán textContent là xong, trên url dùng encodeURIComponent là xong.
+
+
+
+
 # Thao tác với string
 -> VD string find 1 string khác: 
 str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
