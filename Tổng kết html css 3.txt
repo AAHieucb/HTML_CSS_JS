@@ -1,9 +1,9 @@
 # Cách dòng
 white-space: nowrap
 text-overflow + overflow hidden xử lý text tràn thì cut và hiển thị gì ra
-letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc các word bnh chứ kp là giá trị kc luôn
+letter-spacing là kc giữa các ký tự; word-spacing là tăng hay giảm kc các word bnh chứ kp là giá trị kc luôn, nên dùng thay cho &nbsp;
 text-ident để lùi đầu dòng paragraph
-text-align justify
+text-align justify => thay bằng text-wrap
 
 box-decoration-break => xử lý style inline element (span) khi break sang nhiều dòng, liệu các style css vẫn dùng chung cả cục hay mỗi dòng là 1 style riêng. 
 line-height giúp căn kc các dòng trong 1 văn bản có nhiều dòng. Có thể dùng nó để chỉnh vị trí của text theo chiều dọc, VD dùng thay việc set paddingTop
@@ -31,12 +31,15 @@ ab
 defgh
 i ac
 => word-wrap/word-break: break-word; => ok nhất nè
+=> Chốt chỉ cần nhớ: default tự xuống dòng nhưng chữ dài k cắt, break-word như default nhưng chữ dài cắt, break-all là cắt hết
 
 -> Ngoài white-space, ta còn có text-wrap: wrap/no-wrap tương tự
-Có text-wrap: balance; khiến cho content chia vào nhiều dòng 1 cách cân bằng hơn giữa các dòng, chỉ có tác dụng với text < 6 lines. Dùng cho nhiều kiểu k chỉ text 
+Có text-wrap: balance; khiến cho content chia vào nhiều dòng 1 cách cân bằng hơn giữa các dòng, chỉ có tác dụng với text < 6 lines. Dùng cho nhiều kiểu k chỉ text => thường dùng cho title lớn
 VD: list có 10 items, nó sẽ chia mỗi 5 items 1 dòng khi có 2 dòng thay vì cứ giảm dần 9 1, 8 2, 7 3 khi co nhỏ màn lại.
 Nếu ít dòng và right gap lớn thì dùng text wrap pretty sẽ đẹp hơn balance. Pretty cũng tốt nếu cuối dòng có 1 icon và icon bị dài quá sang line2 nhìn rất chuối.
 => Vấn đề text wrap balance bị khoảng trắng lớn ở bên phải, có thể dùng lib https://react-wrap-balancer.vercel.app/
+
+-> TK: white-space, text-wrap balance/pretty, word-break break-word, line-clamp và text-overflow và overflow hidden, line-height và vertical-align, letter-spacing và word-spacing
 
 
 

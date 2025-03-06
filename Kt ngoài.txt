@@ -67,6 +67,15 @@ Ta có thể cấu hình config thủ công cho nó tự động làm các task 
 
 
 
+# Constrast ratio
+Tỉ lệ sáng tối ảnh hưởng đến SEO và thiết kế web.
+Có nhiều tool online check constrast ratio
+Văn bản thường > 7:1
+Văn bản lớn > 4.5:1
+Max k quá 15:1
+
+
+
 # Pre-processors như sass, less
 Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser.
 => hầu hết các bundler như Vite build đều hỗ trợ sẵn post processors.

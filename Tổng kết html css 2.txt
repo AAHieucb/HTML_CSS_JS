@@ -424,3 +424,7 @@ box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh 
 -> Kiểm soát tải font với css font-display, default auto.
 block: text sẽ bị ẩn (tối đa 3 giây) trong khi chờ font tải xong, sau đó sẽ hiển thị với font mong muốn.
 swap: text hiển thị ngay lập tức bằng font dự phòng, sau đó thay thế bằng font mong muốn khi tải xong => luôn dùng css reset
+
+->*** Material icons: là icons viết dạng tag html
+
+
