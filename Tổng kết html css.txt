@@ -212,14 +212,14 @@ VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card c�
 
 
 # Trick responsive flexbox grid
-Xếp flex-basis trước, nếu các thẻ có flex-basis mà k đủ cho 1 dòng thì sẽ xuống dòng. Sau đó mới tính grow, shrink. Do đó có thể lợi dùng flex-basis để kiểm soát số cột
+Xếp flex-basis trước, nếu các thẻ có flex-basis mà k đủ cho 1 dòng thì sẽ xuống dòng. Sau đó mới tính grow, shrink. Do đó có thể lợi dụng flex-basis để kiểm soát số cột
 
 VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp column fit vào ô với kích thước 200px nếu có thể. Có thể dãn lớn hơn 200px. Nhỏ hơn 200px thì xuống dòng.
 minmax nếu max nhỏ hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
 1fr đơn vị phân số fraction chia tỉ lệ nhưng bản thân nó k theo kích thước bất cứ container nào cả, chỉ là tỉ lệ các item. Bth nó kiểu max 100% ấy. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ hoạt động k như mong muốn, hay invalid property.
 repeat là hàm trong css có sẵn. Thường dùng là repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì đến grid. Mục số là điền số chứ đừng điền 1fr, có thể dùng minmax(200px,1fr) để full width mà max width.
 Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row, tức chỉ có 1 cột
-Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như nào thì dòng dưới phải có cột width như vậy. Nếu k muốn v thì dùng flex.
+Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như nào thì dòng dưới phải có cột width như vậy. Nếu k muốn v thì dùng flex. Muốn height các cột bằng nhau thì set grid-template-rows 1fr hết
 
 -> Kỹ thuật responsive:
 1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
@@ -329,7 +329,7 @@ VD code mẫu grid nhảy cột từ 1 tới 4:
   grid-template-columns: repeat(
     auto-fit, 
     minmax(
-      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), 
+      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), // tức màn > 4 thẻ thì column size bth, màn < 4 thẻ thì column size full width
       1fr)
     );
 }
