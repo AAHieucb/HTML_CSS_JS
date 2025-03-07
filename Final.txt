@@ -320,6 +320,8 @@ aria-readonly là 1 phần tử chỉ đọc k thể tương tác:
 
 -> Trong devtool browser có Elements Accessibility tool
 
+-> Dùng ul li a header h1 p nav main article section aside footer
+
 
 
 # Tự tạo dialog css thuần hiện ra

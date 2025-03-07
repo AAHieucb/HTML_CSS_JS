@@ -171,6 +171,11 @@ Thẻ <img> nên luôn set width height ngay trong nó để tránh layout shift
 
 -> body tự có 100% width, việc set 100vw là thừa và có thể sai vì nó k tính scrollbar
 
+-> Chú ý ta dùng css của lib trước r đến css reset để đảm bảo style ta tự code luôn áp đảo mọi styles từ nơi khác. Vẫn dùng styles của lib.
+Chú ý thứ tự style dùng theo layer: lib -> base -> tự định nghĩa: reset r đến layer thường
+Ở mỗi layer: :where(:root) -> html -> :root -> body -> * -> style thường
+VD font-size của css reset để ở thẻ body, chứ để ở html khéo lib hay gì đè lên mất
+
 
 
 # BEM

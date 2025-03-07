@@ -96,7 +96,6 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
 }
 :where(:root) {
   text-rendering: optimizeLegibility;
-  font-size: var(--font-medium);
 }
 * {
   box-sizing: border-box;
@@ -122,6 +121,7 @@ body{
   overflow-y: hidden;
   color: var(--color-text);
   background-color: var(--color-background);
+  font-size: var(--font-medium);
 }
 img {
   max-width: 100%;
