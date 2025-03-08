@@ -182,7 +182,7 @@ VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card c�
 .card:has(> img) {
   // Giả sử mỗi card dài 30ch
   // Khi tăng lên 2 card 1 hàng, thẻ chứa ảnh chiếm cả 1 hàng
-  @container grid-auto-fit (inline-size > calc(30ch * 2 + 1rem)) {
+  @container grid-auto-fit (inline-size > calc(30ch * 2 + 1rem)) { // Chú ý k dùng được css var
     grid-column: span 2;
 
     display: grid;
