@@ -432,4 +432,5 @@ swap: text hiển thị ngay lập tức bằng font dự phòng, sau đó thay 
 
 ->*** Material icons: là icons viết dạng tag html
 
-
+-> Variable fonts là các loại phông chữ cho phép thay đổi thuộc tính cùng 1 tệp phông chữ, thay vì phải fix cứng font-size, font-weight, italic. Luôn dùng variables fonts. Các font-size mà buộc phải set kích thước thì k là variables fonts. Khi tải font local cũng cần chú ý
+VD roboto là static font, roboto_flex là variable font

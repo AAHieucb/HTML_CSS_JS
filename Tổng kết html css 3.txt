@@ -201,7 +201,7 @@ Có thể tạo animation phức tạp như trong game.
 
 # View transition API
 View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
-Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api chuẩn hơn và sẽ tự tối ưu performance
+Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api chuẩn hơn và sẽ tự tối ưu performance. Nó khiến phần thao tác bằng JS thành animation
 
 -> Giải thích view transition api: https://www.youtube.com/watch?v=xZteiW-cun8
 Có thể đổi view-transition-name ở từng thẻ, customize animation của view transition api (mặc định là fade).
