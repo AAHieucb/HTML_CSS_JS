@@ -361,7 +361,9 @@ Pineapple AI => AI tạo website và hosting, k có code, nhưng free plan chỉ
 KLeap AI Website Builder => AI tạo website, k có code, có hsosting, tạo responsive mobile luôn
 
 Cắp ý tưởng trên figma hoặc các trang web đã có, nhưng website thiết kế ra phải đảm bảo có 1 theme đồng bộ giữa các pages. Có tool chuyển website to figma.
-Tuân thủ color rules
+
+-> AI giúp design component như figma: https://www.youtube.com/watch?v=iSReYz7B4i0
+URL: https://creatie.ai/files/home => build mobile thôi
 
 -> Exp: Phần header phải dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
 Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật, cho núp sau ảnh object. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, có thể dùng gradient nếu cần nổi bật chữ
@@ -370,9 +372,6 @@ Các phần phải đồng bộ nhau. VD trang có 3 cái header thì cả 3 nê
 Cân bằng giữa lượng ảnh và text, k nên để text dài cả 1 dòng, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ thôi, nên vắn tắt ít chữ nhất có thể
 Nếu có nhiều card đi kèm nhau, các card nên có cùng size, k nên cái cao cái thấp. Tạo độ tương phản cho heading text và details text bằng color, fontsize, fontweight
 Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full kích thước
-
--> AI giúp design component như figma: https://www.youtube.com/watch?v=iSReYz7B4i0
-URL: https://creatie.ai/files/home
 
 -> New morphism : kiểu design tạo clean effect rất ảo
 Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng

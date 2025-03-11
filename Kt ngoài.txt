@@ -88,6 +88,12 @@ VD chuyển: body {
 } giúp tương thích mọi browser.
 VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên luôn dùng
 
+-> CSS Preprocessor gồm mọi tính năng css và mở rộng thêm 1 số tính năng k có sẵn giúp cấu trúc của CSS dễ đọc hơn. 
+Dù sau cùng, code của css preprocessor sẽ được compile thành code css để dùng. Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử, ta k thể code bằng css thuần
+1 số css preprocessor phổ biến như: SASS, SCSS, LESS, Stylus, PostCSS. Chúng cung biến, hàm, thao tác màu và toán học khiến cho css như 1 ngôn ngữ lập trình chuẩn.
+Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian về hiệu năng vì phải biên dịch ra css rồi mới chạy thay vì chạy TT. 
+Thực tế, ta có thể dùng css compiler để chuyển nó thành css thuần rồi dùng file thuần đó cũng được. Dùng được cả FE và BE SSR.
+
 
 
 # AJAX
@@ -98,43 +104,13 @@ AJAX trong các trình duyệt hiện đại dùng HTML5 + modern js, fetch api 
 
 
 
-# CSS Preprocessor 
-Gồm mọi tính năng css và mở rộng thêm 1 số tính năng k có sẵn giúp cấu trúc của CSS dễ đọc hơn. 
-Dù sau cùng, code của css preprocessor sẽ được compile thành code css để dùng. Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử, ta k thể code bằng css thuần
-1 số css preprocessor phổ biến như: SASS, SCSS, LESS, Stylus, PostCSS. Chúng cung biến, hàm, thao tác màu và toán học khiến cho css như 1 ngôn ngữ lập trình chuẩn.
-
-Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian về hiệu năng vì phải biên dịch ra css rồi mới chạy thay vì chạy TT. 
-Thực tế, ta có thể dùng css compiler để chuyển nó thành css thuần rồi dùng file thuần đó cũng được. Dùng được cả FE và BE SSR.
-
-
-
 # Tạo animation bằng JS hay CSS nhanh hơn?
 Dùng CSS có performance tốt vì giảm thiểu logic cho browser và browser có thể optimize DOM, dùng GPU để tăng hiệu suất. JS tốc độ có thể nhanh or chậm hơn CSS tùy vào thư viện nhưng trong đa số các TH thì tốc độ của 2 cái là như nhau. 
 VD jQuery có animation chậm hơn CSS vì nó thiết kế ngay từ đầu k chú trọng vào animation. Các thư viện animation khác thì ok nhưng còn phụ thuộc vào thư viện nặng hay nhẹ, code css hay js dễ hơn.
 => Cái nào tiện hơn thì dùng. Trong vài TH của React, ta nên dùng css vì việc dùng biến useState tạo animation nó làm cả component render lại và code rối hơn k tốt.
 
-
-
-# OAuth2 google gmail api
-Chạy apache server sẽ serve thư mục trong htdocs. VD Ta để 1 folder là 20194761 thì truy cập được index.html tự động với http://localhost/20194761
-
--> Tạo app user gửi bằng mail của họ phải đồng ý cấp quyền:
-Doc URL setup production: https://developers.google.com/gmail/api/auth/scopes
-Doc viết api: https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-
-Setup: - Vào https://console.cloud.google.com/
-- Tạo 1 project mới nếu chưa có
-- Search Gmail API và Enable nó. Thực tế có nhiều loại API và ở đây ta đang chỉ dùng dịch vụ Gmail.
-- Setup từng bước: phần url phải ủy quyền localhost:5000 chẳng hạn nếu cho phép app chạy ở local như v
-
-Phần scope là các mức độ mà ta muốn app truy cập. VD chọn https://mail.google.com/ sẽ có full access như gửi mail nhưng k có nghĩa là có mọi thứ. VD muốn xem các email gửi thì phải thêm scope https://www.googleapis.com/auth/gmail.readonly
-Có 3 loại scope:
-Recommended là scope cơ bản nhất bất cứ ai cũng ok
-Sensitive và Restricted là 2 scope truy cập data quan trọng cần sự đồng ý của người dùng. Và developer cũng phải cho app đi qua Google Verification Process mới dùng được 2 loại scope này. Google Verification Process phải trả phí hàng tháng và phải quay video cam kết sẽ dùng thông tin nhạy cảm của user để làm gì.
-App chạy được trong 2 môi trường là testing và production. Đổi môi trường trong OAuth consent screen. 
-
--> Tạo ứng dụng nhúng video youtube dạng mp3 qua Youtube API: Có thể nhúng 1 video youtube bất kỳ vào web dạng video nhét vào src được nhưng để thao tác chi tiết với data thì phải dùng YoutubeAPI. Chỉ cần đăng ký project trong google cloud platform và enable youtube api và tạo 1 api key mới là được, k cần config gì thêm.
-Có thể làm đủ kiểu, phát nhạc, tua bài tiếp theo, tìm kiếm bài hát, lấy thumbnail
+-> Animation với lib js được ưa chuộng hơn lib css thuần. Nó cũng đảm bảo chạy được ở mọi browser. 
+VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. Do đó nh lib animate css thuần k hỗ trợ exit animation.
 
 
 
@@ -176,11 +152,7 @@ VD thay vì code JS trong html bth, ta thêm:
   </body>
 => Tag CDATA(Character data) để tránh bị lỗi khi nội dung bên trong chứa ký tự đặc biệt. TH đơn giản k có nhưng myString chứa nhiều ký tự complex của html sẽ gây lỗi và CDATA đảm bảo phần code đó luôn được interpret đúng ở dạng literal
 
--> CSS short for Cascading Style Sheets
-Normal flow là tính chất bth của layout khi mà ta chưa làm gì để chỉnh sửa. Vd display static là default value của 1 element khi nó làm việc trong normal flow.
-
 -> Dùng tool quokka trong VSC: CTRL+SHIFT+P để tìm và bật quokka, CTRL+K rồi E để exit, CTRL+K rồi Q để chạy lại quokka => sau khi cài quokkajs extension của VSC
 Để mở browser nhanh ngay trong VSC: CTRL + SHIFT + P -> Chọn Simple Browser: Show
 
--> MicroInteraction: animation các thứ nhỏ nhặt khi hover và click. Animation càng nhỏ, càng đơn giản càng đẹp.
-Lib react: react-useanimations
+
