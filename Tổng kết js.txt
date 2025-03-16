@@ -334,6 +334,22 @@ intersectionRect: kích thước và vị trí phần giao
 
 
 
+# Dùng service worker
+-> Dùng lưu cache offline, tắt browser bật lại vẫn có data, thậm chí là offline.
+- Bắt sự kiện fetch, nếu request có trong cache thì lấy từ cache
+- Bắt sự kiện install, lưu files nào vào cache.
+- Bắt sự kiện activate xoá các cache không liên quan, chỉ để lại cache hiện tại. Ta cũng có thể update worker service bằng cách tạo 1 key mới và xoá cache key cũ.
+
+Khi reload lại pages, sẽ k trigger lại event install và activate để setup lại worker, trừ khi file service-worker bị thay đổi. 
+Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web lần đầu, đều setup lại service worker. Nói chung là file này cứ đổi là tự áp dụng nên k cần lo cũ.
+
+-> Push notification: chỉ cần request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. 
+Tuỳ biến ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
+Dùng như vậy chỉ gửi yêu cầu nội bộ từ FE, thực tế phải dùng 1 server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ biến gửi notification cho user từ server thay cho việc ấn nút kia. Client có mạng sẽ tự nhận được thông báo.
+Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
+
+
+
 # Other
 -> Typescript sẽ ngăn các trường hợp kỳ lạ xảy ra, đảm bảo operator phải cùng type. Vd: ("b" + "a" + + "a" + "a").toLowerCase(); => banana
 

@@ -369,6 +369,10 @@ Dùng title tốt hơn dùng style css :after content: attr(data-image-to-show);
 
 
 
+# Highlight API
+
+
+
 # Other:
 -> Khi ta cần style chỉ khi có JS, k có JS thì k style gì cả: giải pháp là dùng JS thêm vào aria, rồi css style theo aria, thì khi k disable JS sẽ k style gì cả. 
 

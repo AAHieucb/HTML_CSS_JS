@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Push Notification Example</title>
+</head>
+<body>
+  <h1>Push Notification Example</h1>
+  <button id="request-permission">Request Permission</button>
+  <button id="send-notification">Send Notification</button>
+
+  <script>
+    // Đăng ký Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+
+    // Yêu cầu quyền gửi thông báo
+    document.getElementById('request-permission').addEventListener('click', function() {
+      Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
+        } else {
+          console.log('Notification permission denied.');
+        }
+      });
+    });
+
+    // Gửi thông báo
+    document.getElementById('send-notification').addEventListener('click', function() {
+      navigator.serviceWorker.ready.then(function(registration) {
+        registration.showNotification('Hello, World!', {
+          body: 'This is a push notification example.',
+          // icon: 'https://picsum.photos/200/300',
+          vibrate: [200, 100, 200],
+          tag: 'example-notification'
+        });
+      });
+    });
+  </script>
+</body>
+</html>

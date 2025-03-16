@@ -1,0 +1,46 @@
+<!-- Dùng Highlight API -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    ::highlight(my-custom-highlight) {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <p id="intro">Introductory text.</p>
+  <ul>
+    <li id="item1">Item one</li>
+    <li id="item2">Item two</li>
+    <li id="item3">Item two</li>
+    <li id="item4">Item two</li>
+    <li id="item5">Item two</li>
+  </ul>
+  <script>
+    const range = new Range();
+    range.setStartBefore(document.getElementById('intro'));
+    range.setEndAfter(document.getElementById('item1'));
+    // ...
+    range.setEndAfter(document.getElementById('item3'));
+    const highlight = new Highlight(range);
+    CSS.highlights.set('my-custom-highlight', highlight);
+
+    const item4 = document.getElementById('item4');
+    const range2 = new Range();
+    range2.setStartBefore(item4);
+    range2.setEndAfter(item4);
+    highlight.add(range2);
+
+    const item5 = document.getElementById('item5');
+    const range3 = new Range();
+    range2.setStartBefore(item5);
+    range2.setEndAfter(item5);
+    highlight.add(range3);
+    highlight.remove(range2);
+  </script>
+</body>
+</html>
