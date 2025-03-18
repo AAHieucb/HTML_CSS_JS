@@ -1,3 +1,29 @@
+# Kỹ thuật color rule phối màu
+Phối màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng)
+Màu primary 30% được dùng cho các panel hay background của dialog, thẻ thường. Màu này có thể gần giống màu neutral để tạo ứng dụng 1 theme monochrome
+Màu secondary 10% chỉ dùng cho các phần tử quan trọng để người dùng focus vào mà bấm như button, vị trí mà người dùng có thể tương tác, highlight. Màu này nên nổi bật lên trên 2 màu kia
+=> Chỉ nên có 2 màu xuất hiện nhiều là neutral và primary.
+
+Các màu chọn có thể là gradient hay thêm các màu lạ khác vào (1%) nhưng phải tuân theo quy tắc 3 màu chủ đạo. Xếp tránh các màu quá tương phản mà liên tục show ở 1 vị trí 
+Các bức ảnh có thể mang bất kỳ màu gì k ảnh hưởng, nhưng nếu nhiều ảnh cùng 1 màu nền thì có thể nên đổi màu nền kia thành màu primary.
+Còn phụ thuộc vào font chữ, animation, bo góc.
+
+
+
+# Sidebar design UX
+Min width 48-64px, max width 240-300px. Min width thì nên có tooltip khi hover vào icon. Cho phép user kéo co kích thước sidebar.
+Mỗi items nên có phím tắt, và hover có tooltip hiện phím tắt luôn
+Sidebar có thể navigate tới sidebar con và back lại được, các pages cũng có thể mang sidebar khác nhau để thực hiện các actions khác nhau.
+Sidebar có chia level dropdown xuống các subitem
+Sidebar thường có thể switch accounts, chứa darkmode, chứa thông báo update ở cuối có thể tắt đi
+Chia 3 vùng màu rõ ràng cho item unselected, selected, hovered.
+Cho phép user đổi vị trí các item trong sidebar, ưu tiên hightlight các vùng quan trọng thường dùng.
+Sidebar nên có search bar hiển thị modal search data global phức tạp.
+1 secondary sidebar nhỏ ở bên trái main sidebar để quick access
+Mỗi item trong sidebar có button manage riêng các mục như create, view, update, leave, or hiển thị thông tin ví dụ số lượng notifications
+
+
+
 # DevTool Browser
 Tab Console : allow pasting
 [...$$('img')].forEach(a=>a.remove()); 
@@ -97,14 +123,6 @@ VD jQuery có animation chậm hơn CSS vì nó thiết kế ngay từ đầu k 
 
 -> Animation với lib js được ưa chuộng hơn lib css thuần. Nó cũng đảm bảo chạy được ở mọi browser. 
 VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. Do đó nh lib animate css thuần k hỗ trợ exit animation.
-
-
-
-# Sitemap
-robots.txt là file kiểm soát quá trình crawl của search engine, sitemap.xml giúp search engine đánh chỉ mục dễ hơn. 
-Sitemap chứa thông tin về các url cần crawl và cấu trúc nội dung, cải thiện SEO, dễ đánh chỉ mục hơn với web có nội dung động.
-Nếu đk sitemap với Google Search Console, có thể theo dõi thống kê hiệu suất các trang để biết mà cải thiện SEO.
-=> Ta phải tạo thủ công sitemap.xml, thêm các trường giá trị, đặt cùng index.html và hosting là được.
 
 
 

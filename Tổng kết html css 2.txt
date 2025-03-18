@@ -1,3 +1,10 @@
+# Sitemap
+robots.txt là file kiểm soát quá trình crawl của search engine, sitemap.xml giúp search engine đánh chỉ mục dễ hơn sẽ SEO tốt hơn.
+Sitemap chứa thông tin về các url cần crawl và cấu trúc nội dung, cải thiện SEO, dễ đánh chỉ mục hơn với web có nội dung động. 
+Tạo r đặt cùng index.html, nhét vào robots.txt để gg biết, host lên, đăng ký sitemap với Google Search Console theo dõi thống kê hiệu suất các trang để biết mà cải thiện SEO.
+
+
+
 # Xử lý image
 URL: https://bennettfeely.com/clippy/ => kích thước vẫn thế nhưng hiển thị cut ảnh clip-path
 URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn

@@ -47,6 +47,8 @@ HTML <template> là tag đặc biệt mà nội dung k được render trực ti
 Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-available; width: -webkit-fill-available;
 width auto nhiều lúc cũng tự take up rest space
 
+-> Highlight API
+
 
 
 # Dùng position 
@@ -366,10 +368,6 @@ Nên dùng đặt tên cho view-transition-name nhanh chóng
 
 -> Tạo tooltip: Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
 Dùng title tốt hơn dùng style css :after content: attr(data-image-to-show);
-
-
-
-# Highlight API
 
 
 

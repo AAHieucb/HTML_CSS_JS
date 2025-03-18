@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://example.com/</loc>
+    <lastmod>2025-03-18</lastmod>
+    <!-- <changefreq>: Tần suất cập nhật nội dung trang, daily là update hàng ngày (trang động), monthly (trang giới thiệu), yearly (trang contact, điều khoản) -->
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+      <loc>https://example.com/about</loc>
+      <lastmod>2025-03-18</lastmod>
+      <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://example.com/contact</loc>
+    <lastmod>2025-03-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <!-- <priority>: Độ ưu tiên của trang (từ 0.0 đến 1.0, càng cao càng quan trọng). -->
+    <priority>0.5</priority>
+  </url>
+</urlset>
