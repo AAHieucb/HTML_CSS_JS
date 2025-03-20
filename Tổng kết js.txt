@@ -9,6 +9,12 @@ Có thể dùng JSON lưu function bằng function constructor
 
 -> mousemove, mouseenter, mouseleave, mouseover (phát ra cả khi mới di chuyển vào child)
 
+-> IntersectionObserver
+Cho 1 biến IntersectionObserver lắng nghe 1 thẻ bất kỳ thì nó sẽ check nếu thẻ đó có giao với viewport thì gọi hàm tương ứng.
+Chú ý nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được. 
+VD có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
+Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
+
 
 
 # Load file JS với async và defer
@@ -325,31 +331,6 @@ Vd: setTimeout(function(){
 setImmediate(<function>);
 process.nextTick(<function>); => chỉ có trong NodeJS
 Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTick > setImmediate > setTimeout 0s
-
-
-
-# IntersectionObserver
-Cho 1 biến IntersectionObserver lắng nghe 1 thẻ bất kỳ thì nó sẽ check nếu thẻ đó có giao với viewport thì gọi hàm tương ứng.
-Chú ý nó chỉ tính phần hiển thị trên màn, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-VD có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
-
-const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-  entries.forEach(entry => {
-    const ratio = entry.intersectionRatio;
-    console.log(ratio);
-  });
-};
-const observer = new IntersectionObserver(handleIntersect, {
-  threshold: [0.25, 0.5, 0.75]
-});
-observer.observe(ref.current);
-observer.unobserve(ref.current);
-
--> intersectionRatio: tỉ lệ phần hiển thị với thẻ root
-target: css selector thẻ đang nhắm tới
-isIntersecting: có giao với thẻ root hay không
-rootBounds: kích thước thẻ root, mặc định là màn hình
-intersectionRect: kích thước và vị trí phần giao
 
 
 

@@ -521,11 +521,13 @@ input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đ
 
 
 
--> const observer = new IntersectionObserver(entries => {
+-> const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
   entries.forEach(entry => {
-    if(entry.isIntersecting) observer.unobserve(entry.target);
+    if(entry.isIntersecting) { // đang là lúc mới vào, lúc ra sẽ là false
+      observer.unobserve(entry.target);
+    }
     entry.intersectionRatio; // tỉ lệ phần hiển thị với thẻ root
-    entry.target; // css selector thẻ đang nhắm tới
+    entry.target; // là thẻ đang nhắm tới
     entry.rootBounds; // kích thước thẻ root, mặc định là màn hình
     entry.intersectionRect; // kích thước và vị trí phần giao
   })
@@ -534,7 +536,7 @@ input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đ
   rootMargin: "+100px", // tăng kích thước view port, vào cách 100px là tính rồi
   root: document.querySelector('body') // đổi thẻ root, default null là view port. Phần tử chỉ được kiểm tra intersect với view port nếu nó nằm trong vùng của thẻ root
 });
-observer.observe(card);
+
 
 
 -> <div id="container">
