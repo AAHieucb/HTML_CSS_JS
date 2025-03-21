@@ -96,6 +96,7 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
 }
 :where(:root) {
   text-rendering: optimizeLegibility;
+  // transition: all 0.5s linear; 
 }
 * {
   box-sizing: border-box;
@@ -113,15 +114,17 @@ html {
   -webkit-touch-callout: none;
   interpolate-size: allow-keywords;
   overscroll-behavior: contain;
+  font-family: "DM Sans", sans-serif; // Set font mặc định, k có sẽ dùng font 
   font-display: swap;
+  overflow-y: hidden;
 }
 body{
   min-height: 100%;
   width: 100%;
-  overflow-y: hidden;
+  overflow-y: scroll;
   color: var(--color-text);
   background-color: var(--color-background);
-  font-size: var(--font-medium);
+  font-size: var(--font-medium);default của browser
 }
 img {
   max-width: 100%;
@@ -136,6 +139,10 @@ img {
 a {
   text-decoration: none;
   color: var(--color-text);
+}
+button{
+  text-transform: none;
+  cursor: pointer;
 }
 button:disabled {
   cursor: not-allowed;

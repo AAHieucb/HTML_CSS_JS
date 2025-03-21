@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #pop[popover] {
+      max-width: 100px;
+      inset: unset;
+      bottom: anchor(top);
+      left: anchor(center);
+      translate: -50%;
+      margin: 0.25rem 0;
+      position-anchor: --btn;
+    }
+    .container {
+      padding: 300px;
+      display: inline-block;
+    }
+    #btn {
+      anchor-name: --btn;
+    }
+    #btn2 {
+      anchor-name: --btn2;
+    }
+    #pop2[popover] {
+      max-width: 200px;
+      inset: unset;
+      margin: 0.25rem 0;
+      position: absolute;
+      position-anchor: --btn2;
+      position-area: top right;
+      position-try-fallbacks: flip-inline, flip-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container"><button popovertarget="pop" id="btn">Btn</button></div>
+  <div popover id="pop"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus voluptas culpa aliquid sit minima natus doloremque dolor asperiores vero ullam.</div>
+
+  <div class="container"><button popovertarget="pop2" id="btn2">Btn2</button></div>
+  <div id="pop2" popover>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, sapiente.</div>
+  <div class="container"></div>
+</body>
+</html>

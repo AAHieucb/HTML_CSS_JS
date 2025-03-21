@@ -241,48 +241,33 @@ pageswap là khi load hẳn 1 document mới, document cũ sẽ bị unload luô
 
 
 # Css anchor
-URL: https://www.youtube.com/watch?v=B4Y9Ed4lLAI&list=WL&index=2&t=61s
 Ful tut: https://css-tricks.com/css-anchor-positioning-guide/
-***popovertarget popover popovertargetaction giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần, tự responsive
-anchor trong css và html để gắn popover hiện theo thẻ nào
-:root:has(#context:popover-open): Check popover đang được mở bằng css selector để style
-VD1: 
-<style>
-  [popover] {
-    inset: unset;
-    bottom: anchor(top);
-    left: anchor(center);
-    translate: -50%;
-    margin: 0.25rem 0;
-  }
-</style>
-<button popovertarget="info" id="btn">Field</button>
-<div popover id="info" anchor="btn">Extra</div>
-VD2: 
-<style>
-  #btn {
-    anchor-name: --i-btn;
-  }
-  [popover] {
-    anchor-default: --i-btn;
-    inset: unset;
-    translate: -50%;
-    margin: 0.25rem 0;
-    position-fallback: --top-to-bottom;
-  }
-  @position-fallback --top-to-bottom { /* @position-fallback check dùng các position @try, nếu k được thì cứ lấy tiếp cái sau */
-    @try {
-      bottom: anchor(top);
-      left: anchor(center);
-    }
-    @try {
-      bottom: anchor(bottom); /* K fit top thì anchor xuống bottom => auto positioning */
-      left: anchor(center);
-    }
-  }
-</style>
-<button popovertarget="info" id="btn">Field</button>
-<div popover id="info">Extra</div>
+***popovertarget popover popovertargetaction giúp 1 thẻ hiện khi click và ẩn khi click ra ngoài, éo cần js phức tạp nữa, tạo popover css thuần
+
+-> Khi dùng popover, nó tự anchor vào thẻ trigger nó luôn mà k cần viết anchor thủ công.
+Để anchor position hoạt động, phải có inset: unset; để tránh bị full màn.
+R thêm luôn bottom: anchor(top); được. 
+
+-> VD
+#btn { anchor-name: --btn2; }
+
+Dùng anchor custom position gắn cố định vào 1 thẻ cụ thể thay vì mặc định gắn vào button trigger nó.
+[popover] {
+  position-anchor: --btn2;
+  bottom: anchor(top);
+  left: anchor(center);
+  /* Hoặc position-area: top right; */
+}
+
+Dùng anchor custom position gắn cố định vào 1 thẻ cụ thể thay vì mặc định gắn vào button trigger nó.
+[popover] {
+  position-anchor: --btn2;
+  bottom: anchor(top);
+  left: anchor(center);
+  /* Hoặc position-area: top right; */
+}
+
+Tự động đổi position nếu k đủ diện tích thì thêm position-try-fallbacks: flip-inline, flip-block;
 
 
 

@@ -183,6 +183,8 @@ Chú ý thứ tự style dùng theo layer: lib -> base -> tự định nghĩa: r
 Ở mỗi layer: :where(:root) -> html -> :root -> body -> * -> style thường
 VD font-size của css reset để ở thẻ body, chứ để ở html khéo lib hay gì đè lên mất
 
+-> Nếu muốn chiều dài page chuẩn màn hình hiện tại có footer và header thì set content là minHeight: calc(100vh - var(headerHeight) - var(footerHeight))
+
 
 
 # BEM
