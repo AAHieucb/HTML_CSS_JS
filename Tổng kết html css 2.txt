@@ -132,7 +132,7 @@ Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động 
 => imagesrcset tự set thumbnail là ảnh nào tuỳ theo kích thước màn hình. Chỉ cần để nó trong header là browser chạy tới sẽ load và lưu cache luôn. Bất cứ chỗ nào trong web dùng mà trùng y hệt url đó sẽ lấy từ cache luôn mà k load lại.
 => Tinh kích thước hình ảnh theo 100vw
 
--> Google bot luôn tự đánh chỉ mục với mọi trang web mà nó truy cập được. Trừ khi có robots.txt hay thẻ meta robots cản nó.
+-> Google bot luôn tự đánh chỉ mục với mọi trang web mà nó truy cập được. Trừ khi có robots.txt hay thẻ meta robots cản nó => robots.txt thường để default or k có.
 C1: robots.txt có tác dụng trong toàn page, chỉ cần đặt file vào cùng file gốc index.html
 User-agent: *
 Disallow: /page2.html
