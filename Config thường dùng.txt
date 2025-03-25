@@ -69,8 +69,29 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
 
 
 
+-> <script type="speculationrules">
+  {
+    "prefetch: [ // or prerender
+      {
+        "urls": ["/", "/test.html"],
+        "where": { // or
+          "and": [
+            { "href_matches": "/*" }, // mọi url
+            { "not": { "href_matches": "/logout/:id" } }, // trừ các url lá "/logout/:id"
+            { "not": { "selector_matches": ".no-prerender" } }, // Page k có tag nào có selector css class là no-prerender
+          ]
+        },
+        "eagerness": "moderate"
+      }
+    ]
+  }
+</script>
+
+
+
+
 #############
-#############
+############# => bỏ
 -> Css reset:
 :root {
   --hue: 230;

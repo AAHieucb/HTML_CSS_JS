@@ -386,16 +386,45 @@ Memphis design: dùng màu sắc sống động với các dạng hình học, k
 
 
 
+# Speculation rules
+URL: https://www.youtube.com/watch?v=LEF4UaM5m4U&list=WL 
+- Speculationrules cho prefetch và prerender trong html cho tốc độ siêu tốc. Chỉ cần thêm 1 tag script là xong.
+prefetch chỉ tải html, prerender sẽ tải hết và chạy cả js sẵn để client chỉ cần render ra.
+- Trong browser tab application có speculation rules.
+- eagerness mặc định là immediate tức page load 1 phát là tải mọi tài nguyên ảnh và link prefetch trước trên pages này, k ổn vì page lớn có quá nhiều file.
+eager không khác immediate là mấy, cũng tải nhưng k vội. eager và immediate giới hạn tải 50 pages trước thôi. Chú ý mỗi file html tải trước sẽ là 1 files, k tính các tài nguyên bên trong, cái đó tuỳ vào prerender hay prefetch.
+moderate y hệt nhưng giới hạn max 2 pages, phải hover vào link hay scroll gần tới mới prefech. VD hover vào 3 đường link, đường link đầu sẽ bị stale.
+conservative max 2 page và user phải click vào link mới prefetch, nó chỉ lợi hơn 1 tí tẹo so với bth.
+=> Có thể chia page bth thì load moderate, page khác hay vào hơn thì load immediate 
+- Việc prerender exec code JS rất nguy hiểm. VD trang logout prerender execute code luôn là toang. 
+Có nhiều cách fix như để request post thay vì get ở 1 file html mới. 
+
+Khi prerender sẽ gửi request kèm 1 header đặc biệt, nếu setup analytics thì k được tính số lần tải pages mà phải check vào pages k ở trạng thái prerender mới được.
+Giải pháp là check khi thực sự vào 1 pages được prerender mới chạy analytics:
+if(document.prerendering) { // true khi được tải bằng prerender
+  document.addEventListener( "prerenderingchange", // sự kiện phát ra khi đổi trạng thái từ prerender sang k prerender nữa, VD khi thực sự access 1 pages được prerender
+    func, { once: true }
+  );
+} else { func(); }
+
+
+
+# Other design style
+https://www.youtube.com/watch?v=G8cyr199xZQ => animation cho button đẹp
+Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
+https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
+https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
+https://www.youtube.com/watch?v=BgBtxSGEows&list=WL&index=95&t=5s => crazy animate text theo chuột
+
+
+
 # Dừng
 { display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
-Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
 @property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
 https://www.frontendmentor.io/ => học Fremaster
 https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
 Design trend: Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card. https://glow-cards.webflow.io/
 https://css-tricks.com/positioning-text-around-elements-with-css-offset/ => tạo text di chuyển xung quanh element với offset
-https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
-https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
 https://www.youtube.com/watch?v=Fu4Pl5k-3yQ => dùng mix-blend-mode để đè các layer ảnh, animation ảnh như đang chuyển động, tạo layer và animation với layer bằng clip-path
 @function in css và if()
 https://www.youtube.com/watch?v=VA975GOUFmM => css new feature
