@@ -407,6 +407,8 @@ if(document.prerendering) { // true khi được tải bằng prerender
   );
 } else { func(); }
 
+=> Chú ý speculation rules k dùng cho nextjs vì có sẵn r, reactjs thì SPA nên chả cần.
+
 
 
 # Other design style
