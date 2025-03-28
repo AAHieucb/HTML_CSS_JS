@@ -42,10 +42,7 @@ gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
 border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode.
 text-decoration-thickness, text-underline-offset => style underline
 HTML <template> là tag đặc biệt mà nội dung k được render trực tiếp mà phải được copy rồi mới render ra
-
--->*** -webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác
-Dùng đúng thứ tự để k hỗ trợ sẽ chạy fallback => width: fill-available; width: -webkit-fill-available;
-width auto nhiều lúc cũng tự take up rest space
+-webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác. Fallback với width: fill-available; width: -webkit-fill-available;
 
 -> Highlight API
 
