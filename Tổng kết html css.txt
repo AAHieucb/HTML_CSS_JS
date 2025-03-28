@@ -392,3 +392,4 @@ Khi đó phải code thành shadow DOM. Shadow DOM là phần css k bị ảnh h
 - Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
 - Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
 
+

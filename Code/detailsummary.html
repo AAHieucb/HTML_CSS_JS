@@ -14,9 +14,9 @@
     color: hsl(0 0% 78%);
     font-size: 1rem;
     block-size: 0;
-    transition: block-size 1s, content-visibility 1s;
+    overflow: hidden; /* nên có */
+    transition: block-size 1s allow-discrete, content-visibility 1s allow-discrete;
     /* Thuộc tính content-visibility cho phép 1 thẻ render nội dung bên trong nó ra hay không */
-    transition-behavior: allow-discrete;
   }
   /* Cơ chế là animate height + content-visitbility là được vì bản chất details summary nó sửa 2 thuộc tính này trong shadow dom */
   /* details-content là thẻ slot có id đó trong shadow dom, có thể sửa tương tự bất cứ thứ gì trong shadow DOM, với đk là browser support selector */
