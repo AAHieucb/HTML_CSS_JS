@@ -444,3 +444,7 @@ swap: text hiển thị ngay lập tức bằng font dự phòng, sau đó thay 
 -> Variable fonts là các loại phông chữ cho phép thay đổi thuộc tính cùng 1 tệp phông chữ, thay vì phải fix cứng font-size, font-weight, italic. Luôn dùng variables fonts. Các font-size mà buộc phải set kích thước thì k là variables fonts. Khi tải font local cũng cần chú ý
 VD roboto là static font, roboto_flex là variable font
 
+-> Khi tạo chữ trang trí nên dùng:
+-webkit-text-stroke giúp tạo viền cho svg mà font thực chất là svg. Thường kết hợp với text-shadow cho hiệu ứng ảo. 
+paint-order: stroke fill; thì stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là mặc định
+
