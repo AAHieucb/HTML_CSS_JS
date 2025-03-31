@@ -156,6 +156,8 @@ img {
   shape-margin: 1rem;
   user-select: none;
   -webkit-user-drag: none;
+  verticalAlign: "bottom", // Chặn lỗi thừa pixel dọc của thẻ image
+  boxSizing: "border-box", // Chặn lỗi thừa pixel ngang của thẻ image
 }
 a {
   text-decoration: none;
