@@ -9,6 +9,9 @@ padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa 
 drop-shadow theo hình dạng ảnh có nền transparent, nó cũng theo màu của hình nếu k xác định màu
 Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
 
+box-shadow có thể tạo hình background phức tạp với animation bằng cách dùng inset lồng nhiều màu đè ở các vị trí khác nhau, màu sau sang trái đè lên màu trước đó.
+URL: https://frontendmasters.com/blog/expanding-css-shadow-effects/ 
+
 -> Master border radius: outer radius = inner radius + distance giữa 2 border (border-width) => tự tạo nếu cần 1 thẻ có boder radius trong thẻ khác
 border-radius: https://9elements.github.io/fancy-border-radius/
 Dùng border-image
