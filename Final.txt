@@ -431,3 +431,4 @@ https://www.youtube.com/watch?v=Fu4Pl5k-3yQ => dùng mix-blend-mode để đè c
 @function in css và if()
 https://www.youtube.com/watch?v=VA975GOUFmM => css new feature
 https://www.youtube.com/watch?v=tNBufpGQihY => selectedcontent css new feature
+https://css-tricks.com/worlds-collide-keyframe-collision-detection-using-style-queries/ => css thuần detect collision, animation với thẻ input range của html, @container theo style, tạo game thuần bằng css, @property
