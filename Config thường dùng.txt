@@ -7,6 +7,8 @@
     'Accept': 'application/json', // Kiểu muốn nhận về từ server
     Authorization: "Bearer ...",
     'cache-control': 'public, s-maxage=1200, stale-while-revalidate=600',
+    Connection: 'keep-alive'
+    'keep-alive': 'timeout=5, max=100'
   },
   body: JSON.stringify({
     audio: base64
@@ -15,6 +17,10 @@
   mode: "cors",
   redirect: "manual", // manual trả về 1 phản hồi chuyển hướng để tự xử lý, follow (default) tuân theo các phản hồi chuyển hướng bth, error thì phản hồi chuyển hướng sẽ ném lỗi
 }
+
+--> Connection: 'keep-alive', sẽ k đóng TCP connection mà tái sử dụng cho nhiều request sau. Chỉ cần thiết với http1.1 chứ http2 trở đi tự hỗ trợ.
+'keep-alive': 'timeout=5, max=100', nếu k có yêu cầu nào mới trong 5s sẽ đóng connection, connection này chỉ xử lý max 100 request là đóng.
+2 header này phải đi với nhau. Vd connection: "close" thì keep-alive sẽ bị bỏ qua
 
 --> mode => bth chả cần đụng vì cors và same-origin tự default rồi.
 - "cors": yêu cầu tuân theo cors, là default khi thực hiện yêu cầu cross-origin. Trình duyệt sẽ thêm header Origin vào request để báo nguồn gốc yêu cầu. Nếu server phản hồi với header Access-Control-Allow-Origin là * hoặc tên miền cụ thể thì ok (server đã setup cors), nếu server k phản hồi với header này thì browser sẽ chặn và báo lỗi.
@@ -30,16 +36,17 @@ Nội dung k thể truy cập bị đánh dấu là opaque Vd: response.type là
 - "omit" (default): Không gửi thông tin xác thực cùng với yêu cầu.
 - "same-origin": Gửi thông tin xác thực chỉ khi gửi yêu cầu đến cùng một origin với web
 
---> cache-control => có thể kết hợp các options với ;
+--> cache-control => quản lý cache browser, có thể kết hợp các options với ;
 public: cache lưu cả yêu cầu và phản hồi ở client và proxy (shared caches) ở server => luôn dùng
 private: cache chỉ lưu trữ ở từng client browser
 no-cache: phải request check lại với server trước khi dùng cache, phản hồi 304 Not Modified nếu data chưa đổi 
 no-store: k cache gì hết
-max-age=<seconds>: thời gian max dùng cache trước khi cần xác thực lại với server, cả server proxy và client.
+max-age=<seconds>: thời gian max dùng cache trước khi cần xác thực lại với server, cả server proxy và client. Luôn dùng cái này, override trường expires k còn dùng.
 s-maxage=<seconds>: thời gian max dùng cache trên các proxy (shared caches) trước khi cần xác thực lại với server.
 stale-while-revalidate=<seconds>: cho phép dùng cache cũ trong thời gian bao lâu trong khi tiến hành xác thực lại với server.
 must-revalidate: luôn xác thực lại với server trước khi dùng cache, kể cả biết cache vẫn hợp lệ
-VD: Cache-Control: public, max-age=3600, s-maxage=1200 => cache lưu cả client và proxy, cache dùng trên máy khách 1h trước khi xác thực lại với server, trên proxy thì 1200s
+VD: Cache-Control: public, max-age=3600, s-maxage=1200 => cache lưu cả client và proxy, cache dùng trên máy khách 1h trước khi xác thực lại với server, trên proxy thì 1200s. Nên set file css js ảnh là thời gian cực lâu, các api data đổi nhiều thì no-cache. 
+Phải set cho cả cho FE (server host nó) hoặc set cho API server nodejs nếu trả static file. Thực ra React host lên tự động cache các files static lâu r. Thường set ở nginx proxy, hoặc dùng mặc định browser tự cache file tĩnh ok r.
 
 
 
