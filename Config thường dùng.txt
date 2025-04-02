@@ -16,6 +16,7 @@
   credentials: "include",
   mode: "cors",
   redirect: "manual", // manual trả về 1 phản hồi chuyển hướng để tự xử lý, follow (default) tuân theo các phản hồi chuyển hướng bth, error thì phản hồi chuyển hướng sẽ ném lỗi
+  signal: AbortSignal.timeout(3000),
 }
 
 --> Connection: 'keep-alive', sẽ k đóng TCP connection mà tái sử dụng cho nhiều request sau. Chỉ cần thiết với http1.1 chứ http2 trở đi tự hỗ trợ.
@@ -554,6 +555,7 @@ input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đ
   once: true,
   passive: true, // Báo k chạy event.preventDefault()
   capture: true, 
+  signal: controller.signal
 })
 
 
