@@ -272,7 +272,7 @@ Tự động đổi position nếu k đủ diện tích thì thêm position-try-
 
 
 # Custom thẻ input
-Input bth k có autocomplete, nhưng nếu thêm id="email/name" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
+Input bth k có autocomplete, nhưng nếu thêm name="email/name/phone" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
 
 Dùng event "input" giống onChange của react, dùng thay event "change"
 
