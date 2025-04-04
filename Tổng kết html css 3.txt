@@ -289,6 +289,25 @@ input[type="number"]:not(:in-range) { }
 
 input pattern [a-z] mà k có số lượng {2,} or {2,8} or + * ? đằng sau thì nó mặc định phải là 1 ký tự thôi
 
+-> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
+
+-> Đưa validation form input css thuần lên tầm cao mới: https://www.youtube.com/watch?v=awNYtIAu6pI&list=WL
+Thay vì dùng: 
+input:valid {} // style khi input có valid data
+input:invalid {} // style khi input có invalid data
+Ta dùng:
+input:user-valid {} // style khi input có data, và data đó valid
+input:user-invalid {} // style khi input có data, và data đó invalid
+Hoặc better browser support: 
+input:not(:placeholder-shown):valid {} 
+input:not(:placeholder-shown):invalid {}
+
+=> Nên kết hợp thêm required trong <input> cho các trường buộc phải có
+Khi người dùng chưa nhập xong mà báo invalid luôn k tốt, ta muốn đang nhập dở sẽ k check invalid thì dùng thêm ở cuối:
+input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
+
+-> Có form.reset()
+
 -> Có thể dùng hidden tạo input ảnh hoặc file đẹp
 C1: <CustomButton2 variant="outlined" onClick={() => fileInputRef.current.click()}>
   Upload File
@@ -322,25 +341,6 @@ const onImageChange = (event) => {
 const uploadData = new FormData();
 uploadData.append("image", imageSending);
 const response = await client.post("/api/v1/event", uploadData, config);
-
--> input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
-
--> Đưa validation form input css thuần lên tầm cao mới: https://www.youtube.com/watch?v=awNYtIAu6pI&list=WL
-Thay vì dùng: 
-input:valid {} // style khi input có valid data
-input:invalid {} // style khi input có invalid data
-Ta dùng:
-input:user-valid {} // style khi input có data, và data đó valid
-input:user-invalid {} // style khi input có data, và data đó invalid
-Hoặc better browser support: 
-input:not(:placeholder-shown):valid {} 
-input:not(:placeholder-shown):invalid {}
-
-=> Nên kết hợp thêm required trong <input> cho các trường buộc phải có
-Khi người dùng chưa nhập xong mà báo invalid luôn k tốt, ta muốn đang nhập dở sẽ k check invalid thì dùng thêm ở cuối:
-input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
-
--> Có form.reset() 
 
 
 
