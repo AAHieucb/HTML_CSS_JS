@@ -218,10 +218,10 @@ Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer tr
 
 
 
-# Dark mode thực tế có sẵn mà k cần phải code thủ công, trừ khi có màu nào phức tạp.
-Vào web default sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu localStorage và theo settings đó và luôn ghi đè setting browser.
+# Dark mode 
+Ta nên để default vào web sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu localStorage và theo settings đó và luôn ghi đè setting browser.
 
--> Có 2 cách để set theme mode là dùng html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
+-> Css có sẵn darkmode là dùng html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
 Khi dùng cả 2 giá trị "light dark" như này là theo setting của browser.
 Nếu set rõ ràng color-scheme: light; hay color-scheme: dark; sẽ dùng đúng mode đó.
 Hàm light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser. Để dùng ligh-dark, phải có "color-scheme: light dark;" trong :root
@@ -408,6 +408,18 @@ if(document.prerendering) { // true khi được tải bằng prerender
 } else { func(); }
 
 => Chú ý speculation rules k dùng cho nextjs vì có sẵn r, reactjs thì SPA nên chả cần.
+
+
+
+# Custom timeout cho fetch k hỗ trợ sẵn
+const timeout = (ms, promise) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => { reject(new Error("Request timed out")) }, ms);
+    promise.then(resolve, reject);
+  })
+}
+const response = await timeout(1000, fetch("<url>"));
+=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh
 
 
 

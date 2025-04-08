@@ -402,4 +402,6 @@ Cách khác là dùng input checkbox
 
 -> nth-child dùng n được. VD: .grid > :nth-child(4n) { }
 
+-> K nên dùng id, nên dùng data-* hơn vì id chỉ dược ở 1 thẻ, nếu responsive cần thay đổi vị trí duplicate thẻ ở chỗ khác sẽ sai
+
 

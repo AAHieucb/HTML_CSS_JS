@@ -190,7 +190,7 @@ Sự kiện hay dùng: https://freetuts.net/su-kien-event-trong-javascript-368.h
 
 -> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
 
--> addEventListener
+-> addEventListener: Khi addEventListener cùng 1 sự kiện nhiều lần sẽ chạy theo thứ tự được thêm vào chứ không đồng thời, nếu dùng các hàm async mới k chờ nhau mà chạy liên tục
 Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha), nó check sự kiện nào useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý bubbling phase. Có thể dùng object { capture: true, once: true }
 
 removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase. Tham số thứ 3 boolean tương tự.
@@ -201,7 +201,7 @@ event.stopPropagation() => dùng ở 1 sự kiện ở 1 thẻ sẽ cản trở 
 
 
 
-# OOP
+# OOP trong JS
 Nếu có thể nên dùng class thay vì function hay object trong JS 
 VD: 
 function Animal() { this.name= "a"; }
@@ -211,23 +211,6 @@ class Animal {
   constructor(){ this.name = "a"; }
   test = () => { console.log("test"); }
 }
-
-
-
-# Tạo extension browser bằng JS
--> Để thêm extension vào browser: bật developer mode -> load unpacked folder chứa file manifest extension.
-
--> 1 extension cho browser cần tối thiểu 1 file manifest.json cung cấp thông tin mà thôi. Như v thì chưa làm gì cả, phải viết thêm các script chức năng:
-Content script: là những đoạn mã sẽ chạy trên trang web đang xem -> dùng với "content_scripts"+"js"
-Background script: thực hiện ngầm extension, nhận message từ content script or extension khác => dùng bằng "background"+"scripts"
-UI Elements: thành phần giao diện người dùng thg là hộp thoại popup hiện ra khi ấn vào icon của extension => vd dùng với "browser_action"+"default_popup"
-=> Background script bắt đầu thực hiện khi ta ấn vào biểu tượng extension, content script tự thực hiện khi ta load 1 trang web mới
-
-persistent xđ trang background đc chạy như thế nào
-Dùng "scripts":[".js"] or "page":".html" vói file html chỉ có 1 thẻ script thêm code js vào
-default_popup dùng để hiển thị file html khi mở extension
-js là danh sách các file js được inject vào trang web nên file js luôn trong 1 mảng còn html là ""
-matches xác định trang web muốn thêm nội dung và0, dùng regexp: "*://*/*" sẽ dùng với mọi trang web
 
 
 

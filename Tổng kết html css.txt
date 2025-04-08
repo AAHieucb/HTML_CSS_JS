@@ -20,6 +20,7 @@ Shorthand border-radius: 10% 30% 50% 70%;
 -> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
 zIndex nên luôn đi với position relative
+zIndex nên để tất cả cùng level và cái sau đè cái trước, trừ khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex phải set position relative luôn
 
 --> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
 visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.

@@ -58,7 +58,7 @@ Lib react-progressive-graceful-image rất phù hợp dùng được thay thế 
 --> Ảnh nên nhét vào 1 container có aspect ratio và width responsive: có thể set contain và hiện trong khung, hoặc cover theo 1 trong 2 chiều, hiện ở tâm
 Luôn set min-width min-height cho ảnh giảm layoutshift khi load xong
 
--> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation.
+-> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation. Có thể tách file html riêng và cho vào <img>, or nhúng trực tiếp néu cần style.
 SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
 Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
 
@@ -95,7 +95,7 @@ VD: <picture class="image_container">
 Đủ alt cho hình ảnh
 <link rel="icon" href="/logo.svg"/>
 
-Open Graph tags liên kết với các social media: <meta property = "og: type" content = "article" />
+Open Graph tags liên kết với các social media: <meta property = "og: type" content = "article" /> // hay "website"
 <meta property = "og:title" content = "TÊN TIÊU ĐÊ HOẶC TRANG WEB" />
 <meta property = "og:description" content = "MÔ TẢ CỦA TRANG NỘI DUNG" />
 <meta property = "og:image" content = "LIÊN KẾT ĐẾN TẬP TIN HÌNH ẢNH" />
@@ -110,6 +110,12 @@ Twitter tag tương tự nhưng chỉ dành cho twitter: <meta name = "twitter:d
 <meta name = "twitter:image" content = "LINK TO IMAGE">
 <meta name = "twitter:site" content = "USERNAME">
 <meta name = "twitter:creator" content = "@ USERNAME">
+
+Khi có nhiều lang:
+<link href="https://opensea.io" hrefLang="en" rel="alternate"/>
+<link href="https://opensea.io/zh-CN" hrefLang="zh-CN" rel="alternate"/>
+<link href="https://opensea.io/zh-TW" hrefLang="zh-TW" rel="alternate"/>
+<link href="https://opensea.io/de-DE" hrefLang="de-DE" rel="alternate"/>
 
 -> <meta name="viewport" content="width=device-width, initial-scale=1.0"> => Luôn có thẻ này để cho phép người dùng zoom-in text, điều này phù hợp với những người thị lực yếu vào website, họ sẽ phải dùng các tool giúp zoom to trang web để nhìn rõ, VD CTRL+ của browser. Custom:
 <meta name="viewport" content="user-scalable=yes"/> cho phép người dùng sử dụng các tool zoom cho trang web
@@ -241,6 +247,9 @@ scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào đư�
 -> Scrollbar nên tạo chuẩn 1 thẻ con chứ body và html nên để overflow hidden cho dễ customize về sau:
 - Khi scroll các thẻ liên quan, sẽ k ảnh hưởng đến scrollbar các thẻ khác, chứ scroll thẻ body sẽ ép mọi thẻ scroll
 - Style chuẩn trong 1 phạm vi nhất định
+
+-> K thể tạo được scrollbar có background transparent, chỉ cố tạo tạo background theo màu thẻ body thôi.
+K nên dùng loading bar ngang: fetch API thì k nên vì mỗi component là loading độc lập; scroll thì phải đặt trong tag content và position fixed theo màn hình vì ta k scroll thẻ body; nếu chuyển page thì loading ngang thì k được vì MPA sẽ k thể tính được
 
 
 

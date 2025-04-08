@@ -1,3 +1,27 @@
+# Bàn về try catch
+Bth: let x; try { x = await getX(); } catch (ex) { console.log(ex.message); }
+Tốt hơn là viết 1 hàm trả ra [error, result] wrap mọi hàm async sẽ ok hơn.
+
+
+
+
+# Tạo extension browser bằng JS
+-> Để thêm extension vào browser: bật developer mode -> load unpacked folder chứa file manifest extension.
+
+-> 1 extension cho browser cần tối thiểu 1 file manifest.json cung cấp thông tin mà thôi. Như v thì chưa làm gì cả, phải viết thêm các script chức năng:
+Content script: là những đoạn mã sẽ chạy trên trang web đang xem -> dùng với "content_scripts"+"js"
+Background script: thực hiện ngầm extension, nhận message từ content script or extension khác => dùng bằng "background"+"scripts"
+UI Elements: thành phần giao diện người dùng thg là hộp thoại popup hiện ra khi ấn vào icon của extension => vd dùng với "browser_action"+"default_popup"
+=> Background script bắt đầu thực hiện khi ta ấn vào biểu tượng extension, content script tự thực hiện khi ta load 1 trang web mới
+
+persistent xđ trang background đc chạy như thế nào
+Dùng "scripts":[".js"] or "page":".html" vói file html chỉ có 1 thẻ script thêm code js vào
+default_popup dùng để hiển thị file html khi mở extension
+js là danh sách các file js được inject vào trang web nên file js luôn trong 1 mảng còn html là ""
+matches xác định trang web muốn thêm nội dung và0, dùng regexp: "*://*/*" sẽ dùng với mọi trang web
+
+
+
 # Kỹ thuật color rule phối màu
 Phối màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng)
 Màu primary 30% được dùng cho các panel hay background của dialog, thẻ thường. Màu này có thể gần giống màu neutral để tạo ứng dụng 1 theme monochrome
@@ -105,6 +129,8 @@ Dù sau cùng, code của css preprocessor sẽ được compile thành code css
 1 số css preprocessor phổ biến như: SASS, SCSS, LESS, Stylus, PostCSS. Chúng cung biến, hàm, thao tác màu và toán học khiến cho css như 1 ngôn ngữ lập trình chuẩn.
 Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian về hiệu năng vì phải biên dịch ra css rồi mới chạy thay vì chạy TT. 
 Thực tế, ta có thể dùng css compiler để chuyển nó thành css thuần rồi dùng file thuần đó cũng được. Dùng được cả FE và BE SSR.
+
+-> Postcss là package giúp xử lý css qua các plugin. VD plugin giúp downgrade css về phiên bản tương thích mọi trình duyệt, autoprefix, cssnano
 
 
 
