@@ -313,12 +313,10 @@ C1: <CustomButton2 variant="outlined" onClick={() => fileInputRef.current.click(
   Upload File
 </CustomButton2>
 <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={getFile} />
-
-Đọc text từ file:
 const getFile = (event) => {
   const reader = new FileReader();
   reader.onload = (e) => { console.log(e.target.result); };
-  reader.readAsText(event.target.files[0]);
+  reader.readAsText(event.target.files[0]); // Đọc text từ file
 }
 C2: Input image, hiển thị và gửi qua API
 <input accept="image/*" hidden id="raised-button-file" type="file" onChange={onImageChange}/>
