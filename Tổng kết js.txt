@@ -17,6 +17,39 @@ Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
 
 
 
+# Chuyển hết về async await
+-> Hàm callback
+X(a, callback); => khi hàm X thực hiện xong sẽ truyền kết quả vào hàm callback ở cuối để xử lý. 
+Thường hàm từ thư viện sẽ có sẵn phiên bản khác là async await. Vd: const x = await X(a); callback(x);
+
+Nếu không có phiên bản async await, buộc phải truyền callback vào bth. Nếu callback là async, nó sẽ đi tiếp luôn và thực hiện song song hàm callback. Có thể ép chờ callback xong mới chạy xuống dưới:
+const x = await new Promise((resolve, reject) => {
+  X(a, async (err, result) => {
+    if(err) reject(err);
+    resolve(result);
+  })
+})
+=> Bản chất: promise kbh kết thúc nếu như cái cục cuối cùng của nó k gọi resolve or reject. Vd ở đây ta xóa resolve hay reject đi thì hàm promise này sẽ kbh kết thúc. Ta dựa vào nó để ép hàm này dùng được await.
+
+-> Promise: await X().then();
+Chú ý promise khi call resolve hay reject, nó vẫn chạy tiếp phần code bên dưới, do đó ta nên return để tránh nó đi tiếp
+=> Trong callback phải check if(err) tuỳ lib, promise vẫn phải .then().catch, còn async await phải có try catch. Do đó chuyển sang async await phải luôn nhớ try catch error
+
+-> Event với on
+Ta có thể biến thành Promise để dùng với async. Bằng cách cho resolve khi onsucess, reject với onerror:
+new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    resolve(reader.result);
+  };
+  reader.onerror = (error) => {
+    reject(error);
+  };
+  reader.readAsDataURL(file);
+});
+
+
+
 # Load file JS với async và defer
 Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý xử JS, gọi là Parse Blocking => default
 Script attributes: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy; defer chỉ chạy khi html parse xong.
@@ -330,10 +363,10 @@ Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTic
 Khi reload lại pages, sẽ k trigger lại event install và activate để setup lại worker, trừ khi file service-worker bị thay đổi. 
 Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web lần đầu, đều setup lại service worker. Nói chung là file này cứ đổi là tự áp dụng nên k cần lo cũ.
 
--> Push notification: chỉ cần request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. 
-Tuỳ biến ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
-Dùng như vậy chỉ gửi yêu cầu nội bộ từ FE, thực tế phải dùng 1 server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ biến gửi notification cho user từ server thay cho việc ấn nút kia. Client có mạng sẽ tự nhận được thông báo.
-Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
+-> Push notification: 
+App request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. Thông báo có cả trên máy tính hoặc mobile. Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
+Nếu chỉ FE, ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
+Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ ý trigger notification cho user từ server. Client có mạng sẽ tự nhận được thông báo.
 
 
 
