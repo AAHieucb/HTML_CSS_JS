@@ -1,7 +1,7 @@
 # Bàn về try catch
 Bth: let x; try { x = await getX(); } catch (ex) { console.log(ex.message); }
 Tốt hơn là viết 1 hàm trả ra [error, result] wrap mọi hàm async sẽ ok hơn.
-
+Catch error phải bắt nếu lỗi custom đoán trước được thì hiện error chuẩn, lỗi k đoán được thì hiện default kèm message slice ngắn đi
 
 
 
