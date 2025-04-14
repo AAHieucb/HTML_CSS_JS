@@ -18,7 +18,7 @@ background: <background-color> <background-image> <background-position> / <backg
 VD: background: red url('image.jpg') center / cover no-repeat fixed padding-box content-box;
 
 background-origin xác định vị trí của background image theo content. 
-background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color: transparent; => giải quyết vđ k set gradient color cho text color đc
+background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color or -webkit-text-fill-color: transparent; => giải quyết vđ k set gradient color cho text color đc
 background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
 background-attachment: scroll mặc định là trôi theo page scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
 
@@ -76,7 +76,8 @@ Full tut custom: https://cloudinary.com/blog/low_quality_image_placeholders_lqip
 Cloudinary cũng có cách giảm kích thước ảnh tối đa mà k mất chất lượng: https://cloudinary.com/blog/adaptive_browser_based_image_format_delivery
 
 -> Tối ưu nén ảnh:
-Các bức ảnh tĩnh đều nên cho qua tinyPNG để giảm tải kích thước trước r mới lưu vào server.
+Các bức ảnh tĩnh đều nên cho qua tinyPNG / imagemin để giảm tải kích thước trước r mới lưu vào server.
+Dùng định dạng WebP or AVIF sẽ giảm kích thước 30% so với jpg
 Hoặc dùng cloudinary hay thư viện browser-image-compression để compress ảnh khi người dùng upload trước r mới lưu vào server.
 Các framework như NextJS cung sẵn khi ta cho optimized true trong file config, nó còn optimize theo kích thước màn hình
 Có thể tự chuẩn bị sẵn các bức ảnh khác nhau thủ công và cho load theo kích thước màn hình => có thư viện react giúp

@@ -55,6 +55,7 @@ HTML <template> là tag đặc biệt mà nội dung k được render trực ti
 # Dùng position 
 -> Position absolute sẽ xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
 position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hưởng đến kích thước của thẻ, tự kéo dãn cho vừa hcn đó đó là khi kích thước k set.
+Thường dùng kết hợp transform để dịch ra đâu theo vị trí cố định, rồi dịch tiếp theo kích thước relative của nó
 
 -> Relative là thay đổi vị trí so với bình thường bao nhiêu, vẫn chiếm không gian
 
@@ -129,6 +130,7 @@ Tương tự display table khi muốn hoạt động như table. VD display tabl
 Giống flexbox nhưng custom chia vị trí từng ô tốt hơn.
 Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
 Playground: https://flexboxlabs.netlify.app/grid
+Grid làm container: https://ryanmulligan.dev/blog/layout-breakouts/
 
 -> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
 

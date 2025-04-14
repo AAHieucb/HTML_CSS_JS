@@ -351,6 +351,14 @@ Nếu muốn scrollbar luôn hiện "overflow: scroll;" => ok
 Nếu muốn scrollbar luôn chiếm kích thước kể cả khi k hiện "scrollbar-gutter: stable". Điều đb là nó bằng đúng kích thước width set của ::-webkit-scrollbar => k dùng vì khi kết hợp position fixed dialog khiến scrollbar-gutter k chiếm nx
 Tối ưu là khi k overflow thì k hiện scrollbar nhưng scrollbar vẫn chiếm kích thước bth kể cả position fixed dialog => k làm được trừ khi tự tạo thẻ scroll
 
+->*** Với dialog, nên cho dialog trên điện thoại thì full màn hình or bottom sheet, dialog trên máy tính thì có 1 popup ở giữa. 
+Trong react cho kiểu fullWidth={isMobile} sẽ ok hơn. Khi đó dialog buộc có 1 nút bấm để out ra chứ điện thoại k thể bấm ra ngoài.
+
+-> Chốt: tạo dialog ấn ra ngoài là tắt
+Bản gọn nhất là dùng css only với dialog + popover + @starting style cho dialog và ::backdrop => nhưng k tương thích mọi browser
+HTML thuần dùng JS thì thêm class và bắt event animationend, tạo từng animation cho từng step bằng css. Dùng popover hoặc bắt event click window mà k click dialog thì ẩn đi
+Trong react nên dùng thư viện tạo bottom sheet or dialog sẽ tự dùng portal. Hoặc tự custom div thay cho dialog và dùng portal. Nếu dùng css only với @keyframes, có thể tạo animation lúc mở chứ đóng thì éo được. Muốn tạo animation đóng buộc phải thêm JS y như html thuần thì k chuẩn trong react.
+
 
 
 # How to design website
