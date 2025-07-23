@@ -5,41 +5,45 @@ https://css-generators.com/ => tool css, tạo các shape dị
 
 
 
-//!!!!!!!
 # Dùng content-visibility
-Khi vào 1 page, mặc định browser tải resource, tạo DOM và layout, render paint cả page ra màn hình. Nó khiến page load lần đầu tiên hiện ra bị lâu nếu page rất lớn, và việc paint cả page ra màn hình dù viewport chỉ hiển thị 1 phần gây lag khi resize.
+Khi vào 1 page, mặc định browser tải resource, tạo DOM và layout, render paint cả page ra màn hình, dù viewport chỉ hiển thị 1 phần. Nó khiến page lớn load hiện lần đầu tiên bị lâu, và cũng lag khi resize.
 
-- visible: default
-- hidden: ẩn thẻ hiện tại. Nó giữ rendering state giúp ẩn đi và hiện lại rất nhanh.
-Còn display none là ẩn content và destroy trạng tháng hiển thị nên bị chậm hơn khi ẩn hiện liên tục. Còn visibility hidden là ẩn mà vẫn chiếm kích thước.
-- auto: thẻ sẽ k được paint lên màn hình cho đến khi nó xuất hiện gần viewport.
-Dùng kèm contain-intrinsic-size: auto 600px; xác định kích thước của thẻ khi chưa được paint để k break layout, mặc định browser coi là thẻ có kích thước 0. Việc xác định sai gây jump scrollbar nhưng vẫn ok. K nên dùng khi kích thước thẻ k biết trước mà ảnh hưởng lớn đến layout.
-=> Mặc định mọi thẻ được paint trên màn dù k có trên viewport. Dùng content-visibility auto sẽ đảm bảo thẻ k được paint nếu k hiển thị trên viewport, giúp tối ưu hoá hiệu suất render. Chỉ dùng trên page lớn vì page nhỏ k đáng kể.
+content-visibility visible là default
 
--> contain xác định 1 thẻ có containment không, mặc định là none là k có giới hạn gì:
+-> hidden
+display none ẩn hết khỏi DOM và a11y tree. hidden attribute của html tag y như display none.
+content-visibility hidden cũng ẩn hết, k thể tương tác hay search. Nhưng nó k xóa DOM, giữ state giúp ẩn và hiện lại rất nhanh.
+visibility hidden cũng ẩn, k thể tương tác và k xóa DOM. Nhưng nó lại vẫn chiếm diện tích
+opacity 0 dường như chỉ ẩn phần nhìn, vẫn tương tác đươc.
+
+visibility hidden kết hợp aria-hidden="false" k hoạt động, nó vẫn ưu tiên ẩn
+Thay vì kết hợp visibility hidden với position absolute để k chiếm diện tích, ta nên ưu tiên dùng content-visibility hidden cho tooltip các thứ ok hơn.
+
+-> auto: thẻ sẽ k được paint lên màn hình cho đến khi xuất hiện gần viewport. Mặc định là nó paint cả page.
+Để browser paint content, nó phải calculate layout trước. Thẻ có auto sẽ k tính layout khi chưa vào viewport nên phải đi kèm contain-intrinsic-size: auto 600px; để dùng kích thước tạm trước khi thẻ được paint. Thường set contain-intrinsic-size width là auto tự scale full chứ k fix cứng để k bị tràn màn hình nhỏ.
+Khi scroll xuống và paint thẻ đó, kích thước thực tế sẽ bị thay vào gây jump scrollbar nhưng chấp nhận. K nên dùng khi kích thước thẻ ảnh hướng lớn đến layout thôi.
+K nên dùng auto cho các thẻ quá lớn để tránh scroll nhanh paint thẻ đó k kịp gây khoảng trắng, nên chia chunk nhỏ tốt hơn.
+
+-> contain trong css xác định 1 thẻ có containment không, mặc định là none là k có giới hạn gì.
 contain: paint; => đảm bảo mọi thứ bên trong 1 thẻ k thể paint ra ngoài thẻ đó
 contain: size; => đảm bảo mọi thứ bên trong 1 thẻ sẽ k ảnh hưởng đến kích thước thẻ đó. Vì bth kích thước thẻ cha tự kéo dài theo kích thước con, nhưng ở đây thì không.
 contain: layout; => đảm bảo thẻ bên trong k ảnh hưởng đến layout các thẻ khác và ngược lại.
-Kết hợp với contain: layout paint size; 
-=> Dùng contain như vậy sẽ giảm tải cho browser khi tính toán layout hay paint ra màn hình.
+Có thể kết hợp contain: layout paint size; 
+=> Dùng contain sẽ giảm tải cho browser khi tính toán layout hay paint ra màn hình.
+=> Thẻ có content-visibility auto sẽ tự có contain layout tức thẻ bên trong k thể break layout ra bên ngoài
 
 
 
-# Tạo tooltip
---> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
+# Dùng zIndex
+Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
+Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi
 
-
-
-# -> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-zIndex nên luôn đi với position relative
-zIndex nên để tất cả cùng level và cái sau đè cái trước, trừ khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex phải set position relative luôn
 
 
 
-# 
--> Bản chất về kích thước
+//!!!!!!!
+# Bản chất kích thước mặc định
 Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
 padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
 
@@ -394,6 +398,10 @@ Nên dùng đặt tên cho view-transition-name nhanh chóng
 
 -> Tạo tooltip: Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
 Dùng title tốt hơn dùng style css :after content: attr(data-image-to-show);
+
+# Tạo tooltip
+--> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
+visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
 
 
 
