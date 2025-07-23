@@ -1,48 +1,3 @@
-# Dùng counter-reset hiện số đếm tự tăng k cần JS
-URL: https://www.youtube.com/watch?v=PL3Odw-k8W4
-
-
-
-# Transform stream
-1 loại stream xử lý data, pipe vào các stream khác như bth, dùng stream giúp tiết kiệm băng thông.
-
-Vd tạo một TransformStream để chuyển đổi văn bản thành chữ hoa trước khi đọc nó thì dùng transform stream ở giữa để viết hoa chữ:
-const transformStream = new TransformStream({
-  start() {
-    // Được gọi khi TransformStream khởi tạo
-    console.log('TransformStream bắt đầu.');
-  },
-  transform(chunk, controller) {
-    controller.enqueue(chunk.toUpperCase());
-  },
-  flush(controller) {
-    // Được gọi khi toàn bộ luồng đầu vào đã được xử lý
-    console.log('Đã hoàn thành chuyển đổi.');
-  }
-});
-const readableStream = new ReadableStream({
-  start(controller) {
-    // Đẩy dữ liệu vào luồng
-    controller.enqueue('hello');
-    controller.enqueue(' world');
-    controller.close();
-  }
-});
-// Kết nối ReadableStream với TransformStream và tạo một WritableStream để ghi dữ liệu
-readableStream
-  .pipeThrough(transformStream) // Chuyển dữ liệu qua TransformStream
-  .pipeTo(new WritableStream({
-    write(chunk) {
-      // Ghi ra phần dữ liệu đã biến đổi
-      console.log(chunk);
-    },
-    close() {
-      console.log('Đã ghi xong dữ liệu.');
-    }
-  }));
-
-  
-
 # Private custom variables trong css
 VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click thay vì gán lại style từng thẻ
 
@@ -237,19 +192,6 @@ VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
 
 
 
-# Đỉnh cao dùng conic gradient tạo hình zigzag 
-.loader {
-  height: 47px; /* control the size */
-  aspect-ratio: 5;
-  background:
-    conic-gradient(from 135deg at top,#000 90deg,#0000 0) top,
-    conic-gradient(from 135deg at top,#0000 90deg,#000 0) bottom;
-  background-size: 20% 50%;
-  background-repeat: repeat-x;
-}
-
-
-
 # Tạo tab a11y
 Khi chuyển trang, ưu tiên dùng thẻ a thay vì button. Còn single page thì dùng <a href="#idofelement"/>
 Thay vì add event click vào từng thẻ, ta chỉ cần add vào thẻ container sẽ tự phát khi các phần bên trong bị click
@@ -361,39 +303,6 @@ Trong react nên dùng thư viện tạo bottom sheet or dialog sẽ tự dùng 
 
 
 
-# How to design website
-https://teleporthq.io/ai-website-builder => AI giúp thiết kế website basic
-Hocoos AI Website Builder => AI cực mạnh tạo website và có code luôn, có hosting luôn, multiple pages
-Leia AI website builder => AI tạo website, k có code, hosting luôn
-Pineapple AI => AI tạo website và hosting, k có code, nhưng free plan chỉ tạo được 1 
-KLeap AI Website Builder => AI tạo website, k có code, có hsosting, tạo responsive mobile luôn
-
-Cắp ý tưởng trên figma hoặc các trang web đã có, nhưng website thiết kế ra phải đảm bảo có 1 theme đồng bộ giữa các pages. Có tool chuyển website to figma.
-
--> AI giúp design component như figma: https://www.youtube.com/watch?v=iSReYz7B4i0
-URL: https://creatie.ai/files/home => build mobile thôi
-
--> Exp: Phần header phải dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
-Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật, cho núp sau ảnh object. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, có thể dùng gradient nếu cần nổi bật chữ
-Navigation: text navigation và logo nên cùng màu, logo nên gọn gàng vào
-Các phần phải đồng bộ nhau. VD trang có 3 cái header thì cả 3 nên có cùng 1 style
-Cân bằng giữa lượng ảnh và text, k nên để text dài cả 1 dòng, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ thôi, nên vắn tắt ít chữ nhất có thể
-Nếu có nhiều card đi kèm nhau, các card nên có cùng size, k nên cái cao cái thấp. Tạo độ tương phản cho heading text và details text bằng color, fontsize, fontweight
-Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full kích thước
-
--> New morphism : kiểu design tạo clean effect rất ảo
-Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng
-Skeuomorphism hình thực tế => k dùng
-Flat design: web như 1 mặt phẳng với hình vẽ đơn giản, k có shadow hay hiệu ứn nổi lên gì cả
-Material design mở rộng của flat design, có hiệu ứng nổi lên mọi nơi. Màu và shape cần thay đổi. Mọi chuyển động phải liên tục, k đột ngột ẩn hiện.
-Retro/Vintage Styles: web phong cách tinh tế, cổ kính, sang trọng, quý tộc, cổ điển. 
-Brutalism design: web hiệu ứng mạnh, thô mộc, tương phản cao, font chữ nhiều lúc rất ảo
-Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi, đơn giản, có thể đơn sắc, là loại web dễ tạo và dễ nhìn nhất.
-Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
-Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng, trông như được xếp ngẫu nhiên. 
-
-
-
 # Speculation rules
 URL: https://www.youtube.com/watch?v=LEF4UaM5m4U&list=WL 
 - Speculationrules cho prefetch và prerender trong html cho tốc độ siêu tốc. Chỉ cần thêm 1 tag script là xong.
@@ -427,22 +336,31 @@ const timeout = (ms, promise) => {
   })
 }
 const response = await timeout(1000, fetch("<url>"));
-=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh
+=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh => nên thêm abort controller
 
 
 
-# Other design style
-https://www.youtube.com/watch?v=G8cyr199xZQ => animation cho button đẹp
-Tạo polygon responsive thuần: https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/
-https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
-https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
-https://www.youtube.com/watch?v=BgBtxSGEows&list=WL&index=95&t=5s => crazy animate text theo chuột
+
+# Dùng @property là 1 phần của css houdini
+Là 1 cách khác để khai báo biến css type safe hơn thôi. Thực tế dùng css variables bình thường vẫn animation và mọi thứ ổn mà k cần @property. 
+
+Bản chất @property là khai báo biến và biến trở thành 1 thuộc tính (property của css class đó luôn). 
+VD: @property --rotation {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.box {
+  --rotation: 60deg;
+  transition: --rotation 1s ease-in-out;
+}
+=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s mới được.
 
 
 
 # Dừng
 { display: list-item; list-style-position: inside; } để hiển thị thẻ dạng list. Còn có display: table;
-@property và css houdini can thiệp sâu vào animation, view-timeline-axis, view-timeline-direction
+css houdini can thiệp sâu vào animation, rendering, view-timeline-axis, view-timeline-direction mà trước đây k thể làm dược với css
 https://www.frontendmentor.io/ => học Fremaster
 https://courses.kevinpowell.co/view/courses/conquering-responsive-layouts/233002-introduction/1007804-intro-why-the-course-is-formatted-in-this-way => khoá học responsive uy tín (hieucuopbien123@gmail.com - 180101)
 Design trend: Hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card. https://glow-cards.webflow.io/
@@ -452,3 +370,5 @@ https://www.youtube.com/watch?v=Fu4Pl5k-3yQ => dùng mix-blend-mode để đè c
 https://www.youtube.com/watch?v=VA975GOUFmM => css new feature
 https://www.youtube.com/watch?v=tNBufpGQihY => selectedcontent css new feature
 https://css-tricks.com/worlds-collide-keyframe-collision-detection-using-style-queries/ => css thuần detect collision, animation với thẻ input range của html, @container theo style, tạo game thuần bằng css, @property
+https://css-tricks.com/css-carousels/ => ::scroll-button tạo carousel bằng css only => nên dùng css only nhiều nhất có thể cho mọi thứ
+

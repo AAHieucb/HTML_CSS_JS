@@ -301,14 +301,19 @@ URL: https://www.youtube.com/watch?v=Nd_tzuR7NzY
       @media (min-width: 900px) {
         .content-grid {
           grid-template-columns:
-            [full-width-start] minmax(1rem, 1fr)
-            [content-start sidebar-start] min(
-              33% - 2rem,
-              var(--content-max-width) / 3
-            )
-            [sidebar-end main-start] min(33% - 2rem, var(--content-max-width) / 3)
-            min(33% - 2rem, var(--content-max-width) / 3)
-            [content-end main-end] minmax(1rem, 1fr) [full-width-end];
+            [full-width-start] 
+            minmax(1rem, 1fr)
+              [content-start sidebar-start] /*Có thể viết gộp như này*/
+              min(
+                33% - 2rem,
+                var(--content-max-width) / 3
+              )
+                [sidebar-end main-start] 
+                  min(33% - 2rem, var(--content-max-width) / 3)
+                min(33% - 2rem, var(--content-max-width) / 3)
+              [content-end main-end] 
+            minmax(1rem, 1fr) 
+            [full-width-end];
         }
       }
 

@@ -1,54 +1,65 @@
 # Basic
-Tổng hợp component UI bằng html thuần*: https://uiverse.io/
-GSAP dùng được với css thuần: https://gsap.com/
+https://uiverse.io/ => tổng hợp component UI bằng html thuần*
+https://gsap.com/ => thư viện UI mạnh
+https://css-generators.com/ => tool css, tạo các shape dị
 
-Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
-padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
 
--> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
-drop-shadow theo hình dạng ảnh có nền transparent, nó cũng theo màu của hình nếu k xác định màu
-Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
 
-box-shadow có thể tạo hình background phức tạp với animation bằng cách dùng inset lồng nhiều màu đè ở các vị trí khác nhau, màu sau sang trái đè lên màu trước đó.
-URL: https://frontendmasters.com/blog/expanding-css-shadow-effects/ 
+//!!!!!!!
+# Dùng content-visibility
+Khi vào 1 page, mặc định browser tải resource, tạo DOM và layout, render paint cả page ra màn hình. Nó khiến page load lần đầu tiên hiện ra bị lâu nếu page rất lớn, và việc paint cả page ra màn hình dù viewport chỉ hiển thị 1 phần gây lag khi resize.
 
--> Master border radius: outer radius = inner radius + distance giữa 2 border (border-width) => tự tạo nếu cần 1 thẻ có boder radius trong thẻ khác
-border-radius: https://9elements.github.io/fancy-border-radius/
-Dùng border-image
-Shorthand border-radius: 10% 30% 50% 70%;
+- visible: default
+- hidden: ẩn thẻ hiện tại. Nó giữ rendering state giúp ẩn đi và hiện lại rất nhanh.
+Còn display none là ẩn content và destroy trạng tháng hiển thị nên bị chậm hơn khi ẩn hiện liên tục. Còn visibility hidden là ẩn mà vẫn chiếm kích thước.
+- auto: thẻ sẽ k được paint lên màn hình cho đến khi nó xuất hiện gần viewport.
+Dùng kèm contain-intrinsic-size: auto 600px; xác định kích thước của thẻ khi chưa được paint để k break layout, mặc định browser coi là thẻ có kích thước 0. Việc xác định sai gây jump scrollbar nhưng vẫn ok. K nên dùng khi kích thước thẻ k biết trước mà ảnh hưởng lớn đến layout.
+=> Mặc định mọi thẻ được paint trên màn dù k có trên viewport. Dùng content-visibility auto sẽ đảm bảo thẻ k được paint nếu k hiển thị trên viewport, giúp tối ưu hoá hiệu suất render. Chỉ dùng trên page lớn vì page nhỏ k đáng kể.
 
--> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
+-> contain xác định 1 thẻ có containment không, mặc định là none là k có giới hạn gì:
+contain: paint; => đảm bảo mọi thứ bên trong 1 thẻ k thể paint ra ngoài thẻ đó
+contain: size; => đảm bảo mọi thứ bên trong 1 thẻ sẽ k ảnh hưởng đến kích thước thẻ đó. Vì bth kích thước thẻ cha tự kéo dài theo kích thước con, nhưng ở đây thì không.
+contain: layout; => đảm bảo thẻ bên trong k ảnh hưởng đến layout các thẻ khác và ngược lại.
+Kết hợp với contain: layout paint size; 
+=> Dùng contain như vậy sẽ giảm tải cho browser khi tính toán layout hay paint ra màn hình.
+
+
+
+# Tạo tooltip
+--> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
+visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
+
+
+
+# -> Lỗi zIndex: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
 zIndex nên luôn đi với position relative
 zIndex nên để tất cả cùng level và cái sau đè cái trước, trừ khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex phải set position relative luôn
 
---> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
 
--> Có thể custom cursor:
+
+# 
+-> Bản chất về kích thước
+Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
+padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
+
+
+
+# Có thể custom cursor:
 C1: là cho cursor none rồi tự custom 1 thẻ ảnh khác cho transform theo mousemove. Có thể custom event mouse down thì phóng to ảnh, mouse up thì ảnh về bth
 => Việc custom cursor như v k ổn k nên dùng vì text, input, button đôi khi cần các hình khác nhau thì custom sẽ phức tạp với từng thẻ
 C2: là dùng cursor: url(<base64>) 8 8, auto; // Tham số 2 là dự phòng nếu browser k hỗ trợ hình ảnh  
 Tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị
+URL: https://css-tricks.com/next-level-css-styling-for-cursors/ => dùng C2 fallback cho C1 khi browser k hỗ trợ JS. Check touch screen và k enable js thì dùng cursor C2 thôi.
 URL: https://custom-cursor.com/ => lấy ảnh cursor free
 
--> resize: both; direction: ltr; => biến mọi thẻ thành resizable
-contenteditable => biến mọi thẻ thành editable nhưng khá xấu
-Emphasis marks dùng cho các ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết. Có none, open, dot, circle, triangle, seseam, 1 <character> bất kỳ
-Tag video chứa tag source. VD: preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
-Thuộc tính inert đặc biệt trong html, khi dùng sẽ vô hiệu hóa mọi tương tác của người dùng với các tag.
-contain: paint; => đảm bảo mọi thứ bên trong k thể paint ra ngoài thẻ đó, mạnh hơn overflow hidden.
-Thuộc tính content-visibility cho phép 1 thẻ render nội dung bên trong nó ra hay không
-writing-mode: vertical-rl; => chỉnh thứ tự in chữ
-field-sizing: content; => element tự mở rộng kích thước phụ thuộc vào content. Vd text-area tự mở rộng
-Thay vì margin: 0 auto; ta dùng margin-inline: auto;
-gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
-border-block-end là cạnh dưới của văn bản trong phần tử, tính thêm cả writing-mode.
-text-decoration-thickness, text-underline-offset => style underline
-HTML <template> là tag đặc biệt mà nội dung k được render trực tiếp mà phải được copy rồi mới render ra
--webkit-fill-available là giá trị đảm bảo width và height tự kéo dài hết phần thừa mà nó có thể kéo, k ảnh hưởng tới các thẻ khác. Fallback với width: fill-available; width: -webkit-fill-available;
 
--> Highlight API
+
+# Master border radius: outer radius = inner radius + distance giữa 2 border (border-width) => tự tạo nếu cần 1 thẻ có boder radius trong thẻ khác
+border-radius: https://9elements.github.io/fancy-border-radius/
+Dùng border-image
+Shorthand border-radius: 10% 30% 50% 70%;
+
 
 
 
@@ -127,12 +138,14 @@ Tương tự display table khi muốn hoạt động như table. VD display tabl
 
 
 # Dùng display grid
+CSS grid galaxy layout khá dễ: https://uxdesign.cc/css-grid-with-galaxy-layout-figma-886a935b9649
 Giống flexbox nhưng custom chia vị trí từng ô tốt hơn.
 Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
 Playground: https://flexboxlabs.netlify.app/grid
 Grid làm container: https://ryanmulligan.dev/blog/layout-breakouts/
 
 -> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
+gap/grid-gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
 
 -> grid-template-columns: 10% 10% 10%; là chia 3 thẻ bên trong làm 3 cột, một cột chiếm 10%. 
 grid-template-columns: 1fr 1fr 1fr; hoặc (auto auto auto) cx là 3 cột bằng nhau. Hoặc repeat(3, 1fr) viết lặp
@@ -168,7 +181,8 @@ Dùng flex box căn giữa ok nhưng sẽ full width, nếu ta set max-width ch�
 Có thể tạo kim tự tháp card bằng grid bằng cách tương tự
 
 -> Dùng grid-template-areas thay thế position absolute vì nó có thể tự chồng các element lên nhau và lấy kích thước của thẻ to nhất
-K dùng display none vì nó làm mất thẻ thì k tự lấy kích thước thẻ to nhất, k dùng opacity 0 vì nó gộp aria text các thẻ lại, dùng visibility hidden ok nhất vì vẫn chiếm k gian. Visibility hidden + position absolute = display none => sai vì visibility hidden k ẩn trên accessibility tree
+K dùng display none vì nó làm mất thẻ thì k tự lấy kích thước thẻ to nhất, k dùng opacity 0 vì nó gộp aria text các thẻ lại, dùng visibility hidden ok nhất vì vẫn chiếm k gian và có ẩn aria-text.
+Visibility hidden + position absolute = display none => sai vì visibility hidden vẫn chiếm chỗ trong layout
 visibility khi transition vẫn được, chỉ là hiện hay ẩn chứ k như opacity nhưng nó vẫn chờ đúng thời gian transition
 
 -> Tạo masonry css với grid
@@ -205,7 +219,7 @@ VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card c�
     grid-column: span 2;
     grid-row: span 2;
     > :not(img) {
-      grid-column: 1 / -1;
+      grid-column: 1 / -1; => cách khéo léo để bảo chiếm tất cả, thay vì phải viết 1 số span cụ thể
     }
     > img {
       grid-column: 1 / -1;
@@ -216,8 +230,18 @@ VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card c�
 
 
 
+# -> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
+drop-shadow theo hình dạng ảnh có nền transparent, nó cũng theo màu của hình nếu k xác định màu
+Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
+
+box-shadow có thể tạo hình background phức tạp với animation bằng cách dùng inset lồng nhiều màu đè ở các vị trí khác nhau, màu sau sang trái đè lên màu trước đó.
+URL: https://frontendmasters.com/blog/expanding-css-shadow-effects/ 
+
+
+
+
 # Trick responsive flexbox grid
-Xếp flex-basis trước, nếu các thẻ có flex-basis mà k đủ cho 1 dòng thì sẽ xuống dòng. Sau đó mới tính grow, shrink. Do đó có thể lợi dụng flex-basis để kiểm soát số cột
+Xếp flex-basis trước, nếu các thẻ flex-basis k đủ cho 1 dòng sẽ xuống dòng theo flex-wrap. Sau đó mới tính grow, shrink. Do đó có thể lợi dụng flex-basis để kiểm soát số cột
 
 VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp column fit vào ô với kích thước 200px nếu có thể. Có thể dãn lớn hơn 200px. Nhỏ hơn 200px thì xuống dòng.
 minmax nếu max nhỏ hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
@@ -229,8 +253,8 @@ Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như n
 -> Kỹ thuật responsive:
 1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
 Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => kết hợp min max kiểu lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px
-2) Max số cột:
-Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng. Ta cố tình cho min-width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
+2) Max số cột: Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng rồi mới xét shrink hay grow. 
+Ta cố tình cho min-width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
 
 VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
 
@@ -273,13 +297,12 @@ Dùng sass thì vẫn được vì nó phân tích cú pháp và paste vào tạ
 Dùng @supports (display: grid) and (not (display: inline-grid)) { } để check browser có hỗ trợ thuộc tính nào không. VD dùng để check nếu k hỗ trợ thì in ra đoạn text "Browser not support this feature!" và display none phần nào sử dụng.
 
 -> Container query: xử lý case đôi khi màn hình nhỏ dần mà kích thước container lại tăng
-URL: https://topdev.vn/blog/responsive-giao-dien-cuc-dinh-voi-container-queries  /  https://www.youtube.com/watch?v=rrLAg7xNERA
+URL: https://www.youtube.com/watch?v=rrLAg7xNERA
 container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
 @container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
 Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
 container: main / inline-size; => shorthands container-name / container-type
-
---> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
+=> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
 
 ->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
 - flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 

@@ -1,6 +1,4 @@
-# Basic 
-Thường dùng cho Angular thôi
-
+# Basic => Thường dùng cho Angular thôi
 Observer -- subscription--> Observable
     ^                           |
     |__________invoke___________|
@@ -14,7 +12,7 @@ Rx.Observable.create(function() => { // Kiểm soát khi subscribe thì làm gì
 Khi có error or complete, Obsevable bị huỷ k thể emit gì nữa, trừ khi ta bắt error xử lý
 Chỉ cần hiểu 1 Observable có thể phát ra 1 cái gì đó vào 1 lúc nào đó, thường là sự kiện hoặc call API. Có thể subscribe để nhận giá trị phát ra để làm gì đó, k thì thôi hết
 
-CÓ thể dùng Observer pattern trong OOP để tự tạo quá trình phát và xử lý sự kiẹn
+Có thể dùng Observer pattern trong OOP để tự tạo quá trình phát và xử lý sự kiẹn
 
 -> Việc đầu tiên là tạo Observable, tạo từ event thì dùng fromEvent, tạo từ 1 hoặc nhiều giá trị cụ thể thì dùng of
 

@@ -15,6 +15,23 @@ Chú ý nó chỉ tính phần hiển thị trên màn so với height của nó
 VD có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll
 Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
 
+-> Đổi url k chuyển trang history.pushState(null, "", url);
+Tốt hơn là nên dùng replaceState hơn pushState để nó replace url hiện tại chứ không lưu vào lịch sử:
+VD: window.history.replaceState(null, "",
+  document.querySelector("link[rel=canonical]").getAttribute("href")
+); => set hàm này luôn chạy sau khi load xong chính là mẹo khiến cho url luôn là canonical dù thực tế nó có params các thứ, khiến url gọn hơn.
+
+
+-> -> Highlight API
+
+-> Kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
+
+
+# Bàn về try catch
+Bth: let x; try { x = await getX(); } catch (ex) { console.log(ex.message); }
+Tốt hơn là viết 1 hàm trả ra [error, result] wrap mọi hàm async sẽ ok hơn.
+Catch error phải bắt nếu lỗi custom đoán trước được thì hiện error chuẩn, lỗi k đoán được thì hiện default kèm message slice ngắn đi
+
 
 
 # Chuyển hết về async await
@@ -135,6 +152,8 @@ Dùng Fisher-Yates alg, cơ chế là sinh số random nguyên để hoán đổ
 -> Vòng for of chỉ dùng với các biến iterable. Vd k dùng được với object vì object không iterable, phải dùng hàm Object.entries.
 Vòng for in dùng được với biến và mảng bình thường nhưng 1 số kiểu IterableIterator như entries, values của Map hay Set lại k dùng được
 forEach chỉ dùng cho mảng vì nó thuộc Array.prototype
+
+--> for await (const value of promises) { console.log(value); } => chờ lần lượt từng promies thực hiện xong
 
 -> Hàm map tạo ra 1 mảng mới và k thay đổi trên mảng cũ nên phải gán bằng. 
 2 tham số: 1 là function(currentValue, index, array), 2 là thisValue là giá trị pass vào function để dùng từ khóa this. Tuy nhiên để dùng được đối số 2 thì đối số 1 k được dùng arrow function, nếu k this sẽ luôn là cái bao ngoài hàm. 
@@ -274,6 +293,8 @@ VD Để xác thực thông tin: đối số 2 thêm { credentials: "include(sam
 fetch(url, { 
   credentials: 'include'; // include là có gửi kèm thông tin xác thực cookie
 })
+
+-> Dùng top-level statement fetch api được.
 
 -> Các response.type: 
 basic nếu ứng dụng gửi request cho server cùng nhà, k có giới hạn vc xem thông tin trên response. Hoặc request mode "no-cors" và phản hồi là 1 simple origin

@@ -1,5 +1,5 @@
 # Basic
-Chuyển trang bằng <a>, js chuyển trang thực sự window.location, js đổi url k chuyển trang history.pushState(null, "", url);
+Chuyển trang bằng <a>, js chuyển trang thực sự window.location
 Chia mỗi pages 1 files. Dùng BEM, scss.
 
 -> Setup dự án: Dùng HTML thuần với live server

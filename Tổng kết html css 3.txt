@@ -200,6 +200,7 @@ Có thể tạo animation phức tạp như trong game.
 
 
 # View transition API
+URL dùng view transition api giúp dễ hơn nh, thay thế transition bth: https://www.smashingmagazine.com/2025/06/creating-moving-highlight-navigation-bar-javascript-css/
 View transition API giúp chuyển trạng thái mượt như app bth. Full tut: https://developer.chrome.com/docs/web-platform/view-transitions/
 Sẽ có animation khi update DOM hoặc animation khi navigate tới 1 pages cùng origin khác. Điều này có thể làm bằng css thuần nhưng vẫn bị jump khi chuyển sang pages, view transition api chuẩn hơn và sẽ tự tối ưu performance. Nó khiến phần thao tác bằng JS thành animation
 
@@ -238,6 +239,10 @@ URL khi cần custom animation toàn page, định hình hướng tiến hay lù
 pagereveal là sự kiện phát ra khi nội dung được render, bất kể nội dung từ cache, prerender hay refresh mới.
 pageswap là khi load hẳn 1 document mới, document cũ sẽ bị unload luôn sẽ phát
 
+-> Fix lỗi khi transition biến đổi 1 thẻ thành chính nó nhưng có nội dung thay dổi, dùng witdth height 100% để đảm bảo k có sai sót
+URL: https://www.youtube.com/watch?v=aTGwrErX9AM => cho slideslidein fadeslideout
+URL: https://www.youtube.com/watch?v=N2BKAKwGP6M
+
 
 
 # Css anchor
@@ -272,8 +277,6 @@ Tự động đổi position nếu k đủ diện tích thì thêm position-try-
 
 
 # Custom thẻ input
-Input bth k có autocomplete, nhưng nếu thêm name="email/name/phone" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
-
 Dùng event "input" giống onChange của react, dùng thay event "change"
 
 Gõ có gợi ý theo list có sẵn với: <datalist> + input list
@@ -340,6 +343,15 @@ const uploadData = new FormData();
 uploadData.append("image", imageSending);
 const response = await client.post("/api/v1/event", uploadData, config);
 
+-> Input text k có autocomplete, nhưng nếu thêm name="email/name/phone" sẽ có autocomplete tự động. Có thể custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off", có thể kèm aria-autocomplete="list"
+
+Nên add focus shortcut cho nó: 
+document.addEventListener("keyup", function (e) {
+  if (e.key === "/") {
+    document.getElementById("search").focus();
+  }
+});
+
 
 
 # CSS Selector
@@ -396,7 +408,7 @@ VD tính năng readmore với CSS only: dùng 2 cái radio button cho 2 dòng Re
 VD ấn vào ảnh để phóng to ảnh, click button để thu nhỏ ảnh đó. Chơi ấn vào ảnh thì click thẻ a ref tới ảnh và style img:target to lên, click nút close thì là thẻ a ref ra ngoài ref="#" là xong.
 Cách khác là dùng input checkbox 
 
--> oninvalid this.setCusstomValidity("Lỗi này đây")
+-> oninvalid this.setCustomValidity("Lỗi này đây")
 
 -> nth-child dùng n được. VD: .grid > :nth-child(4n) { }
 

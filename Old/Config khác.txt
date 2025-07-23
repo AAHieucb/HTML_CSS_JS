@@ -1,0 +1,542 @@
+-> Css reset:
+:root {
+  --hue: 230;
+  --primary: oklch(70% .2 var(--hue)); 
+  --primary-highlight: oklch(97% .2 var(--hue));
+  --primary-1: oklch(calc(75% - (1 * 5%)) calc(.2 - (1 * .01)) calc(var(--hue) - (1 + 5)));
+  --primary-2: oklch(calc(75% - (2 * 5%)) calc(.2 - (2 * .01)) calc(var(--hue) - (2 + 5)));
+  --primary-3: oklch(calc(75% - (3 * 5%)) calc(.2 - (3 * .01)) calc(var(--hue) - (3 + 5)));
+  --primary-4: oklch(calc(75% - (4 * 5%)) calc(.2 - (4 * .01)) calc(var(--hue) - (4 + 5)));
+  --primary-5: oklch(calc(75% - (5 * 5%)) calc(.2 - (5 * .01)) calc(var(--hue) - (5 + 5)));
+
+  font-size: 16px;
+  --font-tiny: clamp(0.75rem, calc(0.708rem + 0.133vw), 0.875rem); /* 12-14 500-2000 */
+  --font-small: clamp(0.875rem, calc(0.833rem + 0.133vw), 1rem); /* 14-16 500-2000 */
+  --font-medium: clamp(1rem, calc(0.958rem + 0.133vw), 1.125rem); /* 16-18 500-2000 */
+  --font-large: clamp(1.125rem, calc(1.083rem + 0.133vw), 1.25rem); /* 18-20 500-2000 */
+}
+@view-transition {
+  navigation: auto;
+}
+::view-transition-group(root) {
+  animation-duration: 500ms;
+}
+:where(:root) {
+  text-rendering: optimizeLegibility;
+  // transition: all 0.5s linear; 
+}
+* {
+  box-sizing: border-box;
+}
+*:not(dialog, [popover]) {
+  margin: 0;
+  padding: 0;
+}
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: always;
+  min-height: 100%;
+  width: 100%;
+  -webkit-touch-callout: none;
+  interpolate-size: allow-keywords;
+  overscroll-behavior: contain;
+  font-family: "DM Sans", sans-serif; // Set font mặc định, k có sẽ dùng font 
+  font-display: swap;
+  overflow-y: hidden;
+}
+body{
+  min-height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  font-size: var(--font-medium);default của browser
+}
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  font-style: italic;
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  shape-margin: 1rem;
+  user-select: none;
+  -webkit-user-drag: none;
+  verticalAlign: "bottom", // Chặn lỗi thừa pixel dọc của thẻ image
+  boxSizing: "border-box", // Chặn lỗi thừa pixel ngang của thẻ image
+}
+a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+button{
+  text-transform: none;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+p {
+  cursor: text;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+h1,h2,h3,h4,h5,h6 { text-wrap: balance; } => để các mục header có text balance khi bị break nhiều dòng trông đẹp hơn
+p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn. Tính toán bị expensive.
+
+
+
+.image_container {
+  width: min(300px, 50%);
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: gray;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center center;
+  }
+}
+<figure class="image_container">
+  <picture>
+    <source media="(min-width:650px)" srcset="./test.jpg" type="image/jpg">
+    <img src="" alt="" onerror="this.onerror=null;this.src='base64image';" loading="lazy">
+  </picture>
+  <figcaption>This is cap</figcaption>
+</figure>
+
+
+
+-> Metadata SEO:
+<title>Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preload" as="image" href="./logo.svg"/>
+<link rel="icon" href="./logo.svg"/>
+<meta name="description" content="Test setup website">
+<meta name="keywords" content="test,setup"/>
+<link rel = "canonical" href = "http://localhost:1234/">
+<meta property = "og:type" content = "article" />
+<meta property = "og:title" content = "TÊN TIÊU ĐÊ HOẶC TRANG WEB" />
+<meta property = "og:description" content = "MÔ TẢ CỦA TRANG NỘI DUNG" />
+<meta property = "og:image" content = "./assets/logo.svg" />
+<meta property = "og:image:alt" content="Collection Image"/>
+<meta property = "og:url" content = "PERMALINK" />
+<meta property = "og:site_name" content = "TÊN TRANG WEB" />
+<meta property = "og:locale" content="en_US"/>
+<meta property = "twitter:title" content = "TÊN TIÊU ĐỀ HOẶC TRANG WEB">
+<link rel="stylesheet" href="./css/home.css">
+<script src="./test.js" blocking="render" type="module" defer></script>
+
+
+
+-> @font-face {
+  font-family: SourGummy;
+  src: url("../assets/fonts/SourGummy-ExtraLight.ttf") format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: SourGummy;
+  src: url("../assets/fonts/SourGummy-Light.ttf") format('truetype');
+  font-weight: lighter;
+  font-style: normal;
+}
+.test {
+  font-family: SourGummy;
+  font-weight: lighter;
+}
+
+
+
+-> .test1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  text-align: justify;
+  word-break: break-word; // Chữ k đủ sẽ xuống dòng, 1 chữ quá dài cũng cắt xuống
+  text-wrap: pretty;
+}
+
+
+
+-> @supports (animation-timeline: view()) {
+  .test {
+    animation-timeline: view();
+    animation-range-start: cover 25vh;
+    animation-range-end: 100vh; 
+  }
+}
+
+@supports (animation-timeline: --squareTimeline) {
+  .test {
+    animation: loadingscroll linear forwards;
+    animation-timeline: --squareTimeline;
+  }
+}
+.container {
+  scroll-timeline-name: --squareTimeline; // Dùng animation khi scroll trong thẻ .container
+}
+
+svg {
+  animation: rotate 1s linear infinite;
+  animation-play-state: paused;
+  animation-delay: calc(var(--scroll) * -1s);
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+window.addEventListener("scroll", () => {
+  document.body.style.setProperty("--scroll", window.pageYOffset/(document.body.offsetHeight - window.innerHeight));
+});
+
+animation: play 1s steps(10) infinite; // chia ảnh 10 bước tới 10%, 10 bước tới 100%, tất cả trong 1s
+@keyframes play {
+  0% { background-position: 0 0; }
+  10% { background-position: 100px 100px; }
+  100% { background-position: 0 0; }
+}
+
+path {
+  stroke-width: 2; /* Ensure the stroke is visible */
+  stroke-dasharray: 1000; /* Length of the dash array */
+  animation: test 1s ease-out;
+}
+@keyframes test {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@view-transition {
+	navigation: auto;
+}
+::view-transition-group(root) {
+	animation-duration: 0.5s;
+}
+<script src="ignored" type="module" blocking="render"></script> => blocking="render" k có ý nghĩa
+Đặt 2 thẻ có view-transition-name trùng nhau
+document.startViewTransition(() => {
+  // style đổi cho 2 thẻ
+});
+
+
+
+-> dialog[open]{
+  animation: dialogshow 0.3s ease-out forwards;
+}
+dialog[open]::backdrop{
+  animation: dialogbackdropshow 0.3s ease-out forwards;
+}
+dialog.hide[open] {
+  animation: dialoghide 0.3s ease-out forwards;
+}
+dialog.hide[open]::backdrop {
+  animation: dialogbackdrophide 0.3s ease-out forwards;
+}
+@keyframes dialogshow {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dialoghide {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+@keyframes dialogbackdropshow {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: black;
+  }
+}
+@keyframes dialogbackdrophide {
+  0% {
+    background-color: black
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+const showDialog = () => {
+  dialogX.showModal();
+  const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollY}`;
+}
+const doCloseDialog = () => {
+  const scrollY = document.body.style.top;
+  body.style.position = '';
+  body.style.top = '';
+  dialogX.close();
+  window.scrollTo(0, parseInt(scrollY || '0')*-1);
+}
+const closeDialog = () => {
+  dialogX.classList.add("hide");
+  dialogX.addEventListener('animationend', function(){ 
+    dialogX.classList.remove('hide');
+    doCloseDialog();
+  }, { once: true });
+}
+openButton.addEventListener('click', showDialog);
+closeButton.addEventListener('click', closeDialog);
+dialogX.addEventListener('click', (event) => {
+  if (event.target === dialogX) {
+    closeDialog();
+  }
+});
+window.addEventListener('scroll', () => {
+  document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
+});
+<dialog id="dialogX" role="dialog" aria-label="Connect wallet dialog">
+  <div>
+    <button id="closeButton" aria-label="Close dialog" aria-controls="dialogX">Close dialog</button>
+  </div>
+</dialog>
+
+
+
+-> [popover] {
+  anchor-default: --i-btn;
+  position-fallback: --top-to-bottom;
+  opacity: 0;
+  transform: scaleX(0);
+  transition:
+    opacity 0.7s,
+    transform 0.7s,
+    overlay 0.7s allow-discrete,
+    display 0.7s allow-discrete;
+}
+[popover]:popover-open {
+  opacity: 1;
+  transform: scaleX(1);
+}
+@starting-style {
+  [popover]:popover-open {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+}
+[popover]::backdrop {
+  background-color: rgb(0 0 0 / 0%);
+  transition:
+    display 0.7s allow-discrete,
+    overlay 0.7s allow-discrete,
+    background-color 0.7s;
+}
+[popover]:popover-open::backdrop {
+  background-color: rgb(0 0 0 / 25%);
+}
+@starting-style {
+  [popover]:popover-open::backdrop {
+    background-color: rgb(0 0 0 / 0%);
+  }
+}
+@position-fallback --top-to-bottom {
+  @try {
+    bottom: anchor(top);
+    left: anchor(center);
+  }
+  @try {
+    bottom: anchor(bottom); /* K fit top thì anchor xuống bottom => auto positioning */
+    left: anchor(center);
+  }
+}
+<button popovertarget="test" popovertargetaction="toggle" style="anchor-name: --i-btn;">Open</button>
+<div id="test" popover anchor="btn">
+  <button popovertargetaction="hide" popovertarget="dialog">Close2</button>
+</div>
+
+
+
+-> input[type="number"]:is(::-webkit-inner-spin-button,::-webkit-outer-spin-button) {
+  -webkit-appearance: none !important;
+}
+
+<input accept="image/*" hidden id="test" type="file" onChange={onImageChange}/>
+<label htmlFor="test">
+  <div>Test</div>
+</label>
+const onImageChange = (event) => {
+  if (event.target.files && event.target.files[0]) {
+    setImage(URL.createObjectURL(event.target.files[0]));
+  }
+  setImageSending(event.target.files[0]);
+};
+const uploadData = new FormData();
+uploadData.append("image", imageSending);
+const response = await client.post("/api/v1/event", uploadData, config);
+
+input:valid {} // style khi input có valid data
+input:invalid {} // style khi input có invalid data
+input:user-valid {} // style khi input có data, và data đó valid
+input:user-invalid {} // style khi input có data, và data đó invalid
+input:not(:placeholder-shown):valid {} 
+input:not(:placeholder-shown):invalid {}
+input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
+
+
+
+-> .container {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.content__main__container {
+  --padding-inline: 15px;
+  --content-max-width: 900px;
+  --breakout-max-width: 1500px;
+  --breakout-size: calc((var(--breakout-max-width) - var(--content-max-width)) / 2);
+  display: grid;
+  grid-template-columns:
+    [full-width-start] 
+    minmax(var(--padding-inline), 1fr)
+      [breakout-start] 
+      minmax(0, var(--breakout-size))
+        [content-start] 
+        min(100% - (var(--padding-inline) * 2), var(--content-max-width))
+        [content-end]
+      minmax(0, var(--breakout-size)) 
+      [breakout-end]
+    minmax(var(--padding-inline), 1fr) 
+    [full-width-end];
+  > .layout-content {
+    grid-column: content;
+  }
+  > :not(.layout-content, .layout-fullwidth) {
+    grid-column: breakout;
+  }
+  > .layout-fullwidth {
+    grid-column: full-width;
+    display: grid;
+    grid-template-columns: inherit;
+    > :not(.layout-content, .layout-fullwidth) {
+      grid-column: breakout;
+    }    
+    > .layout-content {
+      grid-column: content;
+    }
+  }
+}
+
+
+
+-> addEventListener("click", () => {}, {
+  once: true,
+  passive: true, // Báo k chạy event.preventDefault()
+  capture: true, 
+  signal: controller.signal
+})
+
+
+
+-> const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) { // đang là lúc mới vào, lúc ra sẽ là false
+      observer.unobserve(entry.target);
+    }
+    entry.intersectionRatio; // tỉ lệ phần hiển thị với thẻ root
+    entry.target; // là thẻ đang nhắm tới
+    entry.rootBounds; // kích thước thẻ root, mặc định là màn hình
+    entry.intersectionRect; // kích thước và vị trí phần giao
+  })
+}, {
+  threshold: 0.5, // giao 1 nửa thẻ mới coi là isIntersecting là true, [0, 0.25, 0.5, 0.75, 1] sẽ gọi lại mỗi khi tỉ lệ giao thay đổi qua các mốc
+  rootMargin: "+100px", // tăng kích thước view port, vào cách 100px là tính rồi
+  root: document.querySelector('body') // đổi thẻ root, default null là view port. Phần tử chỉ được kiểm tra intersect với view port nếu nó nằm trong vùng của thẻ root
+});
+
+
+
+-> <div id="container">
+  <div draggable="true">Hello</div>
+</div>
+<script>
+  container.addEventListener("dragstart", (e) => {
+    // Khi drag vào trong container hoặc drag vào con của nó
+  });
+  containerTag.addEventListener("dragend", (e) => {
+    // Kết thúc thao tác drag
+  });
+  containerTag.addEventListener("dragover", (e) => {
+    // Khi drag lên 1 thẻ draggable hoặc các thẻ con trong thẻ draggable đó
+  });
+  containerTag.addEventListener("dragleave", (e) => {
+    // Khi drag leave 1 phần tử hoặc con của nó
+  });
+  containerTag.addEventListener("drop", (e) => { // Khi drop vào thẻ nào
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+  });
+</script>
+
+
+
+Bỏ:
+-> .animated-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  background: linear-gradient(90deg, #ff0000, #ff7300, #ffeb00, #00ff00);
+  background-size: 300% 300%;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s infinite linear;
+}
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+-> <video width="100px" height="100px" preload="auto" muted loop autoplay playsInline> => preload="auto" là load toàn video luôn
+  <source src="https://www.w3schools.com/tags/movie.mp4" type="video/mp4"/>
+</video>
+
+-> const workerCode = `
+  self.onmessage = function(event) {
+    console.log(event.data);
+    self.postMessage(1);
+  };
+`;
+const blob = new Blob([workerCode], { type: "application/javascript" });
+const worker = new Worker(URL.createObjectURL(blob));
+worker.postMessage({ test: 1 }); // Gửi tới worker thực hiện code
+worker.onmessage = function(event) { // Nhận kết quả từ worker
+  console.log(event.data);
+};
+

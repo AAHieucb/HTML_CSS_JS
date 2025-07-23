@@ -43,6 +43,8 @@ VD Tạo thanh loading ngang khi scroll bằng css thuần quá đỉnh với an
 }
 Để bật chế độ này: mở devtool -> ctrl shift p -> reduced motion. Khi đó đoạn code animation css sẽ chạy
 
+-> Tư duy nhanh hiểu cái timeline là mặc định theo thời gian. Còn scroll là theo vị trí scroll trên màn. Còn view là khi view được 1 object thể nào trên screen. Nó chỉ đơn giản là set giá trị timeline khi nào nên chạy animation phụ thuộc vào cj thôi.
+
 
 
 # Animation Draggable

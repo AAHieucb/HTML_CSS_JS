@@ -7,6 +7,8 @@ Tạo r đặt cùng index.html, nhét vào robots.txt để gg biết, host lê
 
 # Xử lý image
 URL: https://bennettfeely.com/clippy/ => kích thước vẫn thế nhưng hiển thị cut ảnh clip-path
+URL: https://www.youtube.com/watch?v=oWXm5n-Zi38 => thực sự học master clip-path
+URL: https://css-generators.com/svg-to-css/ => convert hàm path thành hàm shape dùng cho clip-path trong css. Shape y hệt nhưng friendly hơn thôi.
 URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
 
 => Ứng dụng tạo diamond grid: https://www.youtube.com/watch?v=A5GXdjEOvos&list=WL&index=98
@@ -88,9 +90,14 @@ VD: <picture class="image_container">
   <img src="" alt="" onerror="this.onerror=null;this.src='base64image';" loading="lazy">
 </picture>
 
+-> K dùng ảnh gif bị nặng hơn video rất nhiều. Dùng với các ảnh nhỏ muốn lặp vô hạn mà k cần media player thì ok => éo bh cần
+K thì nên dùng APNG hơn
+
 
 
 # Metadata SEO
+***URL full mọi tag trong <head>: https://github.com/joshbuchea/HEAD
+
 <title> <meta name="description"> <meta name="keywords"/>
 <link rel = "canonical" href = "http://example.com/"/> => Khi 1 web có nhiều url dẫn tới cùng 1 nội dung, google không biết url nào nên hiển thị trên kết quả tìm kiếm. Luôn dùng thẻ canonical trỏ tới web gốc để thông báo cho search engine URL này là trang chính và tránh lập chỉ mục với URL của các trang trùng lặp khác
 Đủ alt cho hình ảnh
@@ -147,6 +154,13 @@ Disallow: /page2.html
 C2: <meta name = "robots" content = "noindex, nofollow"> => Có nghĩa là không lập chỉ mục hay không theo dõi các liên kết từ trang này trang web này.
 <meta name = "robots" content = "index, follow"> => Có nghĩa là chỉ mục và theo dõi các liên kết từ trang này 
 VD cho robots.txt cản pages2, nhưng trong pages 2 lại dùng thẻ meta robots index. Thì googlebot gặp robots.txt sẽ bỏ qua pages2 luôn và chưa kịp thấy thẻ meta và k đánh index => Do đó bình thường chỉ dùng meta là được, chả cần robots.txt làm gì. Chỗ nào cản đánh index thì thêm noindex thôi
+
+-> Mỗi thẻ h1, h2 nên có id để có url # ref tới vị trí đó nhanh. Nên thêm nếu k có, k giúp SEO nhưng UX tốt hơn:
+document.querySelectorAll("h2").forEach(function(el) {
+  if (!el.hasAttribute("id")) {
+      el.setAttribute("id", el.textContent.replaceAll(/[^a-z]/gi, ''));
+  }
+});
 
 
 
@@ -332,6 +346,19 @@ VD ở light background cần chữ màu tối hơn, dark background cần chữ
 color: color-mix(in lab, currentColor, red 70%); => giả sử chữ đỏ sẽ tự có màu đỏ đậm đỏ nhạt tuỳ bg cho đúng
 
 linear-gradient cũng dùng được currentColor, dùng được mọi nơi cho màu
+
+# Dùng conic gradient tạo hình zigzag 
+.loader {
+  height: 47px; /* control the size */
+  aspect-ratio: 5;
+  background:
+    conic-gradient(from 135deg at top,#000 90deg,#0000 0) top,
+    conic-gradient(from 135deg at top,#0000 90deg,#000 0) bottom;
+  background-size: 20% 50%;
+  background-repeat: repeat-x;
+}
+
+
 
 
 

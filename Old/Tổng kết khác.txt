@@ -1,0 +1,108 @@
+# Tạo extension browser bằng JS
+-> Để thêm extension vào browser: bật developer mode -> load unpacked folder chứa file manifest extension.
+
+-> 1 extension cho browser cần tối thiểu 1 file manifest.json cung cấp thông tin mà thôi. Như v thì chưa làm gì cả, phải viết thêm các script chức năng:
+Content script: là những đoạn mã sẽ chạy trên trang web đang xem -> dùng với "content_scripts"+"js"
+Background script: thực hiện ngầm extension, nhận message từ content script or extension khác => dùng bằng "background"+"scripts"
+UI Elements: thành phần giao diện người dùng thg là hộp thoại popup hiện ra khi ấn vào icon của extension => vd dùng với "browser_action"+"default_popup"
+=> Background script bắt đầu thực hiện khi ta ấn vào biểu tượng extension, content script tự thực hiện khi ta load 1 trang web mới
+
+persistent xđ trang background đc chạy như thế nào
+Dùng "scripts":[".js"] or "page":".html" vói file html chỉ có 1 thẻ script thêm code js vào
+default_popup dùng để hiển thị file html khi mở extension
+js là danh sách các file js được inject vào trang web nên file js luôn trong 1 mảng còn html là ""
+matches xác định trang web muốn thêm nội dung và0, dùng regexp: "*://*/*" sẽ dùng với mọi trang web
+
+
+
+# Dùng counter-reset hiện số đếm tự tăng k cần JS
+URL: https://www.youtube.com/watch?v=PL3Odw-k8W4
+
+
+
+# Transform stream
+1 loại stream xử lý data, pipe vào các stream khác như bth, dùng stream giúp tiết kiệm băng thông.
+
+Vd tạo một TransformStream để chuyển đổi văn bản thành chữ hoa trước khi đọc nó thì dùng transform stream ở giữa để viết hoa chữ:
+const transformStream = new TransformStream({
+  start() {
+    // Được gọi khi TransformStream khởi tạo
+    console.log('TransformStream bắt đầu.');
+  },
+  transform(chunk, controller) {
+    controller.enqueue(chunk.toUpperCase());
+  },
+  flush(controller) {
+    // Được gọi khi toàn bộ luồng đầu vào đã được xử lý
+    console.log('Đã hoàn thành chuyển đổi.');
+  }
+});
+const readableStream = new ReadableStream({
+  start(controller) {
+    // Đẩy dữ liệu vào luồng
+    controller.enqueue('hello');
+    controller.enqueue(' world');
+    controller.close();
+  }
+});
+// Kết nối ReadableStream với TransformStream và tạo một WritableStream để ghi dữ liệu
+readableStream
+  .pipeThrough(transformStream) // Chuyển dữ liệu qua TransformStream
+  .pipeTo(new WritableStream({
+    write(chunk) {
+      // Ghi ra phần dữ liệu đã biến đổi
+      console.log(chunk);
+    },
+    close() {
+      console.log('Đã ghi xong dữ liệu.');
+    }
+  }));
+
+
+
+# CDATA trong XML và HTMl tránh lỗi parse error
+VD thay vì code JS trong html bth, ta thêm:
+ <body>
+    <script type="text/javascript">
+      // <![CDATA[
+      var myString = "<p>This is a string containing <em>HTML</em> tags.</p>";
+      console.log(myString);
+      // ]]>
+    </script>
+  </body>
+=> Tag CDATA(Character data) để tránh bị lỗi khi nội dung bên trong chứa ký tự đặc biệt. TH đơn giản k có nhưng myString chứa nhiều ký tự complex của html sẽ gây lỗi và CDATA đảm bảo phần code đó luôn được interpret đúng ở dạng literal
+
+
+
+# jQuery code được ngay trên browser console
+-> $ is document.querySelector => https://freetuts.net/selector-trong-jquery-574.html
+$$ is document.querySelectorAll
+Bắt sự kiện: dbclick
+Lấy thẻ hiện tại đang làm với $(this)
+Animation: slideUp, hàm animate tạo animation cho thẻ sau bnh giây, fadeIn, scrollTop, slideDown
+Từng thẻ riêng có các hàm riêng: $("input").val()
+Hàm chỉnh nhanh các thuộc tính css: show, hide, addClass, css, width height, attr, removeAttr
+Dùng các hàm JS mà jQuery cung: trim
+Check 1 thẻ có chứa các thẻ nào, lấy các thẻ đang click: has, e.target, is
+Lấy vị trí các thẻ: offset
+Thêm bớt thẻ vào thẻ: append
+Lấy vị trí thẻ và vị trí chuột: e.pageX
+
+-> Dùng các plugin có sẵn của jQuery: fancybox, đọc pdf file, lật trang sách, webcam, zoom ảnh
+
+
+
+# Other 
+-> AJAX (Asynchronous Javascript And XML) là các hàm dùng ở FE gọi vào server lấy data và load dữ liệu vào 1 phần web, chứ k request html, css, js như ngày xưa.
+Ngày xưa dùng window.XmlHttpRequest Object(XHR) để gọi request và trả về response dạng XML biểu diễn DOM element or HTML string
+Cũ hơn nữa còn dùng window.ActiveXObject trước phiên bản IE11 được phát triển bởi Microsoft
+
+-> JScript: Là Microsoft version of JS cho web. JScript được dùng chủ yếu trên Windows và được tích hợp trong các ứng dụng như Internet Explorer và Windows Script Host.
+Code script k truy cập được client's hard drive vì lý do bảo mật
+VB Script là interpreted script lang của microsoft là 1 phần của Visual Basic programming language
+
+-> Dùng tool quokka trong VSC: Cài extension -> CTRL+SHIFT+P để tìm và bật quokka, CTRL+K rồi E để exit, CTRL+K rồi Q để chạy lại quokka
+
+-> Browser khác nhau dùng rendering engine khác nhau: Webkit dùng cho Safari, Gecko dùng trong firefox, Blink dùng trong chrome, opera. 
+Chromium là 1 trình duyệt mã nguồn mở, từ đó phát triển các trình duyệt khác.
+Hack CSS mở rộng tương thích trình duyệt: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 

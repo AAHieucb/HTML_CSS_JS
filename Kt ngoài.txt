@@ -1,72 +1,3 @@
-# Bàn về try catch
-Bth: let x; try { x = await getX(); } catch (ex) { console.log(ex.message); }
-Tốt hơn là viết 1 hàm trả ra [error, result] wrap mọi hàm async sẽ ok hơn.
-Catch error phải bắt nếu lỗi custom đoán trước được thì hiện error chuẩn, lỗi k đoán được thì hiện default kèm message slice ngắn đi
-
-
-
-# Tạo extension browser bằng JS
--> Để thêm extension vào browser: bật developer mode -> load unpacked folder chứa file manifest extension.
-
--> 1 extension cho browser cần tối thiểu 1 file manifest.json cung cấp thông tin mà thôi. Như v thì chưa làm gì cả, phải viết thêm các script chức năng:
-Content script: là những đoạn mã sẽ chạy trên trang web đang xem -> dùng với "content_scripts"+"js"
-Background script: thực hiện ngầm extension, nhận message từ content script or extension khác => dùng bằng "background"+"scripts"
-UI Elements: thành phần giao diện người dùng thg là hộp thoại popup hiện ra khi ấn vào icon của extension => vd dùng với "browser_action"+"default_popup"
-=> Background script bắt đầu thực hiện khi ta ấn vào biểu tượng extension, content script tự thực hiện khi ta load 1 trang web mới
-
-persistent xđ trang background đc chạy như thế nào
-Dùng "scripts":[".js"] or "page":".html" vói file html chỉ có 1 thẻ script thêm code js vào
-default_popup dùng để hiển thị file html khi mở extension
-js là danh sách các file js được inject vào trang web nên file js luôn trong 1 mảng còn html là ""
-matches xác định trang web muốn thêm nội dung và0, dùng regexp: "*://*/*" sẽ dùng với mọi trang web
-
-
-
-# Kỹ thuật color rule phối màu
-Phối màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng)
-Màu primary 30% được dùng cho các panel hay background của dialog, thẻ thường. Màu này có thể gần giống màu neutral để tạo ứng dụng 1 theme monochrome
-Màu secondary 10% chỉ dùng cho các phần tử quan trọng để người dùng focus vào mà bấm như button, vị trí mà người dùng có thể tương tác, highlight. Màu này nên nổi bật lên trên 2 màu kia
-=> Chỉ nên có 2 màu xuất hiện nhiều là neutral và primary.
-
-Các màu chọn có thể là gradient hay thêm các màu lạ khác vào (1%) nhưng phải tuân theo quy tắc 3 màu chủ đạo. Xếp tránh các màu quá tương phản mà liên tục show ở 1 vị trí 
-Các bức ảnh có thể mang bất kỳ màu gì k ảnh hưởng, nhưng nếu nhiều ảnh cùng 1 màu nền thì có thể nên đổi màu nền kia thành màu primary.
-Còn phụ thuộc vào font chữ, animation, bo góc.
-
-
-
-# Sidebar design UX
-Min width 48-64px, max width 240-300px. Min width thì nên có tooltip khi hover vào icon. Cho phép user kéo co kích thước sidebar.
-Mỗi items nên có phím tắt, và hover có tooltip hiện phím tắt luôn
-Sidebar có thể navigate tới sidebar con và back lại được, các pages cũng có thể mang sidebar khác nhau để thực hiện các actions khác nhau.
-Sidebar có chia level dropdown xuống các subitem
-Sidebar thường có thể switch accounts, chứa darkmode, chứa thông báo update ở cuối có thể tắt đi
-Chia 3 vùng màu rõ ràng cho item unselected, selected, hovered.
-Cho phép user đổi vị trí các item trong sidebar, ưu tiên hightlight các vùng quan trọng thường dùng.
-Sidebar nên có search bar hiển thị modal search data global phức tạp.
-1 secondary sidebar nhỏ ở bên trái main sidebar để quick access
-Mỗi item trong sidebar có button manage riêng các mục như create, view, update, leave, or hiển thị thông tin ví dụ số lượng notifications
-
-
-
-# DevTool Browser
-Tab Console : allow pasting
-[...$$('img')].forEach(a=>a.remove()); 
-document.designMode = "on"; 
-VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) => click tất cả các thẻ a có 2 class .touchable.primary
-
-Tab Source Browser: ctrl+p -> tìm file -> đặt debugger -> tới line bất kỳ với: ctrl+p -> :100 để tới dòng 100 -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
-CTRL + SHIFT + F để Search global
-Để cho file chạy đến dòng nào thì log gì ra có thể: right click breakpoint -> logpoint -> ghi message có thể ghi biến ra thì nó sẽ log biến đó
-
-
-
-# Nguyên tắc code FE
-Phải kiểm soát bố cục từ lớn tới nhỏ, cái nào chứa cái nào, thẻ con có vị trí thế nào so với thẻ cha. Cần đảm bảo thẻ bên trong bao giờ cũng nhỏ hơn và nằm trong thẻ cha, hoặc set kích thước của cha phải kiểm soát kích thước của con, con phụ thuộc vào cha chứ kp ngược lại. Màn hình nhỏ dần thì cha nhỏ dần, vì con phụ thuộc vào cha nên cũng nhỏ theo.
-Chỉ set fix with với button hay icon nhỏ. Vì màn hình nhỏ sẽ khiến cha nhỏ dần, mà con fix cứng thì đến 1 lúc sẽ tràn khỏi cha.
-K dùng fit-content vì kích thước con to ra sẽ khiến cha to ra theo sẽ vi phạm nguyên tắc, mà nên dùng max-width hay xử lý rõ overflow để kbh cho 1 con dôi ra ngoài cha.
-
-
-
 # Sự phát triển của JS ở frontend
 -> Đầu tiên JS được dùng trong website bằng tag <script> tới file index.js
 
@@ -77,8 +8,7 @@ Tải file lodash.js về và lại <script> tới nó là được. Để dùng
 npm sẽ giúp tải thư viện về hộ trong node_modules đồng thời quản lý version trong file package.json, k cần làm thủ công bước này nữa.
 Frontend muốn dùng thì index.html vẫn phải <script> thủ công tới lodash.js đặt trong node_modules 
 
--> NodeJS ra đời giúp js code được phía server và tính năng import sourcecode với server đã ra đời thông qua keyword require(). Tức ta dùng require("lodash"); kết hợp với npm tải package về node_modules sẽ tự tìm chính xác vị trí thư viện trong node_modules
-Điều này là hiển nhiên vì server luôn phải cho import code từ file này qua file khác. Các ngôn ngữ phía server khác đều có hết import như v rồi.
+-> NodeJS ra đời giúp js code được phía server và tính năng import sourcecode với server đã ra đời thông qua keyword require(). Tức ta dùng require("lodash"); kết hợp với npm tải package về node_modules sẽ tự tìm chính xác vị trí thư viện trong node_modules, xử lý duplicate import.
 
 Nodejs còn cung cấp cặp export/require giúp tự tạo modules, tức là require còn tìm ở các file trong thư mục gốc chứ k chỉ tìm trong node_modules. Hiểu require là chức năng của nodejs, là tính năng tất yếu phải có của server chứ klq gì đến JS.
 Frontend lúc này vẫn chưa thể import sourcecode trực tiếp, lý do là client side k hiểu lệnh require là gì. Ta buộc phải <script> tất cả trong file html trước theo thứ tự.
@@ -86,103 +16,142 @@ Frontend lúc này vẫn chưa thể import sourcecode trực tiếp, lý do là
 -> Để xử lý thì ý tưởng là nó tạo ra 1 thư viện khiến cho JS có thể dùng được require của nodejs với chức năng tương tự, nhưng khi chạy sẽ tự tìm file gốc thế nội dung vào và loại bỏ cú pháp require (vì bản chất browser frontend vẫn k hiểu require). Gọi là modules bundler.
 Dùng bundler, ta có thể require cả file css luôn vì bản chất khi chạy chỉ là thế code vào. Ta cũng có thể dùng mọi package của server ở phía client (đa số) vì bundler sẽ khiến các package của server dùng require về dạng nguyên bản client-side và browser có thể hiểu được.
 
-Có nhiều công cụ đóng gói modules như Browserify, Webpack, Parcel, FuseBox. Trong đó webpack nổi tiếng nhất vì nó được sử dụng chung với framework React.
-VD để đóng gói: ./node_modules/.bin/webpack index.js -o index_bundle.js => đóng gói index.js thành index_bundle.js. Bản chất là nó tối ưu code và require() về dạng code mà client hiểu được
+Có nhiều công cụ đóng gói modules như Browserify, Webpack, Parcel, FuseBox.
+VD để đóng gói: ./node_modules/.bin/webpack index.js -o index_bundle.js => đóng gói index.js thành index_bundle.js. Bản chất là nó tối ưu code và require() về dạng code mà client hiểu được.
 - Rồi client chỉ cần dùng file index_bundle.js như file client bth: tức "client dùng package của server ở phía client được"
 - Hoặc import sourcecode: client tạo file index2.js require file index.js (trực tiếp) rồi bundler luôn 2 files, file html chỉ cần <script> tới index2.js, tức "file js này có thể import sourcecode trực tiếp từ file js khác" (khác với trước đó là buộc phải import hết theo thứ tự vào file html).
-=> Thực tế type module của script cho phép import rồi.
-=> Ít khi nào dùng require trong client làm gì, cứ dùng import thôi
+=> Type module của script cho phép import rồi.
 
 -> Có nhiều phiên bản JS, nhiều lúc ta cần chuyển đổi những mã JS ở bản mới về bản cũ để hỗ trợ các browser cũ hơn của người dùng, thì dùng Babel.
-Vì Babel cũng là 1 thư viện, việc tích hợp vào webpack giúp đóng gói các file cần thiết và chuyển đổi về dạng dùng được ở phía browser (chuyển require về dạng browser hiểu được). 
-Ta chỉ cần sửa webpack.config.js thêm babel vào là được. Nó sẽ tự chuyển đổi code js version mới về bản tương thích cũ.
+Vì Babel cũng là 1 thư viện, nó tích hợp vào webpack giúp chuyển đổi về dạng dùng được ở phía browser phiên bản cũ. Ta chỉ cần sửa webpack.config.js thêm babel vào là được.
 
--> Task runner: Nếu ta muốn khi gõ 1 command là tự động build, đóng gói, chạy webpack, ta cũng muốn nhét tất cả file js sau khi webpack xử lý về chung 1 file index.js và tự động <script> nó trong file html chứ k cần thủ công chạy từng lệnh
+-> Task runner: Nếu ta muốn khi gõ 1 command là tự động build, đóng gói, chạy webpack, ta cũng muốn nhét tất cả file js sau khi webpack xử lý về chung 1 file index.js và tự động <script> nó trong file html chứ k cần thủ công chạy từng lệnh. Có thể cấu hình nó chạy các lệnh phức tạp.
 Có nhiều task runner giúp làm điều này như Grunt, Gulp. Trong react dùng react-scripts làm điều này.
-Ta có thể cấu hình config thủ công cho nó tự động làm các task phức tạp. 
 
 
 
-# Constrast ratio
-Tỉ lệ sáng tối ảnh hưởng đến SEO và thiết kế web.
-Có nhiều tool online check constrast ratio
-Văn bản thường > 7:1
-Văn bản lớn > 4.5:1
-Max k quá 15:1
+# Nguyên tắc code FE
+Phải kiểm soát bố cục từ lớn tới nhỏ, cái nào chứa cái nào, thẻ con có vị trí thế nào so với thẻ cha. Cần đảm bảo thẻ bên trong bao giờ cũng nhỏ hơn và nằm trong thẻ cha, hoặc set kích thước của cha phải kiểm soát kích thước của con, con phụ thuộc vào cha chứ kp ngược lại. Màn hình nhỏ dần thì cha nhỏ dần, vì con phụ thuộc vào cha nên cũng nhỏ theo.
+Chỉ set fix with với button hay icon nhỏ. Vì màn hình nhỏ sẽ khiến cha nhỏ dần, mà con fix cứng thì đến 1 lúc sẽ tràn khỏi cha.
+K dùng fit-content vì kích thước con to ra sẽ khiến cha to ra theo sẽ vi phạm nguyên tắc, mà nên dùng max-width hay xử lý rõ overflow để kbh cho 1 con dôi ra ngoài cha.
+Tương tự k nên dùng whitespace nowrap mà hãy dùng line clamp nếu có thể
 
 
 
-# Pre-processors như sass, less
-Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser.
-=> hầu hết các bundler như Vite build đều hỗ trợ sẵn post processors.
-VD chuyển: body {
-  background-color: oklch(51.98% 0.1768 142.5);
-} thành body {
+# DevTool Browser
+CTRL + SHIFT + F để Search global
+
+-> Tab Console : allow pasting
+[...$$('img')].forEach(a=>a.remove()); 
+document.designMode = "on"; 
+VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) => click tất cả các thẻ a có 2 class .touchable.primary
+
+-> Tab Source Browser: ctrl+p -> tìm file -> đặt debugger -> tới line bất kỳ với: ctrl+p -> :100 để tới dòng 100 -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
+Để cho file chạy đến dòng nào thì log gì ra có thể: right click breakpoint -> logpoint -> ghi message có thể ghi biến ra thì nó sẽ log biến đó
+
+-> Tắt JS trên web thì quảng cáo cũng mất. VD trên Edge: 3 chấm -> setting -> site permission -> javascript -> ấn tắt
+Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình duyệt tắt javascript or k hỗ trợ 
+
+
+
+### Design
+# How to design a website
+-> Exp:
+- Phần header dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
+- Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật hoặc thêm gradient, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật. VD cho núp sau ảnh. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi.
+- Navigation bar có text và logo nên cùng màu đồng bộ, cùng 1 styles, logo nhỏ gọn.
+- K nên để text dài cả 1 dòng, nên vắn tắt ít chữ, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ.
+- Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full kích thước
+- Sidebar UX:
+Cho phép expand 48-64px to 240-300px. Icon khi thu nhỏ luôn phải có tooltip và show cả phím tắt. Cho phép user drag trong sidebar, hightlight vùng quan trọng thường dùng.
+Mỗi item trong sidebar có button riêng như create, view, update, leave, or có số nhỏ hiển thị thông tin ví dụ số lượng notifications
+Sidebar có thể mở sidebar con và back lại được, hoặc chia level dropdown xuống subitem. Pages khác nhau có thể có sidebar khác nhau.
+Sidebar thường có thể switch accounts, chứa darkmode, chứa thông báo update ở cuối có thể tắt đi. Có thể chứa search bar search item trong sidebar nếu lớn.
+Có checkbox thì chia 3 vùng màu rõ ràng cho item unselected, selected, hovered.
+- Có tool online check constrast ratio vì nó ảnh hưởng SEO: Văn bản thường > 7:1, Văn bản lớn > 4.5:1, Max k quá 15:1
+
+-> AI tool
+https://teleporthq.io/ai-website-builder => AI design web k có code, có hosting. Free được 1 web 3 pages, 5MB assets.
+https://heyleia.com/ => AI tạo web nhanh, k có code, hosting luôn, free 1 page.
+https://www.pineapplebuilder.com/ => AI tạo web, k có code, free 1 page.
+https://creatie.ai/files/home => AI design web như figma. Tut: https://www.youtube.com/watch?v=iSReYz7B4i0
+https://www.motiff.com/ => AI design được như figma, nhưng AI chỉnh sửa k được chuẩn
+https://readdy.ai/ => AI design web mạnh, k tự sửa được như figma
+https://penpot.app/ => Tool design vẽ tuỳ ý, có AI plugin
+https://uxplanet.org/ui-design-with-chatgpt-4o-4d79b2a32008 => dùng ChatGPT design UI bằng markdown
+Có tool convert từ web sang figma. Có Codia AI convert từ image sang figma và sang code.
+
+-> Tổng hợp các kiểu design
+New morphism : kiểu design tạo clean effect rất ảo
+Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng
+Skeuomorphism hình thực tế => k dùng
+Flat design: web như 1 mặt phẳng với hình vẽ đơn giản, k có shadow hay hiệu ứn nổi lên gì cả
+Material design mở rộng của flat design, có hiệu ứng nổi lên mọi nơi. Màu và shape cần thay đổi. Mọi chuyển động phải liên tục, k đột ngột ẩn hiện.
+Retro/Vintage Styles: web phong cách tinh tế, cổ kính, sang trọng, quý tộc, cổ điển. 
+Brutalism design: web hiệu ứng mạnh, thô mộc, tương phản cao, font chữ nhiều lúc rất ảo
+Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi, đơn giản, có thể đơn sắc, là loại web dễ tạo và dễ nhìn nhất.
+Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
+Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng, trông như được xếp ngẫu nhiên. 
+
+-> Video component style khác
+https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ => Tạo polygon responsive thuần
+https://www.youtube.com/watch?v=G8cyr199xZQ => animation cho button đẹp
+https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
+https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
+https://www.youtube.com/watch?v=BgBtxSGEows => crazy animate text theo chuột
+
+-> Color rule phối màu 
+Màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng).
+Màu primary 30% được dùng cho các panel hay background của dialog, card. Màu này nên gần giống màu neutral để tạo ứng dụng 1 theme monochrome.
+Màu secondary 10% chỉ dùng cho các phần tử quan trọng nổi bật mà user có thể tương tác hoặc muốn highlight như button đặc biệt. Màu này nên nổi bật lên trên 2 màu kia.
+=> Màu chọn có thể mix gradient hay 1% các màu lạ khác nhưng phải tuân theo quy tắc 3 màu chủ đạo. K để màu quá tương phản show đè nhau.
+=> Ảnh k ảnh hưởng màu nhưng nếu nhiều ảnh cùng 1 màu nền thì nên để màu nền là màu primary.
+## Design
+
+
+
+# Pre-processors và post-processors 
+-> Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser. Có sẵn trong các bundler như Vite.
+VD chuyển body { background-color: oklch(51.98% 0.1768 142.5); } thành:
+body {
   background-color: green;
   background-color: color(display-p3 0.216141 0.494224 0.131781);
   background-color: lab(46.2829% -47.5413 48.5542);
 } giúp tương thích mọi browser.
-VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên luôn dùng
+VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên dùng khi có parcel
 
--> CSS Preprocessor gồm mọi tính năng css và mở rộng thêm 1 số tính năng k có sẵn giúp cấu trúc của CSS dễ đọc hơn. 
-Dù sau cùng, code của css preprocessor sẽ được compile thành code css để dùng. Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử, ta k thể code bằng css thuần
-1 số css preprocessor phổ biến như: SASS, SCSS, LESS, Stylus, PostCSS. Chúng cung biến, hàm, thao tác màu và toán học khiến cho css như 1 ngôn ngữ lập trình chuẩn.
-Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian về hiệu năng vì phải biên dịch ra css rồi mới chạy thay vì chạy TT. 
-Thực tế, ta có thể dùng css compiler để chuyển nó thành css thuần rồi dùng file thuần đó cũng được. Dùng được cả FE và BE SSR.
-
--> Postcss là package giúp xử lý css qua các plugin. VD plugin giúp downgrade css về phiên bản tương thích mọi trình duyệt, autoprefix, cssnano
+-> CSS Preprocessor mở rộng tính năng của css. Code preprocessor sẽ được compile thành code css thuần. 1 số css preprocessor phổ biến là SASS, SCSS, LESS, Stylus. 
+Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian vì phải biên dịch ra css rồi mới chạy.
+Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử random.
 
 
 
-# AJAX
-Asynchronous Javascript And XML chỉ là phương thức dùng ở FE gọi vào server lấy data và load dữ liệu vào 1 phần web, chứ k request html, css, js như ngày xưa. Các hàm như v gọi là AJAX.
-Ngày xưa AJAX dùng window.XmlHttpRequest Object(XHR) để gọi request và trả về response dạng XML biểu diễn DOM element or HTML dạng string
-Cũ hơn nữa, người ta còn dùng window.ActiveXObject trước phiên bản IE11. ActiveX được phát triển bởi Microsoft để tạo các thành phần tái sử dụng trên web. 
-AJAX trong các trình duyệt hiện đại dùng HTML5 + modern js, fetch api thì có hàm fetch sẵn của webapi or axios.
-
-
-
-# Tạo animation bằng JS hay CSS nhanh hơn?
-Dùng CSS có performance tốt vì giảm thiểu logic cho browser và browser có thể optimize DOM, dùng GPU để tăng hiệu suất. JS tốc độ có thể nhanh or chậm hơn CSS tùy vào thư viện nhưng trong đa số các TH thì tốc độ của 2 cái là như nhau. 
-VD jQuery có animation chậm hơn CSS vì nó thiết kế ngay từ đầu k chú trọng vào animation. Các thư viện animation khác thì ok nhưng còn phụ thuộc vào thư viện nặng hay nhẹ, code css hay js dễ hơn.
-=> Cái nào tiện hơn thì dùng. Trong vài TH của React, ta nên dùng css vì việc dùng biến useState tạo animation nó làm cả component render lại và code rối hơn k tốt.
-
--> Animation với lib js được ưa chuộng hơn lib css thuần. Nó cũng đảm bảo chạy được ở mọi browser. 
-VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. Do đó nh lib animate css thuần k hỗ trợ exit animation.
+# Thuộc tính khác ít dùng
+resize: both; => biến mọi thẻ thành resizable
+direction: ltr; => hướng căn lề
+writing-mode: vertical-rl; => hướng in chữ
+contenteditable => biến mọi thẻ thành editable nhưng xấu
+text-emphasis => emphasis marks dùng cho ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết.
+margin-inline: auto; thay cho margin: 0 auto; để căn giữa
+min-inline-size => thay cho min-width và nó tính cả hướng văn bản
+border-block-end => là cạnh dưới của văn bản trong phần tử như border-bottom nhưng tính thêm cả writing-mode.
+text-decoration-thickness, text-underline-offset => style underline chi tiết
+<progress> => giúp hiện thị progress
+<template> => tag đặc biệt mà nội dung k được render trực tiếp mà dùng để copy rồi mới render ra chỗ khác
+<video> có preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
+inert là attribute sẽ vô hiệu hóa mọi tương tác của người dùng với tag đó.
+width: fill-available; width: -webkit-fill-available; => kéo dài hết phần mà nó có thể kéo. Cách khác là bao flexBox và dùng flexGrow cho nó
+field-sizing: content; => dùng cho thẻ input thì nó tự mở rộng dần khi gõ text bên trong dài ra. Dùng kèm min-inline-size để tránh k có content thì nó k có width
 
 
 
 # Other
--> ES6 (ECMAScript) là các quy tắc giúp JS chạy tốt trên mọi trình duyệt.
-Babel convert ES6 sang CommonJS cho NodeJS dùng được.
+-> Animation bằng JS hay CSS nhanh hơn? Đa số các TH là như nhau. 
+CSS thường tốt hơn vì giảm thiểu logic cho browser xử lý các thứ khác, tận dụng GPU tối ưu hiệu suất.
+JS animation đôi khi buộc phải dùng cho exit animation. Trong React dùng useState cho animation có thể bị rối vì rerender
+VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. 
 
--> Browser khác nhau dùng rendering engine khác nhau như: Webkit dùng cho Safari, Gecko dùng trong firefox, Blink dùng trong chrome, opera.
-Chromium là 1 trình duyệt mã nguồn mở, từ đó phát triển nên các trình duyệt khác.
-Hack CSS: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
+-> ES6 (ECMAScript) là các quy tắc JS chạy tốt trên mọi trình duyệt. Babel convert ES6 sang CommonJS cho NodeJS dùng được.
 
--> Tại sao Youtube load video rất nhanh? Các công ty lớn chuyên về video có server lớn xử lý với băng thông rộng. Phía server họ cũng dùng các thuật toán mạnh để nén các video khi hiển thị cho người dùng nên rất nhẹ. Phía front end họ cũng dùng 1 số mẹo như tính toán cấu hình máy mà đưa ra video quality mặc định phù hợp, đồng thời ưu tiên load video và hiển thị component cho video trước, sau đó mới load các thành phần khác. 
-
--> Có thể tắt JS trong web, khi đó các tính năng liên quan và quảng cáo cũng mất. 
-VD thao tác trên Edge: 3 chấm -> setting -> site permission -> javascript -> ấn tắt
-Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình duyệt tắt javascript or k hỗ trợ 
-
--> JScript: Là Microsoft version of JS dùng trong web. JScript được sử dụng chủ yếu trên nền tảng Windows và được tích hợp trong các ứng dụng như Internet Explorer và Windows Script Host.
-Code script k truy cập được client's hard drive vì lý do bảo mật
-VB Script là interpreted script lang của microsoft là 1 phần của Visual Basic programming language
-
--> CDATA xuất hiện trong XML và HTMl để tránh lỗi parse error
-VD thay vì code JS trong html bth, ta thêm:
- <body>
-    <script type="text/javascript">
-      // <![CDATA[
-      var myString = "<p>This is a string containing <em>HTML</em> tags.</p>";
-      console.log(myString);
-      // ]]>
-    </script>
-  </body>
-=> Tag CDATA(Character data) để tránh bị lỗi khi nội dung bên trong chứa ký tự đặc biệt. TH đơn giản k có nhưng myString chứa nhiều ký tự complex của html sẽ gây lỗi và CDATA đảm bảo phần code đó luôn được interpret đúng ở dạng literal
-
--> Dùng tool quokka trong VSC: CTRL+SHIFT+P để tìm và bật quokka, CTRL+K rồi E để exit, CTRL+K rồi Q để chạy lại quokka => sau khi cài quokkajs extension của VSC
-Để mở browser nhanh ngay trong VSC: CTRL + SHIFT + P -> Chọn Simple Browser: Show
-
+-> Tại sao Youtube load video rất nhanh? Server phân tán, băng thông rộng. Phía BE dùng các thuật toán mạnh để nén các video khi hiển thị cho người dùng. Phía FE tính toán cấu hình máy mà đưa ra video quality mặc định phù hợp, ưu tiên load video và hiển thị component cho video trước, sau đó mới load các thành phần khác. 
 
