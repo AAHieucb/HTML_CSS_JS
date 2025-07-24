@@ -2,10 +2,12 @@
 -> Note:
 - FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
 - Có thể lưu function vào file json với function constructor
-- Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error] để wrap mọi hàm async sẽ ok hơn.
+- Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error]: [undefined, ResultType] | [Error] để wrap hàm async sẽ ok hơn.
 Catch error phải bắt nếu lỗi custom đoán trước được thì hiện error chuẩn, lỗi k đoán được thì hiện default là message slice ngắn đi
+- Tạo unique id: có lib uuid giúp tạo Guid random, hoặc dùng Date.now() + random phụ thuộc vào thời gian. Xác suất bị trùng cực thấp.
 
 -> Highlight API rất mạnh giúp tô màu xuyên văn bản
+
 -> Web worker giúp chạy multi thread trên browser
 
 
@@ -110,7 +112,6 @@ element.classList.add('new-style');
 
 
 
-
 # Load file JS với async và defer
 Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý xử JS, gọi là Parse Blocking => default
 Script attributes: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy; defer chỉ chạy khi html parse xong.
@@ -191,6 +192,30 @@ new Promise((resolve, reject) => {
   reader.readAsDataURL(file);
 });
 
+
+
+# Dùng promise 
+Promise chỉ coi là kết thúc khi gọi resolve hoặc reject.
+Gọi new Promise(<>) thì bên trong promise sẽ thực hiện bất đồng bộ ngay khi được gọi tới. Chú ý phân biệt điều này với var a = function() và bên trong function mới return new Promise thì promise sẽ k thực hiện ngay vì function k được thực hiện.
+
+-> Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào, 1 cái failed sẽ lỗi và dừng luôn. Bản chất nó nhận các promise và trả ra 1 promise mới. Nếu 1 promise con bị failed thì promise ngoài sẽ reject luôn, k lấy được kết quả các promise thành công còn lại nữa.
+Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
+Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
+Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
+
+Chú ý gọi resolve(new Promsie(<hàm>)); chạy được đến resolve sẽ thực hiện hàm luôn
+
+-> Chốt khi nào chạy promise:
+Function trả ra promise thì khi gọi function sẽ thực hiện promise luôn. 
+Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
+Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
+Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
+
+-> Usecase: tìm best url trong list url
+VD có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào.
+Mỗi khi user vào trang web sẽ query thử 1 lệnh đơn giản (như getBlockNumber) cả list rpc với Promise.any xem cái nào trả nhanh nhất thì lấy
+Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại, ở FE thì khi refresh lại pages sẽ chọn lại url luôn.
+=> ref tới projects "Vatra"
 
 
 
@@ -425,31 +450,6 @@ Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp 
 
 
 
-# Dùng promise 
-Promise chỉ coi là kết thúc khi gọi resolve hoặc reject.
-Gọi new Promise(<>) thì bên trong promise sẽ thực hiện bất đồng bộ ngay khi được gọi tới. Chú ý phân biệt điều này với var a = function() và bên trong function mới return new Promise thì promise sẽ k thực hiện ngay vì function k được thực hiện.
-
--> Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào, 1 cái failed sẽ lỗi và dừng luôn. Bản chất nó nhận các promise và trả ra 1 promise mới. Nếu 1 promise con bị failed thì promise ngoài sẽ reject luôn, k lấy được kết quả các promise thành công còn lại nữa.
-Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
-Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
-Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
-
-Chú ý gọi resolve(new Promsie(<hàm>)); chạy được đến resolve sẽ thực hiện hàm luôn
-
--> Chốt khi nào chạy promise:
-Function trả ra promise thì khi gọi function sẽ thực hiện promise luôn. 
-Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
-Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
-Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
-
--> Usecase: tìm best url trong list url
-VD có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào.
-Mỗi khi user vào trang web sẽ query thử 1 lệnh đơn giản (như getBlockNumber) cả list rpc với Promise.any xem cái nào trả nhanh nhất thì lấy
-Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại, ở FE thì khi refresh lại pages sẽ chọn lại url luôn.
-=> ref tới projects "Vatra"
-
-
-
 # setTimeout, setInterval, setImmediate
 Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1
 
@@ -496,22 +496,13 @@ Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Serv
 
 
 # Other
--> Typescript sẽ ngăn các trường hợp kỳ lạ xảy ra, đảm bảo operator phải cùng type. Vd: ("b" + "a" + + "a" + "a").toLowerCase(); => banana
-
--> Polyfill là một đoạn mã (thường là JavaScript trên Web) được dùng để cung cấp chức năng hiện đại trên các trình duyệt cũ hơn vốn không hỗ trợ nó
-VD IE8 k có hàm Array.prototype.includes, ta phải tự viết polyfill riêng để thực hiện chức năng đó. VD:
-if (!Array.prototype.includes) {
+-> Polyfill cung cấp chức năng hiện đại trên các trình duyệt cũ hơn không hỗ trợ, tự viết or tải polyfill về. Khi dùng các hàm mới nên check cho chắc. 
+VD: if (!Array.prototype.includes) {
   Array.prototype.includes = function includes(searchElement) {
     return this.indexOf(searchElement) !== -1
   }
 }
-Tương tự các hàm như Object.assign cũng nên check như v nếu ứng dụng yêu cầu tương thích nhiều trình duyệt rồi dùng như bth. Trên mạng đôi khi có thu viện polyfill để tải về dùng sẵn or nhờ chat GPT viết hộ
 
 -> Cách che giấu source code frontend: Đang ở trang webA, khi load ta cho history.pushState sang đường dẫn khác (cùng host) thì khi mở view page source sẽ ra html của đường dẫn đó. Để đánh lừa thì ta nên cho 2 đường dẫn na ná nhau với chữ i viết hoa giống chữ l viết thường
 Bắt khi người dùng vào devtool bằng JS và cho ẩn phần code JS đi là được. 
 Dev khác vào web sẽ thấy source code là của web kia và k có code js nào cả
-
--> try catch error, hoặc có thể tạo wrapper function dùng then catch để custom trả ra [undefined, T] | [Error] cũng được (T là type của data).
-
--> Tạo unique id với Date.now() trả ra milisecond từ epoch time nếu k quá khắt khe vì vẫn có xs trùng nếu có quá nhiều request lấy id cùng 1 lúc
-

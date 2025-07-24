@@ -106,3 +106,7 @@ VB Script là interpreted script lang của microsoft là 1 phần của Visual 
 -> Browser khác nhau dùng rendering engine khác nhau: Webkit dùng cho Safari, Gecko dùng trong firefox, Blink dùng trong chrome, opera. 
 Chromium là 1 trình duyệt mã nguồn mở, từ đó phát triển các trình duyệt khác.
 Hack CSS mở rộng tương thích trình duyệt: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
+
+-> Biến global trong browser gọi là BOM (Browser Object Model) như cookies, history, window, screen, navigator, location.
+
+-> Typescript sẽ ngăn các trường hợp kỳ lạ xảy ra, đảm bảo operator phải cùng type. Vd: ("b" + "a" + + "a" + "a").toLowerCase(); => banana

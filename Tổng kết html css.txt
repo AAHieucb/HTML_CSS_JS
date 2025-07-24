@@ -1,6 +1,9 @@
 # Basic
 https://uiverse.io/ => tổng hợp component UI bằng html thuần*
 https://gsap.com/ => thư viện UI mạnh
+https://www.flaticon.com => icon động
+https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc => cờ bằng css thuần
+
 https://css-generators.com/ => tool css, tạo các shape dị
 
 -> Bản chất kích thước trong css
@@ -406,12 +409,8 @@ visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dù
 
 
 # Other:
--> Khi ta cần style chỉ khi có JS, k có JS thì k style gì cả: giải pháp là dùng JS thêm vào aria, rồi css style theo aria, thì khi k disable JS sẽ k style gì cả. 
-
--> Nguồn ảnh free: https://www.pexels.com/ ảnh và video chất lượng
-https://unsplash.com/ ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
-Có sẵn quốc kỳ của mọi quốc gia trên thế giới bằng css thuần: https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc
-https://www.flaticon.com => Best site cho icon động.
+https://www.pexels.com/ => ảnh và video free
+https://unsplash.com/ => ảnh đa dạng hơn, có cả thông tin máy chụp, tiêu cự, ống kính
 
 -> Các kiểu thiết kế layout web: https://wordpress.com/blog/2024/11/14/website-layout-examples/
 https://htmlrev.com/ => 1500 template free tạo dự án

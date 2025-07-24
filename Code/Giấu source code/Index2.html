@@ -16,7 +16,7 @@
     const devtool = document.getElementById("devtool")
     function onDevToolsOpen() {
       setTimeout(console.clear.bind(console));
-      // document.documentElement.innerHTML = '<div>You cannot see the source code</div>';
+      document.documentElement.innerHTML = '<div>You cannot see the source code</div>';
     }
     class DevToolsChecker extends Error {
       toString(){ }
