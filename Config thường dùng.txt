@@ -95,3 +95,291 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
   }
 </script>
 
+
+
+-> addEventListener("click", () => {}, {
+  once: true,
+  passive: true, // Báo k chạy event.preventDefault()
+  capture: true, 
+  signal: controller.signal
+})
+
+
+
+-> const observer = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) { // đang là lúc mới vào, lúc ra sẽ là false
+      observer.unobserve(entry.target);
+    }
+    entry.intersectionRatio; // tỉ lệ phần hiển thị với thẻ root
+    entry.target; // là thẻ đang nhắm tới
+    entry.rootBounds; // kích thước thẻ root, mặc định là màn hình
+    entry.intersectionRect; // kích thước và vị trí phần giao
+  })
+}, {
+  threshold: 0.5, // giao 1 nửa thẻ mới coi là isIntersecting là true, [0, 0.25, 0.5, 0.75, 1] sẽ gọi lại mỗi khi tỉ lệ giao thay đổi qua các mốc
+  rootMargin: "+100px", // tăng kích thước view port, vào cách 100px là tính rồi
+  root: document.querySelector('body') // đổi thẻ root, default null là view port. Phần tử chỉ được kiểm tra intersect với view port nếu nó nằm trong vùng của thẻ root
+});
+
+
+
+-> <div id="container">
+  <div draggable="true">Hello</div>
+</div>
+<script>
+  container.addEventListener("dragstart", (e) => {
+    // Khi drag vào trong container hoặc drag vào con của nó
+  });
+  containerTag.addEventListener("dragend", (e) => {
+    // Kết thúc thao tác drag
+  });
+  containerTag.addEventListener("dragover", (e) => {
+    // Khi drag lên 1 thẻ draggable hoặc các thẻ con trong thẻ draggable đó
+  });
+  containerTag.addEventListener("dragleave", (e) => {
+    // Khi drag leave 1 phần tử hoặc con của nó
+  });
+  containerTag.addEventListener("drop", (e) => { // Khi drop vào thẻ nào
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+  });
+</script>
+
+
+
+-> Css reset
+:root {
+  --hue: 230;
+  --primary: oklch(70% .2 var(--hue)); 
+  --primary-highlight: oklch(97% .2 var(--hue));
+  --primary-1: oklch(calc(75% - (1 * 5%)) calc(.2 - (1 * .01)) calc(var(--hue) - (1 + 5)));
+  --primary-2: oklch(calc(75% - (2 * 5%)) calc(.2 - (2 * .01)) calc(var(--hue) - (2 + 5)));
+  --primary-3: oklch(calc(75% - (3 * 5%)) calc(.2 - (3 * .01)) calc(var(--hue) - (3 + 5)));
+  --primary-4: oklch(calc(75% - (4 * 5%)) calc(.2 - (4 * .01)) calc(var(--hue) - (4 + 5)));
+  --primary-5: oklch(calc(75% - (5 * 5%)) calc(.2 - (5 * .01)) calc(var(--hue) - (5 + 5)));
+
+  font-size: 16px;
+  --font-tiny: clamp(0.75rem, calc(0.708rem + 0.133vw), 0.875rem); /* 12-14 500-2000 */
+  --font-small: clamp(0.875rem, calc(0.833rem + 0.133vw), 1rem); /* 14-16 500-2000 */
+  --font-medium: clamp(1rem, calc(0.958rem + 0.133vw), 1.125rem); /* 16-18 500-2000 */
+  --font-large: clamp(1.125rem, calc(1.083rem + 0.133vw), 1.25rem); /* 18-20 500-2000 */
+}
+@view-transition {
+  navigation: auto;
+}
+::view-transition-group(root) {
+  animation-duration: 500ms;
+}
+:where(:root) {
+  text-rendering: optimizeLegibility;
+}
+* {
+  box-sizing: border-box;
+}
+*:not(dialog, [popover]) {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%;
+  width: 100%;
+  -webkit-touch-callout: none;
+  interpolate-size: allow-keywords;
+  overscroll-behavior: contain;
+  font-family: "DM Sans", sans-serif;
+  font-display: swap;
+  overflow-y: hidden;
+}
+body{
+  min-height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  font-size: var(--font-medium);default của browser
+}
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  font-style: italic;
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  shape-margin: 1rem;
+  user-select: none;
+  -webkit-user-drag: none;
+  verticalAlign: "bottom", // Chặn lỗi thừa pixel dọc của thẻ image
+  boxSizing: "border-box", // Chặn lỗi thừa pixel ngang của thẻ image
+}
+a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+button{
+  text-transform: none;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+p {
+  cursor: text;
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+h1,h2,h3,h4,h5,h6 { text-wrap: balance; } => để các mục header có text balance khi bị break nhiều dòng trông đẹp hơn
+p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn. Tính toán bị expensive.
+
+
+
+-> dialog[open]{
+  animation: dialogshow 0.3s ease-out forwards;
+}
+dialog[open]::backdrop{
+  animation: dialogbackdropshow 0.3s ease-out forwards;
+}
+dialog.hide[open] {
+  animation: dialoghide 0.3s ease-out forwards;
+}
+dialog.hide[open]::backdrop {
+  animation: dialogbackdrophide 0.3s ease-out forwards;
+}
+@keyframes dialogshow {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes dialoghide {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+@keyframes dialogbackdropshow {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: black;
+  }
+}
+@keyframes dialogbackdrophide {
+  0% {
+    background-color: black
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+const showDialog = () => {
+  dialogX.showModal();
+  const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${scrollY}`;
+}
+const closeDialog = () => {
+  dialogX.classList.add("hide");
+  dialogX.addEventListener('animationend', function(){ 
+    dialogX.classList.remove('hide');
+    doCloseDialog();
+  }, { once: true });
+}
+const doCloseDialog = () => {
+  const scrollY = document.body.style.top;
+  body.style.position = '';
+  body.style.top = '';
+  dialogX.close();
+  window.scrollTo(0, parseInt(scrollY || '0')*-1);
+}
+openButton.addEventListener('click', showDialog);
+closeButton.addEventListener('click', closeDialog);
+dialogX.addEventListener('click', (event) => {
+  if (event.target === dialogX) {
+    closeDialog();
+  }
+});
+window.addEventListener('scroll', () => {
+  document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
+});
+<dialog id="dialogX" role="dialog" aria-label="Connect wallet dialog">
+  <div>
+    <button id="closeButton" aria-label="Close dialog" aria-controls="dialogX">Close dialog</button>
+  </div>
+</dialog>
+
+
+
+-> input:valid {} // style khi input có valid data
+input:invalid {} // style khi input có invalid data
+input:user-valid {} // style khi input có data, và data đó valid
+input:user-invalid {} // style khi input có data, và data đó invalid
+input:not(:placeholder-shown):valid {} 
+input:not(:placeholder-shown):invalid {}
+input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
+
+
+
+-> .container {
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.content__main__container {
+  --padding-inline: 15px;
+  --content-max-width: 900px;
+  --breakout-max-width: 1500px;
+  --breakout-size: calc((var(--breakout-max-width) - var(--content-max-width)) / 2);
+  display: grid;
+  grid-template-columns:
+    [full-width-start] 
+    minmax(var(--padding-inline), 1fr)
+      [breakout-start] 
+      minmax(0, var(--breakout-size))
+        [content-start] 
+        min(100% - (var(--padding-inline) * 2), var(--content-max-width))
+        [content-end]
+      minmax(0, var(--breakout-size)) 
+      [breakout-end]
+    minmax(var(--padding-inline), 1fr) 
+    [full-width-end];
+  > .layout-content {
+    grid-column: content;
+  }
+  > :not(.layout-content, .layout-fullwidth) {
+    grid-column: breakout;
+  }
+  > .layout-fullwidth {
+    grid-column: full-width;
+    display: grid;
+    grid-template-columns: inherit;
+    > :not(.layout-content, .layout-fullwidth) {
+      grid-column: breakout;
+    }    
+    > .layout-content {
+      grid-column: content;
+    }
+  }
+}
+

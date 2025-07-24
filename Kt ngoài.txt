@@ -152,6 +152,7 @@ JS animation đôi khi buộc phải dùng cho exit animation. Trong React dùng
 VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. 
 
 -> ES6 (ECMAScript) là các quy tắc JS chạy tốt trên mọi trình duyệt. Babel convert ES6 sang CommonJS cho NodeJS dùng được.
+-> Biến global trong browser gọi là BOM (Browser Object Model) như cookies, history, window, screen, navigator, location.
 
 -> Tại sao Youtube load video rất nhanh? Server phân tán, băng thông rộng. Phía BE dùng các thuật toán mạnh để nén các video khi hiển thị cho người dùng. Phía FE tính toán cấu hình máy mà đưa ra video quality mặc định phù hợp, ưu tiên load video và hiển thị component cho video trước, sau đó mới load các thành phần khác. 
 
