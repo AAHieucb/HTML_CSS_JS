@@ -27,6 +27,22 @@ VD: window.history.replaceState(null, "",
 -> Kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
 
 
+Chuyển trang bằng <a>, js chuyển trang thực sự window.location
+Chia mỗi pages 1 files. Dùng BEM, scss.
+
+-> Setup dự án: Dùng HTML thuần với live server
+Dùng bundler hỗ trợ hết như vite
+Dùng bundler tự động như parcel cho dự án đơn giản. Hỗ trợ live reload, build và start ở 1 port, cài package npm và import vào file js.
+Dùng html thuần nhưng tự cài node_modules để quản lý version, còn lại vẫn dùng live server bth.
+Dùng html thuần vói live server, các package thì cài CDN hoặc copy luôn CDN file js vào dự án.
+
+-> Các biến khai báo js mà không trong 1 block, nó sẽ là global var và dùng được ở mọi file js khác miễn các file js khác được tải sau file js này (không dùng module).
+File js tải trước có thể dùng biến globalvar của file js tải sau nếu đảm bảo thời điểm dùng biến, file js tải sau đã hoàn tất việc load qua biến.
+
+
+
+
+
 # Bàn về try catch
 Bth: let x; try { x = await getX(); } catch (ex) { console.log(ex.message); }
 Tốt hơn là viết 1 hàm trả ra [error, result] wrap mọi hàm async sẽ ok hơn.
@@ -388,6 +404,170 @@ Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web 
 App request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. Thông báo có cả trên máy tính hoặc mobile. Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
 Nếu chỉ FE, ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
 Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ ý trigger notification cho user từ server. Client có mạng sẽ tự nhận được thông báo.
+
+
+
+# React -> Vanilla
+-> Tạo Global stores dùng cơ chế pubsub để 1 state đổi thì thực hiện loạt hành động
+// store.js
+const store = {
+  state: {},
+  listeners: [],
+  getState() {
+    return this.state;
+  },
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+    this.notify();
+  },
+  subscribe(listener) {
+    this.listeners.push(listener);
+  },
+  notify() {
+    this.listeners.forEach(listener => listener(this.state));
+  }
+};
+export default store;
+
+--> Viết gọn hơn với object descriptor dùng effect như này
+const state = {
+  get value() {
+    return _value;
+  },
+  set value(newValue) {
+    _value = newValue;
+    this.effect();
+  },
+  effect: () => {}
+};
+
+-> Trong react có sự kiện "onChange", trong vanillajs có sự kiện "change" chỉ trigger khi không còn focus vào ô input, ta có thể dùng sự kiện "input" sẽ trigger mọi lúc value thay đổi giống y hệt onChange
+
+
+
+# Vanilla JS 
+-> Khi thay thuộc tính phần tử trong vanilla js, trình duyệt sẽ nhận ra thay đổi này và tính toán lại các styles cho phần tử bị thay đổi và các phần tử con của nó nếu cần thiết
+Reflow: Nếu sự thay đổi CSS ảnh hưởng đến bố cục (layout) của trang, trình duyệt sẽ thực hiện "reflow" để tính toán lại vị trí và kích thước của các phần tử trong tài liệu
+Repaint: Sau khi reflow, nếu có bất kỳ sự thay đổi nào ảnh hưởng đến sự xuất hiện của các phần tử (như màu sắc, hình ảnh, hoặc đường viền), trình duyệt sẽ thực hiện "repaint" để vẽ lại các phần tử trên màn hình.
+Cuối cùng, trình duyệt sẽ tổng hợp tất cả các lớp đồ họa và hiển thị chúng trên màn hình.
+=> Điều đặc biệt là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết.
+
+VD: box.style.width = '200px'; // Thay đổi kích thước (gây reflow và repaint)
+box.style.backgroundColor = 'blue'; // Thay đổi màu sắc (chỉ gây repaint)
+
+Reflow là quá trình tốn kém tài nguyên, vì vậy nên hạn chế số lần reflow bằng cách gộp các thay đổi CSS lại với nhau để giảm thiểu số lần reflow. 
+VD: // Thay vì:
+element.style.width = '200px';
+element.style.height = '200px';
+element.style.backgroundColor = 'blue';
+// Dùng:
+element.classList.add('new-style');
+
+-> Khi chuyển page MPA thì global state bị reset. Có thể lưu vào sessionStorage, localStorage, indexed db, url params để lấy lại state cũ khi chuyển pages.
+Còn các file js, css, html k cần lo tải lại vì browser có cache để chỉ tải 1 lần.
+
+-> Pb: - document.addEventListener('DOMContentLoaded', function() { }); => sự kiện khi toàn bộ HTML đã được tải xong, k chờ tài nguyên như ảnh, stylesheet.
+- window.onload => sự kiện khi toàn bộ trang đã được tải xong, bao gồm tất cả các tài nguyên phụ như hình ảnh, stylesheet, và iframe.
+=> useEffect trong React khi chạy đã đảm bảo hiện cho người dùng xem 1 lần rồi. Nó cũng tương đương DOMContentLoaded.
+
+Vấn đề là DOMContentLoaded luôn trigger khi sang 1 pages mới, mà ta luôn cần là DOM load xong thì mới fetch data để đảm bảo data có thể hiện ra. VD:
+<body>
+  <div id="data-container">Loading data...</div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetchDataAndDisplay();
+    });
+    async function fetchDataAndDisplay() {
+      const dataContainer = document.getElementById('data-container');
+      try {
+        const response = await fetch('https://api.example.com/data');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        dataContainer.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+      } catch (error) {
+        dataContainer.textContent = 'Failed to load data: ' + error.message;
+      }
+    }
+  </script>
+</body>
+Nhưng ta cần tối ưu khi vào là fetch data sơm hơn ngay khi vào pages, còn khi nào DOM load xong mới show ra data, chưa load DOM xong thì chưa show ra, load dom xong mà chưa fetch data xong thì show loading. VD:
+<body>
+  <div id="data-container">Loading data...</div>
+  <script>
+    let dataFetched = false;
+    let domContentLoaded = false;
+    let fetchedData = null;
+    fetch('https://api.example.com/data')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        fetchedData = data;
+        dataFetched = true;
+        displayDataIfReady();
+      })
+      .catch(error => {
+        document.getElementById('data-container').textContent = 'Failed to load data: ' + error.message;
+      });
+    document.addEventListener('DOMContentLoaded', function() {
+      domContentLoaded = true;
+      displayDataIfReady();
+    });
+    function displayDataIfReady() {
+      if (dataFetched && domContentLoaded) {
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = '<pre>' + JSON.stringify(fetchedData, null, 2) + '</pre>';
+      }
+    }
+  </script>
+</body>
+
+-> Có thể lưu data đã fetch để k fetch lại trong phạm vi 1 page như này:
+- Dùng global namespace object 
+var MyApp = MyApp || {};
+// Storing data in the namespace
+MyApp.globalData = {
+  fetchedData: null
+};
+// Function to fetch data
+MyApp.fetchData = async function() {
+  if (!MyApp.globalData.fetchedData) {
+    const response = await fetch('your-data-source-url');
+    MyApp.globalData.fetchedData = await response.json();
+  }
+  return MyApp.globalData.fetchedData;
+};
+- Dùng Immediately Invoked Function Expression: cung hàm fetch data nếu chưa từng được fetch
+(function() {
+  var privateData = null;
+  window.MyApp = {
+    fetchData: async function() {
+      if (!privateData) {
+        const response = await fetch('your-data-source-url');
+        privateData = await response.json();
+      }
+      return privateData;
+    }
+  };
+})();
+
+- Dựng 1 global stores lưu key-value hoặc nhét hàm fetch API vào 1 file riêng lưu kết quả vào global var và export ra.
+// dataStore.js
+let globalData = null;
+export const fetchData = async () => {
+  if (!globalData) {
+    const response = await fetch('your-data-source-url');
+    globalData = await response.json();
+  }
+  return globalData;
+};
+export const getData = () => globalData;
+
 
 
 

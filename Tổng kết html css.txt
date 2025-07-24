@@ -3,6 +3,13 @@ https://uiverse.io/ => tổng hợp component UI bằng html thuần*
 https://gsap.com/ => thư viện UI mạnh
 https://css-generators.com/ => tool css, tạo các shape dị
 
+-> Bản chất kích thước trong css
+- margin collapse là hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
+- padding-top 100% lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
+- inline chiếm đủ nội dung và k thể set width height, block chiếm toàn bộ chiều ngang và có thể set. inline-block giống inline-nhưng có thể set width height.
+- width auto chiếm full không gian còn lại, k tính margin, khác với width 100% là phần content chiếm 100% content thẻ cha. VD: https://www.youtube.com/watch?v=-st14lUQD3U
+- height auto là default sẽ tự mở rộng theo kích thước content. Thường sẽ k đụng đến nó, nếu muốn chỉnh thì chỉ chỉnh min-height thôi.
+
 
 
 # Dùng content-visibility
@@ -39,13 +46,6 @@ Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A 
 Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi
 
 K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-
-
-
-//!!!!!!!
-# Bản chất kích thước mặc định
-Margin collapse: hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
-padding-top: 100%; lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top: 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
 
 
 
