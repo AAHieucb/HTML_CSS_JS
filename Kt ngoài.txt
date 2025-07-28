@@ -93,6 +93,9 @@ Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi,
 Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
 Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng, trông như được xếp ngẫu nhiên. 
 
+https://wordpress.com/blog/2024/11/14/website-layout-examples/ => Các pattern layout web
+https://htmlrev.com/ => 1500 template free tạo dự án
+
 -> Video component style khác
 https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ => Tạo polygon responsive thuần
 https://www.youtube.com/watch?v=G8cyr199xZQ => animation cho button đẹp
@@ -155,3 +158,6 @@ VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm đ
 
 -> Tại sao Youtube load video rất nhanh? Server phân tán, băng thông rộng. Phía BE dùng các thuật toán mạnh để nén các video khi hiển thị cho người dùng. Phía FE tính toán cấu hình máy mà đưa ra video quality mặc định phù hợp, ưu tiên load video và hiển thị component cho video trước, sau đó mới load các thành phần khác. 
 
+-> WebComponent: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework có thể tạo ra các tag html thuần để dùng được ở mọi framework.
+Google có tool Lit giúp tạo web component dễ hơn.
+Khi đó phải code thành shadow DOM. Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. VD nut pause start trong <video>
