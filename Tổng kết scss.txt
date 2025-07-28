@@ -2,9 +2,12 @@
 SASS giống SCSS nhưng dùng tab và enter thay {}
 
 -> Cài:
-- Extension sass live compiler của VSC -> ấn sass watcher -> save file tự compile ra css
-- npm i sass => cài trong react thì import trực tiếp scss thay cho css dùng luôn
-- npm i -g sass => cài global gọi compile tùy ý
+- React "npm i sass" rồi import trực tiếp file scss thay cho css dùng luôn
+- HTML thuần phải tự compile ra css trước mới dùng được.
+Extension sass live compiler của VSC -> ấn sass watcher -> save file tự compile ra css
+npm i -g sass => gọi compile hay watch file tùy ý
+
+--> Package sass:
 sass <link file>.scss <link file đích>.css --style compressed => bỏ khoảng trắng để nén file thành 1 hàng
 sass <link file>.scss <link file đích>.css --style expanded => mở rộng chuẩn đẹp như code tay dùng 2 space
 sass --watch .:../css
