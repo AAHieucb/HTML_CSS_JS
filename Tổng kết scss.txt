@@ -1,28 +1,24 @@
 # Basic
-SASS k có {} mà dùng tab và enter để phân cấp và xuống dòng, còn SCSS có {} => mặc định code SCSS vì nó giúp cú pháp rõ ràng hơn. Bỏ {} là thành SASS.
+SASS giống SCSS nhưng dùng tab và enter thay {}
 
--> Cài trong VSC:
-Để dùng command line: npm i -g sass 
-Để có sass live compiler: Tải extension sass live compiler -> ấn nút sass watcher -> khi save file scss sẽ tự compile ra css live
-Dùng sass trong React: npm i sass => cài vào project r thì import file scss dùng trực tiếp như bth thôi
-
+-> Cài:
+- Extension sass live compiler của VSC -> ấn sass watcher -> save file tự compile ra css
+- npm i sass => cài trong react thì import trực tiếp scss thay cho css dùng luôn
+- npm i -g sass => cài global gọi compile tùy ý
 sass <link file>.scss <link file đích>.css --style compressed => bỏ khoảng trắng để nén file thành 1 hàng
 sass <link file>.scss <link file đích>.css --style expanded => mở rộng chuẩn đẹp như code tay dùng 2 space
 sass --watch .:../css
-sass --no-source-map .:../css => compile mọi file scss trong thư mục hiện tại vào thư mục css. sourcemap url giúp trình duyệt hiển thị style đang nằm ở file scss nào, nếu k có chỉ hiện file css, ta phải tự tìm ngược về scss để sửa
+sass --no-source-map .:../css => compile mọi file.scss trong thư mục hiện tại vào /css, sourcemap giúp trình duyệt hiển thị style nằm ở file scss nào để debug
+Còn có package sass-migrator tự động chuyển mọi file scss ở phiên bản cũ sang phiên bản mới tự động khi scss update version đổi cú pháp.
 
-scss updates liên tục, dùng sass-migrator module <path> để luôn chuyển đổi mọi file scss ở phiên bản cũ sang bản mới tự động
-
--> Dùng @mixin giúp tái sử dụng, có thể gom 1 phần code css vào và dùng nó ở bất kỳ đâu với từ khóa @include, có thể truyền biến vào. Kết hợp @content
-
--> Dùng @use sẽ chỉ tự import file 1 lần đầu tiên ở vị trí đó, các lần sau thì bỏ. Còn @import 1 file nhiều lần có thể gây lặp code ở nhiều nơi.
-@forward trong scss chỉ chuyển tiếp biến chứ k dùng được trong file hiện tại, thêm @use để dùng trong file hiện tại
-Nếu file hiện tại và file @forward có cùng giá trị thì file hiện tại sẽ override vì nó được định nghĩa sau
-@forward khi được @use có namespace và theo thứ tự cái sau đè cái trước nên k bị conflict. Nó cũng đảm bảo k bị lặp code @forward nhiều lần.
+-> @import trong css tự cache k bị duplicate. @import trong scss bị duplicate.
+scss dùng @use thay hoàn toàn @import k bị duplicate.
+@forward chỉ chuyển tiếp biến sang file @use nó chứ k dùng được trong file hiện tại. 
+1 file vừa @forward biến, vừa define biến thì define sẽ ghi đè vì định nghĩa sau. @forward nhiều lần cũng k sao mà theo cái gọi sau.
 
 
 
-# Khi dùng trong dự án
+# Best practice trong dự án
 -> Tạo theme mode trong scss với map bắt đầu bằng ()
 
 -> Dùng BEM tốt hơn là css selector, css selector chỉ nên 1 cấp thôi:
@@ -39,8 +35,7 @@ Nếu file hiện tại và file @forward có cùng giá trị thì file hiện 
   }
 }
 
--> Tạo responsive trong scss với hàng loạt mixin
-VD: 
+-> Tạo responsive trong scss với hàng loạt mixin:
 @mixin xxxs {
 	@media screen and (max-width: 375.98px) {
 		@content;
@@ -52,7 +47,7 @@ VD:
 	}
 }
 
-Dùng cho css hack:
+-> Dùng mixin cho css hack:
 @mixin keyframes($animation-name) {
 	@-webkit-keyframes #{$animation-name} {
 		@content;
@@ -78,7 +73,7 @@ Dùng cho css hack:
 	-o-transform: $args;
 }
 
-Kết hợp điều kiện if else:
+-> Dùng mixin nhiều thuộc tính thành 1 hàm:
 @mixin fullscreen($fixed: false) {
 	width: 100%;
 	height: 100%;
@@ -90,8 +85,6 @@ Kết hợp điều kiện if else:
 		position: absolute;
 	}
 }
-
-Gom nhiều thuộc tính thành 1 hàm:
 @mixin overtext($lines) {
 	display: -webkit-inline-box;
 	-webkit-line-clamp: $lines;
@@ -113,27 +106,16 @@ Gom nhiều thuộc tính thành 1 hàm:
 
 
 
-# Nhanh
-Phải hiểu nó dùng các thứ trong phạm vi nào:
-- function tái sử dụng logic tính toán giá trị 
-- Biến tái sử dụng giá trị
-- placeholder, @extends tái sử dụng style
-- mixin tái sử dụng style nhưng nhận tham số
-- if tạo điều kiện trong vòng lặp hoặc mixin hoặc function 
-- loop tạo 1 số lượng lớn 1 cái gì đó có quy tắc
+# Chia file
+React thì nên chia từng file.scss cùng cấp từng module. HTML thuần thì dùng folder scss riêng chứa mọi file.scss. Phải chia file common và từng module.
 
--> Dùng scss dự án lớn:
-- Tuân thủ BEM, tối ưu hoá code với kế thừa, biến, mixin, placeholder. Gom style common, themes, variables, css reset chung. Chia nhỏ style từng phần tử riêng.
-- Có thể chia 1 folder scss riêng chứa mọi thứ và chia theo module. Hoặc từng file scss ở cùng cấp với file html từng components.
-
-VD1: 1 folder scss riêng chia module mọi thứ. Các file common chia riêng, các file từng module chia riêng. File main.scss ngoài cùng @use file common trước, @use các file module sau để bên trong file scss từng module dùng biến, mixin, hàm common thoải mái. Tuyệt đối k dùng @import tránh lặp.
-File main.scss @use mọi thứ, rồi chỉ cần compile duy nhất 1 file đó thành main.css là xong.
+VD1 HTML thuần: chia common.scss và file.scss từng module. File main.scss ngoài cùng @use file common trước, rồi @use file module dùng common thoải mái. Compile file main.scss ra main.css là xong
 scss/
 ├── base/
 │   ├── _reset.scss
 │   ├── _typography.scss
 │   └── _base.scss
-├── components/
+├── components/ => sửa các thẻ common theo 1 theme
 │   ├── _buttons.scss
 │   ├── _cards.scss
 │   └── _modals.scss
@@ -150,8 +132,8 @@ scss/
 │   ├── _default.scss
 │   └── _dark.scss
 ├── utils/
-│   ├── _variables.scss
-│   ├── _mixins.scss
+│   ├── _variables.scss => tạo biến cho từng kích thươc màn hình được
+│   ├── _mixins.scss => gom lại responsive, css hack, common code nhận biến
 │   └── _functions.scss
 └── main.scss
 
@@ -194,7 +176,7 @@ main.scss:
 @use 'pages/contact';
 @use 'themes/default';
 @use 'themes/dark';
-// Other common style
+// Other common style and library
 body {
   font-family: $font-stack;
   color: $primary-color;
@@ -203,16 +185,15 @@ body {
   @include flex-center;
   padding: rem(16);
 }
-
 => ref tới "HTML CSS JS / Finance flow" thiết kế rất hay
-reset.scss
-mixins.scss => gom lại responsive, css hack, common code nhận biến
-variables.scss => tạo biến cho từng kích thươc màn hình được
-layout.scss
-components.scss => sửa thẻ common, thêm các class common, tái sử dụng nhiều component
-lib.scss => css thêm từ library or sửa library
-
-VD2: trong các dự án như React thường viết file scss cùng cấp với thư mục từng component của nó. Các file scss common viết ngoài cùng và thêm vào index.jsx ngoài cùng
-Vì là SPA nên thêm vào ngoài cùng sẽ dùng được mọi nơi trong dự án nên file scss dùng trực tiếp mọi thứ.
 
 
+
+# Nhanh
+Phải hiểu nó dùng các thứ trong phạm vi nào:
+- function tái sử dụng logic tính toán giá trị 
+- Biến tái sử dụng giá trị
+- placeholder, @extends tái sử dụng style
+- mixin tái sử dụng style nhưng nhận tham số
+- if tạo điều kiện trong vòng lặp hoặc mixin hoặc function 
+- loop tạo 1 số lượng lớn 1 cái gì đó có quy tắc
