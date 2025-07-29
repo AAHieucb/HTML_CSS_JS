@@ -13,20 +13,14 @@ Frontend muốn dùng thì index.html vẫn phải <script> thủ công tới lo
 Nodejs còn cung cấp cặp export/require giúp tự tạo modules, tức là require còn tìm ở các file trong thư mục gốc chứ k chỉ tìm trong node_modules. Hiểu require là chức năng của nodejs, là tính năng tất yếu phải có của server chứ klq gì đến JS.
 Frontend lúc này vẫn chưa thể import sourcecode trực tiếp, lý do là client side k hiểu lệnh require là gì. Ta buộc phải <script> tất cả trong file html trước theo thứ tự.
 
--> Để xử lý thì ý tưởng là nó tạo ra 1 thư viện khiến cho JS có thể dùng được require của nodejs với chức năng tương tự, nhưng khi chạy sẽ tự tìm file gốc thế nội dung vào và loại bỏ cú pháp require (vì bản chất browser frontend vẫn k hiểu require). Gọi là modules bundler.
-Dùng bundler, ta có thể require cả file css luôn vì bản chất khi chạy chỉ là thế code vào. Ta cũng có thể dùng mọi package của server ở phía client (đa số) vì bundler sẽ khiến các package của server dùng require về dạng nguyên bản client-side và browser có thể hiểu được.
+-> JS ra đời type module giúp import code giữa các module với nhau ở FE.
 
-Có nhiều công cụ đóng gói modules như Browserify, Webpack, Parcel, FuseBox.
-VD để đóng gói: ./node_modules/.bin/webpack index.js -o index_bundle.js => đóng gói index.js thành index_bundle.js. Bản chất là nó tối ưu code và require() về dạng code mà client hiểu được.
-- Rồi client chỉ cần dùng file index_bundle.js như file client bth: tức "client dùng package của server ở phía client được"
-- Hoặc import sourcecode: client tạo file index2.js require file index.js (trực tiếp) rồi bundler luôn 2 files, file html chỉ cần <script> tới index2.js, tức "file js này có thể import sourcecode trực tiếp từ file js khác" (khác với trước đó là buộc phải import hết theo thứ tự vào file html).
-=> Type module của script cho phép import rồi.
+-> Module bundler ra đời giúp FE dùng được các package của server bằng cách thế nội dung gốc vào, loại bỏ cú pháp require. Có thể import cả file css các thứ luôn. 
+Bundler cũng đóng gói phần code js thành 1 file js chung và html chỉ cần script tới 1 file đó thôi. 
 
--> Có nhiều phiên bản JS, nhiều lúc ta cần chuyển đổi những mã JS ở bản mới về bản cũ để hỗ trợ các browser cũ hơn của người dùng, thì dùng Babel.
-Vì Babel cũng là 1 thư viện, nó tích hợp vào webpack giúp chuyển đổi về dạng dùng được ở phía browser phiên bản cũ. Ta chỉ cần sửa webpack.config.js thêm babel vào là được.
+-> Có nhiều phiên bản JS, nhiều lúc ta cần chuyển đổi những mã JS ở bản mới về bản cũ để hỗ trợ các browser cũ hơn, thì có thể thêm JS compiler như Babel. 
 
--> Task runner: Nếu ta muốn khi gõ 1 command là tự động build, đóng gói, chạy webpack, ta cũng muốn nhét tất cả file js sau khi webpack xử lý về chung 1 file index.js và tự động <script> nó trong file html chứ k cần thủ công chạy từng lệnh. Có thể cấu hình nó chạy các lệnh phức tạp.
-Có nhiều task runner giúp làm điều này như Grunt, Gulp. Trong react dùng react-scripts làm điều này.
+-> Khi gõ 1 command là tự động build, đóng gói, chạy webpack, tự động <script> code JS trong file html chứ k cần thủ công chạy từng lệnh. Để làm điều đó tự động, có thể dùng task runner, như Grunt, Gulp. Ngày xưa react có react-scripts làm điều này.
 
 
 
@@ -144,7 +138,7 @@ text-decoration-thickness, text-underline-offset => style underline chi tiết
 <video> có preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
 inert là attribute sẽ vô hiệu hóa mọi tương tác của người dùng với tag đó.
 width: fill-available; width: -webkit-fill-available; => kéo dài hết phần mà nó có thể kéo. Cách khác là bao flexBox và dùng flexGrow cho nó
-field-sizing: content; => dùng cho thẻ input thì nó tự mở rộng dần khi gõ text bên trong dài ra. Dùng kèm min-inline-size để tránh k có content thì nó k có width
+field-sizing: content; => dùng cho mọi loại input/textarea tự mở rộng dần khi content đổi. Dùng min-height cho progressive enhancement.
 
 
 
