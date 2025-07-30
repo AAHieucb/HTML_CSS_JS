@@ -150,6 +150,19 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
 
 
 -> Css reset
+html {
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%; // Có thể để html và body tự mở rộng theo content
+  width: 100%;
+  -webkit-touch-callout: none; // Khi touch và hold trên iOS hay Safari sẽ hiển thị callout (chú thích) thì ta disable
+  interpolate-size: allow-keywords;
+  overscroll-behavior: contain;
+  font-family: "DM Sans", sans-serif;
+  font-display: swap;
+  overflow-y: hidden;
+}
 :root {
   --hue: 230;
   --primary: oklch(70% .2 var(--hue)); 
@@ -160,20 +173,18 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
   --primary-4: oklch(calc(75% - (4 * 5%)) calc(.2 - (4 * .01)) calc(var(--hue) - (4 + 5)));
   --primary-5: oklch(calc(75% - (5 * 5%)) calc(.2 - (5 * .01)) calc(var(--hue) - (5 + 5)));
 
-  font-size: 16px;
   --font-tiny: clamp(0.75rem, calc(0.708rem + 0.133vw), 0.875rem); /* 12-14 500-2000 */
   --font-small: clamp(0.875rem, calc(0.833rem + 0.133vw), 1rem); /* 14-16 500-2000 */
   --font-medium: clamp(1rem, calc(0.958rem + 0.133vw), 1.125rem); /* 16-18 500-2000 */
   --font-large: clamp(1.125rem, calc(1.083rem + 0.133vw), 1.25rem); /* 18-20 500-2000 */
 }
-@view-transition {
-  navigation: auto;
-}
-::view-transition-group(root) {
-  animation-duration: 500ms;
-}
-:where(:root) {
-  text-rendering: optimizeLegibility;
+body{
+  min-height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  font-size: var(--font-medium); // font-size để ở body, chứ để ở html khéo lib đè lên mất
 }
 * {
   box-sizing: border-box;
@@ -182,35 +193,17 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
   margin: 0;
   padding: 0;
 }
-html {
-  font-smooth: always;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100%;
-  width: 100%;
-  -webkit-touch-callout: none;
-  interpolate-size: allow-keywords;
-  overscroll-behavior: contain;
-  font-family: "DM Sans", sans-serif;
-  font-display: swap;
-  overflow-y: hidden;
-}
-body{
-  min-height: 100%;
-  width: 100%;
-  overflow-y: scroll;
-  color: var(--color-text);
-  background-color: var(--color-background);
-  font-size: var(--font-medium);default của browser
+:where(:root) {
+  text-rendering: optimizeLegibility;
 }
 img {
   max-width: 100%;
-  vertical-align: middle;
-  font-style: italic;
+  vertical-align: middle; // Chặn lỗi các thẻ trước và sau bị cách 1 khoảng do k cùng baseline
+  font-style: italic; // alt text khi hiện nghiêng để phân biệt
   background-repeat: no-repeat; 
   background-size: cover; 
-  shape-margin: 1rem;
-  user-select: none;
+  shape-margin: 1rem; // Đề phòng dùng shape-outside + floating cho image thì có sẵn 1 kc 
+  user-select: none; // Cản người dùng bôi đen, dùng với img và canvas
   -webkit-user-drag: none;
   verticalAlign: "bottom", // Chặn lỗi thừa pixel dọc của thẻ image
   boxSizing: "border-box", // Chặn lỗi thừa pixel ngang của thẻ image
@@ -228,6 +221,12 @@ button:disabled {
 }
 p {
   cursor: text;
+}
+@view-transition {
+  navigation: auto;
+}
+::view-transition-group(root) {
+  animation-duration: 500ms;
 }
 ::-webkit-scrollbar {
   width: 10px;

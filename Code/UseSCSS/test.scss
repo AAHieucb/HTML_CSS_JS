@@ -266,8 +266,8 @@ $theme-map: ();
     @each $theme, $map in $themes {
         // & trỏ tới thẻ cha của thẻ hiện tại và mất cha luôn => thành ".theme-dark .header"
         .theme-#{$theme} & {
-            $theme-map: (); // Khai báo bién map là toàn cục k có phần tử nào
-            // global khiến 1 biến trở thành toàn cục, k có thì chỉ dùng trong phạm vi block này thôi
+            $theme-map: (); // cục bộ
+            // Có !global khiến 1 biến trở thành toàn cục, k có thì chỉ dùng trong phạm vi block này thôi
             // Néu có nhiều @mixin gán các gía trị khác nhau cho biến toàn cục này thì nó thực hiện theo thứ tự @include và chạy như bth, dùng giá trị mới nhất gán
 
             // @each $key, $submap in $map {
@@ -282,7 +282,7 @@ $theme-map: ();
             $theme-map: map-merge( 
                 $theme-map,
                 $map
-            ) !global;
+            ) !global; // Có !global là toàn cục
             // Phải cho thành biến global mới dùng được trong @content chứ ở đây k truyền @map vào @content ngay được 
 
             @content;

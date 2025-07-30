@@ -415,3 +415,4 @@ Cách khác là dùng input checkbox
 -> K nên dùng id, nên dùng data-* hơn vì id chỉ dược ở 1 thẻ, nếu responsive cần thay đổi vị trí duplicate thẻ ở chỗ khác sẽ sai
 
 
+:is() sẽ lấy specificity của selector mạnh nhất bên trong, ngược lại với :where()

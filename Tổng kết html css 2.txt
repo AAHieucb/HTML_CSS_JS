@@ -13,6 +13,10 @@ URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
 
 => Ứng dụng tạo diamond grid: https://www.youtube.com/watch?v=A5GXdjEOvos&list=WL&index=98
 
+-> Vì để phòng khi ta dùng ảnh low res load trong background-image. Nên kết hợp với: 
+<link rel="preload" as=image href="./lowresimage.png" fetchpriority=high>
+Thẻ <img> nên luôn set width height ngay trong nó để tránh layout shift, kèm với background-image low res.
+
 -> Có multiple background image. background-size background-image background-repeat background-color (dùng kèm background image được sẽ nằm ở dưới)
 background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung. background-image hiện trong phạm vi content, nếu dịch tràn ra ngoài sẽ k dịch chuyển trừ khi cho repeat hoặc background-size lớn 
 
@@ -161,74 +165,6 @@ document.querySelectorAll("h2").forEach(function(el) {
       el.setAttribute("id", el.textContent.replaceAll(/[^a-z]/gi, ''));
   }
 });
-
-
-
-# CSS reset
-* refer đến mọi thẻ và :root là refer đến cha của mọi thẻ. Trong react thì có thẻ id là root bao mọi thẻ khác.
-Luôn set html và body từ đầu là 100% kích thước, overflow scrollbar
-
--webkit-touch-callout: none; => Khi touch và hold trên màn hình iOS hay Safari sẽ hiển thị callout(chú thích) thì có thể ta disable
-user-select: none; => cản người dùng bôi đen, thg dùng khi với canvas hay ảnh chẳng hạn
-box-sizing: border-box; 
-
--> Phân biệt unset, none, initial, inherrit: 
-initial là lấy thông số kỹ thuật của css. Ít dùng vì nhiều cái default rất ảo. VD display có default là inline sẽ khiến mọi thẻ thành inline kể cả các thẻ div.
-Vd: * { all: initial; }
-=> Thực tế, default value của css property khác với default value của browser. VD div có default display nếu nói default value của browser.
-
-inherit: lấy giá trị thuộc tính kế thừa từ cha. Vì mọi thẻ đều có mọi thuộc tính, nếu k set sẽ dùng default value property của browser.
-unset: có parent thì set parent, nếu chưa từng set cho parent thì lấy initial valua. Initial là thông số kỹ thuật CSS ấy
-none: k set giá trị và coi như k có giá trị đó luôn, 3 thuộc tính trên có với mọi thẻ còn none kp thẻ nào cũng có
-
--> css reset cho text:
-h1,h2,h3,h4,h5,h6 { text-wrap: balance; } => để các mục header có text balance khi bị break nhiều dòng trông đẹp hơn
-p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn. Tính toán bị expensive.
-
--> css reset cho img {
-  max-width: 100%;
-  vertical-align: middle; // để tránh bị cách các thẻ trước và sau đó 1 khoảng cách do k cùng baseline
-  font-style: italic; // alt text khi hiện sẽ nghiêng để phân biệt
-  background-repeat: no-repeat; 
-  background-size: cover; 
-  shape-margin: 1rem; // Đề phòng dùng shape-outside + floating cho image thì có sẵn 1 kc 
-}
-Vì để phòng khi ta dùng ảnh low res load trong background-image. Nên kết hợp với: 
-<link rel="preload" as=image href="./lowresimage.png" fetchpriority=high>
-Thẻ <img> nên luôn set width height ngay trong nó để tránh layout shift, kèm với background-image low res.
-
--> body tự có 100% width, việc set 100vw là thừa và có thể sai vì nó k tính scrollbar
-
--> Chú ý ta dùng css của lib trước r đến css reset để đảm bảo style ta tự code luôn áp đảo mọi styles từ nơi khác. Vẫn dùng styles của lib.
-Chú ý thứ tự style dùng theo layer: lib -> base -> tự định nghĩa: reset r đến layer thường
-Ở mỗi layer: :where(:root) -> html -> :root -> body -> * -> style thường
-VD font-size của css reset để ở thẻ body, chứ để ở html khéo lib hay gì đè lên mất
-
--> Nếu muốn chiều dài page chuẩn màn hình hiện tại có footer và header thì set content là minHeight: calc(100vh - var(headerHeight) - var(footerHeight))
-
-
-
-# BEM
-BEM(Block-Element-Modifier) đem lại hiệu quả viết tên class hướng module, dùng mạnh trong sass.
-Theo BEM, kbh dùng id mà chỉ có class và các class biểu diễn lồng nhau thì dùng với quy tắc kiểu.
-VD: thay vì
-  .menu { ... }
-    .menu .item { ... }
-    .menu .item.active { ... }
-Ta dùng   
-  .menu { ... }
-    .menu__item { ... }
-    .menu__item--active { ... }
-=> để biểu thị item nằm trong khối block menu
-
-VD: <a class="btn btn--orange" href="#">
-  <span class="btn__price">$9.99</span>
-  <span class="btn__text">Subscribe</span>
-</a>
-và file css: .btn { ... }
-.btn__price { ... }
-.btn__text { ... }
-.btn--orange { ... }
 
 
 

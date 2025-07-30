@@ -14,7 +14,7 @@ sass --watch .:../css
 sass --no-source-map .:../css => compile mọi file.scss trong thư mục hiện tại vào /css, sourcemap giúp trình duyệt hiển thị style nằm ở file scss nào để debug
 Còn có package sass-migrator tự động chuyển mọi file scss ở phiên bản cũ sang phiên bản mới tự động khi scss update version đổi cú pháp.
 
--> @import trong css tự cache k bị duplicate. @import trong scss bị duplicate.
+-> @import trong css tự cache k bị duplicate, k bị circular. @import trong scss bị duplicate.
 scss dùng @use thay hoàn toàn @import k bị duplicate.
 @forward chỉ chuyển tiếp biến sang file @use nó chứ k dùng được trong file hiện tại. 
 1 file vừa @forward biến, vừa define biến thì define sẽ ghi đè vì định nghĩa sau. @forward nhiều lần cũng k sao mà theo cái gọi sau.

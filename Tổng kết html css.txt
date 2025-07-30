@@ -20,6 +20,50 @@ Thẻ cha có mỗi min-height:100vh; thẻ con height 50% sẽ k chạy vì hei
 
 
 
+# BEM
+BEM (Block-Element-Modifier) kbh dùng id mà chỉ có class và tên các class tuân theo chuẩn. Nested thì chỉ nên 1 cấp.
+VD để biểu diễn item nằm trong khối block menu, thay vì:
+  .menu { ... }
+    .menu .item { ... }
+    .menu .item.active { ... }
+Ta dùng:
+  .menu { ... }
+    .menu__item { ... }
+    .menu__item--active { ... }
+
+VD: <a class="btn btn--orange" href="#">
+  <span class="btn__price">$9.99</span>
+  <span class="btn__text">Subscribe</span>
+</a>
+và file css: .btn { ... }
+.btn--orange { ... } => -- có tính chất gì
+.btn__price { ... } => __ là gì
+.btn__text { ... }
+
+
+
+# CSS reset
+width default là auto tự full và k cần set 100% làm gì, height default tự theo content và chỉ cần set min-height 100% nếu cần footer dưới cùng thôi.
+
+-> Phân biệt:
+initial: lấy thông số kỹ thuật của css. VD display có default là inline sẽ khiến mọi thẻ thành inline kể cả các thẻ div => k dùng vì nhiều cái default rất ảo
+unset: có parent thì lấy theo parent, nếu chưa từng set cho parent thì lấy initial value là thông sô kỹ thuật của css => k dùng
+inherit: lấy giá trị thuộc tính kế thừa từ cha. Vì mọi thẻ đều có mọi thuộc tính, nếu cha k set sẽ dùng default value của browser. Chú ý default value của browser khác với default value của css property.
+none: k set giá trị và coi như k có giá trị đó luôn, 1 vài css prop có giá trị này thôi.
+
+-> Import css tự reset trước, rồi đến css của thư viện, sau đó là css cho component tuỳ chỉnh.
+Bản chất: chia theo layer -> cùng layer thì style thẻ đó sẽ ghi đè style thẻ cha, style thẻ cha là body cũng mạnh hơn html vì cha gần hơn -> cùng là style thẻ đó thì mới chia theo specifility => Đó chính là lý do vì sao html là 0:0:1 nhưng lại k đè được :where là 0:0:0
+VD thứ tự khi reset giả sử chỉ có 1 layer:
+html => spec 0:0:1, là thuộc tính cha html của mọi thẻ, thường set style base mọi thẻ
+:root => spec 0:1:0, là thuộc tính cha html của mọi thẻ, thường định nghĩa css var, k style
+body => spec 0:0:1, là thuộc tính cha body của mọi thẻ, thường dùng định nghĩa style cho body và mọi thẻ khác mà dùng biến trong :root
+user agent stylesheet => cố định k thể sửa với từng thẻ
+* => spec 0:0:0, set thuộc tính base cho mọi thẻ, thường để đè user agent stylesheet
+:where(tag) => spec 0:0:0, set thuộc tính base cho 1 tag cụ thể
+Trong react sẽ có #id là thẻ bao ứng dụng.
+
+
+
 # Dùng zIndex
 Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi

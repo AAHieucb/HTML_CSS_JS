@@ -33,9 +33,8 @@ Tương tự k nên dùng whitespace nowrap mà hãy dùng line clamp nếu có 
 
 
 # DevTool Browser
-CTRL + SHIFT + F để Search global
-
--> Tab Console : allow pasting
+-> Tab Console : 
+allow pasting
 [...$$('img')].forEach(a=>a.remove()); 
 document.designMode = "on"; 
 VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) => click tất cả các thẻ a có 2 class .touchable.primary
@@ -52,7 +51,7 @@ Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình du
 # How to design a website
 -> Exp:
 - Phần header dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
-- Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật hoặc thêm gradient, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật. VD cho núp sau ảnh. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi.
+- Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật hoặc thêm gradient, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật. VD cho núp sau ảnh. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, ưu tiên load trước.
 - Navigation bar có text và logo nên cùng màu đồng bộ, cùng 1 styles, logo nhỏ gọn.
 - K nên để text dài cả 1 dòng, nên vắn tắt ít chữ, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ.
 - Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full kích thước
@@ -76,7 +75,7 @@ https://uxplanet.org/ui-design-with-chatgpt-4o-4d79b2a32008 => dùng ChatGPT des
 Có tool convert từ web sang figma. Có Codia AI convert từ image sang figma và sang code.
 
 -> Tổng hợp các kiểu design
-New morphism : kiểu design tạo clean effect rất ảo
+Newmorphism: kiểu design tạo clean effect rất ảo
 Glass morphism dùng với backdrop-filter blur + 1 lớp kính rgba mỏng
 Skeuomorphism hình thực tế => k dùng
 Flat design: web như 1 mặt phẳng với hình vẽ đơn giản, k có shadow hay hiệu ứn nổi lên gì cả
@@ -85,7 +84,7 @@ Retro/Vintage Styles: web phong cách tinh tế, cổ kính, sang trọng, quý 
 Brutalism design: web hiệu ứng mạnh, thô mộc, tương phản cao, font chữ nhiều lúc rất ảo
 Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi, đơn giản, có thể đơn sắc, là loại web dễ tạo và dễ nhìn nhất.
 Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
-Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng, trông như được xếp ngẫu nhiên. 
+Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng.
 
 https://wordpress.com/blog/2024/11/14/website-layout-examples/ => Các pattern layout web
 https://htmlrev.com/ => 1500 template free tạo dự án
@@ -107,22 +106,6 @@ Màu secondary 10% chỉ dùng cho các phần tử quan trọng nổi bật mà
 
 
 
-# Pre-processors và post-processors 
--> Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser. Có sẵn trong các bundler như Vite.
-VD chuyển body { background-color: oklch(51.98% 0.1768 142.5); } thành:
-body {
-  background-color: green;
-  background-color: color(display-p3 0.216141 0.494224 0.131781);
-  background-color: lab(46.2829% -47.5413 48.5542);
-} giúp tương thích mọi browser.
-VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên dùng khi có parcel
-
--> CSS Preprocessor mở rộng tính năng của css. Code preprocessor sẽ được compile thành code css thuần. 1 số css preprocessor phổ biến là SASS, SCSS, LESS, Stylus. 
-Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian vì phải biên dịch ra css rồi mới chạy.
-Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử random.
-
-
-
 # Thuộc tính khác ít dùng
 resize: both; => biến mọi thẻ thành resizable
 direction: ltr; => hướng căn lề
@@ -130,15 +113,15 @@ writing-mode: vertical-rl; => hướng in chữ
 contenteditable => biến mọi thẻ thành editable nhưng xấu
 text-emphasis => emphasis marks dùng cho ngôn ngữ có thanh âm để biểu hiện tính cao hay trầm của âm tiết.
 margin-inline: auto; thay cho margin: 0 auto; để căn giữa
-min-inline-size => thay cho min-width và nó tính cả hướng văn bản
-border-block-end => là cạnh dưới của văn bản trong phần tử như border-bottom nhưng tính thêm cả writing-mode.
-text-decoration-thickness, text-underline-offset => style underline chi tiết
+*min-inline-size => thay cho min-width và nó tính cả hướng văn bản
+*border-block-end => là cạnh dưới của văn bản trong phần tử như border-bottom nhưng tính thêm cả writing-mode.
+*text-decoration-thickness, text-underline-offset => style underline chi tiết
 <progress> => giúp hiện thị progress
 <template> => tag đặc biệt mà nội dung k được render trực tiếp mà dùng để copy rồi mới render ra chỗ khác
 <video> có preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
 inert là attribute sẽ vô hiệu hóa mọi tương tác của người dùng với tag đó.
 width: fill-available; width: -webkit-fill-available; => kéo dài hết phần mà nó có thể kéo. Cách khác là bao flexBox và dùng flexGrow cho nó
-field-sizing: content; => dùng cho mọi loại input/textarea tự mở rộng dần khi content đổi. Dùng min-height cho progressive enhancement.
+*field-sizing: content; => dùng cho mọi loại input/textarea tự mở rộng dần khi content đổi. Dùng min-height cho progressive enhancement.
 
 
 
@@ -155,3 +138,16 @@ VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm đ
 -> WebComponent: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework có thể tạo ra các tag html thuần để dùng được ở mọi framework.
 Google có tool Lit giúp tạo web component dễ hơn.
 Khi đó phải code thành shadow DOM. Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. VD nut pause start trong <video>
+
+-> Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser. Có sẵn trong các bundler như Vite.
+VD chuyển body { background-color: oklch(51.98% 0.1768 142.5); } thành:
+body {
+  background-color: green;
+  background-color: color(display-p3 0.216141 0.494224 0.131781);
+  background-color: lab(46.2829% -47.5413 48.5542);
+} giúp tương thích mọi browser.
+VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên dùng khi có parcel
+
+-> CSS Preprocessor mở rộng tính năng của css. Code preprocessor sẽ được compile thành code css thuần. 1 số css preprocessor phổ biến là SASS, SCSS, LESS, Stylus. 
+Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian vì phải biên dịch ra css rồi mới chạy.
+Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử random.
