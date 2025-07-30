@@ -64,6 +64,111 @@ Trong react sẽ có #id là thẻ bao ứng dụng.
 
 
 
+//!!!!!!
+# Dùng @scope và @layer
+-> @scope không đổi specifility, nhưng nếu bên ngoài và trong scope đều cùng specifility, sẽ ưu tiên lấy trong scope => ít dùng vì rối
+@scope có thể giới hạn style trong phạm vi m
+
+
+Specifility: @layer > @scope > thứ tự định nghĩa trong css => sai vì @scope k tăng specifility
+@scope (article) to (aside :scope) {} => article tới thẻ cha là aside mà k tính thẻ cha tức là áp dụng cho thẻ con của article nếu article là con của aside trực tiếp => sai bỏ
+@scope đơn giản là thay thế việc dùng nested selector bth, điểm khác biệt duy nhất là selector gốc của @scope không đóng góp vào specificity, tức làm giảm specificity.
+
+-> CSS rule mặc định theo thứ tự đinh nghĩa trong css. @scope khiến cho nó theo thứ tự nested tag trong html. VD:
+// index.html
+<div class="container">
+  <p class="text">Hello <button class="xxx">Button</button></p>
+</div>
+// index.css
+p.text { color: red; }
+.container p { color: white; }
+=> Chữ sẽ là màu trắng vì 2 class cùng specifility sẽ theo thứ tự đinh nghĩa
+
+@scope sẽ lấy css lên dần các thẻ cha cho đến khi gặp @scope gần nhất, gặp text thì k theo container nữa
+@scope (.text) to (button.xxx) {
+  :scope { } // tương đương với & { }
+  p { color: red; }
+  button { color: yellow; }
+}
+.container p { color: white; }
+.container button { color: black; }
+=> nhớ to (.not-these) { } vì cái trong to k tính 
+=> ở đây lấy hết style ở ngoài vì specifility trong scope rất thấp do .text k tính
+
+VD: @scope (.text) to (button.xxx, a, p[class]) { 
+  // Code css
+} 
+=> tag nằm trong .text sẽ ưu tiên mang code css đó hơn ưu tiên hơn bth, nhưng nếu tag có dạng selector là button.xxx or a or p[class] sẽ inherrit, tức mang specifility thấp, chỉ dùng giá trị đó nếu bên ngoài k set style gì cho thẻ đó.
+
+--> VD :scope dùng y như & được
+@scope (article) to (> figure) {} => áp dụng cho mọi con của article, trừ con trực tiếp là tag figure
+Tức @scope(aside) { @scope (article) { ... } }
+
+--> Dùng trong HTML tag: k cần định nghĩa scope cho thẻ nào, tự hiểu là dùng cho thẻ bao sát thẻ style chứa nó, ở đây là @scope (article) { } nhưng chỉ với duy nhất thẻ article bao style này chứ k ảnh hưởng các article ngoài
+<article>
+  <style>
+    @scope {
+      & {
+        color: red;
+      }
+    }
+  </style>
+  <p>Affected tag</p>
+</article>
+<article>
+  <p>Not affected</p>
+</article>
+
+-> Specifility (0,1,1) theo thứ tự là: 
+Số ID selector
+Số class / pseudo class / attribute selector 
+Số type selector / pseudo elements như :after, :first-letter
+=> Thực ra là có 4 giá trị, còn 1 cái inline style mạnh hơn cả id selector css nữa. Chỉ có !important mới mạnh hơn inline style thôi.
+
+Dùng & sẽ tính specifility chuẩn, dùng :scope sẽ coi cả cục :scope như 1 class, không tính các selector trước đó
+VD: 
+@scope (main .text) to (button.xxx) {
+  :scope img { } // (0, 1, 1)
+}
+@scope (main .text) to (button.xxx) {
+  & img { } // (0, 1, 2)
+}
+=> Vì & coi là thế từ cục trên vào thành "main .text img {}" => dùng & thì y hệt nested bth, còn dùng :scope thì y như khi k có :scope
+
+VD: @scope (.parent) to (.content) {
+  /* Styles written here will only affect .parent but skip .content*/
+}
+
+--> Bản chất specifility => càng specific, càng quan trọng
+URL: https://specificity.keegan.st/
+Cascade là đinh nghĩa sau sẽ đè lên định nghĩa trước. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>. Cascade chỉ đúng khi cùng specifility, nếu khác thì specifility cao hơn ở bên phải qua sẽ override. VD (1,0,0) đè lên (0,1,10)
+VD: 2 cái cùng !important thì cái khai báo sau sẽ đè lên trước
+=> Nên luôn dùng class, tránh dùng !important, #id, nested selector nhiều nhất có thể
+
+-> Có 3 loại layer theo thứ tự đè nhau: user agent styles -> user styles -> author styles
+user agent styles có sẵn style cho các thẻ theo setting kỹ thuật của browser, ta k thể đụng vào. Ta chỉ có thể tác động vào layer cuối là author style.
+@layer giúp định nghĩa thêm các layer trong layer author styles.
+Các layer sẽ có specifility độc lập, ngoại trừ 3 layer có sẵn, các layer tự tạo có specifility theo thứ tự định nghĩa. Cái khai báo sau đè cái trước, bất chấp specifility của các phần tử bên trong.
+
+VD: viết style layer1 -> viết style layer2 -> viết thêm style cho layer1 => style layer2 sẽ đè lên mọi thứ của layer1 vì thứ tự khai báo layer2 sau layer1
+VD: @layer framework, reset, base, layout, components; => nhét ở đầu file để khai báo thứ tự, thì khai báo bên dưới thế nào vẫn luôn tuân theo thứ tự này
+=> Giải quyết TH khi cần custom style của framework sử dụng nhưng nó specifility k đủ để đổi, buộc phải thêm !important rất dở. Nếu thêm được style của framework vào @layer thì sửa ok
+
+-> Code bên ngoài sẽ override code trong custom layer tự tạo ra, vì code bên ngoài thuộc author styles, còn code trong custom layer thuộc 1 layer con của author styles có spec nhỏ hơn
+@layer có thể lồng trong @layer khác và quy tắc vẫn tương tự
+@layer định nghĩa list thứ tự layer buộc phải để đầu file mới có tác dụng. 
+
+@layer dùng trong scss như bth, cứ cho vào file là compile ra
+Nhưng scss dùng @use phải luôn on top nên k thể định nghĩa @layer trước nó được, buộc phải nhét @layer vào 1 file scss riêng rồi @use nó ở đầu để xuất hiện ở đầu
+1 case đặc biệt là @import có thể dùng bên trong @layer, nhưng @use thì không. Cách khác là:
+@use 'sass:meta';
+@layer base, components, utilities;
+@layer components {
+  @include meta.load-css('components'); // Thế cho @use 'components'
+}
+
+
+
 # Dùng zIndex
 Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi
