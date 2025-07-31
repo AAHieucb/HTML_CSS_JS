@@ -64,12 +64,7 @@ Trong react sẽ có #id là thẻ bao ứng dụng.
 
 
 
-# Spec và dùng @scope và @layer
--> Specifility (0,1,1) theo thứ tự là: Số ID selector; Số class / pseudo class / attribute selector; Số type selector / pseudo elements như :after, :first-letter
-=> Thực ra có 4 giá trị, còn 1 cái inline style mạnh hơn cả id selector nữa. Chỉ có !important mới mạnh hơn inline style thôi
-Cascade là khi cùng spec thì đinh nghĩa sau sẽ đè lên định nghĩa trước. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>.
-URL check spec: https://specificity.keegan.st/
-
+# Dùng @scope và @layer
 -> @scope selector k ảnh hưởng spec, selector bên trong giữ nguyên spec của nó. Trong cùng 1 layer, nếu bên ngoài và trong scope đều cùng specifility, sẽ ưu tiên lấy trong scope => ít dùng vì rối
 @scope có thể giới hạn style trong 1 phạm vi mà nested selector không làm được. VD @scope (article) to (aside) { } từ cha article đến con aside và k tính con.
 
@@ -109,8 +104,64 @@ Case đặc biệt là @import có thể dùng bên trong @layer, nhưng @use th
 }
 
 -> Nhanh:
-Spec
+Các layer k thể can thiệp kể cả !important. Trong 1 layer thì style ngoài layer sẽ đè style trong layer
 @layer phải import ở đầu để định nghĩa thứ tự
+
+
+
+# Spec và CSS Selector
+Cascade là khi cùng spec thì cái sau sẽ đè lên cái trước. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>.
+layer sau đè layer trước > cùng layer thì style con đè style cha > cùng style con thì theo specifility -> cùng specifillity thì theo quy tắc @scope và cái sau đè cái trước
+!important > inline style > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
+
+-> Specifility (0,1,1) theo thứ tự là: Số ID selector; Số class / pseudo class / attribute selector; Element và số pseudo elements như :after, :first-letter
+URL check spec: https://specificity.keegan.st/
+
+VD1: pseudo-class :hover
+attributes-selector img:not([alt]) 
+pseudo-element: .test:before
+VD2: dialog.hide 0:1:1 = dialog[open] 0:1:1 > .hide 0:1:0
+
+-> Combinator:
+space là descendant mọi cấp
+>  child trực tiếp
+~  mọi sibling sau
++  1 sibling ngay sau 
+
+-> VD selector:
+a[href$=".abc" i] => tag a có href kết thúc bằng .abc case insensitive
+[href*="google.com"] => tag có href attribute chứa google.com ở bất kỳ đâu
+:active => button, link đang được click
+::selection => text được bôi đen
+:visited X :link => :link là <a> chưa visit bao giờ
+p:empty => thẻ p k có text bên trong 
+:nth-last-of-type(2) => sibling cuối cùng thứ 2
+p:lang(it) { } => thẻ p có lang là italia. VD: <p lang="it">Ciao bella!</p>
+.grid > :nth-child(4n) => con trực tiếp trong grid mà thứ tự chia hết cho 4
+p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
+::initial-letter = ::first-letter => tạo chữ đầu tiên to đùng như đầu bài báo article
+X:before default ở top left, X:after default ở top right, nằm trong thẻ X
+:target => style cho thẻ chứa id, khi được href tới id, từ 1 thẻ khác 
+
+VD tạo checkbox với option light/dark mode thì: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; }
+VD ấn vào ảnh là phóng to ảnh, click 1 button đóng ảnh css only. Thì click thẻ a ref tới ảnh và style img:target phóng to, khi close thì xoá target bằng href="#" k hợp lệ.
+VD read more với CSS only: dùng 2 dùng label + checkbox + :checked để ẩn hiện text
+
+-> Pb:
+- :is() sẽ lấy specificity của selector mạnh nhất bên trong, giúp liệt kê gọn hơn. Còn :where() có spec là 0:0:0 cho css reset
+:where(.parent) .child {} thì child vẫn giư specifility của nó là 0:1:0
+VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
+- :focus là chính thẻ đó focus. Còn :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này được focus, bao gồm ấn tab thì đổi style thẻ này. 
+:focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey
+VD button show dropdown thì dùng :focus-within thay cho :focus để click vào item con thì button cũng k ẩn dropdown, chứ kp chỉ được ấn vào thẻ dropdown cha.
+VD click chuột vào 1 phần tử trong list thì đổi style đơn giản: từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó :focus r chỉnh style thoải mái. 
+
+-> Nhanh: 
+Spec 
+4 combinator
+light/dark mode, phóng to ảnh với css only, readmore
+:is và :where
+:focus và :focus-within, dùng :focus với tabIndex
 
 
 
@@ -503,6 +554,8 @@ Nên dùng đặt tên cho view-transition-name nhanh chóng
 
 -> Tạo tooltip: Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
 Dùng title tốt hơn dùng style css :after content: attr(data-image-to-show);
+
+Nếu phải dùng id, cũng nên thay bằng data-* hơn vì lỡ 1 thẻ muốn duplicate ra chỗ khác khi responsive sẽ bị trùng id chỉ dược ở 1 thẻ.
 
 # Tạo tooltip
 --> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible

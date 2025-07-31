@@ -353,66 +353,41 @@ document.addEventListener("keyup", function (e) {
 });
 
 
-
-# CSS Selector
--> Cùng Specifility thì lấy cái set sau: !important > inline style > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
-dialog.hide > dialog[open] > .hide
-VD: style theo pseudo-class: .test:hover { }
-style theo attributes: div[id=test] { }
-style theo pseudo-element: .test:before { }
-VD: a[href$=".abc" i]  /  [href*="google.com"]  /  img:not([alt]) 
-VD: input[type='file'][multiple] khi chọn nhiều thuộc tính
-
-space là descendant mọi cấp
->  child trực tiếp
-~  mọi sibling sau
-+  1 sibling ngay sau 
-
--> Vd 1 thẻ a mà có cả 4 thuộc tính thì phải viết css đúng thứ tự sự kiện nếu k sẽ k có hiệu ứng :link/:visited -> ::selection -> :hover -> :active (click chuột)
-::active là đang ấn, ::selection là bôi đen
-
-input:checked/:disabled/:enabled/:required => khi input buộc nhập giá trị 
-input:optional/:read-only X :read-write/:valid X :invalid/:out-of-range tức khi lỗi out-of-range thì mang style css gì X :in-range
-
-Pb: :is(<>) thì cho độ ưu tiên cao nhất là 100 còn :where(<>) với cú pháp giống hệt nhưng luôn cho độ ưu tiên thấp nhất là 0 như dùng cho css reset
-:is thực tế có độ ưu tiên bằng với việc liệt kê bth, nó có tác dụng gom viẹc liệt kê gọn hơn
-VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
-:is cũng khiến cho các phần tử trong ngoặc () có cùng specifility là cái cao nhất trong list. VD ở trên thì h1, h2 sẽ có cùng specific như class .link dù nó chỉ là thẻ thường.
-VD: a:is(:hover, :focus) {} tương đương a:hover,a:focus {}
-VD dùng :root css reset nó bị cao hơn bth, ta nhét vào ép specifility về 0 với :where(:root) { }. Ngược lại thì :where(.parent) .child {} thì .chịld vẫn giữ specifility của nó chứ k theo cha.
-
-Pb :focus là chính thẻ đó được focus, :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này bị focus thì thẻ này sẽ mang style nào (bao cả việc ấn tab để focus)
-VD ta ấn button và show dropdown thì dùng button:focus .dropdown { display: flex; } nhưng ấn vào dropdown thì button mất focus sẽ ẩn dropdown, dùng :focus-within cho thẻ bao ngoài 2 cái đó để fix
-:focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey
-
-p:empty là khi thẻ p k có text bên trong thì có style như nào
-:nth-last-of-type(2) => sibling cuối cùng thứ 2
-p:lang(it) { } => thẻ p có lang là italia. VD: <p lang="it">Ciao bella!</p>
-div:nth-child(n) => thẻ div là con thứ n
-p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
-::initial-letter tương đương selector ::first-letter giúp tạo chữ đầu tiên to đùng như đầu bài báo article
-
-VD: button:not(:first-child){} => mọi thẻ button không là first-child trong web 
-button:has(svg){} => mọi button có thẻ svg là child 
-VD giả sử tạo checkbox với option light/dark mode thì cách css hay nhất là: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; } => chú ý phải đổi từ thẻ body vì nó chỉ effect thẻ hiện tại và các con của nó khi ta reassign css vars
-
--> X:before và X:after như 1 thẻ khác nằm bên trong X có kích thước fit content, k có content thì mặc định là 0 0.
-before hiện ở left 0 top 0 của thẻ, after ở top right, kp hiện đằng trc vị trí thẻ hiện tại mà nó chiếm vị trí thẻ và đẩy text thẻ ra sau nó
-VD cho x là relative và before là absolute thì vị trí thẻ before sẽ tính theo thẻ x
-
--> VD Event click chuột vào 1 phần tử trong list thì đổi style đơn giản: Từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó ::focus r chỉnh style thoải mái. 
-
-VD tính năng readmore với CSS only: dùng 2 cái radio button cho 2 dòng Read more và Read less để trigger thông qua label r style css :checked để ẩn hiện dòng text 
-
--> :target là kiểu phần tử target khi bị href tới thì mang style gì. VD: <p><a href="#news1">Đến nội dung số 1</a></p> <p id="news1"><b>Nội dung số 1</b></p>
-VD ấn vào ảnh để phóng to ảnh, click button để thu nhỏ ảnh đó. Chơi ấn vào ảnh thì click thẻ a ref tới ảnh và style img:target to lên, click nút close thì là thẻ a ref ra ngoài ref="#" là xong.
-Cách khác là dùng input checkbox 
-
--> oninvalid this.setCustomValidity("Lỗi này đây")
-
--> nth-child dùng n được. VD: .grid > :nth-child(4n) { }
-
--> K nên dùng id, nên dùng data-* hơn vì id chỉ dược ở 1 thẻ, nếu responsive cần thay đổi vị trí duplicate thẻ ở chỗ khác sẽ sai
+<input 
+    type="email" 
+    required 
+    oninvalid="this.setCustomValidity('Vui lòng nhập email hợp lệ!')"
+    oninput="this.setCustomValidity('')">
 
 
-:is() sẽ lấy specificity của selector mạnh nhất bên trong, ngược lại với :where()
+
+input:checked X input:not:(checked)  input:disabled X input:enabled  input:required X input:optional  input:read-only X input:read-write  input:valid X input:invalid
+input:out-of-range X  input[type="number"]:in-range => out-of-range là khi input bị lỗi out of range
+input[type='file'][multiple]
+
+
+document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Nếu form hợp lệ
+            if (this.checkValidity()) {
+                alert('🎉 Form hợp lệ! Trong thực tế sẽ gửi dữ liệu.');
+            }
+        });
+
+        // Demo thêm hiệu ứng khi input hợp lệ
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', function() {
+                // Clear custom validity khi user bắt đầu sửa
+                this.setCustomValidity('');
+                
+                // Thêm hiệu ứng visual
+                if (this.validity.valid && this.value.length > 0) {
+                    this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            });
+        });
+    </script>

@@ -1,5 +1,4 @@
 # Basic
--> Note:
 - FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
 - Có thể lưu function vào file json với function constructor
 - Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error]: [undefined, ResultType] | [Error] để wrap hàm async sẽ ok hơn.
