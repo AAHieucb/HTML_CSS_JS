@@ -151,3 +151,10 @@ VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suấ
 -> CSS Preprocessor mở rộng tính năng của css. Code preprocessor sẽ được compile thành code css thuần. 1 số css preprocessor phổ biến là SASS, SCSS, LESS, Stylus. 
 Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian vì phải biên dịch ra css rồi mới chạy.
 Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử random.
+
+-> Polyfill cung cấp chức năng hiện đại trên các trình duyệt cũ hơn không hỗ trợ, tự viết or tải polyfill về. Khi dùng các hàm mới nên check cho chắc. 
+VD: if (!Array.prototype.includes) {
+  Array.prototype.includes = function includes(searchElement) {
+    return this.indexOf(searchElement) !== -1
+  }
+}
