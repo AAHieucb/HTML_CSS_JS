@@ -1,24 +1,19 @@
 # Basic
-- FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
-- Có thể lưu function vào file json với function constructor
-- Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error]: [undefined, ResultType] | [Error] để wrap hàm async sẽ ok hơn.
-Catch error phải bắt nếu lỗi custom đoán trước được thì hiện error chuẩn, lỗi k đoán được thì hiện default là message slice ngắn đi
-- Tạo unique id: có lib uuid giúp tạo Guid random, hoặc dùng Date.now() + random phụ thuộc vào thời gian. Xác suất bị trùng cực thấp.
-
--> Highlight API rất mạnh giúp tô màu xuyên văn bản
-
--> Web worker giúp chạy multi thread trên browser
+FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
+Có thể lưu function vào file json với function constructor
+Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error] để wrap hàm async. Lỗi biết trước thì hiện custom, k thì hiện message slice ngắn đi.
+Tạo unique id: có lib uuid giúp tạo Guid random, hoặc dùng Date.now() + random phụ thuộc vào thời gian. Xác suất bị trùng cực thấp.
 
 
 
 # Vanilla JS 
-Best practice VanillaJS khi thiết kế là chia mỗi page 1 file html css js, css dùng BEM.
+Best practice là chia mỗi page 1 file html css js. CSS dùng BEM.
 
 -> Các cách chạy dự án vanillajs
-Dùng HTML thuần với live server. Host thì trực tiếp lên.
-Dùng bundler hỗ trợ hết như vite. Host thì chạy build. Khó dùng vì code html trong JS.
-Dùng bundler parcel như live server nhưng thêm đủ các tính năng build và start ở 1 port, cài package npm và import vào file js.
-Dùng html thuần với live server nhưng tùy biến tự cài node_modules quản lý version hoặc cài qua CDN.
+Dùng HTML thuần với live server. Host thì đẩy file trực tiếp lên.
+Dùng html thuần với live server nhưng tùy biến tự cài node_modules quản lý version hoặc cài qua CDN => phức tạp
+Dùng bundler hỗ trợ hết như vite. Host phải chạy build => khó dùng vì code html trong JS.
+Dùng bundler parcel như live server nhưng thêm đủ các tính năng build và start ở 1 port, cài package vào node_modules và import vào file js => best practice
 
 -> Tối ưu cache fetched data để k fetch lại trong phạm vi 1 page
 VD:
@@ -39,8 +34,8 @@ document.addEventListener('DOMContentLoaded', ...); => khi toàn bộ HTML đã 
 window.onload => khi tất cả, bao gồm cả hình ảnh, stylesheet, và iframe tải xong.
 => useEffect chạy lần đầu tiên tương đương với DOMContentLoaded, cũng k chờ script và ảnh tải xong.
 
-Ta muốn fetch data sớm nhất có thể, khi nào DOM load xong thì show ra thôi. DOM chưa xong thì chưa show, DOM xong và fetch chưa xong thì show loading. K thể cho vào DOMContentLoaded vì khi đó, DOM phải load xong mới bắt đầu fetch.
-VD chuẩn:
+Ta muốn fetch data sớm nhất có thể, khi nào DOM load xong thì show ra thôi. DOM chưa xong thì chưa show, DOM xong và fetch chưa xong thì show loading. K được cho vào DOMContentLoaded vì khi đó, DOM phải load xong mới bắt đầu fetch.
+VD để script js ở cuối:
 <div id="data-container">Loading data...</div>
 <script>
   let dataFetched = false;
@@ -93,13 +88,26 @@ export default store;
 
 
 
+# Load file JS với async và defer
+Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý xử JS, gọi là Parse Blocking => default
+<script>: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy bth; defer chỉ chạy khi html parse xong.
+VD: Đang parse HTML CSS thì gặp 1 script async -> tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì vẫn chạy script luôn
+VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script 
+=> Best practice là đặt script ở đầu và dùng defer để đảm bảo exec sau khi DOM load.
+
+-> Nếu không xác định type="module" trong thẻ <script>, file JS sẽ được xử lý như một script thông thường, k có tính năng của module.
+- Trong module, biến và hàm được khai báo trong scope đó. Còn script bth thì biến không khai báo trong 1 block, sẽ là toàn cục, dùng mọi nơi miễn biến đã load xong.
+- Module trao đổi biến qua export, tự tối ưu k tải nhiều lần dù import 1 module nhiều lần. Module cũng luôn trong chế độ strict, còn script thông thường thì không.
+
+
+
 # Bản chất repaint và reflow
 Khi đổi thuộc tính element bằng js, browser sẽ tự nhận ra thay đổi này và tính toán lại styles cho phần tử bị thay đổi và các con của nó nếu cần.
 - Reflow: nếu CSS đổi có ảnh hưởng đến bố cục (layout) của trang, browser sẽ thực hiện "reflow" để tính toán lại vị trí và kích thước các elements.
 VD: box.style.width = '200px'; // Thay đổi kích thước (gây reflow và repaint)
 - Repaint: sau khi reflow, nếu css đổi ảnh hưởng đến sự xuất hiện của các phần tử (như màu sắc, ảnh, đường viền), browser sẽ thực hiện "repaint" để vẽ lại các phần tử.
 VD: box.style.backgroundColor = 'blue'; // Thay đổi màu sắc (chỉ gây repaint)
-=> Chú ý là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết.
+=> Chú ý là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết, khiến vanillaJS cũng mạnh như reactjs.
 
 Reflow tốn tài nguyên, nên hạn chế số lần reflow bằng cách gộp:
 VD: // Thay vì:
@@ -111,31 +119,82 @@ element.classList.add('new-style');
 
 
 
-# Load file JS với async và defer
-Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý xử JS, gọi là Parse Blocking => default
-Script attributes: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy; defer chỉ chạy khi html parse xong.
-VD: Đang parse HTML CSS thì gặp 1 script async -> tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì vẫn chạy script luôn
-VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script 
-Điểm lợi dùng defer là để script load ở đầu file vẫn đảm bảo thực hiện sau khi DOM load
-=> Dùng defer là ok nhất, đặt script ở đầu thoải mái.
+# Dùng promise và async
+Promise chỉ coi là kết thúc khi gọi resolve hoặc reject. 
+Khi chạy tới new Promise() thì bên trong Promise sẽ thực hiện bất đồng bộ ngay lập tức. VD biến = new Promise sẽ gọi ngay lập tức khi chạy tới; có resolve(new Promsie(<hàm>)) thì chạy được đến resolve cũng thực hiện hàm luôn; khi promise lồng kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái trong. 
 
--> Nhanh: defer js tải song song với html và thực thi sau khi html parse xong; async tải và thực thi song song; Mặc định k có thì parseblocking tải và thực thi xong mới chạy tiếp
+-> Promise.all nhận input list promise, trả ra 1 promise mới trả 1 mảng kết quả đúng thứ tự input. Nếu 1 promise con bị failed thì promise tổng reject luôn.
+Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
+Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
+Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
 
--> Nếu không xác định type="module" trong thẻ <script>, file JS sẽ được xử lý như một script thông thường, k có tính năng của module. Sự khác biệt:
-Scope: Trong module, biến và hàm được khai báo sẽ có scope riêng, không bị rò rỉ ra toàn cục. Trong script thông thường, chúng sẽ nằm trong scope toàn cục.
-Không thể sử dụng import và export trong script thông thường. Chỉ module mới hỗ trợ tính năng này.
-Module đảm bảo tối ưu k bị tải nhiều lần dù import 1 module vào nhiều lần.
-Module luôn chạy trong chế độ strict, trong khi script thông thường thì không => kqtr
+VD usecase tìm best url trong list url: có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào => ref tới projects "Vatra"
+Mỗi khi user vào web sẽ query thử 1 lệnh đơn giản trên cả list rpc với Promise.any, cái nào trả nhanh nhất thì lấy. Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại.
 
--> Dùng type="module" đổi cách viết JS: Mặc định mọi thứ là toàn cục. Biến ta khai báo ở file JS này sẽ truy cập được ở file js khác miễn là script tới cả 2 file và script file khai báo được load xong trước
-type="module" thì biến trong file đó k thể truy cập ở file khác, muốn là gì phải export import => nên luôn dùng type module, chỉ có code kiểu cũ mới k dùng
+-> Chuyển hết về async await
+- Hàm callback
+X(a, callback); => khi hàm X thực hiện xong sẽ truyền kết quả vào hàm callback ở cuối để xử lý. 
+Thường hàm từ thư viện sẽ có sẵn phiên bản khác dùng async await. Vd: const x = await X(a); callback(x);
+Nếu không có sẵn phiên bản async await, có thể ép chờ callback xong mới chạy xuống dưới, vì promise kbh kết thúc nếu cái cục cuối cùng k gọi resolve or reject:
+const x = await new Promise((resolve, reject) => {
+  X(a, async (err, result) => { // Tuỳ lib
+    if(err) reject(err); 
+    resolve(result);
+  })
+})
 
-script tới file js ở cuối page để đảm bảo mọi component đã load xong, hoặc dùng defer
+- Promise: await X().then().catch()
+Promise có thể await trực tiếp, sẽ chờ cả .then .catch, tương tự try catch khi dùng async await.
+=> Chú ý sai: promise khi call resolve hay reject vẫn sẽ chạy tiếp phần code bên dưới, nếu muốn dừng phải thêm return sau đó.
 
-Mặc định JS bth k dùng module, thì các biến khai báo không trong 1 block sẽ là global và dùng được ở mọi file js khác miễn các file đó được tải sau file js này.
-Nếu file JS là 1 module, thì biến file đó sẽ chỉ dùng trong phạm vi file đó, muốn dùng chỗ khác phải export import.
-File js tải trước có thể dùng biến global của file js tải sau nếu đảm bảo tại thời điểm dùng biến, file tải sau đã hoàn tất việc load qua biến. Coi cả web là 1 module.
+-> Event với on
+Ta có thể biến thành Promise để dùng với async. Bằng cách cho resolve khi onsucess, reject với onerror:
+new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    resolve(reader.result);
+  };
+  reader.onerror = (error) => {
+    reject(error);
+  };
+  reader.readAsDataURL(file);
+});
 
+
+
+# setTimeout, setInterval, setImmediate
+Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1
+
+-> Dùng setTimeout để sort => bỏ
+const arr = [10, 50, 100, 500, 0, 200]; var arr1 = [];
+function sortIt() {
+  for (let i of arr) {
+    setTimeout(()=> console.log(i), i);
+    setTimeout(()=> {	
+      arr1.push(i);
+      arr.splice(arr.indexOf(i), 1);
+      if(arr.length === 0)
+        console.log(arr1);
+     }, i);
+  }
+}
+
+Vd: setTimeout(function(){
+  alert("Chào mừng bạn đến với freetuts.net");
+});
+=> Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
+
+-> Dùng setImmediate: tương tự setTimeout với 0s
+setImmediate(<function>);
+process.nextTick(<function>); => chỉ có trong NodeJS
+Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTick > setImmediate > setTimeout 0s
+
+
+
+
+-> Highlight API rất mạnh giúp tô màu xuyên tag 
+
+-> Web worker giúp chạy multi thread trên browser
 
 
 # Navigation
@@ -157,64 +216,6 @@ Các file js, css, html k cần lo tải lại vì browser có cache để chỉ
 
 Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
 VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
-
-
-
-# Chuyển hết về async await
--> Hàm callback
-X(a, callback); => khi hàm X thực hiện xong sẽ truyền kết quả vào hàm callback ở cuối để xử lý. 
-Thường hàm từ thư viện sẽ có sẵn phiên bản khác là async await. Vd: const x = await X(a); callback(x);
-
-Nếu không có phiên bản async await, buộc phải truyền callback vào bth. Nếu callback là async, nó sẽ đi tiếp luôn và thực hiện song song hàm callback. Có thể ép chờ callback xong mới chạy xuống dưới:
-const x = await new Promise((resolve, reject) => {
-  X(a, async (err, result) => {
-    if(err) reject(err);
-    resolve(result);
-  })
-})
-=> Bản chất: promise kbh kết thúc nếu như cái cục cuối cùng của nó k gọi resolve or reject. Vd ở đây ta xóa resolve hay reject đi thì hàm promise này sẽ kbh kết thúc. Ta dựa vào nó để ép hàm này dùng được await.
-
--> Promise: await X().then();
-Chú ý promise khi call resolve hay reject, nó vẫn chạy tiếp phần code bên dưới, do đó ta nên return để tránh nó đi tiếp
-=> Trong callback phải check if(err) tuỳ lib, promise vẫn phải .then().catch, còn async await phải có try catch. Do đó chuyển sang async await phải luôn nhớ try catch error
-
--> Event với on
-Ta có thể biến thành Promise để dùng với async. Bằng cách cho resolve khi onsucess, reject với onerror:
-new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    resolve(reader.result);
-  };
-  reader.onerror = (error) => {
-    reject(error);
-  };
-  reader.readAsDataURL(file);
-});
-
-
-
-# Dùng promise 
-Promise chỉ coi là kết thúc khi gọi resolve hoặc reject.
-Gọi new Promise(<>) thì bên trong promise sẽ thực hiện bất đồng bộ ngay khi được gọi tới. Chú ý phân biệt điều này với var a = function() và bên trong function mới return new Promise thì promise sẽ k thực hiện ngay vì function k được thực hiện.
-
--> Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào, 1 cái failed sẽ lỗi và dừng luôn. Bản chất nó nhận các promise và trả ra 1 promise mới. Nếu 1 promise con bị failed thì promise ngoài sẽ reject luôn, k lấy được kết quả các promise thành công còn lại nữa.
-Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
-Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
-Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
-
-Chú ý gọi resolve(new Promsie(<hàm>)); chạy được đến resolve sẽ thực hiện hàm luôn
-
--> Chốt khi nào chạy promise:
-Function trả ra promise thì khi gọi function sẽ thực hiện promise luôn. 
-Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
-Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
-Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
-
--> Usecase: tìm best url trong list url
-VD có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào.
-Mỗi khi user vào trang web sẽ query thử 1 lệnh đơn giản (như getBlockNumber) cả list rpc với Promise.any xem cái nào trả nhanh nhất thì lấy
-Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại, ở FE thì khi refresh lại pages sẽ chọn lại url luôn.
-=> ref tới projects "Vatra"
 
 
 
@@ -449,33 +450,6 @@ Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp 
 
 
 
-# setTimeout, setInterval, setImmediate
-Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1
-
--> Dùng setTimeout để sort => bỏ
-const arr = [10, 50, 100, 500, 0, 200]; var arr1 = [];
-function sortIt() {
-  for (let i of arr) {
-    setTimeout(()=> console.log(i), i);
-    setTimeout(()=> {	
-      arr1.push(i);
-      arr.splice(arr.indexOf(i), 1);
-      if(arr.length === 0)
-        console.log(arr1);
-     }, i);
-  }
-}
-
-Vd: setTimeout(function(){
-  alert("Chào mừng bạn đến với freetuts.net");
-});
-=> Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
-
--> Dùng setImmediate: tương tự setTimeout với 0s
-setImmediate(<function>);
-process.nextTick(<function>); => chỉ có trong NodeJS
-Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTick > setImmediate > setTimeout 0s
-
 
 
 # Dùng service worker
@@ -495,13 +469,6 @@ Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Serv
 
 
 # Other
--> Polyfill cung cấp chức năng hiện đại trên các trình duyệt cũ hơn không hỗ trợ, tự viết or tải polyfill về. Khi dùng các hàm mới nên check cho chắc. 
-VD: if (!Array.prototype.includes) {
-  Array.prototype.includes = function includes(searchElement) {
-    return this.indexOf(searchElement) !== -1
-  }
-}
-
 -> Cách che giấu source code frontend: Đang ở trang webA, khi load ta cho history.pushState sang đường dẫn khác (cùng host) thì khi mở view page source sẽ ra html của đường dẫn đó. Để đánh lừa thì ta nên cho 2 đường dẫn na ná nhau với chữ i viết hoa giống chữ l viết thường
 Bắt khi người dùng vào devtool bằng JS và cho ẩn phần code JS đi là được. 
 Dev khác vào web sẽ thấy source code là của web kia và k có code js nào cả
