@@ -119,6 +119,77 @@ element.classList.add('new-style');
 
 
 
+# Dùng promise và async
+Promise chỉ coi là kết thúc khi gọi resolve hoặc reject. 
+Khi chạy tới new Promise() thì bên trong Promise sẽ thực hiện bất đồng bộ ngay lập tức. VD biến = new Promise sẽ gọi ngay lập tức khi chạy tới; có resolve(new Promsie(<hàm>)) thì chạy được đến resolve cũng thực hiện hàm luôn; khi promise lồng kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái trong. 
+
+-> Promise.all nhận input list promise, trả ra 1 promise mới trả 1 mảng kết quả đúng thứ tự input. Nếu 1 promise con bị failed thì promise tổng reject luôn.
+Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
+Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
+Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
+
+VD usecase tìm best url trong list url: có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào => ref tới projects "Vatra"
+Mỗi khi user vào web sẽ query thử 1 lệnh đơn giản trên cả list rpc với Promise.any, cái nào trả nhanh nhất thì lấy. Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại.
+
+-> Chuyển hết về async await
+- Hàm callback
+X(a, callback); => khi hàm X thực hiện xong sẽ truyền kết quả vào hàm callback ở cuối để xử lý. 
+Thường hàm từ thư viện sẽ có sẵn phiên bản khác dùng async await. Vd: const x = await X(a); callback(x);
+Nếu không có sẵn phiên bản async await, có thể ép chờ callback xong mới chạy xuống dưới, vì promise kbh kết thúc nếu cái cục cuối cùng k gọi resolve or reject:
+const x = await new Promise((resolve, reject) => {
+  X(a, async (err, result) => { // Tuỳ lib
+    if(err) reject(err); 
+    resolve(result);
+  })
+})
+
+- Promise: await X().then().catch()
+Promise có thể await trực tiếp, sẽ chờ cả .then .catch, tương tự try catch khi dùng async await.
+=> Chú ý sai: promise khi call resolve hay reject vẫn sẽ chạy tiếp phần code bên dưới, nếu muốn dừng phải thêm return sau đó.
+
+-> Event với on
+Ta có thể biến thành Promise để dùng với async. Bằng cách cho resolve khi onsucess, reject với onerror:
+new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    resolve(reader.result);
+  };
+  reader.onerror = (error) => {
+    reject(error);
+  };
+  reader.readAsDataURL(file);
+});
+
+
+
+# setTimeout, setInterval, setImmediate
+Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1
+
+-> Dùng setTimeout để sort => bỏ
+const arr = [10, 50, 100, 500, 0, 200]; var arr1 = [];
+function sortIt() {
+  for (let i of arr) {
+    setTimeout(()=> console.log(i), i);
+    setTimeout(()=> {	
+      arr1.push(i);
+      arr.splice(arr.indexOf(i), 1);
+      if(arr.length === 0)
+        console.log(arr1);
+     }, i);
+  }
+}
+
+Vd: setTimeout(function(){
+  alert("Chào mừng bạn đến với freetuts.net");
+});
+=> Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
+
+-> Dùng setImmediate: tương tự setTimeout với 0s
+setImmediate(<function>);
+process.nextTick(<function>); => chỉ có trong NodeJS
+Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTick > setImmediate > setTimeout 0s
+
+
 
 
 -> Highlight API rất mạnh giúp tô màu xuyên tag 
@@ -145,64 +216,6 @@ Các file js, css, html k cần lo tải lại vì browser có cache để chỉ
 
 Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
 VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
-
-
-
-# Chuyển hết về async await
--> Hàm callback
-X(a, callback); => khi hàm X thực hiện xong sẽ truyền kết quả vào hàm callback ở cuối để xử lý. 
-Thường hàm từ thư viện sẽ có sẵn phiên bản khác là async await. Vd: const x = await X(a); callback(x);
-
-Nếu không có phiên bản async await, buộc phải truyền callback vào bth. Nếu callback là async, nó sẽ đi tiếp luôn và thực hiện song song hàm callback. Có thể ép chờ callback xong mới chạy xuống dưới:
-const x = await new Promise((resolve, reject) => {
-  X(a, async (err, result) => {
-    if(err) reject(err);
-    resolve(result);
-  })
-})
-=> Bản chất: promise kbh kết thúc nếu như cái cục cuối cùng của nó k gọi resolve or reject. Vd ở đây ta xóa resolve hay reject đi thì hàm promise này sẽ kbh kết thúc. Ta dựa vào nó để ép hàm này dùng được await.
-
--> Promise: await X().then();
-Chú ý promise khi call resolve hay reject, nó vẫn chạy tiếp phần code bên dưới, do đó ta nên return để tránh nó đi tiếp
-=> Trong callback phải check if(err) tuỳ lib, promise vẫn phải .then().catch, còn async await phải có try catch. Do đó chuyển sang async await phải luôn nhớ try catch error
-
--> Event với on
-Ta có thể biến thành Promise để dùng với async. Bằng cách cho resolve khi onsucess, reject với onerror:
-new Promise((resolve, reject) => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    resolve(reader.result);
-  };
-  reader.onerror = (error) => {
-    reject(error);
-  };
-  reader.readAsDataURL(file);
-});
-
-
-
-# Dùng promise 
-Promise chỉ coi là kết thúc khi gọi resolve hoặc reject.
-Gọi new Promise(<>) thì bên trong promise sẽ thực hiện bất đồng bộ ngay khi được gọi tới. Chú ý phân biệt điều này với var a = function() và bên trong function mới return new Promise thì promise sẽ k thực hiện ngay vì function k được thực hiện.
-
--> Promise all trả về mảng kết quả đúng thứ tự với mảng input truyền vào, 1 cái failed sẽ lỗi và dừng luôn. Bản chất nó nhận các promise và trả ra 1 promise mới. Nếu 1 promise con bị failed thì promise ngoài sẽ reject luôn, k lấy được kết quả các promise thành công còn lại nữa.
-Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
-Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
-Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
-
-Chú ý gọi resolve(new Promsie(<hàm>)); chạy được đến resolve sẽ thực hiện hàm luôn
-
--> Chốt khi nào chạy promise:
-Function trả ra promise thì khi gọi function sẽ thực hiện promise luôn. 
-Khi 1 promise lồng nhiều promise bên trong kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái Trong
-Biến gán = new Promise luôn thì gọi ngay lập tức khi chạy tới
-Function trả ra function con, fucntion con trả ra promise thì khi nào gọi function con mới chạy promise như bth
-
--> Usecase: tìm best url trong list url
-VD có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào.
-Mỗi khi user vào trang web sẽ query thử 1 lệnh đơn giản (như getBlockNumber) cả list rpc với Promise.any xem cái nào trả nhanh nhất thì lấy
-Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại, ở FE thì khi refresh lại pages sẽ chọn lại url luôn.
-=> ref tới projects "Vatra"
 
 
 
@@ -436,33 +449,6 @@ yield* dùng được với mọi type iterative
 Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp mà k cần gọi next. Đây cũng là cơ chế của redux-saga, k cần gọi next mà đưa vào loop duyệt liên tiếp
 
 
-
-# setTimeout, setInterval, setImmediate
-Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1
-
--> Dùng setTimeout để sort => bỏ
-const arr = [10, 50, 100, 500, 0, 200]; var arr1 = [];
-function sortIt() {
-  for (let i of arr) {
-    setTimeout(()=> console.log(i), i);
-    setTimeout(()=> {	
-      arr1.push(i);
-      arr.splice(arr.indexOf(i), 1);
-      if(arr.length === 0)
-        console.log(arr1);
-     }, i);
-  }
-}
-
-Vd: setTimeout(function(){
-  alert("Chào mừng bạn đến với freetuts.net");
-});
-=> Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
-
--> Dùng setImmediate: tương tự setTimeout với 0s
-setImmediate(<function>);
-process.nextTick(<function>); => chỉ có trong NodeJS
-Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTick > setImmediate > setTimeout 0s
 
 
 
