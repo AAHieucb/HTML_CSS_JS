@@ -165,6 +165,188 @@ light/dark mode, phóng to ảnh với css only, readmore
 
 
 
+# Dùng font
+TrueType Fonts (TTF): TrueType là định dạng font phổ biến cho các hệ điều hành Mac OS và Windows.
+OpenType Fonts (OTF): OpenType là một định dạng được phát triển dựa trên nền tảng của TrueType.
+Web Open Font Format (WOFF): là một TrueType nhưng nhẹ hơn và được W3C khuyến khích dùng
+Web Open Font Format (WOFF 2.0): là một bản nén tuyệt vời hơn WOFF 1.0.
+Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của OpenType
+SVG Fonts: là chữ biến hóa như ảnh graphic. 
+
+Còn có color font thêm màu.
+Material icons là icons viết dạng tag html
+
+-> Thêm font mới:
+- Dùng @import url(<remote url>); để dùng trực tiếp font-family trong css, k dùng được với local url.
+- Fallback font:
+@font-face {
+  font-family: MyFont;
+  src: url(sansation_light.woff2) format("woff2"),
+       url(sansation_light.woff) format("woff"); // Browser k support woff2 tự chuyển sang woff
+  font-weight: 100;
+}
+h2 {
+  font-family: MyFont, sans-serif; // K tìm thấy MyFont sẽ dùng font sans-serif mặc định của browser
+}
+- Nên dùng 1 font file chuẩn và style tự set. Nếu buộc có nhiều style chia font-file riêng, phải thêm font-style font-weight để pb, dùng đúng style sẽ tự lấy đúng font
+VD dùng cùng tên font nhưng style khác nhau:
+@font-face {
+  font-family: "DroidSerif";
+  src: url("DroidSerif-Bold-webfont.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+@font-face {
+  font-family: "DroidSerif";
+  src: url("DroidSerif-BoldItalic-webfont.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+}
+Sử dụng nó tự dùng đúng font tương ứng:
+body { font-family: "DroidSerif", Georgia, serif; }
+h1 { font-weight: bold; }
+em { font-style: italic; }
+strong em {
+  font-weight: bold;
+  font-style: italic;
+}
+Short hand nhiều url:
+@font-face {
+  font-family: 'Klavika';
+  src: url(../fonts/Klavika-Regular.otf) format('truetype') font-weight-normal,
+       url(../fonts/Klavika-Bold.otf) format('truetype') font-weight-bold,
+       url(../fonts/Klavika-Bold-Italic.otf) format('truetype') font-italic font-weight-bold;
+}
+
+-> Web safe font: Có các font chạy trên linux ok nhưng sang window bị lệch dòng, phải sửa thẳng vào file ttf bằng FontForge mất tg. Web safe font là các font chạy mượt với mọi browser và hđh. Nó k đảm bảo lúc nào cũng khả dụng nên phải thêm fallback fonts nếu dùng.
+URL: https://www.w3schools.com/cssref/css_websafe_fonts.php
+URL: https://www.w3schools.com/cssref/css_fonts_fallbacks.php
+
+-> Các thuộc tính:
+- text-transform: uppercase; => viết hoa input của người dùng, luôn dùng thay cho JS
+- font-systhesis => bỏ, default auto tự cho phép browser giả style khi font k hỗ trợ. 
+Chỉ cần đảm bảo k bị lỗi hiển thị là đươc. Nếu thêm style mà text k đổi thì là do font k hỗ trợ và browser cũng k giả style được.
+- text-rendering => default auto browser tự quyết định cân bằng optimizeSpeed, optimizeLegibility, hay độ chính xác hình học (geometricPrecision)
+optimizeLegibility là giúp vc chữ hiển thị dễ đọc, phân biệt "f l i" bằng cách in với kích thước hơi khác biệt 1 chút cho người dùng tránh nhầm
+=> Để thế nào cũng được, nếu k sợ nhầm chữ thì để optimizeSpeed
+- font-smooth => luôn để always là luôn tối ưu smooth cho các thiét bị
+Dùng kèm -webkit-font-smoothing: auto/none/antialiased/subpixel-antialiased (nét chữ sắc nhất) => MacOs
+-moz-osx-font-smoothing: auto/grayscale => Firefox MacOS 
+- font-display => Chỉ định cách hiển thị font khi chưa tải xong. default auto. 
+block: text sẽ bị ẩn nhưng vẫn chiếm k gian (tối đa 3 giây) trong khi chờ font tải xong, sau đó sẽ hiển thị với font mong muốn.
+swap: text hiển thị ngay lập tức bằng font dự phòng, sau đó thay thế bằng font mong muốn khi tải xong => luôn dùng css reset
+
+-> Font size clamp:
+Màn hình luôn được chia thành 100 vw và vh. VD màn hình là 1460px thì 1vw sẽ tương ứng với 14.6px
+clamp(a, b, c); lấy 1 giá trị trong khoảng a và c. Nó ss lấy min(b,c) là x rồi lấy max(a, x) trả ra kết quả. Nên dùng min, max, clamp thay thế width, max/min-width.
+URL: https://clamp.font-size.app
+VD màn hình dưới 700px có font-size là 16px, sau đó tăng dần tuyến tính lên 1px mỗi 100px tăng lên cho đến max là 22px => font-size: clamp(16px, 1vw + 9px, 22px);
+Khi 700px, nó sẽ là clamp(16px, 16px, 22px) thì lấy 16px. Font size tuyến tính tăng lên 1300px thì clamp(16px, 22px, 22px) thì lấy 22px
+
+--> Gợi ý:
+Màn hình break point: 500 - 1300 - 1900 => đặt ở 2 mốc 500 và 1300 là được
+1) Màn hình lớn: text thường 16px, chữ to 20px, title 24px, chữ khổng lồ 48px, button 16px
+Màn hình mobile: text thường 14px, chữ to 16px, title 20px, chữ khổng lồ 36px, button 14px 
+2) Màn hình lớn: text siêu bé 12px, text thường 14px, title 16px, chữ khổng lồ 40px, button 14px
+Màn hình mobile: text thường 12px, title 14px, chữ khổng lồ 20px, button 14px
+
+-> @font-palette-values gom các thuộc tính font lại tái sử dụng
+@font-palette-values --identifier {
+  font-family: Bixa;
+}
+.my-class {
+  font-palette: --identifier;
+}
+
+
+
+
+
+-> Variable fonts là các loại phông chữ cho phép thay đổi thuộc tính cùng 1 tệp phông chữ, thay vì phải fix cứng font-size, font-weight, italic. Luôn dùng variables fonts. Các font-size mà buộc phải set kích thước thì k là variables fonts. Khi tải font local cũng cần chú ý
+VD roboto là static font, roboto_flex là variable font
+
+
+-> :root và html gần tương đương nhau, nhưng thường dùng html để set default style cho mọi thẻ, dùng :root để set global variables.
+Browser có thể đổi font-size, dùng pixel k tốt vì nó override settings đó của browser.
+Cái gì global thì rem, cái gì chỉ phụ thuộc font-size phần tử hiện tại thì em (theo kích thước font-size của phần tử hiện tại).
+Khi font-size tăng, ta cũng muốn padding hay margin của nó tăng. Do đó kích thước nên dùng em, font-size nên dùng rem. Media query dùng rem, khoảng trắng nên dùng rem.
+box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k muốn phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
+
+-> Khi tạo chữ trang trí nên dùng:
+-webkit-text-stroke giúp tạo viền cho svg mà font thực chất là svg. Thường kết hợp với text-shadow cho hiệu ứng ảo. 
+paint-order: stroke fill; thì stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là mặc định
+
+
+
+# Metadata SEO
+***URL full mọi tag trong <head>: https://github.com/joshbuchea/HEAD
+
+<title> <meta name="description"> <meta name="keywords"/>
+<link rel = "canonical" href = "http://example.com/"/> => Khi 1 web có nhiều url dẫn tới cùng 1 nội dung, google không biết url nào nên hiển thị trên kết quả tìm kiếm. Luôn dùng thẻ canonical trỏ tới web gốc để thông báo cho search engine URL này là trang chính và tránh lập chỉ mục với URL của các trang trùng lặp khác
+Đủ alt cho hình ảnh
+<link rel="icon" href="/logo.svg"/>
+
+Open Graph tags liên kết với các social media: <meta property = "og: type" content = "article" /> // hay "website"
+<meta property = "og:title" content = "TÊN TIÊU ĐÊ HOẶC TRANG WEB" />
+<meta property = "og:description" content = "MÔ TẢ CỦA TRANG NỘI DUNG" />
+<meta property = "og:image" content = "LIÊN KẾT ĐẾN TẬP TIN HÌNH ẢNH" />
+<meta property = "og:image:alt" content="Collection Image"/>
+<meta property = "og:url" content = "PERMALINK" />
+<meta property = "og:site_name" content = "TÊN TRANG WEB" />
+<meta property="og:locale" content="en_US"/>
+=> og là thẻ chung, các thẻ ở từng nền sẽ ghi đè thẻ og
+VD: <meta name = "twitter: title" content = "TÊN TIÊU ĐỀ HOẶC TRANG WEB"> => ghi đè og:title
+
+Twitter tag tương tự nhưng chỉ dành cho twitter: <meta name = "twitter:description" content = ”"MÔ TẢ TRANG NỘI DUNG">
+<meta name = "twitter:image" content = "LINK TO IMAGE">
+<meta name = "twitter:site" content = "USERNAME">
+<meta name = "twitter:creator" content = "@ USERNAME">
+
+Khi có nhiều lang:
+<link href="https://opensea.io" hrefLang="en" rel="alternate"/>
+<link href="https://opensea.io/zh-CN" hrefLang="zh-CN" rel="alternate"/>
+<link href="https://opensea.io/zh-TW" hrefLang="zh-TW" rel="alternate"/>
+<link href="https://opensea.io/de-DE" hrefLang="de-DE" rel="alternate"/>
+
+-> <meta name="viewport" content="width=device-width, initial-scale=1.0"> => Luôn có thẻ này để cho phép người dùng zoom-in text, điều này phù hợp với những người thị lực yếu vào website, họ sẽ phải dùng các tool giúp zoom to trang web để nhìn rõ, VD CTRL+ của browser. Custom:
+<meta name="viewport" content="user-scalable=yes"/> cho phép người dùng sử dụng các tool zoom cho trang web
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1"/> chỉ cho max scale đến 200%
+<meta name="viewport" conent="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/> => k cho zoom vì sợ break design
+=> 1 số thiết bị có tính năng zoom text only, nhưng nếu text zoom to mà layout k zoom sẽ break design, do đó code height của thẻ nên phụ thuộc vào content chứ k được fix cứng
+
+-> Nên dùng senmatic element sẽ tốt cho SEO vì tạo cấu trúc nội dung rõ ràng hơn cho search engine hiểu.
+header và footer ở đầu cuối page; figure chứa img và figcaption khi cần ảnh có chú thích; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và <mark> để highlight important text
+Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
+=> 1 số thẻ có thể có tính chất đặc biệt như thẻ time có thể dùng attribute. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn
+
+-> Ảnh hiện ở nền tảng khác nên được ưu tiên preload:
+<link rel="preload" as="image" href="/static/images/logos/opensea.svg"/>
+<link rel="preload" as="image" imagesrcset="
+  https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=640 640w, 
+  https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=750 750w,
+  https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=828 828w,
+" imagesizes="100vw"/>
+=> imagesrcset tự set thumbnail là ảnh nào tuỳ theo kích thước màn hình. Chỉ cần để nó trong header là browser chạy tới sẽ load và lưu cache luôn. Bất cứ chỗ nào trong web dùng mà trùng y hệt url đó sẽ lấy từ cache luôn mà k load lại.
+=> Tinh kích thước hình ảnh theo 100vw
+
+-> Google bot luôn tự đánh chỉ mục với mọi trang web mà nó truy cập được. Trừ khi có robots.txt hay thẻ meta robots cản nó => robots.txt thường để default or k có.
+C1: robots.txt có tác dụng trong toàn page, chỉ cần đặt file vào cùng file gốc index.html
+User-agent: *
+Disallow: /page2.html
+=> tức là googlebot đọc mọi pages trừ page2.html
+C2: <meta name = "robots" content = "noindex, nofollow"> => Có nghĩa là không lập chỉ mục hay không theo dõi các liên kết từ trang này trang web này.
+<meta name = "robots" content = "index, follow"> => Có nghĩa là chỉ mục và theo dõi các liên kết từ trang này 
+VD cho robots.txt cản pages2, nhưng trong pages 2 lại dùng thẻ meta robots index. Thì googlebot gặp robots.txt sẽ bỏ qua pages2 luôn và chưa kịp thấy thẻ meta và k đánh index => Do đó bình thường chỉ dùng meta là được, chả cần robots.txt làm gì. Chỗ nào cản đánh index thì thêm noindex thôi
+
+-> Mỗi thẻ h1, h2 nên có id để có url # ref tới vị trí đó nhanh. Nên thêm nếu k có, k giúp SEO nhưng UX tốt hơn:
+document.querySelectorAll("h2").forEach(function(el) {
+  if (!el.hasAttribute("id")) {
+      el.setAttribute("id", el.textContent.replaceAll(/[^a-z]/gi, ''));
+  }
+});
+
+
+
 # Dùng zIndex
 Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
 Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi

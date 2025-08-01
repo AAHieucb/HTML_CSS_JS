@@ -162,6 +162,10 @@ html {
   font-family: "DM Sans", sans-serif;
   font-display: swap;
   overflow-y: hidden;
+
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none; // Prevent font-size inflation ở 1 số browser trên di động
 }
 :root {
   --hue: 230;
@@ -194,7 +198,7 @@ body{
   padding: 0;
 }
 :where(:root) {
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizeSpeed;
 }
 img {
   max-width: 100%;
