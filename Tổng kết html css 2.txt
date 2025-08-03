@@ -135,34 +135,6 @@ K nên dùng loading bar ngang: fetch API thì k nên vì mỗi component là lo
 
 
 
-# Kích thước khoảng cách trong CSS
--> auto do browser tự tính, chiều dọc lấy 0, chiều ngang lấy hết phần có thể lấy mà k ảnh hưởng các thẻ khác, nếu có nhiều cái cùng auto thì chia đều giá trị cho từng cái => Cần nếu muốn kích thước 1 thẻ bị kéo dài theo thẻ cha tự lấp đầy vào khoảng trống, bây giờ dùng -webkit-fill-available rồi
-Hàm calc có thể tính các kiểu như 50% - 10px là 50% thẻ cha giảm 10px 
-
--> Đơn vị tuyệt đối: Chỉ đúng trên các thiết bị độ phân giải cao như máy in, còn trên laptop và di động kết quả cho có thể sai khác. VD 1in = 96px = 2.54 cm
-
-Relative Units
-em: tương đối so với font-size của phần tử cha
-ex: Tương đối so với chiều cao chữ "x" của font hiện tại.
-ch: Chiều rộng của ký tự "0" trong font đang dùng
-*rem (root em): Giống em, nhưng là tương đối so với phần tử gốc, thường là <html> => sai, nó theo font-size set bởi browser trước cả tag html
-*vw: Tương đối 1% width của kích thước cửa sổ trình duyệt (viewport).
-*vh: Tương đối 1% height của kích thước cửa sổ trình duyệt (viewport).
-vmin Relative to 1% dựa trên chiều nhỏ hơn của trình duyệt. VD điện thoại xoay dọc thì vmin sẽ là 1% của width
-vmax Relative to 1% dựa trên chiều lớn hơn của trình duyệt
-*%: Có giá trị tương đối so với phần tử cha.
-
-VD thuộc tính có thể thay đổi phức tạp, ta k muốn đổi thủ công mà đổi 1 chỗ thì các chỗ khác cũng đổi thì nên cho các thuộc tính phụ thuộc vào nhau. Chẳng hạn thẻ container có padding gấp đôi padding thẻ X thì set padding container là 10rem, padding thẻ x là 5rem chẳng hạn. Xong responsive fontsize của thẻ root là xong
-
---> Các đơn vị mới dùng riêng cho mobile như lvh, dvh, svh, svw 
-vh là chiều cao cơ bản, k đổi 
-lvh là chiều cao lớn nhất khi k có toolbar, svh là chiều cao nhỏ nhất khi k có toolbar
-dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => luôn dùng
-
---> Trap: 1 thẻ có height 50% thì sẽ bằng 50% height thẻ cha. Nếu thẻ cha k set height tức tự vừa với thẻ con thì chả có gì nên là 0
-
-
-
 # Xử lý màu
 Tool sinh code gradient: https://angrytools.com/gradient/
 
