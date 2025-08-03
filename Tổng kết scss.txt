@@ -28,7 +28,7 @@ scss dùng @use thay hoàn toàn @import k bị duplicate.
 .button {
   background-color: var(--primary-color);
   &--primary {
-    background-color: var(--primary-color);
+    background-color: var(--primarycolor);
   }
   &--secondary {
     background-color: var(--secondary-color);

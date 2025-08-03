@@ -13,7 +13,7 @@ Frontend muốn dùng thì index.html vẫn phải <script> thủ công tới lo
 Nodejs còn cung cấp cặp export/require giúp tự tạo modules, tức là require còn tìm ở các file trong thư mục gốc chứ k chỉ tìm trong node_modules. Hiểu require là chức năng của nodejs, là tính năng tất yếu phải có của server chứ klq gì đến JS.
 Frontend lúc này vẫn chưa thể import sourcecode trực tiếp, lý do là client side k hiểu lệnh require là gì. Ta buộc phải <script> tất cả trong file html trước theo thứ tự.
 
--> JS ra đời type module giúp import code giữa các module với nhau ở FE.
+-> JS ra đời type module giúp import code giữa các module với nhau ở FE, và import module tải về node_modules
 
 -> Module bundler ra đời giúp FE dùng được các package của server bằng cách thế nội dung gốc vào, loại bỏ cú pháp require. Có thể import cả file css các thứ luôn. 
 Bundler cũng đóng gói phần code js thành 1 file js chung và html chỉ cần script tới 1 file đó thôi. 
@@ -35,8 +35,8 @@ Tương tự k nên dùng whitespace nowrap mà hãy dùng line clamp nếu có 
 # DevTool Browser
 -> Tab Console : 
 allow pasting
-[...$$('img')].forEach(a=>a.remove()); 
 document.designMode = "on"; 
+[...$$('img')].forEach(a=>a.remove()); 
 VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) => click tất cả các thẻ a có 2 class .touchable.primary
 
 -> Tab Source Browser: ctrl+p -> tìm file -> đặt debugger -> tới line bất kỳ với: ctrl+p -> :100 để tới dòng 100 -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
@@ -50,15 +50,15 @@ Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình du
 ### Design
 # How to design a website
 -> Exp:
-- Phần header dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
-- Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật hoặc thêm gradient, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật. VD cho núp sau ảnh. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, ưu tiên load trước.
+- Phần header đóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
 - Navigation bar có text và logo nên cùng màu đồng bộ, cùng 1 styles, logo nhỏ gọn.
+- Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật hoặc thêm gradient, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật. VD cho núp sau ảnh. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, ưu tiên load trước.
 - K nên để text dài cả 1 dòng, nên vắn tắt ít chữ, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ.
 - Button trong card thường đồng bộ và nằm ở 1 phía, k chiếm full kích thước
 - Sidebar UX:
 Cho phép expand 48-64px to 240-300px. Icon khi thu nhỏ luôn phải có tooltip và show cả phím tắt. Cho phép user drag trong sidebar, hightlight vùng quan trọng thường dùng.
 Mỗi item trong sidebar có button riêng như create, view, update, leave, or có số nhỏ hiển thị thông tin ví dụ số lượng notifications
-Sidebar có thể mở sidebar con và back lại được, hoặc chia level dropdown xuống subitem. Pages khác nhau có thể có sidebar khác nhau.
+Sidebar có thể mở sidebar con và back lại được, hoặc chia level dropdown xuống subitem. Pages khác nhau có thể có sidebar khác nhau. Safe triangle.
 Sidebar thường có thể switch accounts, chứa darkmode, chứa thông báo update ở cuối có thể tắt đi. Có thể chứa search bar search item trong sidebar nếu lớn.
 Có checkbox thì chia 3 vùng màu rõ ràng cho item unselected, selected, hovered.
 - Có tool online check constrast ratio vì nó ảnh hưởng SEO: Văn bản thường > 7:1, Văn bản lớn > 4.5:1, Max k quá 15:1
@@ -130,6 +130,7 @@ width: fill-available; width: -webkit-fill-available; => kéo dài hết phần 
 CSS thường tốt hơn vì giảm thiểu logic cho browser xử lý các thứ khác, tận dụng GPU tối ưu hiệu suất.
 JS animation đôi khi buộc phải dùng cho exit animation. Trong React dùng useState cho animation có thể bị rối vì rerender
 VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. 
+Có cách chuẩn để fadeout ẩn thẻ bằng css thuần: opacity 0 + visibility hidden trước rồi height giảm về 0 sau đó
 
 -> ES6 (ECMAScript) là các quy tắc JS chạy tốt trên mọi trình duyệt. Babel convert ES6 sang CommonJS cho NodeJS dùng được.
 

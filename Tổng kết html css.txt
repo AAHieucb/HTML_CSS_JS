@@ -172,9 +172,7 @@ Web Open Font Format (WOFF): là một TrueType nhưng nhẹ hơn và được W
 Web Open Font Format (WOFF 2.0): là một bản nén tuyệt vời hơn WOFF 1.0.
 Embedded OpenType Fonts (EOT): EOT là một hình thức nén ít dùng của OpenType
 SVG Fonts: là chữ biến hóa như ảnh graphic. 
-
-Còn có color font thêm màu.
-Material icons là icons viết dạng tag html
+Còn có material icons là icons viết dạng tag html
 
 -> Thêm font mới:
 - Dùng @import url(<remote url>); để dùng trực tiếp font-family trong css, k dùng được với local url.
@@ -218,6 +216,10 @@ Short hand nhiều url:
        url(../fonts/Klavika-Bold-Italic.otf) format('truetype') font-italic font-weight-bold;
 }
 
+--> Variable fonts cho phép đổi thuộc tính cùng 1 font file, k fix cứng font-size, font-weight, italic => nên luôn dùng
+Khi tải font chú ý font-size fix cứng thì k nên dùng. Variable font thì FE chỉ cần tải 1 file rồi tự style thoải mái.
+VD roboto là static font, roboto_flex là variable font
+
 -> Web safe font: Có các font chạy trên linux ok nhưng sang window bị lệch dòng, phải sửa thẳng vào file ttf bằng FontForge mất tg. Web safe font là các font chạy mượt với mọi browser và hđh. Nó k đảm bảo lúc nào cũng khả dụng nên phải thêm fallback fonts nếu dùng.
 URL: https://www.w3schools.com/cssref/css_websafe_fonts.php
 URL: https://www.w3schools.com/cssref/css_fonts_fallbacks.php
@@ -250,31 +252,24 @@ Màn hình mobile: text thường 14px, chữ to 16px, title 20px, chữ khổng
 2) Màn hình lớn: text siêu bé 12px, text thường 14px, title 16px, chữ khổng lồ 40px, button 14px
 Màn hình mobile: text thường 12px, title 14px, chữ khổng lồ 20px, button 14px
 
--> @font-palette-values gom các thuộc tính font lại tái sử dụng
-@font-palette-values --identifier {
+-> Color font thêm màu. Tut: https://www.youtube.com/watch?v=VpZSMq2ajDE
+URL web check màu color font support: https://wakamaifondue.com/
+@font-palette-values --fontname {
   font-family: Bixa;
+  base-palette: 3; // trong web từ trên xuống là các palette font hỗ trợ
+  override-colors: 0 rgba(0,0,0,1), 2 red; // trong web từ trái sang là các color index để override
 }
 .my-class {
   font-palette: --identifier;
 }
 
+-> K dùng px vì browser đổi font-size và px sẽ override browser setting. Khi font-size tăng, nhiều nơi khác cũng nên tăng. 
+Với kích thước bth như @media hay padding margin nên dùng rem, font-size cũng dùng rem. Với spacing liên quan đến text, nên dùng em. 
+VD box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
 
-
-
-
--> Variable fonts là các loại phông chữ cho phép thay đổi thuộc tính cùng 1 tệp phông chữ, thay vì phải fix cứng font-size, font-weight, italic. Luôn dùng variables fonts. Các font-size mà buộc phải set kích thước thì k là variables fonts. Khi tải font local cũng cần chú ý
-VD roboto là static font, roboto_flex là variable font
-
-
--> :root và html gần tương đương nhau, nhưng thường dùng html để set default style cho mọi thẻ, dùng :root để set global variables.
-Browser có thể đổi font-size, dùng pixel k tốt vì nó override settings đó của browser.
-Cái gì global thì rem, cái gì chỉ phụ thuộc font-size phần tử hiện tại thì em (theo kích thước font-size của phần tử hiện tại).
-Khi font-size tăng, ta cũng muốn padding hay margin của nó tăng. Do đó kích thước nên dùng em, font-size nên dùng rem. Media query dùng rem, khoảng trắng nên dùng rem.
-box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k muốn phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
-
--> Khi tạo chữ trang trí nên dùng:
--webkit-text-stroke giúp tạo viền cho svg mà font thực chất là svg. Thường kết hợp với text-shadow cho hiệu ứng ảo. 
-paint-order: stroke fill; thì stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là mặc định
+-> Custom chữ trang trí:
+-webkit-text-stroke: 1px black; => tạo 1 đường viền ngoài cho svg, mà font thực chất là svg nên tạo viền cho font. Thường kết hợp thêm với text-shadow.
+paint-order: stroke fill; => stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là để mặc định
 
 
 
