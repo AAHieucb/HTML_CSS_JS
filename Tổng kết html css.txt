@@ -300,6 +300,9 @@ vh là chiều cao cơ bản, k tính toolbar.
 lvh là chiều cao lớn nhất khi k có toolbar, svh là chiều cao nhỏ nhất khi k có toolbar
 dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => luôn dùng thay vh
 
+-> Nhanh:
+Dùng rem em và dvh
+
 
 
 # Metadata SEO
