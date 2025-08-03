@@ -272,7 +272,7 @@ VD box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ả
 paint-order: stroke fill; => stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là để mặc định
 
 -> Nhanh:
-- Thêm font với @import hoặc @font-face. Nên dùng variables font đỡ phải định nghĩ từng style font.
+- Thêm font với @import hoặc @font-face. Dùng variables font k phải định nghĩa từng style.
 - font size clamp
 - Có thể custom màu color font
 - Dùng rem với khoảng cách, nếu kc liên quan đến text thì dùng em.
