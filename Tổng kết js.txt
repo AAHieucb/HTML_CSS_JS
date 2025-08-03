@@ -104,6 +104,10 @@ VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CS
 - Trong module, biến và hàm được khai báo trong scope đó. Còn script bth thì biến không khai báo trong 1 block, sẽ là toàn cục, dùng mọi nơi miễn biến đã load xong.
 - Module trao đổi biến qua export, tự tối ưu k tải nhiều lần dù import 1 module nhiều lần. Module cũng luôn trong chế độ strict, còn script thông thường thì không.
 
+-> Nhanh:
+default block, async, defer
+type module có thể export biến local
+
 
 
 # Bản chất repaint và reflow
@@ -112,7 +116,7 @@ Khi đổi thuộc tính element bằng js, browser sẽ tự nhận ra thay đ�
 VD: box.style.width = '200px'; // Thay đổi kích thước (gây reflow và repaint)
 - Repaint: sau khi reflow, nếu css đổi ảnh hưởng đến sự xuất hiện của các phần tử (như màu sắc, ảnh, đường viền), browser sẽ thực hiện "repaint" để vẽ lại các phần tử.
 VD: box.style.backgroundColor = 'blue'; // Thay đổi màu sắc (chỉ gây repaint)
-=> Chú ý là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết, khiến vanillaJS cũng mạnh như reactjs.
+=> Chú ý là browser không repaint và reflow cả page mà chỉ với các phần tử cần thiết.
 
 Reflow tốn tài nguyên, nên hạn chế số lần reflow bằng cách gộp:
 VD: // Thay vì:
@@ -125,8 +129,8 @@ element.classList.add('new-style');
 
 
 # Dùng promise và async
-Promise chỉ coi là kết thúc khi gọi resolve hoặc reject. 
-Khi chạy tới new Promise() thì bên trong Promise sẽ thực hiện bất đồng bộ ngay lập tức. VD biến = new Promise sẽ gọi ngay lập tức khi chạy tới; có resolve(new Promsie(<hàm>)) thì chạy được đến resolve cũng thực hiện hàm luôn; khi promise lồng kiểu new Promise(<promise lồng>) thì cái ngoài thực hiện sẽ thực hiện hết các cái trong. 
+Luồng promise: khi gọi new Promise() sẽ chạy ngay, kết thúc khi gọi resolve/reject và cũng chỉ gọi resolve/reject được 1 lần thôi, sau đó vẫn chạy hết phần code bên dưới mới trả giá trị, nên nếu muốn dừng luôn phải thêm return sau đó.
+VD resolve(new Promsie(<hàm>)) thì chạy đến resolve cũng thực hiện hàm luôn; khi promise lồng kiểu new Promise(<promise>) thì cái ngoài chạy sẽ thực hiện hết các cái trong.
 
 -> Promise.all nhận input list promise, trả ra 1 promise mới trả 1 mảng kết quả đúng thứ tự input. Nếu 1 promise con bị failed thì promise tổng reject luôn.
 Promise.allSettled tương tự Promise.all nhưng trả hết, error 1 cái cũng k dừng 
@@ -134,7 +138,7 @@ Promise.race trả về cái đầu tiên bất kể thành công hay lỗi
 Promise.any trả vể cái thành công đầu tiên, nếu tất cả đều lỗi mới trả lỗi
 
 VD usecase tìm best url trong list url: có 1 list rpc như nhau, cần chọn ra best url để gọi vào, rpc có thể chết bất cứ lúc nào => ref tới projects "Vatra"
-Mỗi khi user vào web sẽ query thử 1 lệnh đơn giản trên cả list rpc với Promise.any, cái nào trả nhanh nhất thì lấy. Nếu có lỗi mạng thì sẽ tự chọn second-best url query lại.
+Mỗi khi user vào web sẽ query thử 1 lệnh đơn giản trên cả list rpc với Promise.any, cái nào trả nhanh nhất thì lấy. Nếu có lỗi mạng thì sẽ call tìm url lại.
 
 -> Chuyển hết về async await
 - Hàm callback
@@ -149,8 +153,7 @@ const x = await new Promise((resolve, reject) => {
 })
 
 - Promise: await X().then().catch()
-Promise có thể await trực tiếp, sẽ chờ cả .then .catch, tương tự try catch khi dùng async await.
-=> Chú ý sai: promise khi call resolve hay reject vẫn sẽ chạy tiếp phần code bên dưới, nếu muốn dừng phải thêm return sau đó.
+Promise có thể await trực tiếp, sẽ chờ cả .then .catch tương tự try catch khi dùng async await.
 
 -> Event với on
 Ta có thể biến thành Promise để dùng với async. Bằng cách cho resolve khi onsucess, reject với onerror:
@@ -165,35 +168,37 @@ new Promise((resolve, reject) => {
   reader.readAsDataURL(file);
 });
 
+-> Nhanh:
+Luồng new Promise và resolve reject
+Promise.all allSettled race any
+Chuyển về async await
+
 
 
 # setTimeout, setInterval, setImmediate
 Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự động set về 1
 
--> Dùng setTimeout để sort => bỏ
-const arr = [10, 50, 100, 500, 0, 200]; var arr1 = [];
-function sortIt() {
-  for (let i of arr) {
-    setTimeout(()=> console.log(i), i);
-    setTimeout(()=> {	
-      arr1.push(i);
-      arr.splice(arr.indexOf(i), 1);
-      if(arr.length === 0)
-        console.log(arr1);
-     }, i);
-  }
-}
-
-Vd: setTimeout(function(){
+-> Thứ tự ưu tiên là process.nextTick > setImmediate > setTimeout 0s
+- setTimeout(function(){
   alert("Chào mừng bạn đến với freetuts.net");
 });
 => Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
+- setImmediate tương tự setTimeout 0s
+- process.nextTick(<function>); => chỉ có trong NodeJS
+=> Chỉ cần dùng setImmediate
 
--> Dùng setImmediate: tương tự setTimeout với 0s
-setImmediate(<function>);
-process.nextTick(<function>); => chỉ có trong NodeJS
-Như nhau cả, chỉ là thứ tự thực hiện ưu tiên là process.nextTick > setImmediate > setTimeout 0s
 
+
+# OOP trong JS
+Nếu có thể nên dùng class thay vì function hay object trong JS 
+VD: 
+function Animal() { this.name= "a"; }
+Animal.prototype.test = () => { console.log("test"); }
+Tương đương với:
+class Animal {
+  constructor(){ this.name = "a"; }
+  test = () => { console.log("test"); }
+}
 
 
 
@@ -388,19 +393,6 @@ passive: true => Báo là sẽ k chạy event.preventDefault() và browser có t
 event.stopPropagation() => dùng ở 1 sự kiện ở 1 thẻ sẽ cản trở event tiếp tục bubble up quá thẻ này trong bubbling phase
 
 -> mousemove, mouseenter, mouseleave, mouseover (phát ra cả khi mới di chuyển vào child)
-
-
-
-# OOP trong JS
-Nếu có thể nên dùng class thay vì function hay object trong JS 
-VD: 
-function Animal() { this.name= "a"; }
-Animal.prototype.test = () => { console.log("test"); }
-Tương đương với:
-class Animal {
-  constructor(){ this.name = "a"; }
-  test = () => { console.log("test"); }
-}
 
 
 
