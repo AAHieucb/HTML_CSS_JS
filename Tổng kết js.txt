@@ -86,6 +86,11 @@ const store = {
 };
 export default store;
 
+-> Nhanh:
+Dùng parcel
+onload, DomContentLoaded
+event input
+
 
 
 # Load file JS với async và defer
