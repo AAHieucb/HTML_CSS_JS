@@ -64,6 +64,18 @@ Trong react sẽ có #id là thẻ bao ứng dụng.
 
 
 
+# Dùng @import trong css
+- @import nhiều lần cùng 1 file sẽ lấy cái sau thôi, k sợ trùng.
+- @import url("./2.css") layer(base); => nhét mọi code trong 1 file css trong 1 layer
+- Phải để ở đầu file, nó sẽ chạy tuần tự và làm chậm tải trang => chỉ dùng cho dev, trong production nên bundle lại thành 1 file index.css duy nhất và minify nó thôi. Vd dùng parcel build.
+Nếu được nên dùng <link rel="stylesheet" href="styles/reset.css"> sẽ chạy song song nhưng vẫn đảm bảo thứ tự trong html nên k sao.
+
+-> Nhanh:
+Có thể chia layer
+Chỉ dùng production vì tuần tự
+
+
+
 # Dùng @scope và @layer
 -> @scope selector k ảnh hưởng spec, selector bên trong giữ nguyên spec của nó. Trong cùng 1 layer, nếu bên ngoài và trong scope đều cùng specifility, sẽ ưu tiên lấy trong scope => ít dùng vì rối
 @scope có thể giới hạn style trong 1 phạm vi mà nested selector không làm được. VD @scope (article) to (aside) { } từ cha article đến con aside và k tính con.
@@ -302,6 +314,92 @@ dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => l
 
 -> Nhanh:
 Dùng rem em và dvh
+
+
+
+# Private custom variables trong css
+VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click thay vì gán lại style từng thẻ
+
+Thiết kế css var cho dự án lớn: dùng fallback var + kế thừa css var, đảm bảo css var được đinh nghĩa trong 1 scope tối ưu
+VD: 
+<div class="container">
+  <div class="hello">
+    <button>Hello</button>
+    <p>Hello</p>
+  </div>
+  <div class="hi">
+    <button>Hi</button>
+    <p>Hi</p>
+  </div>
+  <div class="bye">
+    <button>Bye</button>
+    <p>Bye</p>
+  </div>
+</div>
+
+-> Ngu:
+.hello button {
+  color: red;
+}
+.hello p {
+  box-shadow: 1px 1px 1px red;
+}
+.hi button {
+  color: blue;
+}
+.hi p {
+  box-shadow: 1px 1px 1px yellow;
+}
+.bye .button {
+  color: green;
+}
+.bye p {
+  box-shadow: 1px 1px 1px red;
+}
+
+-> Dùng private custom variables tự định nghĩa với dấu _ ở dưới. 
+.container {
+  --_shadow: var(--shadow, red);
+  --_color--text: var(--color, var(--color-text, red));
+}
+.container button {
+  color: var(--_color--text);
+}
+.container p {
+  box-shadow: 1px 1px 1px var(--_shadow);
+}
+.hi {
+  --_shadow: yellow;
+  --_color--text: blue;
+}
+.bye {
+  --_color--text: green;
+}
+=> :root có thể list hàng loạt các variables làm style chung và chỉ cần sửa trong đó để tạo các theme khác nhau. Nếu k định nghĩa tự dùng fallback cho các private custom var. Đảm bảo tính kế thừa từ cao xuống
+=> Các private var k ảnh hưởng tới scope khác. Nhìn custom var, ta hiểu ngay là đổi trong container của phần đó, thay vì tìm trên root, root chỉ đinh nghĩa các biến base
+=> Giảm bớt số lượng selector. VD muốn đổi màu button trong bye thì đổi ngay css var của .bye thay vì viết selector ".bye button"
+
+->***Bản chất: Css var thường dùng khi ta có các style phụ thuộc vào nhau, sau này muốn đổi sẽ phải đổi tất cả. Thay vì vậy sẽ gom vào 1 biến css và relative tói nó để đổi.
+Trừ @media và @container mới fix cứng vì k dùng được css var, đồng nghĩa đổi chỗ khác cũng phải đổi nó
+
+
+
+
+# Dùng @property là 1 phần của css houdini
+Là 1 cách khác để khai báo biến css type safe hơn thôi. Thực tế dùng css variables bình thường vẫn animation và mọi thứ ổn mà k cần @property. 
+
+Bản chất @property là khai báo biến và biến trở thành 1 thuộc tính (property của css class đó luôn). 
+VD: @property --rotation {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+.box {
+  --rotation: 60deg;
+  transition: --rotation 1s ease-in-out;
+}
+=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s mới được.
+
 
 
 

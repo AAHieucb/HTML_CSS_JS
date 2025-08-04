@@ -1,77 +1,3 @@
-# Private custom variables trong css
-VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click thay vì gán lại style từng thẻ
-
-Thiết kế css var cho dự án lớn: dùng fallback var + kế thừa css var, đảm bảo css var được đinh nghĩa trong 1 scope tối ưu
-VD: 
-<div class="container">
-  <div class="hello">
-    <button>Hello</button>
-    <p>Hello</p>
-  </div>
-  <div class="hi">
-    <button>Hi</button>
-    <p>Hi</p>
-  </div>
-  <div class="bye">
-    <button>Bye</button>
-    <p>Bye</p>
-  </div>
-</div>
-
--> Ngu:
-.hello button {
-  color: red;
-}
-.hello p {
-  box-shadow: 1px 1px 1px red;
-}
-.hi button {
-  color: blue;
-}
-.hi p {
-  box-shadow: 1px 1px 1px yellow;
-}
-.bye .button {
-  color: green;
-}
-.bye p {
-  box-shadow: 1px 1px 1px red;
-}
-
--> Dùng private custom variables tự định nghĩa với dấu _ ở dưới. 
-.container {
-  --_shadow: var(--shadow, red);
-  --_color--text: var(--color, var(--color-text, red));
-}
-.container button {
-  color: var(--_color--text);
-}
-.container p {
-  box-shadow: 1px 1px 1px var(--_shadow);
-}
-.hi {
-  --_shadow: yellow;
-  --_color--text: blue;
-}
-.bye {
-  --_color--text: green;
-}
-=> :root có thể list hàng loạt các variables làm style chung và chỉ cần sửa trong đó để tạo các theme khác nhau. Nếu k định nghĩa tự dùng fallback cho các private custom var. Đảm bảo tính kế thừa từ cao xuống
-=> Các private var k ảnh hưởng tới scope khác. Nhìn custom var, ta hiểu ngay là đổi trong container của phần đó, thay vì tìm trên root, root chỉ đinh nghĩa các biến base
-=> Giảm bớt số lượng selector. VD muốn đổi màu button trong bye thì đổi ngay css var của .bye thay vì viết selector ".bye button"
-
-->***Bản chất: Css var thường dùng khi ta có các style phụ thuộc vào nhau, sau này muốn đổi sẽ phải đổi tất cả. Thay vì vậy sẽ gom vào 1 biến css và relative tói nó để đổi.
-Trừ @media và @container mới fix cứng vì k dùng được css var, đồng nghĩa đổi chỗ khác cũng phải đổi nó
-
-
-# Dùng @import trong css
-@import trong css không sợ bị trùng code vì tuy trùng nhưng css tự có cơ chế override style cái sau đè cái trước. Cần tự code cẩn thận để k import nh lần.
-@import của css cũng phải để ở top mới có tác dụng
-@import trong css sẽ chạy tuần tự nên làm chậm quá trình tải trang => Do đó khi dev có thể dùng @import, còn production nên dùng bundler gom lại thành 1 file index.css và minify nó chứ k chia ra nhiều file. VD parcel build tự làm luôn
-***@import url("./2.css") layer(base); => nhét mọi code trong 1 file css nằm trong 1 layer
-
-
-
 # Dark mode 
 Ta nên để default vào web sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu localStorage và theo settings đó và luôn ghi đè setting browser.
 
@@ -236,24 +162,6 @@ const timeout = (ms, promise) => {
 }
 const response = await timeout(1000, fetch("<url>"));
 => Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh => nên thêm abort controller
-
-
-
-
-# Dùng @property là 1 phần của css houdini
-Là 1 cách khác để khai báo biến css type safe hơn thôi. Thực tế dùng css variables bình thường vẫn animation và mọi thứ ổn mà k cần @property. 
-
-Bản chất @property là khai báo biến và biến trở thành 1 thuộc tính (property của css class đó luôn). 
-VD: @property --rotation {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-.box {
-  --rotation: 60deg;
-  transition: --rotation 1s ease-in-out;
-}
-=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s mới được.
 
 
 
