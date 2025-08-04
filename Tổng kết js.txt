@@ -103,6 +103,7 @@ VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CS
 -> Nếu không xác định type="module" trong thẻ <script>, file JS sẽ được xử lý như một script thông thường, k có tính năng của module.
 - Trong module, biến và hàm được khai báo trong scope đó. Còn script bth thì biến không khai báo trong 1 block, sẽ là toàn cục, dùng mọi nơi miễn biến đã load xong.
 - Module trao đổi biến qua export, tự tối ưu k tải nhiều lần dù import 1 module nhiều lần. Module cũng luôn trong chế độ strict, còn script thông thường thì không.
+dynamic import cũng chỉ dùng trong module: await import("../index.js");
 
 -> Nhanh:
 default block, async, defer
@@ -189,16 +190,68 @@ Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự độn
 
 
 
-# OOP trong JS
-Nếu có thể nên dùng class thay vì function hay object trong JS 
+# OOP
+function và class trong JS đều hỗ trợ đủ OOP => nên dùng class
 VD: 
-function Animal() { this.name= "a"; }
+function Animal() { 
+  let count = 0;
+  this.name= "a";
+}
 Animal.prototype.test = () => { console.log("test"); }
+Animal.staticMethod = () => { }
 Tương đương với:
 class Animal {
-  constructor(){ this.name = "a"; }
+  #count = 0;
+  constructor() { 
+    this.name = "a"; 
+  }
   test = () => { console.log("test"); }
+  static staticMethod = () => { }
 }
+
+
+
+# Closure function
+func1 return ra func2, thì func2 dùng biến khởi tạo trong func1 được dù func1 đã kết thúc.
+
+-> this bth trong hàm or class sẽ trỏ chính đối tượng đó, this ở ngoài là window. this trong code html truyền vào event thì chính là thẻ tag đó.
+Dùng arrow function thì this trong func sẽ là cái bao ngoài cái hiện tại (object, class, window) ở mọi case, vì arrow function k có this, bind call apply k tác dụng.
+Còn có with(this) { ... }
+
+-> Dùng call bind apply:
+- call và apply chỉ khác cú pháp: o.call(this, args1, args2) và o.apply(this, [args1, args2]);
+- bind có thể tái sử dụng vì nó return 1 function mới với this xác định.
+VD: function greet(greeting, punctuation) {
+  console.log(greeting + ', ' + this.name + punctuation);
+}
+const person = { name: 'John' };
+const greetPerson = greet.bind(person, 'Hello');
+greetPerson('!');
+
+-> Nhanh: 
+Biến this
+Dùng bind có thể tái sử dụng
+
+
+
+# Dùng sự kiện JS
+Sự kiện hay dùng: https://freetuts.net/su-kien-event-trong-javascript-368.html
+3 cách: dùng ở tag html; code js là element.onclick = () => { }; element.addEventListener("click", () => { });
+
+-> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
+
+-> addEventListener: Khi addEventListener cùng 1 sự kiện nhiều lần sẽ chạy theo thứ tự được thêm vào chứ không đồng thời, nếu dùng các hàm async mới k chờ nhau mà chạy liên tục
+Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha), nó check sự kiện nào useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý bubbling phase. Có thể dùng object { capture: true, once: true }
+
+removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase. Tham số thứ 3 boolean tương tự.
+
+passive: true => Báo là sẽ k chạy event.preventDefault() và browser có thể xử lý ngay lập tức, cải thiện hiệu suất. Mặc định hiệu suất bị giảm khi browser xử lý event vì luôn phải đợi xem event.preventDefault có được gọi hay không.
+
+event.stopPropagation() => dùng ở 1 sự kiện ở 1 thẻ sẽ cản trở event tiếp tục bubble up quá thẻ này trong bubbling phase
+
+-> mousemove, mouseenter, mouseleave, mouseover (phát ra cả khi mới di chuyển vào child)
+
+
 
 
 
@@ -349,50 +402,6 @@ Do cơ chế dọn rác, nếu mảng có 1 phần tử là 1 object chẳng h�
 Do GC k rõ thời gian chạy nên k thể truy cập vào số lượng phần tử hay duyệt các phần tử của WeakMap. Chỉ có has delete get set. 
 - WeakSet giống set nhưng chỉ nhận object, tự bị xóa khi k còn reference từ ngoài, cũng k hỗ trợ size keys hay các kiểu duyệt
 VD 1 biến WeakMap lưu thông tin của người dùng, khi người dùng leave thì tự xóa, nếu dùng map bth phải xóa thủ công hoặc chờ biến map giải phóng. Tức là ta dùng khi cần dùng map với set, mà k cần dùng length hay duyệt, mất reference bên ngoài là tự xóa tối ưu bộ nhớ.
-
-
-
-# Closure function
-Function 1 return ra function 2, thì function 2 dùng biến khởi tạo trong function 1 được dù function 1 đã kết thúc, biến đó là 1 single instance phạm vi sẽ thuộc về function 2
-Function trong 1 class, return 1 function khác. Biến this trong function sẽ k còn là class bao ngoài nữa, phải dùng bind hoặc arrow function để this dính sát cái bao nó
-
--> this mặc định global là window
-Trong mọi TH, dùng arrow function thì this sẽ trỏ cái bao ngoài cái hiện tại(object, class, window,..)
-bind call apply sẽ xác định rõ biến this nhưng vẫn cùi hơn arrow function
-this dùng bth trong hàm or class sẽ trỏ vào đối tượng đó như 1 object có constructor
-Truyền this vào sự kiện trong code html thì this là code thẻ tag đó
-with(this) { ... }
-
--> Dùng call bind apply
-Dùng bind có điểm lơi là return 1 function mới với giá trị biến this xác định mà có thể tái sử dụng gọi function đó nhiều lần
-call và apply giống nhau chỉ khác cú pháp: o.call(this, args1, args2) và o.apply(this, [args1, args2]); là khi gọi mới gán giá trị this là gì, k thể tái sử dụng.
-
---> Bind chia được tham số kiểu này
-function greet(greeting, punctuation) {
-    console.log(greeting + ', ' + this.name + punctuation);
-}
-const person = { name: 'John' };
-const greetPerson = greet.bind(person, 'Hello');
-greetPerson('!');
-
-
-
-# Dùng sự kiện JS
-Sự kiện hay dùng: https://freetuts.net/su-kien-event-trong-javascript-368.html
-3 cách: dùng ở tag html; code js là element.onclick = () => { }; element.addEventListener("click", () => { });
-
--> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
-
--> addEventListener: Khi addEventListener cùng 1 sự kiện nhiều lần sẽ chạy theo thứ tự được thêm vào chứ không đồng thời, nếu dùng các hàm async mới k chờ nhau mà chạy liên tục
-Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha), nó check sự kiện nào useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý bubbling phase. Có thể dùng object { capture: true, once: true }
-
-removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase. Tham số thứ 3 boolean tương tự.
-
-passive: true => Báo là sẽ k chạy event.preventDefault() và browser có thể xử lý ngay lập tức, cải thiện hiệu suất. Mặc định hiệu suất bị giảm khi browser xử lý event vì luôn phải đợi xem event.preventDefault có được gọi hay không.
-
-event.stopPropagation() => dùng ở 1 sự kiện ở 1 thẻ sẽ cản trở event tiếp tục bubble up quá thẻ này trong bubbling phase
-
--> mousemove, mouseenter, mouseleave, mouseover (phát ra cả khi mới di chuyển vào child)
 
 
 
