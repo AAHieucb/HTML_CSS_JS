@@ -18,6 +18,15 @@ height auto là default sẽ tự mở rộng theo kích thước content. Thư�
 Khi set 50% sẽ theo kích thước thẻ cha trực tiếp. Nếu thẻ cha trực tiếp k set height or auto theo thẻ con, thì bị loop, khiến thuộc tính height 50% invalid và coi như k có. 
 Thẻ cha có mỗi min-height:100vh; thẻ con height 50% sẽ k chạy vì height thẻ cha vẫn là auto tương tự như trên. 
 
+-> Tổng kết dự án basic:
+- Tạo dự án: parcel import npm; html thuần import cdn; react;
+- Hosting: Github pages, netlify.
+- Darkmode: scss dùng map; css thuần dùng var có thể set từ checkbox hoặc dùng JS set data-theme attribute cho thẻ body, hoặc viết thủ công như cách scss sau khi tạo ra; Dùng css relative color tạo color palette.
+- Chia file: html thuần chia mỗi pages 1 file; css chia style chung và riêng từng pages ở các file riêng rồi import file css trực tiếp lẫn nhau được; scss cũng style chung từng file, từng pages @use các file chung đó, chia cả file components các thứ, cuối cùng quy hét về 1 file scss duy nhất @use tất cả để compile bằng 1 lệnh thôi, mọi pages đều phải script tới file chung đó dẫn đến style thừa nhưng chả sao.
+- BEM: scss dùng &--container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
+- Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
+- Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
+
 
 
 # BEM
@@ -317,12 +326,11 @@ Dùng rem em và dvh
 
 
 
-# Private custom variables trong css
-VD Click chuột là đổi màu 1 vài thẻ: nên dùng css var trong :root và đổi giá trị khi click thay vì gán lại style từng thẻ
+# Private custom variable
+VD click chuột là đổi màu 1 vài thẻ thì nên dùng css var và đổi giá trị var thay vì gán lại style từng thẻ. Đổi màu css var để tạo các theme khác nhau được.
 
-Thiết kế css var cho dự án lớn: dùng fallback var + kế thừa css var, đảm bảo css var được đinh nghĩa trong 1 scope tối ưu
-VD: 
-<div class="container">
+-> Trong dự án lớn, nên dùng fallback var + kế thừa + private custom var. 
+VD: <div class="container">
   <div class="hello">
     <button>Hello</button>
     <p>Hello</p>
@@ -337,7 +345,7 @@ VD:
   </div>
 </div>
 
--> Ngu:
+Cách làm ngu:
 .hello button {
   color: red;
 }
@@ -357,7 +365,7 @@ VD:
   box-shadow: 1px 1px 1px red;
 }
 
--> Dùng private custom variables tự định nghĩa với dấu _ ở dưới. 
+Best practice là dùng private custom variables
 .container {
   --_shadow: var(--shadow, red);
   --_color--text: var(--color, var(--color-text, red));
@@ -375,20 +383,10 @@ VD:
 .bye {
   --_color--text: green;
 }
-=> :root có thể list hàng loạt các variables làm style chung và chỉ cần sửa trong đó để tạo các theme khác nhau. Nếu k định nghĩa tự dùng fallback cho các private custom var. Đảm bảo tính kế thừa từ cao xuống
-=> Các private var k ảnh hưởng tới scope khác. Nhìn custom var, ta hiểu ngay là đổi trong container của phần đó, thay vì tìm trên root, root chỉ đinh nghĩa các biến base
-=> Giảm bớt số lượng selector. VD muốn đổi màu button trong bye thì đổi ngay css var của .bye thay vì viết selector ".bye button"
+=> Nó giúp giảm số lượng css selector. Nhìn custom var, ta hiểu ngay là biến định nghĩa trong container thay vì tìm trên :root.
 
-->***Bản chất: Css var thường dùng khi ta có các style phụ thuộc vào nhau, sau này muốn đổi sẽ phải đổi tất cả. Thay vì vậy sẽ gom vào 1 biến css và relative tói nó để đổi.
-Trừ @media và @container mới fix cứng vì k dùng được css var, đồng nghĩa đổi chỗ khác cũng phải đổi nó
-
-
-
-
-# Dùng @property là 1 phần của css houdini
-Là 1 cách khác để khai báo biến css type safe hơn thôi. Thực tế dùng css variables bình thường vẫn animation và mọi thứ ổn mà k cần @property. 
-
-Bản chất @property là khai báo biến và biến trở thành 1 thuộc tính (property của css class đó luôn). 
+-> @property trong css houdini giúp khai báo biến css type safe, nên dùng với animation.
+Bản chất @property là khai báo biến và nó trở thành 1 thuộc tính (property) của css class đó luôn.
 VD: @property --rotation {
   syntax: '<angle>';
   inherits: false;
@@ -399,7 +397,6 @@ VD: @property --rotation {
   transition: --rotation 1s ease-in-out;
 }
 => Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s mới được.
-
 
 
 
@@ -470,417 +467,3 @@ document.querySelectorAll("h2").forEach(function(el) {
   }
 });
 
-
-
-# Dùng zIndex
-Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
-Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi
-
-K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-
-
-
-
-# Dùng position 
--> Position absolute sẽ xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
-position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hưởng đến kích thước của thẻ, tự kéo dãn cho vừa hcn đó đó là khi kích thước k set.
-Thường dùng kết hợp transform để dịch ra đâu theo vị trí cố định, rồi dịch tiếp theo kích thước relative của nó
-
--> Relative là thay đổi vị trí so với bình thường bao nhiêu, vẫn chiếm không gian
-
--> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ stick vào thẻ parent relative đầu tiên của nó, k thì sẽ theo màn hình. Nếu thẻ parent scroll hết thì k stick nữa
-
--> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
-VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
-
-
-
-# Float => k dùng
-Float khiến 1 thẻ block thành inline không chiếm height và trôi sang 2 bên. Các thẻ khác vẫn hiện cùng dòng và né width nó ra.
-clear: both => khiến thẻ float chiếm height, các thẻ khác k thể ở cùng dòng với nó nữa
-
--> VD thẻ div chỉ có các thẻ float bên trong thì height thẻ div đó là 0 vì thẻ float k chiếm height của cha nó mà
-ClearFix trong CSS giúp thẻ cha mang kích thước của thẻ con kể cả dùng float, chỉ cần cho 1 thẻ con dưới float để kéo dài cha quá float là được.
-VD: .clearfix:after{
-  content: ".";
-  clear: both;
-  display: block;
-  width: 0px;
-  height: 0px;
-}
-
-
-
-
-
-
-# Dùng content-visibility
-Khi vào 1 page, mặc định browser tải resource, tạo DOM và layout, render paint cả page ra màn hình, dù viewport chỉ hiển thị 1 phần. Nó khiến page lớn load hiện lần đầu tiên bị lâu, và cũng lag khi resize.
-
-content-visibility visible là default
-
--> hidden
-display none ẩn hết khỏi DOM và a11y tree. hidden attribute của html tag y như display none.
-content-visibility hidden cũng ẩn hết, k thể tương tác hay search. Nhưng nó k xóa DOM, giữ state giúp ẩn và hiện lại rất nhanh.
-visibility hidden cũng ẩn, k thể tương tác và k xóa DOM. Nhưng nó lại vẫn chiếm diện tích
-opacity 0 dường như chỉ ẩn phần nhìn, vẫn tương tác đươc.
-
-visibility hidden kết hợp aria-hidden="false" k hoạt động, nó vẫn ưu tiên ẩn
-Thay vì kết hợp visibility hidden với position absolute để k chiếm diện tích, ta nên ưu tiên dùng content-visibility hidden cho tooltip các thứ ok hơn.
-
--> auto: thẻ sẽ k được paint lên màn hình cho đến khi xuất hiện gần viewport. Mặc định là nó paint cả page.
-Để browser paint content, nó phải calculate layout trước. Thẻ có auto sẽ k tính layout khi chưa vào viewport nên phải đi kèm contain-intrinsic-size: auto 600px; để dùng kích thước tạm trước khi thẻ được paint. Thường set contain-intrinsic-size width là auto tự scale full chứ k fix cứng để k bị tràn màn hình nhỏ.
-Khi scroll xuống và paint thẻ đó, kích thước thực tế sẽ bị thay vào gây jump scrollbar nhưng chấp nhận. K nên dùng khi kích thước thẻ ảnh hướng lớn đến layout thôi.
-K nên dùng auto cho các thẻ quá lớn để tránh scroll nhanh paint thẻ đó k kịp gây khoảng trắng, nên chia chunk nhỏ tốt hơn.
-
--> contain trong css xác định 1 thẻ có containment không, mặc định là none là k có giới hạn gì.
-contain: paint; => đảm bảo mọi thứ bên trong 1 thẻ k thể paint ra ngoài thẻ đó
-contain: size; => đảm bảo mọi thứ bên trong 1 thẻ sẽ k ảnh hưởng đến kích thước thẻ đó. Vì bth kích thước thẻ cha tự kéo dài theo kích thước con, nhưng ở đây thì không.
-contain: layout; => đảm bảo thẻ bên trong k ảnh hưởng đến layout các thẻ khác và ngược lại.
-Có thể kết hợp contain: layout paint size; 
-=> Dùng contain sẽ giảm tải cho browser khi tính toán layout hay paint ra màn hình.
-=> Thẻ có content-visibility auto sẽ tự có contain layout tức thẻ bên trong k thể break layout ra bên ngoài
-
-
-
-# Có thể custom cursor:
-C1: là cho cursor none rồi tự custom 1 thẻ ảnh khác cho transform theo mousemove. Có thể custom event mouse down thì phóng to ảnh, mouse up thì ảnh về bth
-=> Việc custom cursor như v k ổn k nên dùng vì text, input, button đôi khi cần các hình khác nhau thì custom sẽ phức tạp với từng thẻ
-C2: là dùng cursor: url(<base64>) 8 8, auto; // Tham số 2 là dự phòng nếu browser k hỗ trợ hình ảnh  
-Tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị
-URL: https://css-tricks.com/next-level-css-styling-for-cursors/ => dùng C2 fallback cho C1 khi browser k hỗ trợ JS. Check touch screen và k enable js thì dùng cursor C2 thôi.
-URL: https://custom-cursor.com/ => lấy ảnh cursor free
-
-
-
-# Master border radius: outer radius = inner radius + distance giữa 2 border (border-width) => tự tạo nếu cần 1 thẻ có boder radius trong thẻ khác
-border-radius: https://9elements.github.io/fancy-border-radius/
-Dùng border-image
-Shorthand border-radius: 10% 30% 50% 70%;
-
-
-
-# Flexbox
-Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
-Dùng kèm flex-grow và flex-shrink, order. Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để mọi con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
-
--> Nhanh: flex: 2 2 10%; // grow shrink basis 
-flex: 2 2; // grow shrink
-flex: 2 // = 2 1 0%
-=> flex shrink default 1, flex grow default 0, flex-basis 0% nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
-flex-flow: row wrap;
-place-content: center space-between; /* align-content: center; justify-content: space-between; */
-place-items: center stretch; /* align-items: center; justify-items: stretch; */ => k có stretch
-place-self: start end; /* align-self: start; justify-self: end; */ => có thể stretch, trong phạm vi ô to
-=> align-items, jusitfy-content, align-content cho flex
-=> 1 điểm khác biệt lớn của place-items và place-self là place-items dùng cho container bao ngoài, place self là dùng cho từng phần tử được. place-self chỉ cần dùng cho grid
-
--> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
-
--> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
-
--> flex-basis => ref tới "Responsive css"
-Flexbox gặp vấn đề là chỉnh size của cell dựa vào kích thước item bên trong, shrink hay grow cũng thế. Grid tốt hơn vì chỉnh size của cell dựa vào kích thước các cell bên ngoài set từ trước.
-VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
-Để fix: phải dùng flex-basis khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
-=> Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex k xử lý trước trường hợp row cuối cùng k full
-
-Các phần tử trong flex sẽ mở rộng theo kích thước của chính các phần tử đó. Nhưng nếu mọi phần tử trong 1 flexbox đều được set flex-grow, thì kích thước từng cái sẽ chia theo tỷ lệ đó luôn (trong 1 hàng chứ các hàng khác nhau sẽ k tự dóng thẳng như grid) => Cách để chia tỉ lệ phần tử trong flexbox. Chú ý là tỉ lệ phần tử k tính padding, nếu item có padding sẽ to hơn bth.
-
--> Mở rộng thuộc tính display
-inline-flex, inline-grid
-
-Nhận 2 param thì 1 là style ngoài, 2 là style trong và các thẻ trong nó.
-inline-flex = inline flex
-flex = block flex
-block = block flow
-none = none
-inline-block = inline flow-root
-
-Param 2 có thể là flow-root tạo block formatting content k bị margin collapse, còn lại như default flow: https://www.youtube.com/watch?v=JY0FN71vCbw
-display contents dùng để khiến 1 thẻ như là biến mất khỏi DOM nhưng ta vẫn css selector từ nó để style cho thẻ con được => ít dùng
-display list-item khi muốn 1 thẻ hoạt động như 1 item trong list ul li dù k có. 
-Tương tự display table khi muốn hoạt động như table. VD display table-column sẽ k hiện nếu thẻ này k nằm trong 1 table => ít dùng
-
-
-
-# Dùng display grid
-CSS grid galaxy layout khá dễ: https://uxdesign.cc/css-grid-with-galaxy-layout-figma-886a935b9649
-Giống flexbox nhưng custom chia vị trí từng ô tốt hơn.
-Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
-Playground: https://flexboxlabs.netlify.app/grid
-Grid làm container: https://ryanmulligan.dev/blog/layout-breakouts/
-
--> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
-gap/grid-gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
-
--> grid-template-columns: 10% 10% 10%; là chia 3 thẻ bên trong làm 3 cột, một cột chiếm 10%. 
-grid-template-columns: 1fr 1fr 1fr; hoặc (auto auto auto) cx là 3 cột bằng nhau. Hoặc repeat(3, 1fr) viết lặp
-grid-template-rows: 300px 100px; => row1 cao 300px, row2 cao 100px, các row sau kích thước mặc định k fix
-grid-template-columns: repeat(3, minmax(200px, 1fr));
-
--> grid-column / grid-row là 1 phần tử chiếm bnh cột và hàng. Vd: grid-row: 1 / span 2; là item này bắt đầu từ row1 và kéo dài 2 row
-
--> grid-auto-rows sẽ set kích thước chiều cao mặc định cho row mói được thêm vào, nếu ta k set bằng grid-template-rows cho nó thì sẽ lấy cái này; Tương tự grid-auto-columns
-
--> grid-template-areas để sắp xếp các item vào grid theo label. Kết hợp grid-area khi responsive đổi vị trí area.
-
--> grid-area còn là short của grid column và grid row. VD:
-VD grid-area: 2 / 1 / span 2 / span 3; => thẻ ở row 2 column 1 kéo dài 2 rows 3 column
-VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-column-start: 2; grid-row-end: 3; grid-column-end: 4; => Kéo dài từ row1->row2, col2->col3
-
--> grid-auto-flow: column; ưu tiên xếp hết từng col trước. 
-grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
-
--> grid có thể dùng cho 1D layout để tạo khi các cột đều bằng nhau => tốt hơn flexbox. Dùng flex box khi cần các item theo kích thước riêng của chúng
-Chỉ cần dùng {
-  grid-auto-flow: column; // để nó xếp trong 1 hàng
-  grid-auto-columns: 1fr; // để các phần tử mới thêm vào grid đều cùng kích thước nhau
-}
-- flexbox có thể dùng cho 2D layout, chỉ cần set flex wrap, khác với grid là có thể để các cột không cùng kích thước nhau, cứ có kích thước đúng của nó là được
- 
--> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
-Dùng grid là container được: browser -> Elements -> Layout -> show line names để thấy grid line names
-URL: https://www.youtube.com/watch?v=c13gpBrnGEw
-
--> Căn giữa phần tử cuối cùng của grid: 
-Dùng flex box căn giữa ok nhưng sẽ full width, nếu ta set max-width chứ k full width thì khi màn hình co chỉ còn 1 column muốn full lại k được nx. Nếu k muốn như vậy thì dùng grid
-Có thể tạo kim tự tháp card bằng grid bằng cách tương tự
-
--> Dùng grid-template-areas thay thế position absolute vì nó có thể tự chồng các element lên nhau và lấy kích thước của thẻ to nhất
-K dùng display none vì nó làm mất thẻ thì k tự lấy kích thước thẻ to nhất, k dùng opacity 0 vì nó gộp aria text các thẻ lại, dùng visibility hidden ok nhất vì vẫn chiếm k gian và có ẩn aria-text.
-Visibility hidden + position absolute = display none => sai vì visibility hidden vẫn chiếm chỗ trong layout
-visibility khi transition vẫn được, chỉ là hiện hay ẩn chứ k như opacity nhưng nó vẫn chờ đúng thời gian transition
-
--> Tạo masonry css với grid
-
-
-
-# Responsive chuẩn với grid layout + @container query
-Dùng grid layout hoặc flex để chia bố cục, dùng kèm @container query để style các items
-VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card có ảnh sẽ mang style thay đổi 
-.grid-auto-fit {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(30ch, 100%), 1fr));
-  container: grid-auto-fit / inline-size;
-}
-.card:has(> img) {
-  // Giả sử mỗi card dài 30ch
-  // Khi tăng lên 2 card 1 hàng, thẻ chứa ảnh chiếm cả 1 hàng
-  @container grid-auto-fit (inline-size > calc(30ch * 2 + 1rem)) { // Chú ý k dùng được css var
-    grid-column: span 2;
-
-    display: grid;
-    grid-template-columns: subgrid;
-    gap: 0;
-
-    > img {
-      grid-column: 2;
-      grid-row: 1 / 4;
-    }
-  }
-
-  // Khi tăng lên 4 card 1 hàng, thẻ chứa ảnh chiếm 2 hàng 2 cột
-  @container grid-auto-fit (inline-size > calc(30ch * 4 + 3rem)) {
-    grid-column: span 2;
-    grid-row: span 2;
-    > :not(img) {
-      grid-column: 1 / -1; => cách khéo léo để bảo chiếm tất cả, thay vì phải viết 1 số span cụ thể
-    }
-    > img {
-      grid-column: 1 / -1;
-      grid-row: 1;
-    }
-  }
-}
-
-
-
-# -> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
-drop-shadow theo hình dạng ảnh có nền transparent, nó cũng theo màu của hình nếu k xác định màu
-Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
-
-box-shadow có thể tạo hình background phức tạp với animation bằng cách dùng inset lồng nhiều màu đè ở các vị trí khác nhau, màu sau sang trái đè lên màu trước đó.
-URL: https://frontendmasters.com/blog/expanding-css-shadow-effects/ 
-
-
-
-
-# Trick responsive flexbox grid
-Xếp flex-basis trước, nếu các thẻ flex-basis k đủ cho 1 dòng sẽ xuống dòng theo flex-wrap. Sau đó mới tính grow, shrink. Do đó có thể lợi dụng flex-basis để kiểm soát số cột
-
-VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp column fit vào ô với kích thước 200px nếu có thể. Có thể dãn lớn hơn 200px. Nhỏ hơn 200px thì xuống dòng.
-minmax nếu max nhỏ hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
-1fr đơn vị phân số fraction chia tỉ lệ nhưng bản thân nó k theo kích thước bất cứ container nào cả, chỉ là tỉ lệ các item. Bth nó kiểu max 100% ấy. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ hoạt động k như mong muốn, hay invalid property.
-repeat là hàm trong css có sẵn. Thường dùng là repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì đến grid. Mục số là điền số chứ đừng điền 1fr, có thể dùng minmax(200px,1fr) để full width mà max width.
-Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row, tức chỉ có 1 cột
-Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như nào thì dòng dưới phải có cột width như vậy. Nếu k muốn v thì dùng flex. Muốn height các cột bằng nhau thì set grid-template-rows 1fr hết
-
--> Kỹ thuật responsive:
-1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
-Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => kết hợp min max kiểu lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px
-2) Max số cột: Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng rồi mới xét shrink hay grow. 
-Ta cố tình cho min-width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
-
-VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
-
-VD chỉ muốn bo góc ở màn hình lớn:
-.card {
-  border-radius: max(0px, min(8px, calc((100vw - 4px - 100%)*9999)));
-}
-=> 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần như bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực)) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
-Tức if(!mobile) borderRadius=0px else borderRadius=8px
-
-=>***Cứ tưởng tượng màn hình lớn và màn hình nhỏ thì min max width là gì là chơi dược thôi
-
-
-
-# Responsive css
-Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có thể gấp 3 lần height và height cực kỳ nhỏ.
-
--> Dùng @media:
-@media not|only mediatype and (mediafeature and|or|not mediafeature) { CSS-Code; }
-với mediatype là: all / print / screen
-media feature là: color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, resolution, orientation (portrait/landscape)
-orientation portrait/landscape => vì điện thoại xoay ngang và điện thoại xoay khác nhau, k thể chỉ @media theo mỗi width. Mở rộng với min-aspect-ratio
-
-VD: @media (min-width: 100px) {} => tương đương @media all and (min-width: 100px) {}
-VD: @media (min-device-width: 100px) {} => thì kích thước tính cả thanh công cụ và thanh cuộn => k dùng
-VD: @media only screen and (max-width: 480px) and (min-width: 320px){ } => kích thước từ 320->480 của màn hình máy tính or smartphone
-VD: @media only print { } => chỉ cho máy in
-VD: @media (100px <= width <= 300px) {} => luôn dùng
-VD: @media only screen and (max-width: 100px) and (orientation: landscape), screen and (min-width: 100px) {} => Áp dụng cho các thiết bị màn hình có width nhỏ hơn 100px và chiều rộng lớn hơn chiều cao, k bao gồm thiết bị đọc màn hình hay in ấn, đồng thời áp dụng cho mọi loại thiết bị hiển thị bao gồm cả in ấn và thiết bị đọc màn hình nếu width lớn hơn 100px
-Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">
-=> Các thuộc tính và responsive các kích thước cơ bản: https://freetuts.net/su-dung-media-css-tao-responsive-cho-website-660.html
-
---> @media (prefers-color-scheme: dark) { } là khi user setting dark mode trong phần mềm sử dụng or thay đổi user-agent (light/dark/no-references) => k cần thiết
---> @media (prefers-reduced-motion) {} là khi user setting giảm thiểu animation cho web. Setting này của browser để web ít animation cho đỡ lag.
-
---> K dùng được css var trong @media. VD @media screen and (max-width: --mobile-size){} => sai ngay
-Dùng sass thì vẫn được vì nó phân tích cú pháp và paste vào tại thời điểm compile. CSS thuần thì có package postcss-css-variables giúp làm điều đó.
-
--> Có thể responsive bằng JS với event resize, k sợ browser k hỗ trợ @media 
-Dùng @supports (display: grid) and (not (display: inline-grid)) { } để check browser có hỗ trợ thuộc tính nào không. VD dùng để check nếu k hỗ trợ thì in ra đoạn text "Browser not support this feature!" và display none phần nào sử dụng.
-
--> Container query: xử lý case đôi khi màn hình nhỏ dần mà kích thước container lại tăng
-URL: https://www.youtube.com/watch?v=rrLAg7xNERA
-container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
-@container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
-Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
-container: main / inline-size; => shorthands container-name / container-type
-=> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
-
-->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
-- flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 
-VD: container 100px, item1 50px, item2 30px. Nếu set flexbasis item1 là 1000px thì nó chỉ tới 70 thôi, nếu set flexbasis item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
-Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ được chia ra. Các thẻ mở rộng tuỳ vào flex-grow. Nếu container nhỏ hơn thì lại co theo tỉ lệ dựa vào flex-shrink
-- clamp(min,value,max): browser set giá trị là value, nếu value nhỏ hơn min sẽ set là min, lớn hơn max sẽ set là max. Value ở giữa thường là relative.
-- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách dãn phần tử => nên dùng auto-fill hơn vì nó cố điền nhiều cột nhất có thể. Khi chỉ có 1 hàng sẽ thấy rõ.
-- minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
-=> Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
-
-VD: Chỉ cần grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); là đã tự responsive chia cột, nếu mỗi phần tử k thể lớn hơn 100px sẽ tự giảm 1 cột
-auto-fit hết container, cố gắng fit full width với các phần tử hiện tại khi chỉ có 1 row
-auto-fill những cột còn lại, thì sẽ lấy min width và cố gắng tưởng tượng còn nhiều cột khác xép vào
-VD: (200px - 100%)*999  là check nếu container lớn hơn 200px sẽ trả ra số âm cực bé, và ngược lại là dương cực lớn
-VD flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thước đủ: https://www.youtube.com/watch?v=LEkFckg7sfw
-.with-sidebar {
-  --main-min-width: 45ch;
-  --sidebar-size: 250px;
-  --gap: 2rem;
-
-  display: flex;
-  gap: var(--gap);
-  flex-wrap: wrap;
-}
-.with-sidebar > * {
-  flex-grow: 1;
-}
-.with-sidebar > :first-child {
-  flex-grow: 999;
-  flex-basis: calc(
-    ((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999)
-  ); // Tức flex-basis xếp trước vào vị trí, k đủ sẽ đẩy thẻ xuống (flex-basis là NN xuống dòng), sau đó mới tính flex-grow, flex-shrink các thứ
-  // Nếu vừa có flex-basis, vừa có flex-grow, nó vẫn chỉ cố grow đến mức đạt được flex-basis thì thôi, chứ đạt r sẽ k grow quá nữa làm gì
-} 
-.with-sidebar > :last-child {
-  flex-basis: var(--sidebar-size);
-}
-VD code mẫu grid nhảy cột từ 1 tới 4:
-.columns {
-  /* user setting */
-  --min-column-size: 200px;
-  --column-count: 4;
-  --gap: 2rem;
-  
-  /* calculations */
-  --breakpoint: calc(var(--min-column-size) * var(--column-count) + (var(--gap) * (var(--column-count) - 1)) );
-  --column-size: calc((100% / var(--column-count)) - var(--gap));
-  
-  display: grid;
-  gap: var(--gap);
-  
-  grid-template-columns: repeat(
-    auto-fit, 
-    minmax(
-      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), // tức màn > 4 thẻ thì column size bth, màn < 4 thẻ thì column size full width
-      1fr)
-    );
-}
-Có code mẫu tăng dần cột từ 1 tới 1 số chỉ định
-
--> Thêm max-width 100% cho ảnh vì website luôn tự responsive co các item lại rồi => css reset 
-Tư duy responsive: kích thước ta set k cố định mà để cho browser tự set vì nó tự co item khi nó co lại. Ta chỉ cần set, min max để giới hạn k được nhỏ hay lớn hơn bao nhiêu thôi
-Tối ưu @media query, vd muốn màn lớn thì 2 col, màn nhỏ thì 1 col. Mà mặc định grid là 1 col, nên ta để mặc định 1 col, @media min-width thì set 2 cols. Chứ mặc định set 2cols, sau màn nhỏ lại phải chỉnh thì phải sửa grid-template-columns 2 lần lận => thường thì media query toàn dùng min-width
-
-
-
-# Dùng attr trong css
-attr(data-name); mặc định là string chỉ dùng trong content
-Bh có thể dùng với mọi kiểu trừ image url, Vd dùng với color: attr(data-color type(<color>), gray);
-URL list các type: https://una.im/advanced-attr/
-
-Thường ta style cho 1 thẻ hoàn toàn từ css. Chỉ dùng data-attribute khi có các thuộc tính của thẻ hỗ trợ cho việc truy cập từ JS or CSS. 
-- Lúc trước có giải pháp chia sẻ biến giữa html, css, js là dùng custom property:
-<div style="--color: red"></div>
-element.style.setProperty("--color", "red")
-- data-attribute tương tự nhưng dễ thao tác hơn với JS, cũng tiện hơn nhiều TH:
-<div data-color-to-show="red"></div>
-element.dataset.colorToShow = "red"
-
-Check: 
-@supports (x: attr(x type(*))) {
-  .warning {
-    display: none;
-  }
-}
-
--> type(<custom-ident>) là 1 custom identifier có thể trỏ tới id 1 thẻ
-Nên dùng đặt tên cho view-transition-name nhanh chóng
-
--> Tạo tooltip: Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
-Dùng title tốt hơn dùng style css :after content: attr(data-image-to-show);
-
-Nếu phải dùng id, cũng nên thay bằng data-* hơn vì lỡ 1 thẻ muốn duplicate ra chỗ khác khi responsive sẽ bị trùng id chỉ dược ở 1 thẻ.
-
-# Tạo tooltip
---> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
-
-
-
-# Other:
--> min-content: kích thước nhỏ nhất mà vẫn chứa content, sẽ khiến content co nhỏ nhất có thể
-max-content: kích thước lớn nhất mà vẫn chứa content, sẽ khiến content duỗi dài nhất có thể, gây overflow.
-fit-content: kích thước luôn vừa với content, khi màn hình nhỏ khiến content co nhỏ lại thì nó chiếm fullwidth, như width auto.
-=> bỏ, kbh dùng vì nó khiến parent theo kích thước của con, còn thực tế ta chỉ muốn con theo kích thước parent thôi.
-
--> Tổng kết dự án basic:
-- Tạo dự án: parcel import npm; html thuần import cdn; react;
-- Hosting: Github pages, netlify.
-- Darkmode: scss dùng map; css thuần dùng var có thể set từ checkbox hoặc dùng JS set data-theme attribute cho thẻ body, hoặc viết thủ công như cách scss sau khi tạo ra; Dùng css relative color tạo color palette.
-- Chia file: html thuần chia mỗi pages 1 file; css chia style chung và riêng từng pages ở các file riêng rồi import file css trực tiếp lẫn nhau được; scss cũng style chung từng file, từng pages @use các file chung đó, chia cả file components các thứ, cuối cùng quy hét về 1 file scss duy nhất @use tất cả để compile bằng 1 lệnh thôi, mọi pages đều phải script tới file chung đó dẫn đến style thừa nhưng chả sao.
-- BEM: scss dùng &--container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
-- Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
-- Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;

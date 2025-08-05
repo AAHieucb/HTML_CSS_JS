@@ -234,23 +234,25 @@ Dùng bind có thể tái sử dụng
 
 
 
-# Dùng sự kiện JS
-Sự kiện hay dùng: https://freetuts.net/su-kien-event-trong-javascript-368.html
+# Dùng event JS
+URL event: https://freetuts.net/su-kien-event-trong-javascript-368.html
 3 cách: dùng ở tag html; code js là element.onclick = () => { }; element.addEventListener("click", () => { });
 
--> onmouseenter khi hover vào element(dùng thay thế :hover tạo animation cho React được); onmouseover cũng tương tự nhưng điểm khác là onmouseenter k bubble bắn ra again khi mouse trỏ vào child element, onmouseover thì có.
+-> 1 tag addEventListener cùng 1 event nhiều lần thì khi trigger sự kiện tới element đó sẽ chạy lần lượt theo thứ tự được thêm vào chứ không đồng thời.
+Nếu để tham số 3 là boolean useCapture. Khi 1 event trigger sẽ luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha). Nếu useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý trong bubbling phase.
+removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase, có tham số 3 tương tự.
 
--> addEventListener: Khi addEventListener cùng 1 sự kiện nhiều lần sẽ chạy theo thứ tự được thêm vào chứ không đồng thời, nếu dùng các hàm async mới k chờ nhau mà chạy liên tục
-Tham số 3 là useCapture, ngược với bubbling. Khi 1 event trigger luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha), nó check sự kiện nào useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý bubbling phase. Có thể dùng object { capture: true, once: true }
+event.stopPropagation() => mặc định event chạy từ window đến tag sâu nhất rồi chạy từ nó đến window, trên đường đi tag nào catch event tương ứng sẽ chạy handler. Dùng như này cho 1 tag thì khi trigger tới tag đó sẽ dừng luôn.
 
-removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase. Tham số thứ 3 boolean tương tự.
+-> onmouseenter phát 1 lần mỗi khi hover vào element, dùng thay :hover tạo animation được.
+onmouseover tương tự nhưng điểm khác là onmouseenter k bubble event again khi mouse hover vào child element, onmouseover thì có.
+onmousemove phát liên tục khi di chuyển trong element
+onmouseleave phát 1 lần khi rời khỏi element
+onmouseout phát khi chuột rời khỏi element hoặc rời khỏi 1 child element sang 1 child element khác.
 
-passive: true => Báo là sẽ k chạy event.preventDefault() và browser có thể xử lý ngay lập tức, cải thiện hiệu suất. Mặc định hiệu suất bị giảm khi browser xử lý event vì luôn phải đợi xem event.preventDefault có được gọi hay không.
-
-event.stopPropagation() => dùng ở 1 sự kiện ở 1 thẻ sẽ cản trở event tiếp tục bubble up quá thẻ này trong bubbling phase
-
--> mousemove, mouseenter, mouseleave, mouseover (phát ra cả khi mới di chuyển vào child)
-
+-> Nhanh:
+3 cách gán event
+Chạy event ở capture phase và bubbling phase. Khi stopPropagation nữa.
 
 
 

@@ -159,3 +159,8 @@ VD: if (!Array.prototype.includes) {
     return this.indexOf(searchElement) !== -1
   }
 }
+
+-> min-content: kích thước nhỏ nhất mà vẫn chứa content, sẽ khiến content co nhỏ nhất có thể
+max-content: kích thước lớn nhất mà vẫn chứa content, sẽ khiến content duỗi dài nhất có thể, gây overflow.
+fit-content: kích thước luôn vừa với content, khi màn hình nhỏ khiến content co nhỏ lại thì nó chiếm fullwidth, như width auto.
+=> bỏ, kbh dùng vì nó khiến parent theo kích thước của con, còn thực tế ta chỉ muốn con theo kích thước parent thôi.

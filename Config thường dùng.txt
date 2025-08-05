@@ -99,7 +99,7 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
 
 -> addEventListener("click", () => {}, {
   once: true,
-  passive: true, // Báo k chạy event.preventDefault()
+  passive: true, // Luôn dùng, báo k chạy event.preventDefault() cho browser sẽ cải thiện hiệu suất.
   capture: true, 
   signal: controller.signal
 })
