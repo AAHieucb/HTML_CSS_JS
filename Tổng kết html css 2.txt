@@ -27,11 +27,13 @@ Có thể check page tải là prerender hay vào bth.
 
 
 
-# Tạo tab a11y
-Khi chuyển trang, ưu tiên dùng thẻ a thay vì button. Còn single page thì dùng <a href="#idofelement"/>
-Thay vì add event click vào từng thẻ, ta chỉ cần add vào thẻ container sẽ tự phát khi các phần bên trong bị click
+# a11y
+Dùng thẻ a navigate thay vì button sẽ tốt cho a11y và SEO hơn. Single page thì dùng <a href="#idofelement"/>
 
--> Các thẻ chi tiết phải luôn dán nhãn, nhất là các thẻ chỉ có icon k có text mô tả:
+-> Các thẻ chi tiết luôn dán nhãn, nhất là các thẻ chỉ có icon k có text mô tả:
+
+
+
 Dùng với aria-label được: <button aria-label="Tìm kiếm">
 Dùng với aria-labeledby khi cần 1 hoặc nhiều thẻ khác làm nhãn cho thẻ hiện tại. VD:
 <p id="label1">Giỏ hàng:</p>
