@@ -15,7 +15,7 @@
   }),
   credentials: "include",
   mode: "cors",
-  redirect: "manual", // manual trả về 1 phản hồi chuyển hướng để tự xử lý, follow (default) tuân theo các phản hồi chuyển hướng bth, error thì phản hồi chuyển hướng sẽ ném lỗi
+  redirect: "manual",
   signal: AbortSignal.timeout(3000),
 }
 
@@ -26,28 +26,34 @@
 --> mode => bth chả cần đụng vì cors và same-origin tự default rồi.
 - "cors": yêu cầu tuân theo cors, là default khi thực hiện yêu cầu cross-origin. Trình duyệt sẽ thêm header Origin vào request để báo nguồn gốc yêu cầu. Nếu server phản hồi với header Access-Control-Allow-Origin là * hoặc tên miền cụ thể thì ok (server đã setup cors), nếu server k phản hồi với header này thì browser sẽ chặn và báo lỗi.
 Browser cũng gửi preflight request với OPTIONS để check trước với Access-Control-Request-Method và Access-Control-Request-Headers, Origin
-=> Dùng khi gửi cross-origin và biết rằng server đã cấu hình cors để cho phép call từ browser.
-- "no-cors": dùng khi cần gọi cross origin nhưng biết rằng server k cấu hình cors cho ta gọi. Tức khi gọi mà k cần lấy response, chỉ muốn lấy các header thông tin cơ bản. 
-Nội dung k thể truy cập bị đánh dấu là opaque Vd: response.type là "opaqueredirect" hoặc "opaque"
-- "same-origin": khi cùng origin và truy cập được mọi thứ, là default khi gọi same-origin
+=> Luôn dùng khi gửi cross-origin và biết rằng server đã cấu hình cors để cho phép call từ browser.
+- "no-cors": dùng khi cần gọi cross-origin nhưng biết rằng server k cấu hình cors cho ta gọi. Tức khi gọi mà k cần lấy response, server vẫn xử lý request.
+Nội dung k thể truy cập bị đánh dấu là opaque. Vd: response.type là "opaqueredirect" hoặc "opaque"
+- "same-origin": khi cùng origin và truy cập được mọi thứ, là default khi gọi same-origin. Nếu request đến origin khác sẽ bị chặn.
 - "navigate": khi trình duyệt tự thực hiện yêu cầu chuyển hướng tải trang web mới, ta k dùng với fetch bao giờ, truy cập đủ mọi thứ. 
 
 --> credentials
 - "include": gửi thông tin xác thực với mọi yêu cầu, bao cả cross-origin. Vd gửi request kèm cookies với fetch của browser chỉ cần thêm option này chứ kp nhét cookies vào option
-- "omit" (default): Không gửi thông tin xác thực cùng với yêu cầu.
+- "omit" (default): browser k gửi thông tin xác thực cùng với yêu cầu.
 - "same-origin": Gửi thông tin xác thực chỉ khi gửi yêu cầu đến cùng một origin với web
 
---> cache-control => quản lý cache browser, có thể kết hợp các options với ;
+--> cache-control => quản lý cache browser, có thể kết hợp nhiều options với ,
 public: cache lưu cả yêu cầu và phản hồi ở client và proxy (shared caches) ở server => luôn dùng
 private: cache chỉ lưu trữ ở từng client browser
-no-cache: phải request check lại với server trước khi dùng cache, phản hồi 304 Not Modified nếu data chưa đổi 
+Browser có thể lưu bản copy, nhưng mỗi lần vẫn phải gửi request để xác nhận với server 
+no-cache: browser vẫn lưu copy, nhưng mỗi request vẫn phải xác nhận lại với server trước (ETag hoặc Last-Modified). Phản hồi 304 Not Modified nếu data chưa đổi.
 no-store: k cache gì hết
 max-age=<seconds>: thời gian max dùng cache trước khi cần xác thực lại với server, cả server proxy và client. Luôn dùng cái này, override trường expires k còn dùng.
 s-maxage=<seconds>: thời gian max dùng cache trên các proxy (shared caches) trước khi cần xác thực lại với server.
-stale-while-revalidate=<seconds>: cho phép dùng cache cũ trong thời gian bao lâu trong khi tiến hành xác thực lại với server.
-must-revalidate: luôn xác thực lại với server trước khi dùng cache, kể cả biết cache vẫn hợp lệ
+stale-while-revalidate=<seconds>: cho phép dùng cache cũ trong thời gian bao lâu trong khi tiến hành background fetch lại với server.
+must-revalidate: cache hết hạn thì phải fetch lại server, k được dùng tạm bản cache cũ.
 VD: Cache-Control: public, max-age=3600, s-maxage=1200 => cache lưu cả client và proxy, cache dùng trên máy khách 1h trước khi xác thực lại với server, trên proxy thì 1200s. Nên set file css js ảnh là thời gian cực lâu, các api data đổi nhiều thì no-cache. 
 Phải set cho cả cho FE (server host nó) hoặc set cho API server nodejs nếu trả static file. Thực ra React host lên tự động cache các files static lâu r. Thường set ở nginx proxy, hoặc dùng mặc định browser tự cache file tĩnh ok r.
+
+--> redirect
+follow: là mặc định, browser tự redirect rồi trả về kết quả cuối cùng cho user sau khi redirect request xử lý xong
+manual: trả về 1 phản hồi chuyển hướng, rồi tự code xử lý sau đó. Cùng origin thì trong header Location, khác origin sẽ trả response.type "opaqueredirect"
+error: nếu request này gặp phản hồi chuyển hướng, sẽ fail luôn.
 
 
 
@@ -82,10 +88,10 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
     "prefetch: [ // or prerender
       {
         "urls": ["/", "/test.html"],
-        "where": { // or
-          "and": [
+        "where": {
+          "and": [ // or
             { "href_matches": "/*" }, // mọi url
-            { "not": { "href_matches": "/logout/:id" } }, // trừ các url lá "/logout/:id"
+            { "not": { "href_matches": "/logout/:id" } }, // trừ các url là "/logout/:id"
             { "not": { "selector_matches": ".no-prerender" } }, // Page k có tag nào có selector css class là no-prerender
           ]
         },
@@ -154,7 +160,7 @@ html {
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100%; // Có thể để html và body tự mở rộng theo content
+  min-height: 100dvh; // Có thể để html và body tự mở rộng theo content
   width: 100%;
   -webkit-touch-callout: none; // Khi touch và hold trên iOS hay Safari sẽ hiển thị callout (chú thích) thì ta disable
   interpolate-size: allow-keywords;
@@ -162,6 +168,7 @@ html {
   font-family: "DM Sans", sans-serif;
   font-display: swap;
   overflow-y: hidden;
+  text-rendering: optimizeSpeed;
 
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
@@ -183,7 +190,7 @@ html {
   --font-large: clamp(1.125rem, calc(1.083rem + 0.133vw), 1.25rem); /* 18-20 500-2000 */
 }
 body{
-  min-height: 100%;
+  min-height: 100dvh;
   width: 100%;
   overflow-y: scroll;
   color: var(--color-text);
@@ -196,9 +203,6 @@ body{
 *:not(dialog, [popover]) {
   margin: 0;
   padding: 0;
-}
-:where(:root) {
-  text-rendering: optimizeSpeed;
 }
 img {
   max-width: 100%;

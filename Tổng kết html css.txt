@@ -14,16 +14,16 @@ https://css-generators.com/ => tool css, tạo các shape dị
 Cách khác nếu muốn fillup remaining space là dùng flex-grow
 - Mọi trường hợp, min lớn hơn max sẽ lấy min. Vd min-height > max-height sẽ lấy min-height
 - Bản chất về height:
-height auto là default sẽ tự mở rộng theo kích thước content. Thường css reset cũng thẻ body mặc định như v chứ k set height cố định.
+height auto là default sẽ tự mở rộng theo kích thước content. Thường css reset cũng để thẻ body mặc định như v chứ k set height cố định.
 Khi set 50% sẽ theo kích thước thẻ cha trực tiếp. Nếu thẻ cha trực tiếp k set height or auto theo thẻ con, thì bị loop, khiến thuộc tính height 50% invalid và coi như k có. 
-Thẻ cha có mỗi min-height:100vh; thẻ con height 50% sẽ k chạy vì height thẻ cha vẫn là auto tương tự như trên. 
+VD thẻ cha có mỗi min-height:100vh; thẻ con height 50% sẽ k chạy vì height thẻ cha vẫn là auto tương tự như trên. 
 
 -> Tổng kết dự án basic:
 - Tạo dự án: parcel import npm; html thuần import cdn; react;
 - Hosting: Github pages, netlify.
 - Darkmode: scss dùng map; css thuần dùng var có thể set từ checkbox hoặc dùng JS set data-theme attribute cho thẻ body, hoặc viết thủ công như cách scss sau khi tạo ra; Dùng css relative color tạo color palette.
 - Chia file: html thuần chia mỗi pages 1 file; css chia style chung và riêng từng pages ở các file riêng rồi import file css trực tiếp lẫn nhau được; scss cũng style chung từng file, từng pages @use các file chung đó, chia cả file components các thứ, cuối cùng quy hét về 1 file scss duy nhất @use tất cả để compile bằng 1 lệnh thôi, mọi pages đều phải script tới file chung đó dẫn đến style thừa nhưng chả sao.
-- BEM: scss dùng &--container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
+- BEM: scss dùng &__container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
 - Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
 - Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
 
@@ -52,7 +52,7 @@ và file css: .btn { ... }
 
 
 # CSS reset
-width default là auto tự full và k cần set 100% làm gì, height default tự theo content và chỉ cần set min-height 100% nếu cần footer dưới cùng thôi.
+width default là auto tự full và k cần set 100% làm gì, height default tự theo content và chỉ cần set min-height 100dvh nếu cần footer dưới cùng thôi.
 
 -> Phân biệt:
 initial: lấy thông số kỹ thuật của css. VD display có default là inline sẽ khiến mọi thẻ thành inline kể cả các thẻ div => k dùng vì nhiều cái default rất ảo
@@ -69,7 +69,7 @@ body => spec 0:0:1, là thuộc tính cha body của mọi thẻ, thường dùn
 user agent stylesheet => cố định k thể sửa với từng thẻ
 * => spec 0:0:0, set thuộc tính base cho mọi thẻ, thường để đè user agent stylesheet
 :where(tag) => spec 0:0:0, set thuộc tính base cho 1 tag cụ thể
-Trong react sẽ có #id là thẻ bao ứng dụng.
+Trong react còn có #id là thẻ bao ứng dụng.
 
 
 
@@ -81,12 +81,12 @@ Nếu được nên dùng <link rel="stylesheet" href="styles/reset.css"> sẽ c
 
 -> Nhanh:
 Có thể chia layer
-Chỉ dùng production vì tuần tự
+K dùng production vì tuần tự
 
 
 
 # Dùng @scope và @layer
--> @scope selector k ảnh hưởng spec, selector bên trong giữ nguyên spec của nó. Trong cùng 1 layer, nếu bên ngoài và trong scope đều cùng specifility, sẽ ưu tiên lấy trong scope => ít dùng vì rối
+-> @scope selector k ảnh hưởng spec, selector bên trong giữ nguyên spec. Trong cùng 1 layer, nếu bên ngoài và trong scope đều cùng specifility, sẽ ưu tiên lấy trong scope
 @scope có thể giới hạn style trong 1 phạm vi mà nested selector không làm được. VD @scope (article) to (aside) { } từ cha article đến con aside và k tính con.
 
 VD2: @scope (.text) to (button.xxx) { // button.xxx k ảnh hưởng spec
@@ -126,7 +126,7 @@ Case đặc biệt là @import có thể dùng bên trong @layer, nhưng @use th
 
 -> Nhanh:
 Các layer k thể can thiệp kể cả !important. Trong 1 layer thì style ngoài layer sẽ đè style trong layer
-@layer phải import ở đầu để định nghĩa thứ tự
+@layer phải khai báo thứ tự ở đầu. Sau đó muốn viết thứ tự như nào xuống dưới cũng được.
 
 
 
@@ -223,7 +223,7 @@ VD dùng cùng tên font nhưng style khác nhau:
 }
 Sử dụng nó tự dùng đúng font tương ứng:
 body { font-family: "DroidSerif", Georgia, serif; }
-h1 { font-weight: bold; }
+h1 { font-weight: bold; } // Cả 2 font cùng có styles sẽ lấy font đầu tiên
 em { font-style: italic; }
 strong em {
   font-weight: bold;
@@ -275,7 +275,7 @@ Màn hình mobile: text thường 12px, title 14px, chữ khổng lồ 20px, but
 
 -> Color font thêm màu. Tut: https://www.youtube.com/watch?v=VpZSMq2ajDE
 URL web check màu color font support: https://wakamaifondue.com/
-@font-palette-values --fontname {
+@font-palette-values --identifier {
   font-family: Bixa;
   base-palette: 3; // trong web từ trên xuống là các palette font hỗ trợ
   override-colors: 0 rgba(0,0,0,1), 2 red; // trong web từ trái sang là các color index để override
@@ -289,14 +289,15 @@ Với kích thước bth như @media hay padding margin nên dùng rem, font-siz
 VD box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
 
 -> Custom chữ trang trí:
--webkit-text-stroke: 1px black; => tạo 1 đường viền ngoài cho svg, mà font thực chất là svg nên tạo viền cho font. Thường kết hợp thêm với text-shadow.
+-webkit-text-stroke: 1px black; => text-stroke tạo 1 đường viền ngoài cho svg, mà font thực chất là svg nên tạo viền cho font. Thường kết hợp thêm với text-shadow.
 paint-order: stroke fill; => stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là để mặc định
+Còn có text-fill kiểm soát màu
 
 -> Nhanh:
 - Thêm font với @import hoặc @font-face. Dùng variables font k phải định nghĩa từng style.
 - font size clamp
 - Có thể custom màu color font
-- Dùng rem với khoảng cách, nếu kc liên quan đến text thì dùng em.
+- Dùng rem với kc phụ thuộc font, nếu kc liên quan đến text thì dùng em.
 - Dùng text-stroke + text-shadow + paint-order tạo chữ đẹp
 
 
@@ -319,10 +320,10 @@ vmax Relative to 1% dựa trên chiều lớn hơn của trình duyệt
 --> Các đơn vị đặc biệt cho mobile: lvh, dvh, svh, svw 
 vh là chiều cao cơ bản, k tính toolbar.
 lvh là chiều cao lớn nhất khi k có toolbar, svh là chiều cao nhỏ nhất khi k có toolbar
-dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => luôn dùng thay vh
+dvh là chiều cao dynamic tự thay đổi khi toolbar ẩn hoặc hiện => luôn dùng thay vh khi ứng dụng có chạy trên mobile
 
 -> Nhanh:
-Dùng rem em và dvh
+Dùng rem em (px khi klq tới font) và dvh
 
 
 
@@ -383,7 +384,7 @@ Best practice là dùng private custom variables
 .bye {
   --_color--text: green;
 }
-=> Nó giúp giảm số lượng css selector. Nhìn custom var, ta hiểu ngay là biến định nghĩa trong container thay vì tìm trên :root.
+=> Nó giúp giảm số lượng css selector. Nhìn custom var, ta hiểu ngay là biến định nghĩa trong container thay vì tìm trên :root. Chỉ đè private var 1 lần thôi, k đè nh lần.
 
 -> @property trong css houdini giúp khai báo biến css type safe, nên dùng với animation.
 Bản chất @property là khai báo biến và nó trở thành 1 thuộc tính (property) của css class đó luôn.
@@ -394,32 +395,35 @@ VD: @property --rotation {
 }
 .box {
   --rotation: 60deg;
+  transform: rotate(var(--rotation));
   transition: --rotation 1s ease-in-out;
 }
-=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s mới được.
+=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s linear mới được.
 
 
 
 # Metadata SEO
-***URL full mọi tag trong <head>: https://github.com/joshbuchea/HEAD
+***URL tag trong <head>: https://github.com/joshbuchea/HEAD
 
-<title> <meta name="description"> <meta name="keywords"/>
-<link rel = "canonical" href = "http://example.com/"/> => Khi 1 web có nhiều url dẫn tới cùng 1 nội dung, google không biết url nào nên hiển thị trên kết quả tìm kiếm. Luôn dùng thẻ canonical trỏ tới web gốc để thông báo cho search engine URL này là trang chính và tránh lập chỉ mục với URL của các trang trùng lặp khác
-Đủ alt cho hình ảnh
-<link rel="icon" href="/logo.svg"/>
+-> Config thường dùng:
+<title>Title</title>
+<meta name="description" content="Test setup website">
+<meta name="keywords" content="test,setup"/>
+<link rel = "canonical" href = "http://example.com/"/> => 1 web có nhiều url dẫn tới cùng 1 nội dung, gg không biết url nào nên hiển thị trên kết quả tìm kiếm. Luôn dùng thẻ canonical trỏ tới web gốc để thông báo cho search engine URL này là trang chính và tránh lập chỉ mục với URL của các trang trùng lặp khác
+<link rel="preload" as="image" href="./logo.svg"/> => ưu tiên preload
+<link rel="icon" href="./logo.svg"/>
 
-Open Graph tags liên kết với các social media: <meta property = "og: type" content = "article" /> // hay "website"
+<meta property = "og:type" content = "article" /> => hay "website"
 <meta property = "og:title" content = "TÊN TIÊU ĐÊ HOẶC TRANG WEB" />
 <meta property = "og:description" content = "MÔ TẢ CỦA TRANG NỘI DUNG" />
-<meta property = "og:image" content = "LIÊN KẾT ĐẾN TẬP TIN HÌNH ẢNH" />
+<meta property = "og:image" content = "./assets/logo.svg" />
 <meta property = "og:image:alt" content="Collection Image"/>
 <meta property = "og:url" content = "PERMALINK" />
 <meta property = "og:site_name" content = "TÊN TRANG WEB" />
-<meta property="og:locale" content="en_US"/>
-=> og là thẻ chung, các thẻ ở từng nền sẽ ghi đè thẻ og
-VD: <meta name = "twitter: title" content = "TÊN TIÊU ĐỀ HOẶC TRANG WEB"> => ghi đè og:title
+<meta property = "og:locale" content="en_US"/>
 
-Twitter tag tương tự nhưng chỉ dành cho twitter: <meta name = "twitter:description" content = ”"MÔ TẢ TRANG NỘI DUNG">
+<meta name = "twitter:title" content = "TÊN TIÊU ĐỀ HOẶC TRANG WEB"> => ghi đè og:title vì og là thẻ chung, các thẻ từng nền tảng sẽ ghi đè og
+<meta name = "twitter:description" content = ”"MÔ TẢ TRANG NỘI DUNG">
 <meta name = "twitter:image" content = "LINK TO IMAGE">
 <meta name = "twitter:site" content = "USERNAME">
 <meta name = "twitter:creator" content = "@ USERNAME">
@@ -430,40 +434,56 @@ Khi có nhiều lang:
 <link href="https://opensea.io/zh-TW" hrefLang="zh-TW" rel="alternate"/>
 <link href="https://opensea.io/de-DE" hrefLang="de-DE" rel="alternate"/>
 
--> <meta name="viewport" content="width=device-width, initial-scale=1.0"> => Luôn có thẻ này để cho phép người dùng zoom-in text, điều này phù hợp với những người thị lực yếu vào website, họ sẽ phải dùng các tool giúp zoom to trang web để nhìn rõ, VD CTRL+ của browser. Custom:
-<meta name="viewport" content="user-scalable=yes"/> cho phép người dùng sử dụng các tool zoom cho trang web
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1"/> chỉ cho max scale đến 200%
+--> <meta name="viewport" content="width=device-width, initial-scale=1.0"> => luôn có thẻ này để cho phép người dùng zoom-in text, điều này phù hợp với những người thị lực yếu vào website, họ sẽ phải dùng các tool giúp zoom to trang web để nhìn rõ, VD CTRL+ của browser. Có thể custom: 
+<meta name="viewport" content="user-scalable=yes"/> => cho phép người dùng sử dụng các tool zoom cho trang web
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1"/> => chỉ cho max scale đến 200%
 <meta name="viewport" conent="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/> => k cho zoom vì sợ break design
-=> 1 số thiết bị có tính năng zoom text only, nhưng nếu text zoom to mà layout k zoom sẽ break design, do đó code height của thẻ nên phụ thuộc vào content chứ k được fix cứng
+=> 1 số thiết bị có tính năng zoom text only, nhưng nếu text zoom to mà layout k zoom sẽ break design
 
--> Nên dùng senmatic element sẽ tốt cho SEO vì tạo cấu trúc nội dung rõ ràng hơn cho search engine hiểu.
-header và footer ở đầu cuối page; figure chứa img và figcaption khi cần ảnh có chú thích; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; time biểu diễn thời gian và <mark> để highlight important text
-Các thẻ heading h1 h2 ... chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
-=> 1 số thẻ có thể có tính chất đặc biệt như thẻ time có thể dùng attribute. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn
+-> Tối ưu SEO:
+- Dùng đủ alt cho image
+- Nên dùng senmatic element tốt cho SEO vì tạo cấu trúc nội dung rõ ràng hơn cho search engine hiểu:
+header và footer ở đầu cuối page; figure chứa img và figcaption khi cần ảnh có chú thích; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; <mark> để highlight important text
+Các thẻ heading h1 h2 chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
+1 số thẻ đặc biệt như <time> biểu diễn thời gian. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn.
+- Mỗi thẻ h1, h2 nên có id để có url # ref tới vị trí đó nhanh, k giúp SEO nhưng UX tốt hơn:
+document.querySelectorAll("h2").forEach(function(el) {
+  if (!el.hasAttribute("id")) {
+    el.setAttribute("id", el.textContent.replaceAll(/[^a-z]/gi, ''));
+  }
+});
 
--> Ảnh hiện ở nền tảng khác nên được ưu tiên preload:
+-> Preload ảnh:
 <link rel="preload" as="image" href="/static/images/logos/opensea.svg"/>
 <link rel="preload" as="image" imagesrcset="
   https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=640 640w, 
   https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=750 750w,
   https://i.seadn.io/gcs/files/ee67a8d1f6a2ba1ffbdb64a48c708f51.png?auto=format&amp;w=828 828w,
 " imagesizes="100vw"/>
-=> imagesrcset tự set thumbnail là ảnh nào tuỳ theo kích thước màn hình. Chỉ cần để nó trong header là browser chạy tới sẽ load và lưu cache luôn. Bất cứ chỗ nào trong web dùng mà trùng y hệt url đó sẽ lấy từ cache luôn mà k load lại.
-=> Tinh kích thước hình ảnh theo 100vw
+Có thể preload 1 ảnh cố định, preload 1 file hay preload ảnh nào trong list tuỳ theo kích thước màn hình. 
+VD ở đây imagesrcset có 3 bức ảnh có 3 chiều rộng khác nhau và imagesizes chỉ rằng ảnh sẽ chiếm full màn. Tuỳ kích thước màn, browser tự chọn 1 trong 3 ảnh phù hợp kích thước để tải trước và cache lại. Mọi chỗ trong web sử dụng đúng url ảnh đã cache sẽ lấy luôn từ cache ra, nên thường kết hợp với srcset của <img>
 
--> Google bot luôn tự đánh chỉ mục với mọi trang web mà nó truy cập được. Trừ khi có robots.txt hay thẻ meta robots cản nó => robots.txt thường để default or k có.
-C1: robots.txt có tác dụng trong toàn page, chỉ cần đặt file vào cùng file gốc index.html
+-> <link rel="prefetch" href="products.html">
+Preload chỉ dùng cho page hiện tại, session hiện tại, với tài nguyên cần gấp. Chỉ nên preload ít để tránh page tải lâu.
+Prefetch chỉ chạy khi browser rảnh và thường query tài nguyên cho next page k cần dùng ngay. Thời gian cache sẽ theo Cache-Control, or browser hard refresh cũng tải lại.
+Trong quá trình thao tác, tag này được add bằng JS cũng khiến browser tự prefetch url.
+
+-> Google bot tự đánh chỉ mục với mọi trang web mà nó truy cập được, trừ khi có robots.txt hay thẻ meta robots cản nó => thường để robots.txt default or k cần. Dùng khi có trang k cần đánh index thì đỡ tốn crawl budget cho các trang kqtr.
+VD1 robots.txt có tác dụng trong toàn page, chỉ cần đặt file này vào cùng file gốc index.html:
 User-agent: *
 Disallow: /page2.html
-=> tức là googlebot đọc mọi pages trừ page2.html
-C2: <meta name = "robots" content = "noindex, nofollow"> => Có nghĩa là không lập chỉ mục hay không theo dõi các liên kết từ trang này trang web này.
-<meta name = "robots" content = "index, follow"> => Có nghĩa là chỉ mục và theo dõi các liên kết từ trang này 
-VD cho robots.txt cản pages2, nhưng trong pages 2 lại dùng thẻ meta robots index. Thì googlebot gặp robots.txt sẽ bỏ qua pages2 luôn và chưa kịp thấy thẻ meta và k đánh index => Do đó bình thường chỉ dùng meta là được, chả cần robots.txt làm gì. Chỗ nào cản đánh index thì thêm noindex thôi
+=> Googlebot đọc mọi pages trừ page2.html
+VD2 <meta name = "robots" content = "noindex, nofollow"> => Không lập chỉ mục hay không theo dõi các liên kết từ page này.
+<meta name = "robots" content = "index, follow"> => Có lập chỉ mục và theo dõi các liên kết từ trang này 
+VD3: cho robots.txt cản pages2, nhưng trong pages 2 lại dùng thẻ meta robots cho phép index, thì googlebot gặp robots.txt sẽ bỏ qua pages2 luôn và chưa kịp thấy thẻ meta nên k đánh index
 
--> Mỗi thẻ h1, h2 nên có id để có url # ref tới vị trí đó nhanh. Nên thêm nếu k có, k giúp SEO nhưng UX tốt hơn:
-document.querySelectorAll("h2").forEach(function(el) {
-  if (!el.hasAttribute("id")) {
-      el.setAttribute("id", el.textContent.replaceAll(/[^a-z]/gi, ''));
-  }
-});
+-> Sitemap: robots.txt là file kiểm soát quá trình crawl của search engine, còn sitemap.xml giúp search engine đánh chỉ mục dễ hơn sẽ SEO tốt hơn.
+Sitemap chứa thông tin về các url cần crawl và cấu trúc nội dung, dễ đánh chỉ mục hơn với web có nội dung dài. \
+Tạo sitemap.xml đặt cùng index.html, thêm cả robots.txt để gg biết, host lên, đăng ký sitemap với Google Search Console theo dõi thống kê để biết mà cải thiện SEO.
+=> Web phức tạp nhiều content thì nên có vì giúp crawl dễ hơn
 
+-> Nhanh:
+Config thường dùng về canonical, og, language
+Dùng senmatic element, dùng h1 h2 kèm id.
+Preload ảnh, prefetch file.
+robots.txt và sitemap.xml => đọc qua

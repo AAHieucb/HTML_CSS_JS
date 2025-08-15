@@ -50,7 +50,7 @@ Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình du
 ### Design
 # How to design a website
 -> Exp:
-- Phần header đóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
+- Phần header dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
 - Navigation bar có text và logo nên cùng màu đồng bộ, cùng 1 styles, logo nhỏ gọn.
 - Hero section: Chữ nên được tương phản với ảnh background và có kích thước vị trí nổi bật hoặc thêm gradient, có thể phóng to thu nhỏ từng phần, uppercase chữ nổi bật. VD cho núp sau ảnh. Ảnh nên được upscale rõ, ít khi cho tối hay mờ đi, ưu tiên load trước.
 - K nên để text dài cả 1 dòng, nên vắn tắt ít chữ, nếu buộc có đoạn văn dài thì nên chia ra nhiều paragraphs nhỏ.
@@ -67,7 +67,6 @@ Có checkbox thì chia 3 vùng màu rõ ràng cho item unselected, selected, hov
 https://teleporthq.io/ai-website-builder => AI design web k có code, có hosting. Free được 1 web 3 pages, 5MB assets.
 https://heyleia.com/ => AI tạo web nhanh, k có code, hosting luôn, free 1 page.
 https://www.pineapplebuilder.com/ => AI tạo web, k có code, free 1 page.
-https://creatie.ai/files/home => AI design web như figma. Tut: https://www.youtube.com/watch?v=iSReYz7B4i0
 https://www.motiff.com/ => AI design được như figma, nhưng AI chỉnh sửa k được chuẩn
 https://readdy.ai/ => AI design web mạnh, k tự sửa được như figma
 https://penpot.app/ => Tool design vẽ tuỳ ý, có AI plugin
@@ -127,7 +126,7 @@ width: fill-available; width: -webkit-fill-available; => kéo dài hết phần 
 
 # Other
 -> Animation bằng JS hay CSS nhanh hơn? Đa số các TH là như nhau. 
-CSS thường tốt hơn vì giảm thiểu logic cho browser xử lý các thứ khác, tận dụng GPU tối ưu hiệu suất.
+CSS thường tốt hơn vì giảm thiểu logic cho browser xử lý các thứ khác, tận dụng GPU tối ưu hiệu suất => nên ưu tiên
 JS animation đôi khi buộc phải dùng cho exit animation. Trong React dùng useState cho animation có thể bị rối vì rerender
 VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. 
 Có cách chuẩn để fadeout ẩn thẻ bằng css thuần: opacity 0 + visibility hidden trước rồi height giảm về 0 sau đó

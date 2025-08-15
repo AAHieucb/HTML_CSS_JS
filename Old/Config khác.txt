@@ -21,28 +21,6 @@
 
 
 
--> Metadata SEO:
-<title>Title</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preload" as="image" href="./logo.svg"/>
-<link rel="icon" href="./logo.svg"/>
-<meta name="description" content="Test setup website">
-<meta name="keywords" content="test,setup"/>
-<link rel = "canonical" href = "http://localhost:1234/">
-<meta property = "og:type" content = "article" />
-<meta property = "og:title" content = "TÊN TIÊU ĐÊ HOẶC TRANG WEB" />
-<meta property = "og:description" content = "MÔ TẢ CỦA TRANG NỘI DUNG" />
-<meta property = "og:image" content = "./assets/logo.svg" />
-<meta property = "og:image:alt" content="Collection Image"/>
-<meta property = "og:url" content = "PERMALINK" />
-<meta property = "og:site_name" content = "TÊN TRANG WEB" />
-<meta property = "og:locale" content="en_US"/>
-<meta property = "twitter:title" content = "TÊN TIÊU ĐỀ HOẶC TRANG WEB">
-<link rel="stylesheet" href="./css/home.css">
-<script src="./test.js" blocking="render" type="module" defer></script>
-
-
-
 -> @font-face {
   font-family: SourGummy;
   src: url("../assets/fonts/SourGummy-ExtraLight.ttf") format('truetype');

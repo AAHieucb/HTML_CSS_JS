@@ -184,7 +184,6 @@ Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự độn
   alert("Chào mừng bạn đến với freetuts.net");
 });
 => Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
-- setImmediate tương tự setTimeout 0s
 - process.nextTick(<function>); => chỉ có trong NodeJS
 => Chỉ cần dùng setImmediate
 
@@ -239,10 +238,10 @@ URL event: https://freetuts.net/su-kien-event-trong-javascript-368.html
 3 cách: dùng ở tag html; code js là element.onclick = () => { }; element.addEventListener("click", () => { });
 
 -> 1 tag addEventListener cùng 1 event nhiều lần thì khi trigger sự kiện tới element đó sẽ chạy lần lượt theo thứ tự được thêm vào chứ không đồng thời.
-Nếu để tham số 3 là boolean useCapture. Khi 1 event trigger sẽ luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha). Nếu useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý trong bubbling phase.
+Tham số 3 là boolean useCapture. Khi 1 event trigger sẽ luôn chạy theo thứ tự Capture phase (từ window đến đúng ptu đó) rồi đến Bubbling phase (từ phần tử đó lên cha). Nếu useCapture true sẽ xử lý trong capture phase, false mặc định sẽ chỉ xử lý trong bubbling phase.
 removeEventListener cũng chạy Capture phase trước rồi đến Bubbling phase, có tham số 3 tương tự.
 
-event.stopPropagation() => mặc định event chạy từ window đến tag sâu nhất rồi chạy từ nó đến window, trên đường đi tag nào catch event tương ứng sẽ chạy handler. Dùng như này cho 1 tag thì khi trigger tới tag đó sẽ dừng luôn.
+event.stopPropagation() => mặc định event chạy từ window đến tag sâu nhất rồi chạy từ nó đến window, trên đường đi tag nào catch event tương ứng sẽ chạy handler. Dùng như này cho 1 tag thì khi trigger tới tag đó sẽ dừng propagateluôn.
 
 -> onmouseenter phát 1 lần mỗi khi hover vào element, dùng thay :hover tạo animation được.
 onmouseover tương tự nhưng điểm khác là onmouseenter k bubble event again khi mouse hover vào child element, onmouseover thì có.
@@ -253,6 +252,47 @@ onmouseout phát khi chuột rời khỏi element hoặc rời khỏi 1 child el
 -> Nhanh:
 3 cách gán event
 Chạy event ở capture phase và bubbling phase. Khi stopPropagation nữa.
+
+
+
+# Fetch API
+Không còn dùng XMLHttpRequest nữa mà dùng fetch có sẵn của browser.
+Dùng top-level statement fetch api được.
+
+-> Các response.type: 
+basic: khi gửi request cho server cùng origin, k có giới hạn vc xem thông tin trên response. Hoặc request mode "no-cors" và phản hồi là 1 simple origin
+cors: Khi yêu cầu cross origin và server đã cấu hình CORS để cho phép truy cập.
+"opaqueredirect" hoặc "opaque": éo xem được response, chỉ xem được vài header cơ bản. Khi cross-origin request mà server k cấu hình cors hợp lệ
+
+-> Có thể dùng AbortController custom timeout cho fetch với setTimeout gọi cùng với hàm fetch truyền vào signal
+
+
+
+# FormData và URLSearchParams, URL
+-> FormData có thể upload multiple files lên server => refer tới "Projects / Tinkerbellgarden"
+VD: var formData = new FormData();
+var photos = document.querySelector("input[type='file'][multiple]");
+formData.append('title', 'My Vegas Vacation');
+formData.append('photos', photos.files);
+fetch('https://example.com/posts', {
+  method: 'POST',
+  body: formData
+})
+.then(response => response.json())
+.then(response => console.log('Success:', JSON.stringify(response)))
+.catch(error => console.error('Error:', error));
+
+-> const myURL = new URL('https://example.com/path?name=chatgpt&age=25');
+myURL.hostname => "example.com"
+myURL.pathname => "/path"
+myURL.search => "?name=chatgpt&age=25"
+myURL.searchParams là URLSearchParams
+
+-> const params = new URLSearchParams('?name=chatgpt&age=25');
+params.get('name')
+params.set('name', 'gpt-4'); => thêm key-value, nếu key đã có sẽ thay thế
+params.append('lang', 'en'); => thêm key-value, nếu key đã có vẫn thêm, khiến key đó là 1 mảng
+params.getAll("lang");
 
 
 
@@ -281,21 +321,6 @@ Các file js, css, html k cần lo tải lại vì browser có cache để chỉ
 
 Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
 VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
-
-
-
-# URLSearchParams và URL
--> const myURL = new URL('https://example.com/path?name=chatgpt&age=25');
-myURL.hostname => "example.com"
-myURL.pathname => "/path"
-myURL.search => "?name=chatgpt&age=25"
-myURL.searchParams là URLSearchParams
-
--> const params = new URLSearchParams('?name=chatgpt&age=25');
-params.get('name')
-params.set('name', 'gpt-4');
-params.append('lang', 'en'); => append sẽ thêm value vào key như mảng, set sẽ thay thế giá trị nếu đã có
-params.getAll("lang");
 
 
 
@@ -404,48 +429,6 @@ Do cơ chế dọn rác, nếu mảng có 1 phần tử là 1 object chẳng h�
 Do GC k rõ thời gian chạy nên k thể truy cập vào số lượng phần tử hay duyệt các phần tử của WeakMap. Chỉ có has delete get set. 
 - WeakSet giống set nhưng chỉ nhận object, tự bị xóa khi k còn reference từ ngoài, cũng k hỗ trợ size keys hay các kiểu duyệt
 VD 1 biến WeakMap lưu thông tin của người dùng, khi người dùng leave thì tự xóa, nếu dùng map bth phải xóa thủ công hoặc chờ biến map giải phóng. Tức là ta dùng khi cần dùng map với set, mà k cần dùng length hay duyệt, mất reference bên ngoài là tự xóa tối ưu bộ nhớ.
-
-
-
-# Dùng FormData
--> Có thể upload multiple file lên server với tag <input type="file" multiple>
-Nạp nội dung vào thẻ input -> tạo 1 form -> lấy nội dung files trong thẻ input -> nhét files đo vào form -> nhét nó vào phần body vói method POST lên server. VD:
-var formData = new FormData();
-var photos = document.querySelector("input[type='file'][multiple]");
-formData.append('title', 'My Vegas Vacation');
-formData.append('photos', photos.files);
-fetch('https://example.com/posts', {
-  method: 'POST',
-  body: formData
-})
-.then(response => response.json())
-.then(response => console.log('Success:', JSON.stringify(response)))
-.catch(error => console.error('Error:', error));
-=> refer tới "Projects / Tinkerbellgarden"
-
-
-
-# Fetch API trong JS thuần
-Dùng XMLHttpRequest có sẵn của JS ít dùng
-Dùng fetch của JS được tích hợp sẵn trong browser. Check fetch có dùng được k với: if(!('fetch' in window)){ }
-
-fetch('<link có dữ liệu cần xử lý>', {optional object}); VD object { method: POST, headers: {"Content-Type:application/<>; charset=UTF-8"}, body: '<foo=bar>' }
-VD Để xác thực thông tin: đối số 2 thêm { credentials: "include(same-origin/ omit)" } => là đi kèm cookie; same-origin là gửi request cùng nhà, omit thì k cho trình duyệt gửi thông tin xác thực. VD:
-fetch(url, { 
-  credentials: 'include'; // include là có gửi kèm thông tin xác thực cookie
-})
-
--> Dùng top-level statement fetch api được.
-
--> Các response.type: 
-basic nếu ứng dụng gửi request cho server cùng nhà, k có giới hạn vc xem thông tin trên response. Hoặc request mode "no-cors" và phản hồi là 1 simple origin
-cors: Khi yêu cầu cross origin và server đã cấu hình CORS để cho phép truy cập.
-"opaqueredirect" hoặc "opaque": éo xem được response, chỉ xem được vài header cơ bản
-
--> Trong fetch có option mode:
-cors: mặc định, cho phép yêu cầu từ một nguồn khác (cross-origin) và gửi kèm header CORS. Nếu server không cho phép yêu cầu từ nguồn đó, trình duyệt sẽ chặn phản hồi => luôn dùng
-no-cors: gửi yêu cầu đến một nguồn khác mà không cần kiểm tra CORS nhưng sẽ không thể đọc response. Chỉ dùng cho các yêu cầu đến các API không hỗ trợ CORS.
-same-origin: Chế độ này chỉ cho phép gửi yêu cầu đến cùng một nguồn (same-origin). Nếu gửi yêu cầu đến một nguồn khác thì sẽ bị chặn.
 
 
 

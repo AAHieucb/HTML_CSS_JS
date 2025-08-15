@@ -17,80 +17,6 @@ VD có thể set trong từng thẻ để bảo 1 thẻ dùng mode nào
 
 
 
-# Tạo tab a11y
-Khi chuyển trang, ưu tiên dùng thẻ a thay vì button. Còn single page thì dùng <a href="#idofelement"/>
-Thay vì add event click vào từng thẻ, ta chỉ cần add vào thẻ container sẽ tự phát khi các phần bên trong bị click
-
--> Các thẻ chi tiết phải luôn dán nhãn, nhất là các thẻ chỉ có icon k có text mô tả:
-Dùng với aria-label được: <button aria-label="Tìm kiếm">
-Dùng với aria-labeledby khi cần 1 hoặc nhiều thẻ khác làm nhãn cho thẻ hiện tại. VD:
-<p id="label1">Giỏ hàng:</p>
-<p id="label2">Bạn có 3 sản phẩm.</p>
-<div role="region" aria-labelledby="label1 label2">
-  <!-- Nội dung -->
-</div>
-
--> Để có a11y tốt khi dùng tab, đảm bảo ấn tab và mũi tên là có thể navigate được.
-Cách dùng aria cho tabs: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
-
-role="tablist", role="presentation", tabindex, role="tab", role="tabpanel"
-Thuộc tính role sẽ loại bỏ ý nghĩa senmatic của thẻ, VD role="presentation" cho thẻ li chỉ định rằng phần tử có mục đích trình bày (decorative), không mang ý nghĩa semantic hay chức năng trong ngữ cảnh hiện tại, tức thẻ li không còn biểu hiện cho list nữa và sẽ bị bỏ qua trong accessibility tree, screen reader sẽ không đọc hoặc thông báo về nó
-
-Mặc định ấn key tab sẽ navigate qua mọi thẻ a trên page. Nếu dùng tabindex="-1" cho 1 thẻ sẽ bị bỏ qua khi nhảy tab. Nếu dùng tabindex="0" cho các thẻ khác như div thì nó sẽ nhảy vào cả các thẻ đó. Điều này tiện cho việc ấn key tab vào 1 tab, và ấn key tab tiếp sẽ vào content của tab kể cả div đó chứ k nhảy qua
-Set bằng JS, ta cho mọi tab k active có tabindex="-1", tab đang active và nội dùng của nó có tabindex="0"
-
-Thuộc tính hidden k chỉ ẩn thẻ đi mà cũng ẩn nó khỏi accessibility tree, tương tự display none. Còn visibility: hidden chỉ ẩn trên UI mà k ẩn trên accessibility tree. 
-VD dùng display none / hidden + aria-hidden="false" => k hoạt động, sẽ ẩn khỏi tree. Dùng visibility hidden + aria-hidden="false" ok UI k có mà a11y vẫn hđ
-
-aria-selected="true" bảo screen reader biết hiện đang ở tab nào, nó cũng tác động vào style tag nào là tag đang được chọn
-
-aria-controls k nên dùng, nếu muốn thêm thông tin mô tả cho tab thì có thể dùng: aria-describedby="idofelement" và dùng 1 thẻ <div id="idofelement" aria-hidden="false" style="visibility:hidden;"></div> để thêm nếu cần. Nội dung của thuộc tính này được sử dụng khi ngừoi dùng vào tab đó và screen reader đọc nó lên cho ngừoi dùng nghe.
-
-Ấn key left right để switch tab thì phải tự custom tạo hàm riêng thao tác với DOM thôi. Bắt sự kiện keydown.
-Điều đặc biệt là khi ta add event keydown cho tabContainer thì chỉ khi ấn tab focus vào tabContainer thì keydown của nó mới bắt chứ ngoài màn hình gõ sẽ k ảnh hưởng
-
--> Tạo tab html thuần
-- Mỗi tab nên ở cùng pages và k chuyển pages. Vì chỉ đổi tab nhưng mọi phần code html chung lại phải copy ra nhiều file.
-Cũng phải lưu lại vị trí scroll với các state data khác vào sessionStorage, trước khi chuyển, và khi page onload phải lấy lại data rất rối.
-- Đơn giản có thể viết nội dung tab hết 1 file rồi xử lý JS để display none hay hiện ra khi ngừoi dùng ấn vào tab
-- Để chuyển tab có thể dùng label checkbox để bắt và hiển thị content bằng HTML CSS thuần, hoặc dùng JS luôn được. Có thể animation content hiện ra ok.
-Có thể tạo animation slide từ 2 hướng khi chuyển tab, buộc phải dùng JS khi đó để xác định hướng cho animation, mỗi animation 1 keyframe riêng.
-- Có thể dùng window.history.pushState để đổi url mà k chuyển page, kèm xử lý onload. Để khi chuyển page sẽ đổi url, gõ url vào sẽ hiển thị đúng đang là tab nào.
-- Dùng kèm view transition api là thành animation đỉnh chóp
-
--> Nhanh chỉ cần set: aria-label, aria-labelledby, aria-describedby, aria-hidden, aria-selected, aria-controls, aria-current, aria-autocomplete (kèm input autocomplete), title, alt, role, aria-expanded
-Icon thì nên có aria-hidden hoặc mô tả bằng aria label cho tag bao nó
-aria-controls xác định quan hệ điều khiển, phần tử này điều khiển phần tử khác. Vd 1 button điều khiển dialog, menu, tab panel. Dùng label for để toggle thì k cần
-VD: <button aria-controls="idofdialog">. Tương tự aria-expanded cho button ấn button là mở rộng gì đó, cập nhật bằng JS khi mở và đóng là true và false, nó thể hiện trạng thái hiện tại của dialog
-
---> Bộ 3 aria-errormessage, aria-invalid dùng cho thẻ input khi bị lỗi, aria-required báo input này k thể để trống:
-<input id="email" type="email" aria-invalid="true" aria-errormessage="email-error" aria-required="true">
-<span id="email-error" role="alert">Email không hợp lệ</span>
-Bộ 3 aria-controls, aria-expand và aria-haspopup cho button thể hiện có menu hay danh sách thả hay hộp thoại:
-<button aria-haspopup="dialog" aria-controls="login-dialog">
-  Đăng nhập
-</button>
-<div id="login-dialog" role="dialog" hidden>
-  <p>Vui lòng nhập thông tin đăng nhập.</p>
-</div>
-Bộ 2 aria-selected và aria-multiselectable báo có thể chọn nhiều options:
-<ul role="listbox" aria-multiselectable="true">
-  <li role="option" aria-selected="true">Mục 1</li>
-  <li role="option" aria-selected="false">Mục 2</li>
-  <li role="option" aria-selected="true">Mục 3</li>
-</ul>
-aria-readonly là 1 phần tử chỉ đọc k thể tương tác:
-<label for="username">Tên đăng nhập:</label>
-<input id="username" type="text" aria-readonly="true" value="user123">
-
--> pointer-events: none; sẽ cản sự kiện của 1 thẻ. VD ứng dụng navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
-
--> Trong devtool browser có Elements Accessibility tool
-
--> Dùng ul li a header h1 p nav main article section aside footer
-
-
-
 # Tự tạo dialog css thuần hiện ra
 -> <dialog> có thể mở đóng bằng HTML, CSS để style nhưng sẽ k có animation.
 Dùng css thuần @starting-style và transition-behavior allow-discrete sẽ có animation nhưng k hoạt động với safari
@@ -125,31 +51,6 @@ Trong react cho kiểu fullWidth={isMobile} sẽ ok hơn. Khi đó dialog buộc
 Bản gọn nhất là dùng css only với dialog + popover + @starting style cho dialog và ::backdrop => nhưng k tương thích mọi browser
 HTML thuần dùng JS thì thêm class và bắt event animationend, tạo từng animation cho từng step bằng css. Dùng popover hoặc bắt event click window mà k click dialog thì ẩn đi
 Trong react nên dùng thư viện tạo bottom sheet or dialog sẽ tự dùng portal. Hoặc tự custom div thay cho dialog và dùng portal. Nếu dùng css only với @keyframes, có thể tạo animation lúc mở chứ đóng thì éo được. Muốn tạo animation đóng buộc phải thêm JS y như html thuần thì k chuẩn trong react.
-
-
-
-# Speculation rules
-URL: https://www.youtube.com/watch?v=LEF4UaM5m4U&list=WL 
-- Speculationrules cho prefetch và prerender trong html cho tốc độ siêu tốc. Chỉ cần thêm 1 tag script là xong.
-prefetch chỉ tải html, prerender sẽ tải hết và chạy cả js sẵn để client chỉ cần render ra.
-- Trong browser tab application có speculation rules.
-- eagerness mặc định là immediate tức page load 1 phát là tải mọi tài nguyên ảnh và link prefetch trước trên pages này, k ổn vì page lớn có quá nhiều file.
-eager không khác immediate là mấy, cũng tải nhưng k vội. eager và immediate giới hạn tải 50 pages trước thôi. Chú ý mỗi file html tải trước sẽ là 1 files, k tính các tài nguyên bên trong, cái đó tuỳ vào prerender hay prefetch.
-moderate y hệt nhưng giới hạn max 2 pages, phải hover vào link hay scroll gần tới mới prefech. VD hover vào 3 đường link, đường link đầu sẽ bị stale.
-conservative max 2 page và user phải click vào link mới prefetch, nó chỉ lợi hơn 1 tí tẹo so với bth.
-=> Có thể chia page bth thì load moderate, page khác hay vào hơn thì load immediate 
-- Việc prerender exec code JS rất nguy hiểm. VD trang logout prerender execute code luôn là toang. 
-Có nhiều cách fix như để request post thay vì get ở 1 file html mới. 
-
-Khi prerender sẽ gửi request kèm 1 header đặc biệt, nếu setup analytics thì k được tính số lần tải pages mà phải check vào pages k ở trạng thái prerender mới được.
-Giải pháp là check khi thực sự vào 1 pages được prerender mới chạy analytics:
-if(document.prerendering) { // true khi được tải bằng prerender
-  document.addEventListener( "prerenderingchange", // sự kiện phát ra khi đổi trạng thái từ prerender sang k prerender nữa, VD khi thực sự access 1 pages được prerender
-    func, { once: true }
-  );
-} else { func(); }
-
-=> Chú ý speculation rules k dùng cho nextjs vì có sẵn r, reactjs thì SPA nên chả cần.
 
 
 
