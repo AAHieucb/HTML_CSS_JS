@@ -27,6 +27,13 @@ Có thể check page tải là prerender hay vào bth.
 
 
 
+# Random css
+random(min, max, step)
+random(min, max)
+random(--per-element, min, max) => tái sử dụng nhiều nơi, mỗi nơi sẽ có 1 giá trị random độc lập
+
+
+
 # a11y
 Dùng thẻ a navigate thay vì button sẽ tốt cho a11y và SEO hơn. Single page thì dùng <a href="#idofelement"/>
 
@@ -704,3 +711,17 @@ Nếu phải dùng id, cũng nên thay bằng data-* hơn vì lỡ 1 thẻ muố
 # Tạo tooltip
 --> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
 visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
+
+
+
+# Tạo responsive marquee css only
+URL: https://frontendmasters.com/blog/infinite-marquee-animation-using-modern-css/
+
+- offset: path() giúp định nghĩa 1 đường đi, và offset-path sẽ chỉ định vị trí trên path đó theo %. Dùng offset để di chuyển object theo 1 path với offset-distance.
+- Dùng shape thay cho path vì shape có thể kết hợp với css function phức tạp
+VD: path("M100 100 h200"); tương đương với shape(from 100px 100px, hline by 200px);
+- sibling-count() là hàm đếm có bao nhiêu sibling là các thẻ cùng là con trực tiếp của thẻ cha của hiện tại.
+- VD offset: shape(from calc(var(--image-size)/-2) 50%, hline by calc(sibling-count() * var(--image-size))); 
+=> bắt đầu từ sát bên trái ngoài màn hình, 1 đường ngang dài bằng kích thước số lượng element
+- Để ảnh start lần lượt nhau, ta cho animation delay số âm
+

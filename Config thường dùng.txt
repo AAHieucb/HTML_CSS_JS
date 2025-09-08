@@ -1,5 +1,4 @@
 -> if(('fetch' in window)) {}
-
 {
   method: "POST",
   headers: {
@@ -54,13 +53,6 @@ Phải set cho cả cho FE (server host nó) hoặc set cho API server nodejs n�
 follow: là mặc định, browser tự redirect rồi trả về kết quả cuối cùng cho user sau khi redirect request xử lý xong
 manual: trả về 1 phản hồi chuyển hướng, rồi tự code xử lý sau đó. Cùng origin thì trong header Location, khác origin sẽ trả response.type "opaqueredirect"
 error: nếu request này gặp phản hồi chuyển hướng, sẽ fail luôn.
-
-
-
--> Parcel package.json:
-"@parcel/transformer-css": {
-  "errorRecovery": true => Cho phép Parcel tiếp tục build khi có lỗi trong CSS thay vì dừng lại.
-}
 
 
 

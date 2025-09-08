@@ -274,6 +274,10 @@ Dùng anchor custom position gắn cố định vào 1 thẻ cụ thể thay vì
 
 Tự động đổi position nếu k đủ diện tích thì thêm position-try-fallbacks: flip-inline, flip-block;
 
+-> dialog và popover
+
+-> position-try-fallbacks
+
 
 
 # Custom thẻ input

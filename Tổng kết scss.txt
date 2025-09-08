@@ -1,5 +1,5 @@
 # Basic
-SASS giống SCSS nhưng dùng tab và enter thay {}
+SASS giống SCSS nhưng dùng tab và enter thay { }
 
 -> Cài:
 - React "npm i sass" rồi import trực tiếp file scss thay cho css dùng luôn
@@ -8,7 +8,7 @@ Extension sass live compiler của VSC -> ấn sass watcher -> save file tự co
 npm i -g sass => gọi compile hay watch file tùy ý
 
 --> Package sass:
-sass <link file>.scss <link file đích>.css --style compressed => bỏ khoảng trắng để nén file thành 1 hàng
+sass <link file>.scss <link file đích>.css --style compressed => bỏ khoảng trắng để nén file thành 1 hàng, cho production
 sass <link file>.scss <link file đích>.css --style expanded => mở rộng chuẩn đẹp như code tay dùng 2 space
 sass --watch .:../css
 sass --no-source-map .:../css => compile mọi file.scss trong thư mục hiện tại vào /css, sourcemap giúp trình duyệt hiển thị style nằm ở file scss nào để debug
@@ -21,7 +21,7 @@ scss dùng @use thay hoàn toàn @import k bị duplicate.
 
 
 
-# Best practice trong dự án
+# Best practice scss trong dự án
 -> Tạo theme mode trong scss với map bắt đầu bằng ()
 
 -> Dùng BEM tốt hơn là css selector, css selector chỉ nên 1 cấp thôi:
@@ -110,9 +110,9 @@ scss dùng @use thay hoàn toàn @import k bị duplicate.
 
 
 # Chia file
-React thì nên chia từng file.scss cùng cấp từng module. HTML thuần thì dùng folder scss riêng chứa mọi file.scss. Phải chia file common và từng module.
+React thì 1 component đi kèm 1 file.scss. HTML thuần thì dùng folder scss riêng chứa mọi file.scss, import vào 1 file index.scss duy nhất.
 
-VD1 HTML thuần: chia common.scss và file.scss từng module. File main.scss ngoài cùng @use file common trước, rồi @use file module dùng common thoải mái. Compile file main.scss ra main.css là xong
+VD1 HTML thuần: chia common.scss và file.scss từng module. File main.scss @use từ common r đến từng module. Cuối cùng compile mỗi main.scss là xong.
 scss/
 ├── base/
 │   ├── _reset.scss

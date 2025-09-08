@@ -1,17 +1,10 @@
 # Basic
-https://uiverse.io/ => tổng hợp component UI bằng html thuần*
-https://gsap.com/ => thư viện UI mạnh
-https://www.flaticon.com => icon động
-https://dev.to/j471n/i-made-all-countries-flags-using-html-css-4cnc => cờ bằng css thuần
-
-https://css-generators.com/ => tool css, tạo các shape dị
-
 -> Bản chất kích thước trong css
 - margin collapse là hiện tượng bottom margin thẻ trên bị merge với top margin thẻ dưới => fix bằng cách dùng padding hoăc cho thành inline-block
 - padding-top 100% lấy 1/3 phần height thẻ cha. VD: A height 600px chứa B có padding-top 100% thì B có padding top là 200px vì chia đều cho padding top, bottom, content height
 - inline chiếm đủ nội dung và k thể set width height, block chiếm toàn bộ chiều ngang và có thể set. inline-block giống inline nhưng có thể set width height.
 - width auto chiếm full remaining space k tính margin, khác với width 100% sẽ có kích thước = 100% width thẻ cha. Nếu nhiều thẻ auto sẽ chia đều.
-Cách khác nếu muốn fillup remaining space là dùng flex-grow
+Cách khác nếu muốn fillup remaining space là dùng flex-grow, fill-available
 - Mọi trường hợp, min lớn hơn max sẽ lấy min. Vd min-height > max-height sẽ lấy min-height
 - Bản chất về height:
 height auto là default sẽ tự mở rộng theo kích thước content. Thường css reset cũng để thẻ body mặc định như v chứ k set height cố định.
@@ -23,14 +16,14 @@ VD thẻ cha có mỗi min-height:100vh; thẻ con height 50% sẽ k chạy vì 
 - Hosting: Github pages, netlify.
 - Darkmode: scss dùng map; css thuần dùng var có thể set từ checkbox hoặc dùng JS set data-theme attribute cho thẻ body, hoặc viết thủ công như cách scss sau khi tạo ra; Dùng css relative color tạo color palette.
 - Chia file: html thuần chia mỗi pages 1 file; css chia style chung và riêng từng pages ở các file riêng rồi import file css trực tiếp lẫn nhau được; scss cũng style chung từng file, từng pages @use các file chung đó, chia cả file components các thứ, cuối cùng quy hét về 1 file scss duy nhất @use tất cả để compile bằng 1 lệnh thôi, mọi pages đều phải script tới file chung đó dẫn đến style thừa nhưng chả sao.
-- BEM: scss dùng &__container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi, chia với @layer và @scope
-- Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack
-- Routing chuyển pages: chuyển page load lại mọi thứ, có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page, dùng thẻ a or window.location.href để thực sự chuyển pages; Dùng view transition api; Dùng session storage lưu data các pages;
+- BEM: scss dùng &__container, css cũng vậy. Trong file css 1 pages có <section>__<subsection>__<content>, max là 4 level. CSS Selector 1 level thôi.
+- Responsive: dùng css var với responsive hack grid flex, dùng clamp; Dùng @container > @media; scss dùng @mixin chia từng màn hình @media thuần và css hack.
+- Routing chuyển pages: dùng thẻ a or window.location.href để chuyển page load lại mọi thứ, or mở tab mới; Dùng history.pushState + URLSearchParams cho đổi url mà k chuyển page; có thể prefetch trước file cho pages same site <link rel="prefetch" href="./page2.html">; Dùng view transition api; Dùng session storage lưu data các pages;
 
 
 
 # BEM
-BEM (Block-Element-Modifier) kbh dùng id mà chỉ có class và tên các class tuân theo chuẩn. Nested thì chỉ nên 1 cấp.
+BEM (Block-Element-Modifier) kbh dùng id mà chỉ có class và tên các class tuân theo chuẩn. Nested thì chỉ nên 1 cấp. BEM max 4 cấp
 VD để biểu diễn item nằm trong khối block menu, thay vì:
   .menu { ... }
     .menu .item { ... }
@@ -61,10 +54,10 @@ inherit: lấy giá trị thuộc tính kế thừa từ cha. Vì mọi thẻ đ
 none: k set giá trị và coi như k có giá trị đó luôn, 1 vài css prop có giá trị này thôi.
 
 -> Import css tự reset trước, rồi đến css của thư viện, sau đó là css cho component tuỳ chỉnh.
-Bản chất: chia theo layer -> cùng layer thì style thẻ đó sẽ ghi đè style thẻ cha, style thẻ cha là body cũng mạnh hơn html vì cha gần hơn -> cùng là style thẻ đó thì mới chia theo specifility => Đó chính là lý do vì sao html là 0:0:1 nhưng lại k đè được :where là 0:0:0
+Bản chất: chia theo layer -> trong cùng cấp layer, style 1 thẻ con sẽ ghi đè style thẻ cha, style thẻ cha là body cũng mạnh hơn html vì cha gần hơn -> cùng là style thẻ đó thì style ngoài layer sẽ đè style layer con, cùng cấp layer mới chia theo specifility => Đó chính là lý do vì sao html là 0:0:1 nhưng lại k đè được :where là 0:0:0
 VD thứ tự khi reset giả sử chỉ có 1 layer:
 html => spec 0:0:1, là thuộc tính cha html của mọi thẻ, thường set style base mọi thẻ
-:root => spec 0:1:0, là thuộc tính cha html của mọi thẻ, thường định nghĩa css var, k style
+:root => spec 0:1:0, là thuộc tính cha html của mọi thẻ, thường định nghĩa css var, k style (pseudo class)
 body => spec 0:0:1, là thuộc tính cha body của mọi thẻ, thường dùng định nghĩa style cho body và mọi thẻ khác mà dùng biến trong :root
 user agent stylesheet => cố định k thể sửa với từng thẻ
 * => spec 0:0:0, set thuộc tính base cho mọi thẻ, thường để đè user agent stylesheet
@@ -76,8 +69,8 @@ Trong react còn có #id là thẻ bao ứng dụng.
 # Dùng @import trong css
 - @import nhiều lần cùng 1 file sẽ lấy cái sau thôi, k sợ trùng.
 - @import url("./2.css") layer(base); => nhét mọi code trong 1 file css trong 1 layer
-- Phải để ở đầu file, nó sẽ chạy tuần tự và làm chậm tải trang => chỉ dùng cho dev, trong production nên bundle lại thành 1 file index.css duy nhất và minify nó thôi. Vd dùng parcel build.
-Nếu được nên dùng <link rel="stylesheet" href="styles/reset.css"> sẽ chạy song song nhưng vẫn đảm bảo thứ tự trong html nên k sao.
+- Phải để ở đầu file, nó sẽ chạy tuần tự và làm chậm tải trang => hạn chế dùng trong production mà nên bundle 1 file index.css duy nhất. Vd dùng parcel build.
+Nếu được nên dùng <link rel="stylesheet" href="styles/reset.css"> sẽ chạy import nhiều file css song song nhưng vẫn đảm bảo thứ tự trong html nên k sao.
 
 -> Nhanh:
 Có thể chia layer
@@ -131,9 +124,9 @@ Các layer k thể can thiệp kể cả !important. Trong 1 layer thì style ng
 
 
 # Spec và CSS Selector
-Cascade là khi cùng spec thì cái sau sẽ đè lên cái trước. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>.
-layer sau đè layer trước > cùng layer thì style con đè style cha > cùng style con thì theo specifility -> cùng specifillity thì theo quy tắc @scope và cái sau đè cái trước
-!important > inline style > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
+Cascade là khi cùng spec thì theo thứ tự định nghĩa. VD ta link file css sau <style> thì css trong file sẽ đè lên css trong tag <style>.
+layer sau đè layer trước > cùng layer thì thẻ cha gần đè thẻ cha xa, style con đè style cha > cùng style con thì style bình thường đè style layer con -> cùng layer và cùng style con thì theo specifility -> cùng specifillity thì theo quy tắc @scope và cái sau đè cái trước
+inline style > !important > style theo id > style class, pseudo-class, attributes > element and pseudo-element > universal selector(*)
 
 -> Specifility (0,1,1) theo thứ tự là: Số ID selector; Số class / pseudo class / attribute selector; Element và số pseudo elements như :after, :first-letter
 URL check spec: https://specificity.keegan.st/
@@ -165,11 +158,19 @@ X:before default ở top left, X:after default ở top right, nằm trong thẻ 
 :target => style cho thẻ chứa id, khi được href tới id, từ 1 thẻ khác 
 
 VD tạo checkbox với option light/dark mode thì: body:has(option[value="dark"]:checked){ --background: black; --text-color: white; }
-VD ấn vào ảnh là phóng to ảnh, click 1 button đóng ảnh css only. Thì click thẻ a ref tới ảnh và style img:target phóng to, khi close thì xoá target bằng href="#" k hợp lệ.
+VD ấn vào ảnh là phóng to ảnh, cck 1 button đóng ảnh css only. Thì click thẻ a ref tới ảnh và style img:target phóng to, khi close thì xoá target bằng href="#" k hợp lệ.
 VD read more với CSS only: dùng 2 dùng label + checkbox + :checked để ẩn hiện text
 
+--> Special navigate với thẻ a:
+<a href="#"> => Invalid tự scrolls to the top of a document, or <a href="#top"> nếu k có thẻ id top
+<a href=""> => Reloads the current page, preserving the search string but removing the hash string (if present)
+<a href="."> => Reloads the current page, removing both the search and hash strings
+<a href="?"> => Reloads the current page, removing both the search and hash strings (nhưng keeps `?`)
+<a href="data:"> => Link to data URLs, like text fragments
+<a href="video.mp4#t=10,20"> => Links chi tiết tới đoạn nào của media file
+
 -> Pb:
-- :is() sẽ lấy specificity của selector mạnh nhất bên trong, giúp liệt kê gọn hơn. Còn :where() có spec là 0:0:0 cho css reset
+- :is() sẽ lấy specificity của selector cao nhất bên trong và áp dụng cho tất cả, giúlip liệt kê gọn hơn. Còn :where() có spec là 0:0:0 cho css reset
 :where(.parent) .child {} thì child vẫn giư specifility của nó là 0:1:0
 VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
 - :focus là chính thẻ đó focus. Còn :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này được focus, bao gồm ấn tab thì đổi style thẻ này. 
@@ -181,6 +182,7 @@ VD click chuột vào 1 phần tử trong list thì đổi style đơn giản: t
 Spec 
 4 combinator
 light/dark mode, phóng to ảnh với css only, readmore
+Có thể special navigate với thẻ a
 :is và :where
 :focus và :focus-within, dùng :focus với tabIndex
 

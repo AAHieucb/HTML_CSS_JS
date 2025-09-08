@@ -73,7 +73,9 @@
   scroll-timeline-name: --squareTimeline; // Dùng animation khi scroll trong thẻ .container
 }
 
-svg {
+
+
+-> svg {
   animation: rotate 1s linear infinite;
   animation-play-state: paused;
   animation-delay: calc(var(--scroll) * -1s);
@@ -84,7 +86,9 @@ window.addEventListener("scroll", () => {
   document.body.style.setProperty("--scroll", window.pageYOffset/(document.body.offsetHeight - window.innerHeight));
 });
 
-animation: play 1s steps(10) infinite; // chia ảnh 10 bước tới 10%, 10 bước tới 100%, tất cả trong 1s
+
+
+-> animation: play 1s steps(10) infinite; // chia ảnh 10 bước tới 10%, 10 bước tới 100%, tất cả trong 1s
 @keyframes play {
   0% { background-position: 0 0; }
   10% { background-position: 100px 100px; }
@@ -105,7 +109,9 @@ path {
   }
 }
 
-@view-transition {
+
+
+-> @view-transition {
 	navigation: auto;
 }
 ::view-transition-group(root) {
@@ -192,7 +198,6 @@ const response = await client.post("/api/v1/event", uploadData, config);
 
 
 
-Bỏ:
 -> .animated-text {
   background-clip: text;
   -webkit-background-clip: text;
@@ -214,9 +219,13 @@ Bỏ:
   }
 }
 
+
+
 -> <video width="100px" height="100px" preload="auto" muted loop autoplay playsInline> => preload="auto" là load toàn video luôn
   <source src="https://www.w3schools.com/tags/movie.mp4" type="video/mp4"/>
 </video>
+
+
 
 -> const workerCode = `
   self.onmessage = function(event) {

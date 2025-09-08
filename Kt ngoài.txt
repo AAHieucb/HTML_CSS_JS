@@ -1,53 +1,60 @@
-# Sự phát triển của JS ở frontend
--> Đầu tiên JS được dùng trong website bằng tag <script> tới file index.js
+# Sự phát triển của JS
+Đầu tiên JS được dùng trong website bằng tag <script> tới file index.js. Khi JS thuần k đủ, người ta phải thêm các thư viện như jQuery, lodash. 
+Ta phải tải file lodash.js về và lại <script> tới nó là được. Để dùng code lodash trong index.js thì phải script tới lodash trước index.js
 
--> Khi JS thuần k đủ, người ta phải thêm các thư viện như jQuery, lodash. 
-Tải file lodash.js về và lại <script> tới nó là được. Để dùng code lodash trong index.js thì phải script tới lodash trước index.js
-
--> Nhưng việc quản lý version sẽ khó vì ta phải download thủ công rồi thay thế file vào và cũng phải tự nhớ version. Ta dùng bộ quản lý thư viện npm.
-npm sẽ giúp tải thư viện về hộ trong node_modules đồng thời quản lý version trong file package.json, k cần làm thủ công bước này nữa.
+Việc quản lý version sẽ khó vì ta phải tải file về thủ công và nhớ version. 
+npm ra đời giúp quản lý thư viện, nó giúp tải thư viện về node_modules và quản lý version trong package.json.
 Frontend muốn dùng thì index.html vẫn phải <script> thủ công tới lodash.js đặt trong node_modules 
 
--> NodeJS ra đời giúp js code được phía server và tính năng import sourcecode với server đã ra đời thông qua keyword require(). Tức ta dùng require("lodash"); kết hợp với npm tải package về node_modules sẽ tự tìm chính xác vị trí thư viện trong node_modules, xử lý duplicate import.
+NodeJS ra đời giúp js code được phía server và tính năng import sourcecode với server đã ra đời thông qua keyword require. Tức ta dùng require("lodash") kết hợp npm sẽ tự tìm chính xác vị trí thư viện trong node_modules, xử lý duplicate import.
+Nodejs còn cung cấp export/require giúp tự tạo modules, tức require còn tìm ở các file trong thư mục gốc chứ k chỉ tìm trong node_modules.
+Frontend lúc này vẫn chưa thể import sourcecode trực tiếp, lý do là client side k hiểu lệnh require là gì, vẫn phải <script> tất cả trong file html trước theo thứ tự.
 
-Nodejs còn cung cấp cặp export/require giúp tự tạo modules, tức là require còn tìm ở các file trong thư mục gốc chứ k chỉ tìm trong node_modules. Hiểu require là chức năng của nodejs, là tính năng tất yếu phải có của server chứ klq gì đến JS.
-Frontend lúc này vẫn chưa thể import sourcecode trực tiếp, lý do là client side k hiểu lệnh require là gì. Ta buộc phải <script> tất cả trong file html trước theo thứ tự.
+JS ra đời type module giúp import code giữa các module với nhau ở FE, và import từ node_modules
 
--> JS ra đời type module giúp import code giữa các module với nhau ở FE, và import module tải về node_modules
-
--> Module bundler ra đời giúp FE dùng được các package của server bằng cách thế nội dung gốc vào, loại bỏ cú pháp require. Có thể import cả file css các thứ luôn. 
+Module bundler ra đời giúp FE dùng được các package của server bằng cách thế nội dung gốc vào, loại bỏ cú pháp require. Có thể import cả file css các thứ luôn. 
 Bundler cũng đóng gói phần code js thành 1 file js chung và html chỉ cần script tới 1 file đó thôi. 
-
--> Có nhiều phiên bản JS, nhiều lúc ta cần chuyển đổi những mã JS ở bản mới về bản cũ để hỗ trợ các browser cũ hơn, thì có thể thêm JS compiler như Babel. 
-
--> Khi gõ 1 command là tự động build, đóng gói, chạy webpack, tự động <script> code JS trong file html chứ k cần thủ công chạy từng lệnh. Để làm điều đó tự động, có thể dùng task runner, như Grunt, Gulp. Ngày xưa react có react-scripts làm điều này.
+Có nhiều phiên bản JS, nhiều lúc ta cần chuyển đổi những mã JS ở bản mới về bản cũ để hỗ trợ các browser cũ hơn, thì có thể thêm JS compiler như Babel. 
+Khi gõ 1 command là tự động build, đóng gói, <script> code JS trong file html k cần làm thủ công. Để làm điều đó tự động, có thể dùng task runner, như Grunt, Gulp.
 
 
 
 # Nguyên tắc code FE
-Phải kiểm soát bố cục từ lớn tới nhỏ, cái nào chứa cái nào, thẻ con có vị trí thế nào so với thẻ cha. Cần đảm bảo thẻ bên trong bao giờ cũng nhỏ hơn và nằm trong thẻ cha, hoặc set kích thước của cha phải kiểm soát kích thước của con, con phụ thuộc vào cha chứ kp ngược lại. Màn hình nhỏ dần thì cha nhỏ dần, vì con phụ thuộc vào cha nên cũng nhỏ theo.
+Kiểm soát bố cục từ lớn tới nhỏ, cái nào chứa cái nào, thẻ con có vị trí thế nào so với thẻ cha. 
+Đảm bảo thẻ con luôn nhỏ hơn ở trong thẻ cha, con phụ thuộc vào cha chứ kp ngược lại. Màn hình nhỏ dần thì cha nhỏ dần, vì con phụ thuộc vào cha nên cũng nhỏ theo.
 Chỉ set fix with với button hay icon nhỏ. Vì màn hình nhỏ sẽ khiến cha nhỏ dần, mà con fix cứng thì đến 1 lúc sẽ tràn khỏi cha.
-K dùng fit-content vì kích thước con to ra sẽ khiến cha to ra theo sẽ vi phạm nguyên tắc, mà nên dùng max-width hay xử lý rõ overflow để kbh cho 1 con dôi ra ngoài cha.
-Tương tự k nên dùng whitespace nowrap mà hãy dùng line clamp nếu có thể
+VD k dùng fit-content vì thẻ con to ra sẽ khiến cha to ra theo sẽ vi phạm nguyên tắc, nên thay bằng max-width và xử lý rõ overflow để kbh cho 1 con dôi ra ngoài cha.
+VD tương tự k nên dùng whitespace nowrap mà hãy dùng line clamp nếu có thể
 
 
 
 # DevTool Browser
--> Tab Console : 
+-> Tab Console: 
 allow pasting
 document.designMode = "on"; 
 [...$$('img')].forEach(a=>a.remove()); 
 VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) => click tất cả các thẻ a có 2 class .touchable.primary
 
--> Tab Source Browser: ctrl+p -> tìm file -> đặt debugger -> tới line bất kỳ với: ctrl+p -> :100 để tới dòng 100 -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
+-> Tab Source: ctrl+p -> tìm file -> đặt debugger -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
 Để cho file chạy đến dòng nào thì log gì ra có thể: right click breakpoint -> logpoint -> ghi message có thể ghi biến ra thì nó sẽ log biến đó
 
--> Tắt JS trên web thì quảng cáo cũng mất. VD trên Edge: 3 chấm -> setting -> site permission -> javascript -> ấn tắt
-Khi đó, thẻ <noscript> </noscript> là thẻ sẽ hiển thị khi trình duyệt tắt javascript or k hỗ trợ 
+-> Tab network: Chuột phải vào api -> override json -> chọn 1 folder bất kỳ -> ghi đè api
+
+-> Edge tắt JS: 3 chấm -> setting -> site permission -> javascript -> ấn tắt
+Khi đó, thẻ <noscript> </noscript> sẽ hiển thị. Tắt JS cũng chặn quảng cáo.
+
+-> CTRL + F => Emulate a focus page => luôn dùng
 
 
 
-### Design
+# Animation JS hay CSS
+Đa số TH thì tốc độ là như nhau, nhưng CSS thường tốt hơn vì giảm thiểu logic cho browser xử lý các thứ khác, tận dụng GPU tối ưu hiệu suất
+Chỉ dùng animation cho JS khi buộc cho exit animation. React mà dùng useState cho animation sẽ rối vì rerender.
+VD cần remove 1 thẻ khỏi DOM bằng animation buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. 
+Dù CSS k xoá thẻ khỏi DOM được nhưng vẫn có cách ẩn thẻ: opacity 0 + visibility hidden trước rồi height giảm về 0 sau đó
+
+
+
 # How to design a website
 -> Exp:
 - Phần header dóng được xuống phía content bên dưới, hoặc content ngay bên dưới là fullscreen, nếu không sẽ rất xấu. Tương tự các section cần align theo chiều dọc bằng nhau
@@ -64,14 +71,11 @@ Có checkbox thì chia 3 vùng màu rõ ràng cho item unselected, selected, hov
 - Có tool online check constrast ratio vì nó ảnh hưởng SEO: Văn bản thường > 7:1, Văn bản lớn > 4.5:1, Max k quá 15:1
 
 -> AI tool
-https://teleporthq.io/ai-website-builder => AI design web k có code, có hosting. Free được 1 web 3 pages, 5MB assets.
-https://heyleia.com/ => AI tạo web nhanh, k có code, hosting luôn, free 1 page.
-https://www.pineapplebuilder.com/ => AI tạo web, k có code, free 1 page.
+https://teleporthq.io/ai-website-builder => AI design web, có hosting. Free được 1 web 3 pages, 5MB assets.
 https://www.motiff.com/ => AI design được như figma, nhưng AI chỉnh sửa k được chuẩn
 https://readdy.ai/ => AI design web mạnh, k tự sửa được như figma
-https://penpot.app/ => Tool design vẽ tuỳ ý, có AI plugin
-https://uxplanet.org/ui-design-with-chatgpt-4o-4d79b2a32008 => dùng ChatGPT design UI bằng markdown
-Có tool convert từ web sang figma. Có Codia AI convert từ image sang figma và sang code.
+http://purecode.ai/my-generations => tool generate component UI bằng AI
+https://codia.ai/pricing => AI convert qua nhiều kiểu đa dạng. VD image sang code.
 
 -> Tổng hợp các kiểu design
 Newmorphism: kiểu design tạo clean effect rất ảo
@@ -85,23 +89,21 @@ Minimalism: chỉ hiển thị các thứ cần thiết, k có gì thừa thãi,
 Vaporwave design: web dùng tông màu neon như hồng, tím, xanh dương kiểu biển hiệu quảng cáo điện tử, video game, hoài cổ. VD thena.fi mới chỉ có 1 chút vaporwave thôi
 Memphis design: dùng màu sắc sống động với các dạng hình học, ký tự đa dạng không đối xứng sắp xếp trừu tượng ngẫu hứng.
 
-https://wordpress.com/blog/2024/11/14/website-layout-examples/ => Các pattern layout web
 https://htmlrev.com/ => 1500 template free tạo dự án
-
--> Video component style khác
-https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ => Tạo polygon responsive thuần
-https://www.youtube.com/watch?v=G8cyr199xZQ => animation cho button đẹp
-https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
-https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
-https://www.youtube.com/watch?v=BgBtxSGEows => crazy animate text theo chuột
 
 -> Color rule phối màu 
 Màu neutral 60% quyết định theme chính của ứng dụng. Màu này được sử dụng cho nền ngoài cùng. Thường là đen or trắng (1 màu rất tối or 1 màu rất sáng).
 Màu primary 30% được dùng cho các panel hay background của dialog, card. Màu này nên gần giống màu neutral để tạo ứng dụng 1 theme monochrome.
 Màu secondary 10% chỉ dùng cho các phần tử quan trọng nổi bật mà user có thể tương tác hoặc muốn highlight như button đặc biệt. Màu này nên nổi bật lên trên 2 màu kia.
 => Màu chọn có thể mix gradient hay 1% các màu lạ khác nhưng phải tuân theo quy tắc 3 màu chủ đạo. K để màu quá tương phản show đè nhau.
-=> Ảnh k ảnh hưởng màu nhưng nếu nhiều ảnh cùng 1 màu nền thì nên để màu nền là màu primary.
-## Design
+=> Ảnh k ảnh hưởng màu nhưng nếu nhiều ảnh cùng 1 màu nền thì nên để màu ảnh là màu primary.
+
+-> Các component style:
+https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ => Tạo polygon responsive thuần
+https://www.youtube.com/watch?v=G8cyr199xZQ => animation cho button đẹp
+https://www.youtube.com/watch?v=qTfQUXCPA2o => inverted border dùng thêm tag
+https://www.youtube.com/watch?v=dbaOq7F5msU => inverted border dùng mask phải có ảnh
+https://www.youtube.com/watch?v=BgBtxSGEows => crazy animate text theo chuột
 
 
 
@@ -119,47 +121,37 @@ margin-inline: auto; thay cho margin: 0 auto; để căn giữa
 <template> => tag đặc biệt mà nội dung k được render trực tiếp mà dùng để copy rồi mới render ra chỗ khác
 <video> có preload="auto,metadata,none", metadata là xem đến đâu load đến đấy, trong khi auto là load entire video luôn. 
 inert là attribute sẽ vô hiệu hóa mọi tương tác của người dùng với tag đó.
-width: fill-available; width: -webkit-fill-available; => kéo dài hết phần mà nó có thể kéo. Cách khác là bao flexBox và dùng flexGrow cho nó
+*width: fill-available; width: -webkit-fill-available; => kéo dài hết phần mà nó có thể kéo. Cách khác là bao flexBox và dùng flexGrow cho nó
 *field-sizing: content; => dùng cho mọi loại input/textarea tự mở rộng dần khi content đổi. Dùng min-height cho progressive enhancement.
+
+-> min/max/fit-content => bỏ
+min-content: kích thước nhỏ nhất mà vẫn chứa content, sẽ khiến content co nhỏ nhất có thể
+max-content: kích thước lớn nhất mà vẫn chứa content, sẽ khiến content duỗi dài nhất có thể, gây overflow.
+fit-content: kích thước luôn vừa với content, khi màn hình nhỏ khiến content co nhỏ lại thì nó chiếm fullwidth, như width auto.
+
+
+
+# Youtube streaming server load video rất nhanh
+Video được nén bằng thuật toán AV1 cực mạnh mà k giảm chất lượng, nó dùng nhiều server chuyên dụng để encode vì thuật toán nặng.
+Video tải lên cũng được mã hoá ở nhiều độ phân giải. Youtube tính toán cấu hình máy và tốc độ mạng (nếu để auto) để tải video tương ứng.
+Ưu tiên load video hơn các component khác trên web
+Dự đoán video nào xem tiếp để tải trước phần đầu, dựa vào lịch sử và xu hướng của nhiều người dùng.
+Xem đến đâu tải đến đấy, kéo dài đoạn tải trước ra dài để đảm bảo k bị delay.
+Băng thông rộng với mạng lưới CDN có mọi video.
+
+Để xử lý video quá dài, youtube chia hàng nghìn segment nhỏ và đánh dấu phần đầu và phần xem nhiều thì cho cache Edge CDN, phần xem vừa thì cho regional server, phần xem ít giữ trong original server. Video hot trending cũng ưu tiên lên CDN hơn video cũ rồi. Nhiều video chỉ có người xem ở vài quốc gia thì chỉ lưu trên các CDN quốc gia đó.
+Phần tải trước dài như nào cũng dựa vào phần sắp xem ở trên original server không, tốc độ xem, pattern đoạn nào hay bị skip.
+
+Youtube tính view: 
+Video phải xem quá ngưỡng thời gian tối thiểu, thậm chí có các mốc được mark random phải request đủ các mốc đó mới tính.
+Phát hiện bots và spam. IP tracking 1 máy xem lại nhiều lần 1 đoạn trong thời gian ngắn sẽ bị hạn chế, chỉ tính vài view đầu.
+Có cơ chế tự động check để audit lại view định kỳ nên đôi khi sẽ thấy view giảm.
+Video mới mà có lượt view tăng bất thường sẽ bị đóng băng view vài giờ đầu để đội ngũ vào xác minh thủ công.
 
 
 
 # Other
--> Animation bằng JS hay CSS nhanh hơn? Đa số các TH là như nhau. 
-CSS thường tốt hơn vì giảm thiểu logic cho browser xử lý các thứ khác, tận dụng GPU tối ưu hiệu suất => nên ưu tiên
-JS animation đôi khi buộc phải dùng cho exit animation. Trong React dùng useState cho animation có thể bị rối vì rerender
-VD cần remove 1 thẻ khỏi DOM bằng animation, css thuần k thể làm được vì nó chỉ fade thẻ đi mà k remove thẻ, buộc phải dùng JS bảo nó chạy animation trước, khi animation kết thúc thì remove thẻ để có exit animation. 
-Có cách chuẩn để fadeout ẩn thẻ bằng css thuần: opacity 0 + visibility hidden trước rồi height giảm về 0 sau đó
+-> Dùng CSS JS tính năng mới luôn phải có fallback, k hỗ trợ sẽ để mặc định: CSS có @support. JS check bth.
+VD check polyfill browser cũ: if (!Array.prototype.includes) Array.prototype.includes = function includes(searchElement) { return this.indexOf(searchElement) !== -1 }
 
--> ES6 (ECMAScript) là các quy tắc JS chạy tốt trên mọi trình duyệt. Babel convert ES6 sang CommonJS cho NodeJS dùng được.
 
--> Tại sao Youtube load video rất nhanh? Server phân tán, băng thông rộng. Phía BE dùng các thuật toán mạnh để nén các video khi hiển thị cho người dùng. Phía FE tính toán cấu hình máy mà đưa ra video quality mặc định phù hợp, ưu tiên load video và hiển thị component cho video trước, sau đó mới load các thành phần khác. 
-
--> WebComponent: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework có thể tạo ra các tag html thuần để dùng được ở mọi framework.
-Google có tool Lit giúp tạo web component dễ hơn.
-Khi đó phải code thành shadow DOM. Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. VD nut pause start trong <video>
-
--> Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser. Có sẵn trong các bundler như Vite.
-VD chuyển body { background-color: oklch(51.98% 0.1768 142.5); } thành:
-body {
-  background-color: green;
-  background-color: color(display-p3 0.216141 0.494224 0.131781);
-  background-color: lab(46.2829% -47.5413 48.5542);
-} giúp tương thích mọi browser.
-VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên dùng khi có parcel
-
--> CSS Preprocessor mở rộng tính năng của css. Code preprocessor sẽ được compile thành code css thuần. 1 số css preprocessor phổ biến là SASS, SCSS, LESS, Stylus. 
-Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian vì phải biên dịch ra css rồi mới chạy.
-Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử random.
-
--> Polyfill cung cấp chức năng hiện đại trên các trình duyệt cũ hơn không hỗ trợ, tự viết or tải polyfill về. Khi dùng các hàm mới nên check cho chắc. 
-VD: if (!Array.prototype.includes) {
-  Array.prototype.includes = function includes(searchElement) {
-    return this.indexOf(searchElement) !== -1
-  }
-}
-
--> min-content: kích thước nhỏ nhất mà vẫn chứa content, sẽ khiến content co nhỏ nhất có thể
-max-content: kích thước lớn nhất mà vẫn chứa content, sẽ khiến content duỗi dài nhất có thể, gây overflow.
-fit-content: kích thước luôn vừa với content, khi màn hình nhỏ khiến content co nhỏ lại thì nó chiếm fullwidth, như width auto.
-=> bỏ, kbh dùng vì nó khiến parent theo kích thước của con, còn thực tế ta chỉ muốn con theo kích thước parent thôi.

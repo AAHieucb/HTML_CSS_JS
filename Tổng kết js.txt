@@ -1,11 +1,3 @@
-# Basic
-FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau, bị XSS.
-Có thể lưu function vào file json với function constructor
-Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error] để wrap hàm async. Lỗi biết trước thì hiện custom, k thì hiện message slice ngắn đi.
-Tạo unique id: có lib uuid giúp tạo Guid random, hoặc dùng Date.now() + random phụ thuộc vào thời gian. Xác suất bị trùng cực thấp.
-
-
-
 # Vanilla JS 
 Best practice là chia mỗi page 1 file html css js. CSS dùng BEM.
 
@@ -324,6 +316,15 @@ VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuốn
 
 
 
+# ResizeObserver
+Thay vì window addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi nào kích thước của các objects nào bị thay đổi thì làm gì chẳng hạn.
+
+
+
+# Drag Animation với JS
+
+
+
 # Thao tác với string
 -> VD string find 1 string khác: 
 str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
@@ -460,6 +461,8 @@ Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Serv
 
 
 # Other
--> Cách che giấu source code frontend: Đang ở trang webA, khi load ta cho history.pushState sang đường dẫn khác (cùng host) thì khi mở view page source sẽ ra html của đường dẫn đó. Để đánh lừa thì ta nên cho 2 đường dẫn na ná nhau với chữ i viết hoa giống chữ l viết thường
-Bắt khi người dùng vào devtool bằng JS và cho ẩn phần code JS đi là được. 
-Dev khác vào web sẽ thấy source code là của web kia và k có code js nào cả
+- FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau bị XSS.
+- Có thể lưu function vào file json với function constructor
+- Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error] để wrap hàm async. Hiện custom error, lỗi lạ thì hiện message slice ngắn đi.
+- Tạo random nhanh có thể dùng Date.now() + Math.random() cho seed phụ thuộc vào thời gian, xác suất bị trùng cực thấp.
+

@@ -88,7 +88,17 @@ Lấy vị trí các thẻ: offset
 Thêm bớt thẻ vào thẻ: append
 Lấy vị trí thẻ và vị trí chuột: e.pageX
 
--> Dùng các plugin có sẵn của jQuery: fancybox, đọc pdf file, lật trang sách, webcam, zoom ảnh
+
+
+# Third party cookie:
+Thực tế web A lưu cookie web B nhưng k thể đọc được mà chỉ gửi lại cho web B khi có request tới web B. Nhưng A vẫn có nhiều cách tấn công khác nên browser dần loại bỏ third party cookie.
+Nó có thể mở rộng là nhúng nút like của facebook tự động login hay gợi ý video của youtube chứ k chỉ quảng cáo.
+
+Cơ chế retargeting ad:
+User truy cập web A, web A nhúng script từ ad platform như google analytics.
+Script chạy sẽ gửi data của user cho ad platform. Ad platform lưu id và behavior vào. Id được generate duy nhất cho thiết bị, behavior tự được track định kỳ.
+UserId được lưu vào cookie web A nhưng domain là ad platform. Tức 1 web đặt cookie vào web khác được.
+User truy cập web B chạy quảng cáo. Web B query ad từ ad platform điền vào ad space, truyền userid lấy từ cookie ad platform chung với web A.
 
 
 
@@ -101,12 +111,32 @@ Cũ hơn nữa còn dùng window.ActiveXObject trước phiên bản IE11 đư�
 Code script k truy cập được client's hard drive vì lý do bảo mật
 VB Script là interpreted script lang của microsoft là 1 phần của Visual Basic programming language
 
--> Dùng tool quokka trong VSC: Cài extension -> CTRL+SHIFT+P để tìm và bật quokka, CTRL+K rồi E để exit, CTRL+K rồi Q để chạy lại quokka
-
 -> Browser khác nhau dùng rendering engine khác nhau: Webkit dùng cho Safari, Gecko dùng trong firefox, Blink dùng trong chrome, opera. 
 Chromium là 1 trình duyệt mã nguồn mở, từ đó phát triển các trình duyệt khác.
 Hack CSS mở rộng tương thích trình duyệt: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
 
 -> Biến global trong browser gọi là BOM (Browser Object Model) như cookies, history, window, screen, navigator, location.
 
--> Typescript sẽ ngăn các trường hợp kỳ lạ xảy ra, đảm bảo operator phải cùng type. Vd: ("b" + "a" + + "a" + "a").toLowerCase(); => banana
+-> ES6 (ECMAScript) là các quy tắc JS chạy tốt trên mọi trình duyệt. Babel convert ES6 sang CommonJS cho NodeJS dùng được.
+
+-> WebComponent: https://www.freecodecamp.org/news/write-components-that-work-in-any-framework có thể tạo ra các tag html thuần để dùng được ở mọi framework.
+Google có tool Lit giúp tạo web component dễ hơn.
+Khi đó phải code thành shadow DOM. Shadow DOM là phần css k bị ảnh hưởng khi người dùng global style các thẻ. VD nut pause start trong <video>
+
+-> Post-processors giúp auto-prefix css hack, code minify, transform modern css phù hợp mọi browser. Có sẵn trong các bundler như Vite.
+VD chuyển body { background-color: oklch(51.98% 0.1768 142.5); } thành:
+body {
+  background-color: green;
+  background-color: color(display-p3 0.216141 0.494224 0.131781);
+  background-color: lab(46.2829% -47.5413 48.5542);
+} giúp tương thích mọi browser.
+VD LightningCSS là thay thế của PostCSS, Autoprefixer, CSSNano hiệu suất cao hơn => nên dùng khi có parcel
+
+-> CSS Preprocessor mở rộng tính năng của css. Code preprocessor sẽ được compile thành code css thuần. 1 số css preprocessor phổ biến là SASS, SCSS, LESS, Stylus. 
+Nhược điểm của css preprocessor là khó debug lỗi runtime, tốn thời gian vì phải biên dịch ra css rồi mới chạy.
+Có 1 số TH buộc phải dùng scss. VD css style cho 300 phần tử random.
+
+-> Cách che giấu source code FE: 
+Đang ở trang webA, khi load ta cho history.pushState sang đường dẫn khác (cùng host) thì khi mở view page source sẽ ra html của đường dẫn đó. Để đánh lừa thì ta nên cho 2 đường dẫn na ná nhau với chữ i viết hoa giống chữ l viết thường. Dev khác vào web sẽ thấy source code là của web kia và k có code js nào cả
+Bắt khi người dùng vào devtool bằng JS và cho ẩn phần code JS đi là được. 
+
