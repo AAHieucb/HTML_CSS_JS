@@ -198,12 +198,12 @@ SVG Fonts: là chữ biến hóa như ảnh graphic.
 Còn có material icons là icons viết dạng tag html
 
 -> Thêm font mới:
-- Dùng @import url(<remote url>); để dùng trực tiếp font-family trong css, k dùng được với local url.
-- Fallback font:
+- Dùng @import url(<remote url>); để import có trực tiếp font-family trong css, k dùng được với local url.
+- Set font từ local file:
 @font-face {
   font-family: MyFont;
   src: url(sansation_light.woff2) format("woff2"),
-       url(sansation_light.woff) format("woff"); // Browser k support woff2 tự chuyển sang woff
+       url(sansation_light.woff) format("woff"); // Browser k support woff2 tự chuyển sang woff, hỗ trợ hết r nên k cần thiết
   font-weight: 100;
 }
 h2 {
@@ -240,7 +240,7 @@ Short hand nhiều url:
 }
 
 --> Variable fonts cho phép đổi thuộc tính cùng 1 font file, k fix cứng font-size, font-weight, italic => nên luôn dùng
-Khi tải font chú ý font-size fix cứng thì k nên dùng. Variable font thì FE chỉ cần tải 1 file rồi tự style thoải mái.
+Khi tải font chú ý font-weight fix cứng thì k nên dùng. Variable font thì FE chỉ cần tải 1 file rồi tự style thoải mái.
 VD roboto là static font, roboto_flex là variable font
 
 -> Web safe font: Có các font chạy trên linux ok nhưng sang window bị lệch dòng, phải sửa thẳng vào file ttf bằng FontForge mất tg. Web safe font là các font chạy mượt với mọi browser và hđh. Nó k đảm bảo lúc nào cũng khả dụng nên phải thêm fallback fonts nếu dùng.
@@ -287,16 +287,16 @@ URL web check màu color font support: https://wakamaifondue.com/
 }
 
 -> K dùng px vì browser đổi font-size và px sẽ override browser setting. Khi font-size tăng, nhiều nơi khác cũng nên tăng. 
-Với kích thước bth như @media hay padding margin nên dùng rem, font-size cũng dùng rem. Với spacing liên quan đến text, nên dùng em. 
+Với kích thước bth như @media hay padding margin nên dùng rem, font-size cũng dùng rem. Với spacing liên quan đến text mới dùng em. 
 VD box-shadow dùng px thoải mái vì chả liên quan đến font. Hoặc ảnh hay cái gì k phụ thuộc vào font-size mà cố định ở mọi màn hình thì để px.
 
 -> Custom chữ trang trí:
 -webkit-text-stroke: 1px black; => text-stroke tạo 1 đường viền ngoài cho svg, mà font thực chất là svg nên tạo viền cho font. Thường kết hợp thêm với text-shadow.
 paint-order: stroke fill; => stroke được vẽ trước r mới fill màu lên tạo chữ đẹp hơn là để mặc định
-Còn có text-fill kiểm soát màu
+Còn có text-fill kiểm soát màu > color
 
 -> Nhanh:
-- Thêm font với @import hoặc @font-face. Dùng variables font k phải định nghĩa từng style.
+- Thêm font remote với @import, local với @font-face. Dùng variables font k phải định nghĩa từng style. Web safe font, fallback font.
 - font size clamp
 - Có thể custom màu color font
 - Dùng rem với kc phụ thuộc font, nếu kc liên quan đến text thì dùng em.
@@ -314,10 +314,10 @@ ex: Tương đối so với chiều cao chữ "x" của font hiện tại.
 ch: Chiều rộng của ký tự "0" trong font đang dùng
 *vw: Tương đối 1% width của kích thước cửa sổ trình duyệt (viewport).
 *vh: Tương đối 1% height của kích thước cửa sổ trình duyệt (viewport).
-vmin Relative to 1% dựa trên chiều nhỏ hơn của trình duyệt. VD điện thoại xoay dọc thì vmin sẽ là 1% của width
+vmin Relative to 1% dựa trên chiều nhỏ hơn của trình duyệt. VD điện thoại xoay dọc thì vmin sẽ là 1% của height
 vmax Relative to 1% dựa trên chiều lớn hơn của trình duyệt
 *%: Có giá trị tương đối so với phần tử cha.
-=> Nên set kích thước theo rem, em, và responsive font-size theo rem, tất cả sẽ theo setting browser là font size gốc.
+=> Tức browser default 1rem = 16px or setting browser, nên set :root là 1rem or default luôn, các thẻ khác cũng dùng rem nhưng font to hay nhỏ set với dùng clamp là xong.
 
 --> Các đơn vị đặc biệt cho mobile: lvh, dvh, svh, svw 
 vh là chiều cao cơ bản, k tính toolbar.
@@ -330,9 +330,10 @@ Dùng rem em (px khi klq tới font) và dvh
 
 
 # Private custom variable
-VD click chuột là đổi màu 1 vài thẻ thì nên dùng css var và đổi giá trị var thay vì gán lại style từng thẻ. Đổi màu css var để tạo các theme khác nhau được.
+VD click chuột là đổi màu vài thẻ thì nên dùng css var và đổi giá trị var thay vì gán lại style từng thẻ, tốt hơn cả việc gán class. Có thể dùng để tạo theme khác nhau.
 
 -> Trong dự án lớn, nên dùng fallback var + kế thừa + private custom var. 
+Lưu ý chỉ đè private var tối đa 1-2 lần thôi, k đè nh lần.
 VD: <div class="container">
   <div class="hello">
     <button>Hello</button>
@@ -386,7 +387,7 @@ Best practice là dùng private custom variables
 .bye {
   --_color--text: green;
 }
-=> Nó giúp giảm số lượng css selector. Nhìn custom var, ta hiểu ngay là biến định nghĩa trong container thay vì tìm trên :root. Chỉ đè private var 1 lần thôi, k đè nh lần.
+=> Nó giúp giảm số lượng css selector. Nhìn custom var, ta hiểu ngay là biến định nghĩa trong container thay vì tìm trên :root. 
 
 -> @property trong css houdini giúp khai báo biến css type safe, nên dùng với animation.
 Bản chất @property là khai báo biến và nó trở thành 1 thuộc tính (property) của css class đó luôn.
@@ -400,7 +401,7 @@ VD: @property --rotation {
   transform: rotate(var(--rotation));
   transition: --rotation 1s ease-in-out;
 }
-=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r, dùng css bình thường phải dùng transition all 1s linear mới được.
+=> Transition trực tiếp biến --rotation được vì nó như 1 thuộc tính của class r.
 
 
 
