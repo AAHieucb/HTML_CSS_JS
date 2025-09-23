@@ -36,6 +36,7 @@ scroll thực tế check thẻ gần nó nhất mà bị scroll thì chạy anim
 -> animation-timeline: view() chạy animation khi thẻ đi từ vị trí nào đến vị trí nào của view
 animation-range giúp kiểm soát điểm bắt đầu và start của timeline, default animation bắt đầu khi nó mới vào viewport và kết thúc khi nó hiện đầy đủ trong view port
 VD Tạo thanh loading ngang khi scroll bằng css thuần quá đỉnh với animation-timeline scroll(block):
+K nên dùng loading bar ngang cho fetch API vì mỗi component là loading độc lập. Loading ngang cho scroll phải đặt trong tag content và position fixed theo màn hình vì ta k chỉ scroll thẻ body. Loading ngang nếu chuyển page MPA cũng k được vì SSR k thể tính được.
 
 -> Check nếu set reduced motion trong OS để giảm animation thì nên tắt animation này đi, nên wrap lại trong @media:
 @media (prefers-reduced-motion: no-preference) {

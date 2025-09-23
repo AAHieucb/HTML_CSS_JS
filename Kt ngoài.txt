@@ -29,6 +29,9 @@ VD tương tự k nên dùng whitespace nowrap mà hãy dùng line clamp nếu c
 
 
 # DevTool Browser
+-> Edge tắt JS: 3 chấm -> setting -> site permission -> javascript -> ấn tắt
+Khi đó, thẻ <noscript> </noscript> sẽ hiển thị. Tắt JS cũng chặn quảng cáo.
+
 -> Tab Console: 
 allow pasting
 document.designMode = "on"; 
@@ -38,12 +41,33 @@ VD autoClick: Array.from($$('a.touchable.primary')).forEach(btn => btn.click()) 
 -> Tab Source: ctrl+p -> tìm file -> đặt debugger -> refresh trang thì nó sẽ chạy đến breakpoint là dừng
 Để cho file chạy đến dòng nào thì log gì ra có thể: right click breakpoint -> logpoint -> ghi message có thể ghi biến ra thì nó sẽ log biến đó
 
--> Tab network: Chuột phải vào api -> override json -> chọn 1 folder bất kỳ -> ghi đè api
+-> Tab Network: Chuột phải vào api -> override json -> chọn 1 folder bất kỳ -> ghi đè api
 
--> Edge tắt JS: 3 chấm -> setting -> site permission -> javascript -> ấn tắt
-Khi đó, thẻ <noscript> </noscript> sẽ hiển thị. Tắt JS cũng chặn quảng cáo.
+-> Tab Elements:
+- Layout:
+Hàng loạt options debug flex và grid
+Show line names để thấy grid line names
+- Styles: :hov -> Emulate a focus page => luôn dùng
+.cls thêm class
+Nút brush tool để trigger prefers-color-scheme
+- DOM breakpoint:
+Chuột phải vào thẻ -> Break on -> Node removed sẽ dừng code khi thẻ này được xoá khỏi DOM / subtree modification khi thẻ con trong tag này được add or remove
 
--> CTRL + F => Emulate a focus page => luôn dùng
+-> Tab rendering:
+Emulate hàng loạt prefers-color-scheme, prefers-reduced-motion, prefers-contrast, print screen, prefers-reduced-transparency, blurred vision.
+Paint flashing hightlight area mỗi khi được repaint. 
+Layout shift regions hightlight area có layout shift.
+Frame rendering stats hiển thị thông tin performance khi có animation. Scrolling performance issue hightlight phần làm chậm scroll performance.
+
+-> Tab animation: Chạy animation chậm hơn, tạm dừng animation, custom animation.
+
+->*** Tab CSS overview => check performance
+Nên set để id selector và inline selector nên là 0
+Nên gom các màu gần như nhau vào làm 1 để consistent, tránh dùng màu bừa.
+Hiện số các font-size và font-weight được sử dụng để gom lại cho consistent, k có 1 chỗ nào dùng riêng 1 font-size hay font-family lạc loài. 
+Số lần @media query với từng màn hình tương tự.
+Xử lý contrast ratio cho màu AA là khá ổn, AAA là tốt nhất. Ấn vào sẽ ra thẻ dùng màu đó và chọn bảng màu sẽ ra màu kèm constrast ratio để chọn.
+Unused css để remove mà vẫn k đổi styles.
 
 
 

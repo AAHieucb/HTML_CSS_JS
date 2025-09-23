@@ -111,9 +111,8 @@ Cũ hơn nữa còn dùng window.ActiveXObject trước phiên bản IE11 đư�
 Code script k truy cập được client's hard drive vì lý do bảo mật
 VB Script là interpreted script lang của microsoft là 1 phần của Visual Basic programming language
 
--> Browser khác nhau dùng rendering engine khác nhau: Webkit dùng cho Safari, Gecko dùng trong firefox, Blink dùng trong chrome, opera. 
+-> Browser khác nhau dùng rendering engine khác nhau: Webkit -webkit dùng cho safari và chrome, Gecko -moz dùng trong firefox, Blink -o dùng trong opera, -ms Edge.
 Chromium là 1 trình duyệt mã nguồn mở, từ đó phát triển các trình duyệt khác.
-Hack CSS mở rộng tương thích trình duyệt: -webkit của chrome, -moz của firefox dùng bởi các rendering engines khác nhau. 
 
 -> Biến global trong browser gọi là BOM (Browser Object Model) như cookies, history, window, screen, navigator, location.
 

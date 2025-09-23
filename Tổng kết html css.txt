@@ -145,7 +145,7 @@ space là descendant mọi cấp
 -> VD selector:
 a[href$=".abc" i] => tag a có href kết thúc bằng .abc case insensitive
 [href*="google.com"] => tag có href attribute chứa google.com ở bất kỳ đâu
-:active => button, link đang được click
+:active => button, link đang được click, kể cả touch screen
 ::selection => text được bôi đen
 :visited X :link => :link là <a> chưa visit bao giờ
 p:empty => thẻ p k có text bên trong 
@@ -175,6 +175,7 @@ VD read more với CSS only: dùng 2 dùng label + checkbox + :checked để ẩ
 VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
 - :focus là chính thẻ đó focus. Còn :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này được focus, bao gồm ấn tab thì đổi style thẻ này. 
 :focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey
+VD combo button:hover,:active,:focus-visible => hover hoặc click bởi chuột, bàn phím, tabkey
 VD button show dropdown thì dùng :focus-within thay cho :focus để click vào item con thì button cũng k ẩn dropdown, chứ kp chỉ được ấn vào thẻ dropdown cha.
 VD click chuột vào 1 phần tử trong list thì đổi style đơn giản: từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó :focus r chỉnh style thoải mái. 
 
@@ -449,6 +450,8 @@ VD khi có nhiều lang:
 header và footer ở đầu cuối page; figure chứa img và figcaption khi cần ảnh có chú thích; nav tạo navigation; aside tạo content related indirect to main; main chứa các article; article có các section; section có detail, detail có content bth và 1 thẻ summary; <mark> để highlight important text
 Các thẻ heading h1 h2 chỉ nên dùng cho heading chứ k chủ động dùng để tạo big text vì search engine dùng heading để đánh index cho nội dung page
 1 số thẻ đặc biệt như <time> biểu diễn thời gian. VD: <time datetime="2008-02-14 20:00"> thì thời gian trong attribute này sẽ được dịch sang machine-redable format và browser có thể thêm date này vào reminder của user's calendar nếu có và search engine cũng cho kết quả search thông minh hơn.
+Dùng thẻ a navigate thay vì button sẽ tốt cho a11y và SEO hơn. Single page thì dùng <a href="#idofelement"/>
+Dùng ul li cho list
 - Mỗi thẻ h1, h2 nên có id để có url # ref tới vị trí đó nhanh, k giúp SEO nhưng UX tốt hơn:
 document.querySelectorAll("h2").forEach(function(el) {
   if (!el.hasAttribute("id")) {
@@ -496,7 +499,7 @@ robots.txt và sitemap.xml => đọc qua
 # Speculation rules
 URL: https://www.youtube.com/watch?v=LEF4UaM5m4U
 - Speculationrules cho prefetch và prerender trong html cho tốc độ siêu tốc. Chỉ cần thêm 1 tag script là xong.
-prefetch chỉ tải html, prerender sẽ tải hết và chạy cả js bên trong, fetch cả các API GET nếu có để client chỉ cần render ra.
+prefetch chỉ tải html, prerender sẽ tải hết và chạy cả js bên trong, fetch cả các API GET nếu có để client chỉ cần render ra. POST request sẽ bị delay gọi khi user truy cập
 - Trong browser tab application có speculation rules hiển thị các trang đã được prefetch hay prerender.
 - Khác với <link rel="prefetch> luôn prefetch ngay thì speculation rules có option eagerness kiểm soát nhiều hơn.
 - eagerness mặc định là immediate tức page load là tải ngay prefetch luôn, nếu prerender sẽ tải hết tài nguyên, sẽ k ổn vì page lớn có quá nhiều file.
@@ -516,92 +519,915 @@ if(document.prerendering) { // true khi được tải bằng prerender
 - Speculation rules k dùng reactjs vì nó là CSR. NextJS có prefetch sẵn rồi nhưng vẫn có thể dùng bằng cách thêm <script> nếu muốn kiểm soát
 
 -> Nhanh:
-Speculation rules là prerender mới exec hết code JS bên trong.
+Speculation rules là prerender mới exec hết code JS bên trong và gọi các API GET
 Option eagerness giúp kiểm soát prefetch/prerender, prerender cẩn thận exec hết api GET bên trong
 Có thể check page tải là prerender hay vào bth.
 
 
 
-# Random css
-random(min, max, step)
-random(min, max)
-random(--per-element, min, max) => tái sử dụng nhiều nơi, mỗi nơi sẽ có 1 giá trị random độc lập
-
-
-
 # a11y
-Dùng thẻ a navigate thay vì button sẽ tốt cho a11y và SEO hơn. Single page thì dùng <a href="#idofelement"/>
+Elements / Accessibility tool của browser giúp debug a11y
 
--> Các thẻ chi tiết luôn dán nhãn, nhất là các thẻ chỉ có icon k có text mô tả:
+-> TK chỉ cần set: aria-label, aria-labelledby, aria-describedby, aria-hidden, aria-selected, aria-current, aria-autocomplete (kèm input autocomplete), title, alt, role, aria-expanded, label for để toggle input nếu có sẽ thay aria-label
+- Icon thì nên có aria-hidden để ẩn khỏi screen reader, nếu có tính năng thì phải mô tả bằng aria-label cho tag bao nó
+Thuộc tính hidden của html tương đương display none ẩn hết. Còn visibility: hidden chỉ ẩn trên UI mà k ẩn trên accessibility tree. 
+VD: hidden + aria-hidden = false k hoạt động, vẫn ẩn cả UI và a11 tree bth.
+- aria-controls xác định quan hệ điều khiển. Vd 1 button điều khiển dialog, menu, tab panel. VD: <button aria-controls="idofdialog"> => k nên dùng
+- aria-describedby="idofelement" thêm mô tả chi tiết cho thẻ, kết hợp aria-labeledby được
+-> aria-label text thuần: <button aria-label="Tìm kiếm"> => luôn dán nhãn nếu thẻ chỉ có icon
+aria-labeledby để dùng các thẻ khác làm nhãn cho 1 thẻ: <div role="region" aria-labelledby="label1 label2">...</div>
+<p id="label1">Giỏ hàng:</p> <p id="label2">Bạn có 3 sản phẩm.</p>
 
-
-
-Dùng với aria-label được: <button aria-label="Tìm kiếm">
-Dùng với aria-labeledby khi cần 1 hoặc nhiều thẻ khác làm nhãn cho thẻ hiện tại. VD:
-<p id="label1">Giỏ hàng:</p>
-<p id="label2">Bạn có 3 sản phẩm.</p>
-<div role="region" aria-labelledby="label1 label2">
-  <!-- Nội dung -->
-</div>
-
--> Để có a11y tốt khi dùng tab, đảm bảo ấn tab và mũi tên là có thể navigate được.
-Cách dùng aria cho tabs: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
-
-role="tablist", role="presentation", tabindex, role="tab", role="tabpanel"
-Thuộc tính role sẽ loại bỏ ý nghĩa senmatic của thẻ, VD role="presentation" cho thẻ li chỉ định rằng phần tử có mục đích trình bày (decorative), không mang ý nghĩa semantic hay chức năng trong ngữ cảnh hiện tại, tức thẻ li không còn biểu hiện cho list nữa và sẽ bị bỏ qua trong accessibility tree, screen reader sẽ không đọc hoặc thông báo về nó
-
-Mặc định ấn key tab sẽ navigate qua mọi thẻ a trên page. Nếu dùng tabindex="-1" cho 1 thẻ sẽ bị bỏ qua khi nhảy tab. Nếu dùng tabindex="0" cho các thẻ khác như div thì nó sẽ nhảy vào cả các thẻ đó. Điều này tiện cho việc ấn key tab vào 1 tab, và ấn key tab tiếp sẽ vào content của tab kể cả div đó chứ k nhảy qua
-Set bằng JS, ta cho mọi tab k active có tabindex="-1", tab đang active và nội dùng của nó có tabindex="0"
-
-Thuộc tính hidden k chỉ ẩn thẻ đi mà cũng ẩn nó khỏi accessibility tree, tương tự display none. Còn visibility: hidden chỉ ẩn trên UI mà k ẩn trên accessibility tree. 
-VD dùng display none / hidden + aria-hidden="false" => k hoạt động, sẽ ẩn khỏi tree. Dùng visibility hidden + aria-hidden="false" ok UI k có mà a11y vẫn hđ
-
-aria-selected="true" bảo screen reader biết hiện đang ở tab nào, nó cũng tác động vào style tag nào là tag đang được chọn
-
-aria-controls k nên dùng, nếu muốn thêm thông tin mô tả cho tab thì có thể dùng: aria-describedby="idofelement" và dùng 1 thẻ <div id="idofelement" aria-hidden="false" style="visibility:hidden;"></div> để thêm nếu cần. Nội dung của thuộc tính này được sử dụng khi ngừoi dùng vào tab đó và screen reader đọc nó lên cho ngừoi dùng nghe.
-
-Ấn key left right để switch tab thì phải tự custom tạo hàm riêng thao tác với DOM thôi. Bắt sự kiện keydown.
-Điều đặc biệt là khi ta add event keydown cho tabContainer thì chỉ khi ấn tab focus vào tabContainer thì keydown của nó mới bắt chứ ngoài màn hình gõ sẽ k ảnh hưởng
-
--> Tạo tab html thuần
-- Mỗi tab nên ở cùng pages và k chuyển pages. Vì chỉ đổi tab nhưng mọi phần code html chung lại phải copy ra nhiều file.
-Cũng phải lưu lại vị trí scroll với các state data khác vào sessionStorage, trước khi chuyển, và khi page onload phải lấy lại data rất rối.
-- Đơn giản có thể viết nội dung tab hết 1 file rồi xử lý JS để display none hay hiện ra khi ngừoi dùng ấn vào tab
-- Để chuyển tab có thể dùng label checkbox để bắt và hiển thị content bằng HTML CSS thuần, hoặc dùng JS luôn được. Có thể animation content hiện ra ok.
-Có thể tạo animation slide từ 2 hướng khi chuyển tab, buộc phải dùng JS khi đó để xác định hướng cho animation, mỗi animation 1 keyframe riêng.
-- Có thể dùng window.history.pushState để đổi url mà k chuyển page, kèm xử lý onload. Để khi chuyển page sẽ đổi url, gõ url vào sẽ hiển thị đúng đang là tab nào.
-- Dùng kèm view transition api là thành animation đỉnh chóp
-
--> Nhanh chỉ cần set: aria-label, aria-labelledby, aria-describedby, aria-hidden, aria-selected, aria-controls, aria-current, aria-autocomplete (kèm input autocomplete), title, alt, role, aria-expanded
-Icon thì nên có aria-hidden hoặc mô tả bằng aria label cho tag bao nó
-aria-controls xác định quan hệ điều khiển, phần tử này điều khiển phần tử khác. Vd 1 button điều khiển dialog, menu, tab panel. Dùng label for để toggle thì k cần
-VD: <button aria-controls="idofdialog">. Tương tự aria-expanded cho button ấn button là mở rộng gì đó, cập nhật bằng JS khi mở và đóng là true và false, nó thể hiện trạng thái hiện tại của dialog
-
---> Bộ 3 aria-errormessage, aria-invalid dùng cho thẻ input khi bị lỗi, aria-required báo input này k thể để trống:
-<input id="email" type="email" aria-invalid="true" aria-errormessage="email-error" aria-required="true">
+--> Đặc biệt cho input:
+- Bộ 3 aria-errormessage, aria-invalid dùng cho thẻ input khi bị lỗi, aria-required báo input này k thể để trống.
+VD: <input id="email" type="email" aria-invalid="true" aria-errormessage="email-error" aria-required="true">
 <span id="email-error" role="alert">Email không hợp lệ</span>
-Bộ 3 aria-controls, aria-expand và aria-haspopup cho button thể hiện có menu hay danh sách thả hay hộp thoại:
+- Bộ 3 aria-controls, aria-expanded và aria-haspopup cho button khi nó mở menu hay hộp thoại
+aria-expanded cho <button> thì ấn button là mở rộng gì đó, cập nhật bằng JS khi mở và đóng là true và false, nó thể hiện trạng thái hiện tại của dialog
+aria-haspopup="menu" cho <button> báo hiệu button này sẽ mở 1 menu popup ra thôi, chỉ dùng khi button chỉ mở, không dùng đóng.
 <button aria-haspopup="dialog" aria-controls="login-dialog">
   Đăng nhập
 </button>
 <div id="login-dialog" role="dialog" hidden>
   <p>Vui lòng nhập thông tin đăng nhập.</p>
 </div>
-Bộ 2 aria-selected và aria-multiselectable báo có thể chọn nhiều options:
+- Bộ 2 aria-selected và aria-multiselectable cho checkbox:
 <ul role="listbox" aria-multiselectable="true">
   <li role="option" aria-selected="true">Mục 1</li>
   <li role="option" aria-selected="false">Mục 2</li>
   <li role="option" aria-selected="true">Mục 3</li>
 </ul>
-aria-readonly là 1 phần tử chỉ đọc k thể tương tác:
-<label for="username">Tên đăng nhập:</label>
-<input id="username" type="text" aria-readonly="true" value="user123">
+- aria-readonly cho input readonly. VD <input id="username" type="text" aria-readonly="true" value="user123">
 
--> pointer-events: none; sẽ cản sự kiện của 1 thẻ. VD ứng dụng navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
+-> Tạo tab chuẩn a11y: https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
+- pointer-events: none; sẽ cản sự kiện 1 tag. VD navigation bar đang ở tab .active thì ấn vào sẽ k load lại chính trang hiện tại nữa có thể dùng.
+- aria-selected="true" báo đang ở tab nào
+- role="tablist", role="presentation", role="tab", role="tabpanel"
+Thuộc tính role sẽ loại bỏ ý nghĩa senmatic của thẻ, VD role="presentation" cho thẻ li chỉ định rằng phần tử có mục đích trình bày (decorative), không còn mang ý nghĩa semantic hay chức năng trong ngữ cảnh hiện tại, tức thẻ li k là list nữa và sẽ bị bỏ qua trong accessibility tree, screen reader sẽ không đọc hoặc thông báo về nó
+- Mặc định ấn key tab sẽ navigate qua mọi thẻ a trên page. Nếu dùng tabindex="-1" cho 1 thẻ sẽ bị bỏ qua khi nhảy tab. Nếu dùng tabindex="0" cho 1 thẻ sẽ nhảy vào cả các thẻ bên trong. Điều này tiện cho việc ấn key tab vào 1 tab, và ấn key tab tiếp sẽ vào content của tab chứ k nhảy qua
+Set bằng JS, ta cho mọi tab k active có tabindex="-1", tab đang active và nội dùng của nó có tabindex="0"
+- Ấn tab và key left right phải switch tab. Cái này k có sẵn mà phải custom với sự kiện keydown.
+Điều đặc biệt là khi ta add event keydown cho tabContainer thì chỉ khi ấn tab focus vào tabContainer thì keydown của nó mới bắt chứ ngoài màn hình gõ sẽ k ảnh hưởng
+- Dùng kèm view transition api cho animation hoặc animation bằng JS custom
+Dùng window.history.pushState để đổi url mà k chuyển page cho CSR, kèm xử lý onload lần đầu vào, xử lý khi gõ url vào cũng ở đúng tab nào.
+Mỗi tab k nên chuyển pages mà nên là CSR, xử lý hiện ra bằng JS or dùng css thuần với label checkbox.
+Khi chuyển tab, lưu lại vị trí scroll với các state data khác vào session storage trước khi chuyển và load lại khi vào tab
 
--> Trong devtool browser có Elements Accessibility tool
 
--> Dùng ul li a header h1 p nav main article section aside footer
+
+# Custom thẻ input
+<datalist> + input list => bỏ, gõ có gợi ý nhưng xấu
+
+-> Custom Input
+- HTML thuần dùng event "input" giống onChange của react, thay event "change"
+- Nếu muốn có 1 group input radio chỉ cho chọn 1 thì phải đặt chung trường name với nhau
+- Vào web nên tự động focus vào input nếu cần điền, ấn tab nhảy sang ô input tiếp theo. Cũng có thể thêm shortcut cho input tiêu biểu. 
+VD: document.addEventListener("keyup", function (e) { if (e.key === "/") document.getElementById("search").focus(); });
+- Nên dùng attribute required input cho các trường buộc phải có. Dùng pattern khi input type text.
+- HTML có sẵn form.reset() không cần tự viết.
+
+- Dùng input radio nếu muốn chỉ chọn 1 thì phải đặt chung attribute name với nhau
+- Dùng input password nên để 1 checkbox show password thay vì dùng con mắt mặc định vì nó éo chuẩn
+- Dùng input text k có autocomplete, nhưng nếu thêm id/name="email/name/phone" sẽ có autocomplete tự động.
+Custom vẫn dùng id nhưng bỏ autocomplete bằng cách thêm: autocomplete="off"
+- Dùng input type="number" lợi là có min max value step.
+
+- Custom style invalid input: https://www.youtube.com/watch?v=awNYtIAu6pI
+Thay vì dùng: 
+input:valid {} // style khi input có valid data
+input:invalid {} // style khi input có invalid data
+Ta dùng:
+input:user-valid {} // style khi input có data, và data đó valid
+input:user-invalid {} // style khi input có data, và data đó invalid
+Hoặc better browser support: 
+input:not(:placeholder-shown):valid {} 
+input:not(:placeholder-shown):invalid {}
+input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở. Có thể custom để đang nhập dở chưa xong sẽ k style invalid
+- Css selector for input
+input:checked X input:not:(checked)  input:disabled X input:enabled  input:required X input:optional  input:read-only X input:read-write
+input:out-of-range X input[type="number"]:in-range => custom cho input type number
+input[type='file'][multiple]
+
+- VD Sửa invalid text có sẵn của tag input. 
+<input type="email" required oninvalid="this.setCustomValidity('Vui lòng nhập email hợp lệ!')" oninput="this.setCustomValidity('')">
+VD custom form khi hợp lệ:
+document.querySelector('form').addEventListener('submit', function(e) {
+  if (this.checkValidity()) { <form hợp lệ> }
+});
+VD custom input khi gõ hợp lệ: 
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('input', function() {
+    this.setCustomValidity(''); // Bắt đầu gõ thì clear
+    if (this.validity.valid && this.value.length > 0) {
+      this.style.transform = 'scale(1.02)';
+      setTimeout(() => {
+        this.style.transform = 'scale(1)';
+      }, 200);
+    }
+  });
+});
+
+-> Custom spin button cho input số:
+- Dùng input type="number" và custom shadow DOM với input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button
+Dùng thuộc tính -webkit-appearance và appearance là none để ẩn
+- Dùng custom cho type="number" k an toàn vì -webkit => Best practice là dùng type text và lọc thủ công. 
+
+-> Custom style input file và ảnh:
+C1: Input file text 
+<CustomButton2 variant="outlined" onClick={() => fileInputRef.current.click()}>
+  Upload File
+</CustomButton2>
+<input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={getFile} />
+const getFile = (event) => {
+  const reader = new FileReader();
+  reader.onload = (e) => { console.log(e.target.result); };
+  reader.readAsText(event.target.files[0]); // Đọc text từ file
+}
+C2: Input image, hiển thị và gửi qua API
+<input accept="image/*" hidden id="raised-button-file" type="file" onChange={onImageChange}/>
+<label htmlFor="raised-button-file">
+  <Box style={{ width: "299px", height: "300px" }}>
+    <img
+      width="100%"
+      height="100%"
+      style={{ borderRadius: "15px" }}
+      src={image}
+    />
+  </Box>
+</label>
+const onImageChange = (event) => {
+  if (event.target.files && event.target.files[0]) {
+    setImage(URL.createObjectURL(event.target.files[0]));
+  }
+  setImageSending(event.target.files[0]);
+};
+const uploadData = new FormData();
+uploadData.append("image", imageSending);
+const response = await client.post("/api/v1/event", uploadData, config);
+
+
+
+# Random trong css
+random(min, max, step). VD: random(5rem, 50rem, by 5rem);
+random(min, max)
+random(--per-element, 4rem, 10rem) => gán vào biến tái sử dụng 1 số random từ 4-10 rem
+
+
+
+# Dùng z-index
+Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
+Best practice để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. 
+z-index luôn đi kèm với position relative tránh lỗi. K dùng z-index với opacity vì opacity làm giảm z-index của thẻ trong nó.
+
+
+
+# Dùng border-radius
+URL: https://9elements.github.io/fancy-border-radius/
+Shorthand border-radius: 10% 30% 50% 70%;
+outer radius = inner radius + distance giữa 2 border (border-width) => Dùng khi cần 1 thẻ có boder radius trong thẻ khác
+Dùng border-image: border-image-source border-image-slice border-image-width border-image-outset border-image-repeat
+
+
+
+# Css shadow
+Có text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow
+Có thể dùng multiple box-shadow lồng nhau trong 1 thẻ có thể gom tạo hình trừu tượng bao quanh: https://www.youtube.com/watch?v=20QiX8rmHnU
+box-shadow tạo hình phức tạp với animation bằng cách dùng inset lồng đè ở các vị trí khác nhau: https://frontendmasters.com/blog/expanding-css-shadow-effects/ 
+Có drop-shadow tự theo hình dạng và màu của ảnh có nền transparent, or kèm ảnh với clip-path
+
+
+
+# Xử lý cách dòng text
+white-space: nowrap; dùng được cho mọi loại tag => k nên dùng
+text-overflow: ellipsis; overflow: hidden; cắt text tràn và hiện thị 3 chấm
+letter-spacing là kc giữa các ký tự; word-spacing là kc giữa các word, nên dùng thay cho &nbsp;
+text-ident để lùi đầu dòng paragraph
+text-align: justify; 
+box-decoration-break: clone; để style inline element khi break sang nhiều dòng thì ở đây là mỗi dòng 1 style riêng.
+line-height là kc giữa các dòng trong 1 văn bản nhiều dòng, thay cho việc dùng paddingTop
+vertical-align dùng nhanh để chỉnh vị trí lên hay xuống 1 tẹo mà k cần dùng flexbox => nên thử mọi options khi dùng
+
+-> Dùng text-wrap: wrap/no-wrap; tương tự white-space
+text-wrap: balance; khiến cho content chia vào nhiều dòng 1 cách cân bằng hơn giữa các dòng, khi text < 6 lines, thường dùng cho title lớn, dùng được mọi loại k chỉ text. VD: list có 10 items, nó sẽ chia mỗi 5 items 1 dòng khi có 2 dòng thay vì cứ giảm dần 9 1, 8 2, 7 3 khi co nhỏ màn lại.
+text-wrap: pretty; sẽ đẹp hơn balance khi ít dòng và right gap lớn. pretty cũng tốt nếu cuối dòng có 1 icon và icon bị dài quá sang line2 nhìn rất chuối.
+=> React có lib tương tự là https://react-wrap-balancer.vercel.app/
+
+-> Xử lý cách dòng:
+- Default text tràn khung sẽ tự xuống dòng, nhưng 1 từ dài quá 1 dòng sẽ k cắt.
+- word-wrap: break-all; sẽ cut mọi chỗ => bỏ, thế bằng word-break
+word-break y hệt word-wrap nhưng có thêm break-word là chuẩn nhất
+- line-clamp: giúp hiển thị quá bnh dòng thì mới cut, react phải dùng là WebkitLineClamp / -webkit-line-clamp
+- VD trong khung max 4 chữ:
+1) abcde thì word-wrap break-word hiện là:
+abcd
+e
+2) ab def thì word-break keep-all kbh cắt chữ:
+ab
+def
+3) ab def thì word-break break-all hiện là:
+ab de
+f
+4) ab defghi ac thì word-break: break-word là ok nhất, muốn nó vừa bảo toàn chữ khi tràn, vừa break word nếu word quá dài:
+ab
+defgh
+i ac
+=> Mức độ cut chữ: default < keep-all < break-word < break-all
+
+-> Nhanh: 
+text-wrap balance/pretty, word-break break-word
+line-clamp + text-overflow + overflow hidden
+line-height và vertical-align 
+letter-spacing và word-spacing
+
+
+
+# Dùng attr css
+-> attr css giúp lấy giá trị thuộc tính html vào css. 
+- VD lấy ra string:
+<button class="btn" data-label="Bấm vào đây">Click</button>
+.btn::after {
+  content: " (" attr(data-label) ")"; 
+}
+- Dùng được với mọi kiểu trừ image url. URL all type: https://una.im/advanced-attr/
+VD dùng với color: attr(data-color type(<color>), gray);
+- type(<custom-ident>) là 1 custom identifier có thể trỏ tới id 1 thẻ. Có thể dùng đặt tên cho view-transition-name nhanh chóng
+- Check support: 
+@supports (x: attr(x type(*))) {
+  .warning {
+    display: none;
+  }
+}
+
+-> Cách dùng data chung giữa html css js
+1) Dùng custom property:
+<div style="--color: red"></div>
+element.style.setProperty("--color", "red")
+2) Dùng data-* tiện hơn: cũng dùng thay thế id vì dùng id lỡ cần duplicate component sẽ bị trùng id.
+<div data-color-to-show="red"></div>
+element.dataset.colorToShow = "red"
+:after { content: attr(data-image-to-show); }
+
+-> Tạo hover tooltip: 
+- Dùng thuộc tính title có sẵn của các thẻ p, div
+- Custom bằng css: Cho thẻ đó position relative bao thẻ x absolute có visibility là hidden, :hover thì set visibility của x là visible
+
+-> Nhanh:
+html có data-*
+attr css lấy data từ html
+html có title
+
+
+
+# Dùng content-visibility
+-> visible: là default paint cả page.
+Khi vào 1 page, mặc định browser tải resource, tạo DOM và layout, paint cả page ra màn hình dù viewport chỉ hiển thị 1 phần. Nó khiến page lớn load hiện lần đầu tiên bị lâu, và lag khi resize.
+
+-> hidden:
+display none và html hidden attribute ẩn khỏi DOM và a11y tree.
+content-visibility hidden ẩn khỏi DOM và UI, nhưng k ẩn a11y. Đặc biệt là nó giữ state giúp ẩn và hiện lại rất nhanh.
+visibility hidden ẩn UI và a11y tree, k ẩn khỏi DOM. K thể tương tác, nhưng vẫn chiếm diện tích
+opacity 0 dường như chỉ ẩn phần nhìn, vẫn tương tác đươc.
+
+-> auto: thẻ sẽ k được paint lên màn hình cho đến khi xuất hiện gần viewport.
+Để browser paint content, nó phải calculate layout trước. Thẻ có auto sẽ k tính layout khi chưa vào viewport nên phải đi kèm contain-intrinsic-size: auto 600px; để dùng kích thước tạm khi thẻ chưa được paint. Thường set contain-intrinsic-size width là auto tự scale full.
+Khi scroll xuống và paint thẻ đó, kích thước thực tế sẽ bị thay vào gây jump scrollbar phải chấp nhận.
+K nên dùng auto cho các thẻ quá lớn để tránh scroll nhanh paint thẻ đó k kịp gây khoảng trắng, nên chia chunk nhỏ tốt hơn.
+
+-> Dùng contain: sẽ giảm tải cho browser khi tính toán layout hay paint ra màn hình. 
+contain: none; => contain xác định 1 thẻ có containment không, default none là k có giới hạn gì.
+contain: paint; => đảm bảo mọi thứ bên trong 1 thẻ k thể paint ra ngoài thẻ đó
+contain: size; => đảm bảo mọi thứ bên trong 1 thẻ sẽ k ảnh hưởng đến kích thước thẻ đó. Vì bth kích thước thẻ cha tự kéo dài theo kích thước con, nhưng ở đây thì không.
+contain: layout; => đảm bảo thẻ bên trong k ảnh hưởng đến layout các thẻ khác và ngược lại.
+contain: layout paint size; => có thể kết hợp
+=> Thẻ có content-visibility auto sẽ tự có contain layout tức thẻ bên trong k thể break layout ra bên ngoài
+
+-> Nhanh: 
+content-visibility auto chỉ render khi gần viewport
+contain paint đặt giới hạn k paint ra ngoài thẻ
+
+
+
+# Dùng detail summary => k support rộng
+VD: <details>
+  <summary>Summary</summary>
+  <p>Detail content</p>
+</details>
+details::details-content { // Style shadow dom cho content khi chưa hiện ra
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 1s allow-discrete, content-visibility 1s allow-discrete; // cho animation
+}
+details[open]::details-content { // Style phần content khi hiện ra
+  block-size: auto;
+}
+summary::marker { } // Style cho marker ấn để hiện details. Có thể để display none và dùng :before để tạo custom marker
+
+
+
+# Dùng position
+position absolute xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
+position absolute nếu set cả 4 giá trị sẽ ảnh hưởng đến kích thước của thẻ.
+Có thể kết hợp position absolute + transform để animation dịch thẻ k chiếm kích thước.
+
+position relative tương tự position static nhưng custom vị trí được với top bottom left right.
+
+position sticky thì vật ở vị trí bth, nhưng khi scroll quá sẽ stick vào thẻ parent relative đầu tiên của nó, k thì sẽ theo màn hình, thẻ parent scroll hết thì k stick nữa
+
+position fixed cố định thẻ mãi ở 1 vị trí. VD dùng cho menu.
+Bản chất: thẻ A chứa thẻ B, mà B có position fixed sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho A thì B sẽ fix theo A chứ k fix theo window nx.
+
+-> Float khiến 1 thẻ block thành inline-block và trôi sang 1 bên, k chiếm height. Các thẻ khác vẫn hiện cùng dòng và né nó ra => bỏ
+Thẻ div chỉ có thẻ float bên trong thì height thẻ div đó là 0. 
+ClearFix trong CSS giúp thẻ cha tính cả kích thước của thẻ con kể cả con dùng float: thêm clear both khiến nó chiếm height và các thẻ khác k thể ở cùng dòng với nó nữa.
+
+
+
+# Tạo dialog
+-> Dùng <dialog> có thể đóng mở bằng html
+<dialog> là 1 loại popover và có thể dùng kèm API của popover để tạo click outside close với popovertarget popover popovertargetaction => k support rộng
+Style animation với @starting-style + transition-behavior allow-discrete + ::backdrop => k support rộng
+dialog trên mobile nên để bottom sheet hoặc full màn hình kèm nút bấm tắt sẽ đẹp hơn.
+
+--> Dùng JS để support chuẩn mọi browser:
+Dùng @keyframes css và JS event animationend cho animation từng step
+Ấn ra ngoài ẩn dialog bằng cách bắt sự kiện click global rồi check target khác dialog để close dialog
+React sẽ khó dùng JS kiểm soát animation, phải dùng portal mới chuẩn
+
+Vấn đề mở dialog thì cản scroll, vị trí scroll ngoài phải giữ nguyên khi tắt dialog, content k bị di chuyển sang trái khi mở, hoạt động trên cả mobile.
+- Dùng <dialog> vốn tự cản scroll rồi
+- Cản dịch chuyển sang trái: 
+VD set padding-right bằng kích thước scrollbar default là 15px, nên set thêm width trong ::-webkit-scrollbar đảm bảo cũng bằng 15px => safari có thể k ổn
+html:has(dialog[open]){
+  overflow: hidden;
+  padding-right: 15px;
+}
+VD cách khác chạy mượt cả safari:
+html:has(dialog[open]){
+  position: fixed;
+}
+- Để giữ vị trí scrollbar, làm như VD trên nhưng thêm 1 biến css lưu vị trí scroll bằng event "scroll", khi đóng dialog thì JS jump tới là được.
+
+-> Hiển thị scrollbar: nên cho background transparent chỉ hiện mỗi thumb
+Nếu muốn scrollbar luôn hiện thì để "overflow: scroll;" => ok
+Nếu muốn scrollbar luôn chiếm kích thước kể cả khi k hiện "scrollbar-gutter: stable". Điều đb là nó bằng đúng kích thước width set của ::-webkit-scrollbar => bỏ, vì khi kết hợp position fixed dialog khiến scrollbar-gutter k chiếm nx và dịch chuyển
+Đẹp nhất là khi k overflow thì k hiện scrollbar nhưng scrollbar vẫn chiếm kích thước kể cả position fixed dialog => cách duy nhất là tự tạo thẻ custom scrollbar, kqtr
+
+-> Nhanh:
+Tạo dialog bằng JS animationend, bắt sự kiện click global cho click outside close
+dùng position fixed cản dịch chuyển content, event scroll lưu vị trí scrollbar
+overflow scroll để scrollbar luôn chiếm kích thước
+
+
+
+# Dùng css anchor
+Ful tut: https://css-tricks.com/css-anchor-positioning-guide/
+
+Thường dùng cho html popover để custom vị trí với css thuần
+Phải có inset: unset; để tránh bị lỗi full màn.
+Dùng kèm position-try-fallbacks: flip-inline, flip-block; để tự động đổi position nếu màn k đủ diện tích
+
+Mặc định anchor gắn vào thẻ trigger nó, có thể dùng anchor-name để custom gắn vao thẻ nào
+VD: #btn { anchor-name: --btn2; }
+[popover] {
+  position-anchor: --btn2;
+  bottom: anchor(top);
+  left: anchor(center);
+  /* Hoặc position-area: top right; */
+}
+
+
+
+# Custom cursor
+C1: cho cursor none rồi tự custom 1 thẻ ảnh khác transform theo mousemove. Có thể custom event mouse down thì phóng to thẻ, mouse up thì thẻ về bth
+=> k nên dùng vì text, input, button đôi khi cần các hình khác nhau thì custom sẽ phức tạp với từng thẻ
+C2: là dùng cursor: url(<base64>) 8 8, auto; // Tham số 2 là dự phòng nếu browser k hỗ trợ hình ảnh  
+Có thể tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị. 
+URL: https://css-tricks.com/next-level-css-styling-for-cursors/ => có check chỉ show khi không là touch screen
+URL: https://custom-cursor.com/ => lấy ảnh cursor free, copy style nó làm code mẫu luôn
+
+
+
+# Dùng scroll
+-> Tạo scrollbar cho 1 box bằng cách cho container kích thước nhỏ hơn content và overflow auto là có scrollbar
+VD box inline-block, white-space nowrap, overflow-x auto, set width k fit-content mà responsive màn hình, content set minWidth bằng kích thước của box
+- overflow: clip; kết hợp overflow-clip-margin: 30px; để overflow tràn ra ngoài 1 lượng tối đa là bao nhiêu, còn lại sẽ hidden
+- overscroll-behavior: khi 2 scroll lồng nhau, auto thì cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
+
+-> Nhảy đến 1 vị trí trên trang html: đặt id cho thẻ và dùng tag a href đến #đó là được
+scroll-behavior: smooth hay auto để trượt đến hay nhảy đến
+
+-> Custom style scrollbar
+URL: https://css-tricks.com/custom-scrollbars-in-webkit/
+URL: https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp
+Có thể ẩn thanh scrollbar nhưng vẫn giữ nguyên chức năng
+K thể tạo được scrollbar có background transparent, có thể ép bằng cách cho background cùng màu thẻ body.
+
+-> Dùng scroll-snap
+- scroll-snap-type: x mandatory; xác định hướng và kiểu scroll. proximity là scroll tới sát mép card mới tự scroll vào đúng vị trí card nếu k sẽ lơ lửng, mandatory là trình duyệt tự snap theo từng điểm scroll mọi lúc theo cách ta dùng scroll-snap-align 
+- scroll-snap-align: từng item sẽ có vị trí như nào với container bao nó. VD center là điểm giữa item trùng điểm giữa container, tương tự start và end.
+- Đôi khi ta k muốn item hiển thị ở đúng ở 3 vị trí start center end, mà hiển thị ở giữa cách bên trái 1 vài pixel thì:
+scroll-padding dùng ở container sẽ cho mọi item bên trong được quyền hiển thị cách mép 1 khoảng bnh
+scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào được phép hiển thị cách mép bnh
+Thường thì nên để kích thước container chia hết cho kích thước card bên trong
+- scroll-snap-stop: khi lướt quá nhanh sẽ luôn dừng ở từng element (always) hay cho lướt qua (normal)
+
+-> Nhanh:
+overflow-clip-margin để giới hạn khoảng overflow, còn lại sẽ hidden
+overscroll-behavior: contain để cản scroll chaining
+scroll-behavior: smooth
+Custom style ::-webkit-scrollbar
+Dùng scroll-snap-type kiểm soát vị trí item so với container
+
+
+
+# Xử lý màu
+https://www.w3schools.com/cssref/css_colors.php => màu chuẩn đồng nhất browser, giúp tránh lệch màu trong browser khác nhau.
+K nên giả định 2 màu là giống nhau giữa 1 thẻ so với 1 bức ảnh hay video, vì màu thẻ sẽ khác khi sang browser khác
+
+-> Gradient color: https://angrytools.com/gradient/
+Linear từ 1 phía sang 1 phía, radial kéo từ tâm ra xung quanh, conic-gradient như cái compa
+- background: linear-gradient(direction, color1, color2, color3, color4,..);
+VD: linear-gradient(in oklch, red, blue); => gradient ưu tiên dùng oklch sẽ đẹp hơn
+- background: radial-gradient(circle closest-corner at 100px 100px, red 10%, yellow 20%, pink 10%); 
+shape là circle / elipse (default) bóp méo theo khung ngoài
+size có thể là closest-side, farthest-side (default), closest-corner, farthest-corner at ... để set kích thước, màu cuối của gradient chạm cạnh nào của box bao nó thì dừng
+- background: repeating-linear-gradient
+
+-> Các cách lấy màu: rgba(255,0,0,0.5); rgb(255,0,0); hsl(0, 100%, 50%), hsla(0,100%,10%,0.3); #ffffff; red, yellow
+Nên dùng oklch(0.8 0.1 100) tạo màu như lch(lightness, chroma như saturation, hue) nhưng cân bằng hơn. Dùng tạo color palette được.
+
+- mix-blend-mode: difference; => giúp đổi màu tương phản color white realtime
+- backdrop-filter: blur(5px); => style area đằng sau element, dùng tạo glass morphism
+
+--> Tạo màu random:
+Random hoàn toàn: x.style.color = `rgb(${Math.round(Math.random()*255)} ${Math.round(Math.random()*255)} ${Math.round(Math.random()*255)})`;
+Random tông sáng: x.style.backgroundColor = `hsl(${Math.round(Math.random()*359)}deg 100% 80%)`;
+Dùng oklch tốt hơn: x.style.backgroundColor = `oklch(0.8 0.1 ${Math.round(Math.random()*359)})`
+
+-> Dùng relative color
+hsl(from #ff0000 / 0.5); => giảm opacity đi 0.5
+hsl(from red h s calc(l - 20) / 0.5); => lấy màu đỏ và giảm light đi 20, alpha là 50%
+hsl(from var(--clr-primary) h s 20%); => lấy màu từ biến và gữi h s, light set là 20%
+rgb(from #ffff r g g / 0.5); => tương tự nhưng lấy màu green làm màu blue, alpha 50%
+oklch(from red calc(l * .5) calc(c * .1) h / 0.5); => nên dùng
+
+-> Dùng color-mix
+VD: color-mix(in srgb, red 30%, blue);
+VD: color-mix(in lab, currentColor, red 70%); => pha 70% đỏ
+VD: color-mix(in lab, black, currentColor); => currentColor sẽ lấy thuộc tính color của thẻ hiện tại và ở case này làm tối màu đó đi, nếu thẻ k set color sẽ lấy của cha.
+Usecase ở light background cần chữ màu tối hơn, dark background cần chữ màu sáng hơn.
+=> currentColor dùng được mọi nơi, kể cả trong linear-gradient cũng dùng được , dùng được mọi nơi cho màu
+
+--> Color hue interpolation: dùng được ở mọi hàm về màu
+VD: linear-gradient(to right in lch shorter hue, lch(70% 80 30) 0%, lch(70% 80 330) 100%); => không gian màu lch dùng shorter route để đến màu đích, là mặc định
+VD: in lch decreasing hue => theo hướng giảm dần các thông số đến giá trị đích, giảm về 0 sẽ quay lại 255
+
+-> Color shifting animation:
+- Đơn giản dùng hsl(xdeg 100% 80%) thì đổi sang màu khác bằng cách cộng thêm 180deg. 
+Cách này chỉ rotate max 180deg, màu ở vị trí xdeg và x+360deg là 1. Cơ chế nó đổi sang rgb và tịnh tiến r g b về giá trị đích. Nếu rotate quá 180deg, nó vẫn convert sang rgb và chọn được ngắn nhất để tịnh tiến các giá trị r g b, dẫn đến chỉ max 180deg.
+Làm vậy sẽ bị grey out do chỉnh các số r g b sẽ tới lúc r g b xấp xỉ nhau gây ra màu xám.
+- Dùng @property của css houdini cho deg là 1 property sẽ rotate quá 180deg ok.
+- Best practice là dùng filter:hue-rotate() sẽ tự rotate màu của thẻ hiện tại, thoải mái bao nhiêu deg cũng được, k còn bị grey out.
+Các cách trước render lại ở từng frame, còn cách này sẽ tận dụng màu có sẵn và tilt sang màu đích nên có performance tốt hơn đổi màu trực tiếp.
+VD: @keyframes hueRotate { to { filter: hue-rotate(720deg); } } .particle { animation: hueRotate 1000ms; }
+
+-> Usecase dùng conic-gradient tạo hình zigzag 
+.loader {
+  height: 47px; /* control the size */
+  aspect-ratio: 5;
+  background:
+    conic-gradient(from 135deg at top,#000 90deg,#0000 0) top,
+    conic-gradient(from 135deg at top,#0000 90deg,#000 0) bottom;
+  background-size: 20% 50%;
+  background-repeat: repeat-x;
+}
+
+-> Nhanh: 
+Gradient color
+Relative color
+color-mix
+Color shifting animation
+
+
+
+# Dark mode 
+Best practice là vào web lần đầu sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu setting mới vào localStorage đè setting browser.
+
+-> Các cách tạo darkmode
+- Css có sẵn. VD html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
+Nó gợi ý trình duyệt là web hỗ trợ những mode nào. Nếu dùng "light dark" thì browser tự dùng theo seting. Nếu chỉ rõ color-scheme light hay dark sẽ dùng đúng mode đó.
+Các chỗ dùng màu thì light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser.
+- style trong @media (prefers-color-scheme: dark) { } được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => Bỏ k dùng
+Vì nếu browser set dark thật thì style bên trong k thể mất, éo đổi sang light được.
+- Mặc định Canvas là màu của background, CanvasText là màu của text, sẽ tự đổi tuỳ vào mode hiện tại => Bỏ k dùng
+VD để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
+- Luôn dùng JS: Check darkmode setting browser với window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; rồi lưu vào localStorage
+
+
+
+# View transition API
+HTML thuần thì animation khi update DOM bị phức tạp, navigate SSR thì bị jump. Dùng view transition api sẽ tối ưu performance và chuẩn hơn.
+
+URL chuẩn tạo moving hightlight: https://www.smashingmagazine.com/2025/06/creating-moving-highlight-navigation-bar-javascript-css/ => luôn dùng
+Full docs chuyển page: https://developer.chrome.com/docs/web-platform/view-transitions/
+Giải thích: https://www.youtube.com/watch?v=xZteiW-cun8
+Custom cho slideslidein fadeslideout: https://www.youtube.com/watch?v=aTGwrErX9AM 
+Tạo morphing button: https://www.youtube.com/watch?v=N2BKAKwGP6M 
+
+-> Set cùng 1 view-transition-name cho thẻ trước và sau animation để browser tự animate thẻ nào biến đổi dần thành thẻ nào
+Customize animation với ::view-transition-old(<name>) là style thẻ trước animation, và ::view-transition-new(<name>) là style thẻ sau animation.
+Animation mặc định là fade or dịch chuyển, có thể customize.
+Đổi DOM thì wrap trong startViewTransition. SSR cross docs animation thì dùng @view-transition { navigation: auto; }
+Custom animation time với ::view-transition-group(root) { animation-duration: 0.5s; }
+
+Code hack html thuần nếu k chạy: đặt trong head <script src="ignored" type="module" blocking="render"></script> 
+VD dòng text ở trang này bé, ở trang sau vẫn là dòng text đó nhưng to hơn, thì ta gán view-transition-name cho 2 tag ở 2 page cùng 1 giá trị là ok
+Chú ý nếu dùng page1 span -> page2 h1 thì sẽ phóng to, nhưng cả 2 page cùng tag thì lại k.
+
+-> URL phức tạp custom animation toàn page, định hướng tiến lùi: https://view-transitions.chrome.dev/stack-navigator/mpa-prerender/ 
+pageswap khi page hiện tại bị thể bởi trang khác sự kiện phát ra ở trang cũ trước khi chuyển.
+pageshow khi load pages lần đầu tiên, hoặc navigate tới
+pagereveal khi nội dung thực sự được render, bất kể nội dung từ cache, prerender hay refresh mới.
+
+
+
+# Dùng flexbox
+flex: 2 2 10%; // grow shrink basis
+flex: 2 2; // grow shrink
+flex: 2; // = 2 1 0% vì default là flex grow 0, flex shrink 1, flex-basis 0% 
+order: 3; // ép 1 thẻ nằm ở vị trí số 3 trong flexbox
+flex-flow: row wrap; // flex-direction flex-wrap
+
+place-self: start end; /* align-self: start; justify-self: end; */ => place-items dùng cho container bao ngoài, place self là dùng cho từng phần tử được trong grid
+place-items: center stretch; /* align-items: center; justify-items: stretch; */ => stretch sẽ giãn trong phạm vi ô to, 
+place-content: center space-between; /* align-content: center; justify-content: space-between; */
+Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để mọi con ra giữa, muốn 1 vài con ở 2 bên vẫn dùng align-self chỉnh được.
+
+-> Bản chất flex:
+Flexbox chỉnh size của cell lệch dựa vào kích thước item bên trong, shrink hay grow cũng k ép về bằng nhau được. Grid chỉnh cell size dựa vào kích thước set cho container bao ngoài => Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex cũng k xử lý được case row cuối k full.
+
+Bản chất các bước tính flex-basis là thẻ cố đạt kích thước xác định, nếu k đủ 1 dòng sẽ xuống dòng theo flex-wrap, r tính grow shrink. Nếu có space thừa sẽ grow theo flex-grow, nếu container nhỏ hơn sẽ shrink theo flex-shrink. flex-basis là NN xuống dòng, kp flex-grow hay flex-shrink.
+Nếu vừa có flex-basis, vừa có flex-grow, nó chỉ cố grow đến khi đạt được kích thước flex-basis thôi chứ kp cứ set 999 là chiếm cả. 
+Set flex-basis cho item là 0 thì item mang kích thước nhỏ nhất fit content, set auto thì chia đều nhau, set quá container thì item max trong giới hạn container. VD flex-basis là 0 và flex-grow 999, nó sẽ ưu tiên grow thẻ đó đạt được kích thước fit-content.
+VD: container 100px, item1 50px, item2 30px. Nếu flexbasis item1 là 1000px thì chỉ tới 70px thôi, nếu set là 10px thì nó mang width là 50px để hiển thị đủ item
+URL: https://www.youtube.com/watch?v=Ns12ALe8aqI => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
+Nếu muốn hoạt động giống grid, dùng flex-basis khiến các thẻ content cố đạt được 1 mốc width cố định sẽ giống nhau, còn khi shrink nhỏ hơn mốc đó thì chưa chắc.
+
+-> Display nhận 2 params thì 1 là style container ngoài, 2 là style con bên trong:
+flex => = block flex, container là block
+inline-flex => container là inline 
+inline-grid => container là inline, bên trong là grid
+block => = block flow
+inline-block => = inline flow-root
+
+Param 2 là flow-root tạo block formatting content k bị margin collapse, còn lại như default flow: https://www.youtube.com/watch?v=JY0FN71vCbw
+Còn có display list-item khi muốn 1 thẻ hoạt động như 1 item trong list ul li dù k có => k dùng
+Còn có display contents khiến 1 thẻ biến mất khỏi DOM nhưng ta vẫn css selector từ nó để style cho thẻ con được => k dùng
+Còn có display table khi hoạt động như table, 1 thẻ dùng display table-column sẽ k hiện nếu thẻ này k nằm trong 1 table => k dùng
+
+-> Dùng min-width: fit-content; cho thẻ con để fix case muốn thẻ con ưu tiên xuống dòng mới thay vì wrap content ở màn hình nhỏ, chỉ wrap khi k thể xuống dòng mới được.
+
+
+
+# Dùng grid
+https://uxdesign.cc/css-grid-with-galaxy-layout-figma-886a935b9649 => tạo CSS grid galaxy layout
+https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM => full tut master
+https://flexboxlabs.netlify.app/grid => grid playground
+https://ryanmulligan.dev/blog/layout-breakouts/ => grid làm container
+
+grid/grid-gap: 1rem 3rem; => vertical 1rem, horizontal 3rem. Cũng có column-gap, row-gap
+grid-column / grid-row => 1 phần tử chiếm bnh cột và hàng. Vd: grid-row: 1 / span 2; là item này bắt đầu từ row1 và kéo dài 2 row
+grid-area: 2 / 1 / span 2 / span 3; => là short của grid-column và grid-row, thẻ ở row 2 column 1 kéo dài 2 rows 3 column. 
+grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-column-start: 2; grid-row-end: 3; grid-column-end: 4; là kéo dài từ row1->row2, col2->col3
+
+-> grid-auto-flow: row dense; => ưu tiên xếp row trước, và ưu tiên fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
+Có thể dùng tạo masonry grid
+
+-> grid-template-rows: 300px 100px; => row1 cao 300px, row2 cao 100px, các row sau kích thước mặc định k fix
+grid-auto-rows => set kích thước chiều cao mặc định cho row mới được thêm vào, nếu ta k set bằng grid-template-rows cho nó thì sẽ lấy cái này
+
+grid-template-columns: 10% 10% 10%; hoặc repeat(3, 10%) => chia 3 thẻ bên trong làm 3 cột, một cột chiếm 10%. 
+grid-template-columns: repeat(3, minmax(200px, 1fr)); => có thể tự động responsive min item width 200px.
+Có thể tạo container với line names tự định nghĩa. Browser Elements -> Layout -> show line names để thấy grid line names
+
+-> grid-template-areas => định nghĩa vị trí area cho các label để xếp item vào. Kết hợp grid-area định nghĩa các label cho từng thẻ, có thể responsive đổi vị trí area.
+grid-template-areas cũng có thể thay thế position absolute vì nó chồng các element lên nhau và lấy kích thước của thẻ to nhất.
+
+Usecase ấn button thì text trong button thay đổi: ta cho các đoạn text là thẻ riêng với cùng grid-area đè nhau, cái nào ẩn thì hide nó đi
+K dùng display none vì nó làm mất thẻ thì grid-area k tự lấy kích thước thẻ to nhất, k dùng opacity 0 vì nó gộp aria text các thẻ lại => dùng visibility hidden ok nhất vì vẫn chiếm k gian và có ẩn aria-text, dùng cho transition được
+
+-> Căn giữa phần tử ở hàng cuối:
+Dùng flexbox hàng cuối bị full width. Nếu set max-width chứ k full width thì khi màn hình nhỏ chỉ còn 1 column muốn full lại k được nx => flexbox thường chỉ cho 1D layout
+Dùng grid ưu tiên cho 2D layout, hàng cuối căn giữa phải css selector chọn từng item cho ra giữa kèm với @media. Tạo galaxy layout, kim tự tháp card bằng cách tương tự.
+VD: &:nth-child(-n+2) { /* Chọn 2 item đầu tiên trong grid */}
+VD: &:nth-child(n+3)&:nth-child(-n+4) { /* Chọn item thứ 3 và thứ 4 trong grid, vì phải thoả mãn giao 2 selector */ }
+VD: &:nth-child(3n)&:nth-last-child(-n+4) ~ * { } => trong grid có 3 cols thì sẽ chọn hàng cuối, vì nó chọn phần tử cuối cùn của hàng sát cuối phải chia hết cho 3 và nằm trong 4 phần tử đầu tiên, rồi chọn các thẻ sibling sau nó chính là hàng cuối.
+URL: https://codepen.io/t_afif/pen/QwbZKPB => chọn row cực mạnh mà k cần media query
+
+-> Master trick responsive:
+- Grid responsive với grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); ô có thể dãn > 200px nhưng nhỏ hơn 200px sẽ ưu tiên xuống dòng.
+minmax nếu max < min thì lấy min, thay thế min-width, max-width.
+1fr chỉ là đơn vị fraction chia tỉ lệ các items, nó k định nghĩa theo kích thước bất cứ container nào cả. Mặc định là max 100%. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ invalid property.
+repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì grid. Mục số là điền số chứ đừng điền 1fr
+auto-fit thì grid cố "điền đầy" không gian bằng cách dãn phần tử, nên dùng auto-fill hơn vì nó cố điền nhiều cột nhất có thể, khi chỉ có 1 hàng sẽ thấy rõ.
+display grid mà các item k set grid-column hay grid-row sẽ mặc định 1 item là 1 ô, k set kích thước thì 1 ô chiếm cả row, tức chỉ có 1 cột
+Grid mặc định dòng dưới cột phải có width y như dòng trên. Còn muốn height các cột bằng nhau thì set grid-template-rows 1fr hết
+
+- Tạo số dương cực lớn hay âm cực lớn ở 1 mốc: Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999, kết hợp minmax
+VD lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px: max(calc((100% - 200px)*999),200px)
+VD chỉ bo góc ở màn hình lớn: .card { 
+  border-radius: max(0px, min(8px, calc((100vw - 4px - 100%)*9999))); 
+} => 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực)) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
+Tức if(!mobile) borderRadius=0px else borderRadius=8px
+=>*** Cứ tưởng tượng màn hình lớn và màn hình nhỏ thì min max width là gì là chơi dược thôi. Điều đb là dùng calc kết hợp kích thước absolute và relative
+
+- Custom max bao nhiêu cột: dựa vào tính chất flex-basis xếp k đủ thì tự giảm cột xuống dòng, rồi mới xét shrink grow.
+VD set item là min-width: 100% / 4 + 0.1%; => 1 row max 3 cột
+
+-> Usecase flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thước đủ: https://www.youtube.com/watch?v=LEkFckg7sfw
+VD: .with-sidebar {
+  --main-min-width: 45ch;
+  --sidebar-size: 250px;
+  --gap: 2rem;
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: wrap;
+}
+.with-sidebar > * {
+  flex-grow: 1;
+}
+.with-sidebar > :last-child {
+  flex-basis: var(--sidebar-size);
+}
+.with-sidebar > :first-child {
+  flex-grow: 999;
+  flex-basis: calc(((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999));
+  // container lớn sẽ là âm vô cực tức flex grow 999 sẽ cố gắng kéo dài để đạt được kích thước fit-content, sidebar bên phải sẽ hiện
+  // container nhỏ là dương vô cực, flex-grow 999 sẽ hiện content cố full màn, sidebar sẽ k hiện
+} 
+
+-> Usecase grid nhảy cột từ 1 tới 4 luôn khi màn hình to ra 
+.columns {
+  --min-column-size: 200px;
+  --column-count: 4;
+  --gap: 2rem;
+  --breakpoint: calc(var(--min-column-size) * var(--column-count) + (var(--gap) * (var(--column-count) - 1)));
+  --column-size: calc((100% / var(--column-count)) - var(--gap));
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, 
+    minmax(
+      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), // Màn > 4 thẻ thì min width từng thẻ là màn / 4, màn < 4 thẻ thì min width từng thẻ là full
+      1fr
+    )
+  );
+}
+=> hoàn toàn master, tham số 1 của minmax là min width của 1 item, thì ta cho số này responsive theo màn hình và các size kia thôi.
+
+-> Usecase dùng grid + container query tạo responsive layout:
+VD 1 grid hiện nhiều cards, style card thay đổi khi số thẻ trong 1 row thay đổi:
+.grid-auto-fit {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(30ch, 100%), 1fr));
+  container: grid-auto-fit / inline-size;
+}
+.card:has(> img) {
+  // Giả sử mỗi card dài 30ch. Khi tăng lên 2 card 1 hàng, thẻ chứa ảnh chiếm cả 1 hàng
+  @container grid-auto-fit (inline-size > calc(30ch * 2 + 1rem)) { // K dùng được css var
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: subgrid;
+    gap: 0;
+    > img {
+      grid-column: 2;
+      grid-row: 1 / 4;
+    }
+  }
+  // Khi 4 card 1 hàng, thẻ chứa ảnh chiếm 2 hàng 2 cột
+  @container grid-auto-fit (inline-size > calc(30ch * 4 + 3rem)) {
+    grid-column: span 2;
+    grid-row: span 2;
+    > :not(img) {
+      grid-column: 1 / -1; => dùng 1 / -1 để chiếm cả từ đầu đến cuối thay vì 1 số span cụ thể
+    }
+    > img {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+  }
+}
+
+-> Nhanh: 
+Các thuộc tính grid cơ bản
+Cách tạo galaxy layout, masonry grid, căn giữa phần tử cuối
+Master trick responsive
+
+
+
+# CSS responsive
+Responsive cần chú ý cả case xoay ngang phone khiến height rất nhỏ và width gấp 3 lần height.
+Kích thước luôn set relative để khi screen co lại thì item cũng tự nhỏ lại, chỉ cần thêm min max để giới hạn thôi.
+
+-> Dùng @media: @media not|only mediatype and (mediafeature and|or|not mediafeature) { }
+mediatype: all / print / screen
+media feature: min-height, resolution, orientation (portrait/landscape)
+=> Viết @media query tối ưu: VD màn lớn thì 2 col, màn nhỏ thì 1 col, mà mặc định grid là 1 col thì ta nên để mặc định 1 col, @media min-width thì set 2 cols. Chứ mặc định set 2cols, sau màn nhỏ lại phải set style 2 lần => thường thì media query toàn dùng min-width
+
+VD: @media (min-width: 100px) { } => tương đương @media all and (min-width: 100px) {}
+VD: @media (min-device-width: 100px) { } => kích thước tính cả thanh công cụ và thanh cuộn => k dùng
+VD: @media only screen and (max-width: 480px) and (min-width: 320px) { } => kích thước từ 320->480 của màn hình máy tính or smartphone
+VD: @media only print { } => chỉ cho máy in
+VD: @media (100px <= width <= 300px) { } => luôn dùng
+VD: @media only screen and (max-width: 100px) and (orientation: landscape), screen and (min-width: 100px) { } => thiết bị chỉ có màn hình width nhỏ hơn 100px và chiều rộng lớn hơn chiều cao, tức k bao gồm thiết bị đọc màn hình hay in ấn, đồng thời áp dụng cho mọi thiết bị hiển thị bao gồm cả in ấn nếu width lớn hơn 100px
+Còn có color-index là thiết bị màn hình dạng indexed color, hay min-aspect-ratio, min-device-aspect-ratio, min-device-pixel-ratio => k dùng
+Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css"> => k dùng
+
+@media (prefers-color-scheme: dark) { } => setting dark mode cho browser
+@media (prefers-reduced-motion) { } => setting giảm animation được bật.
+
+-> Dùng @container: xử lý case screen nhỏ dần mà kích thước container lại tăng. 
+URL tut: https://www.youtube.com/watch?v=rrLAg7xNERA
+@container tự tìm container bao ngoài là parent đầu tiên, dùng container-name nếu muốn rõ ràng hơn.
+container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container defines kích thước của content theo chiều đó.
+container: main / inline-size; => shorthands container-name / container-type
+Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
+=> Nhanh: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
+
+
+
+# 3D 2D transform
+Chỉ có: translate(1,2), rotate(20deg), scale(1,2), skewX(15deg,15deg) có thể dùng trực tiếp mà k cần transform
+Dùng transform-origin set tâm
+
+Hàm translate relative có 1 điểm đb là khi lùi tương đối, nó lùi so với kích thước của chính nó chứ kp kích thước cha => cách để cho thẻ ra tâm thẻ khác
+transform nhược điểm là vẫn chiếm vị trí cũ nên position relative ít dùng
+VD: position relative top -50px và transform translateY(-50px) chả khác gì nhau. Thực tế translate nó boost graphical performance of browser vì nó ra đời sau.
+Shorthand transform: perspective(500px) translate(100px, 50px) scale(1.5, 1.5) rotate(45deg) skew(10deg, 15deg);
+
+-> transform-style: A chứa B thì xoay A, B cũng xoay theo. Vd thẻ A xoay trục Y 60 độ sẽ nhỏ lại và text bị méo, transform-style mặc định là flat khiến cho vị trí đó trở thành kích thước và vị trí của thẻ B luôn, nếu xoay B -60 độ thì nó xoay cái hình méo đó tiếp làm thẻ B nhỏ hơn nữa  (xoay xong flat ra thành mp r xoay tiếp mp đó). transform-style preserve-3d thì thẻ B tách rời với thẻ A và k bị flat nữa nên xoay -60 độ quay trở lại kích thước và vị trí ban đầu
+
+-> Perspective chỉnh kc từ mắt đến vật, mặc định nó nhìn từ rất xa. VD 1 hình vuông nghiêng mà nhìn từ kc xa sẽ thành hcn bth chứ k thấy độ lệch.
+Sample căn phòng 3d: https://codepen.io/ricardoolivaalonso/pen/mdPzrpe
+
+-> Breakmind 3d:
+VD perspective 1000px và 1 mp translateZ 500 sẽ nhìn tương tự perspective 100 và mp cách mắt 50, vì qtr là ratio như nhau
+Nhưng nếu perspective và kc từ mp đến mắt nhỏ khi rotate sẽ bị nhìn gần quá, ảnh bị phóng to méo nên xấu. Nên ta thường thấy perspective lớn.
+perspective responsive theo vw giúp co nhỏ khi thu nhỏ màn hình mobile ok.
+URL: https://www.youtube.com/watch?v=niwUUtgn4-o
+
+
+
+# Animation basic
+Tìm animation đủ loại => search #topcsseffects trong youtube kênh hơn 1000 video chỉ giới thiệu css animation
+
+-> transition: [thuộc tính chuyển động] [thời gian chuyển động] [thời gian delay] [kiểu chuyển động];
+Đổi trạng thái cho các thuộc tính liên quan đến số và màu, VD background-image k có tác dụng nhưng có thể fake chỉ bằng cách animate opacity các ảnh
+VD: transition: all 1s 0.5s ease-in; hoặc transition: width 2s, height 2s, transform 2s;
+cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm
+transition-delay
+
+transition k dùng được với width hay các giá trị k rõ như auto
+VD có thể set padding 0 -> unset, fontSize 0 -> unset => h thì được r
+Trong React ta dùng style={appear ? {fontSize: "unset"} : {fontSize: 0, padding: 0, opacity: 0}} + transition là được
+pointer-events => sự kiện xử lý ở JS nhưng có thể set css để k cho thẻ bắt sự kiện nữa được
+
+-> animation: [animation-name] [animation-duration] [animation-timing-function] [animation-delay] [animation-iteration-count] [animation-direction] [animation-fill-mode] [animation-play-state];
+animation-duration là thời gian từ lúc bắt đầu cho đến khi kết thúc
+animation-delay là thời gian chờ trước khi hiệu ứng bắt đầu chạy
+animation-iteration-count dùng số or infinite, số float cho ra animation dừng giữa chừng
+animation-direction thì normal là đi về phía trước, reverse là về phía sau, alternate làm chuyển động được quay ngược lại kiểu 5s đầu là 0%->100% và 5s sau là 100%->0%, alternate-reverse ngược lại với alternate 
+animation-fill-mode: Khi kết thúc animation, nếu để none or k set gì thì mặc định dùng style ban đầu khi animation k thực thi, nếu set forwards sẽ dùng giá trị khung cuối, backwards dùng giá trị khung hình chính ở đầu animation (lúc 0%); both là hòa trộn forward và backwards; 
+animation-play-state: paused hay running
+=> Lưu ý để đảm bảo animation liên tiếp nhau k kiểu bị ngắt quãng thì nên setup sao cho giá trị mặc định lúc 0% bằng với giá trị lúc 100% để làm vô tận mượt hơn
+VD tạo animation hover mới có thì nên để animation-play-state là paused, hover thì running để tránh animation chạy mãi sẽ ngốn CPU: https://www.youtube.com/watch?v=M1qPpwVcF64
+
+VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal) both running;
+=> animation còn có SVG, ảnh động, 3D. URL full: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM 
+URL animate loading: https://loading.io/spinner
+
+-> animation-timeline giúp control thuộc tính animation phụ thuộc vào hành động của user hoàn toàn bằng css. VD chỉ khi scroll thì animation mới chạy, tạo parallax
+view(), scroll(), scroll-timeline-name: --squareTimeline;
+
+-> Vd hover button to ra: 
+Nếu có thể, nên cho button to sẵn và scale nhỏ lại, hover thì trở về kích thước ban đầu
+Nếu không, cách tốt nhất là scale(1.2) lên và bị mờ. Để fix:
+- will-change: transform; sẽ đưa gợi ý cho browser biết sẽ thay đổi như nào để optimize, hạn chế dùng vì browser xử lý expensive có thể gây lag.
+- backface-visibility: hidden; chặn hiển thị mặt sau giúp giảm mờ.
+
+-> Hiểu nguyên tắc xếp chồng code css: style được thêm vào sau sẽ đè lên style được thêm vào trước đó. Ở mỗi thời điểm, ta chỉ cần hiểu nó có style gì là được. VD animation forwards thực tế là style cuối cùng được thêm vào thẻ và cố định như v luôn.
+transition sẽ luôn giúp thuộc tính css bị biến đổi từ từ nếu có sự thay đổi. 
+Nếu muốn khác đi, nên dùng animation keyframes. Mọi lúc animation có sự thay đổi khác biệt đều là 1 keyframes riêng. 
+VD: animation ẩn và hiện, néu dùng keyframes thì buộc lúc hiện và ẩn là 2 keyframes phải tạo ra.
+=> Tưởng tượng animation như các stack xếp chồng lên nhau khi set sẽ dễ hơn
+
+-> Trong js có event "transitionend" bắt khi quá trình transition kết thúc.
+VD: ta muốn 1 thẻ bị faded rồi biến mất. Nếu ta dùng keyframes với opacity sẽ k biến mất, nếu dùng display sẽ k có animation. Có thể dùng opacity rồi bắt sự kiện "transitionend" để gán display none là được.
+Cách khác là setTimeout đúng bằng thời gian transition rồi xoá thẻ.
+=> Tương tự có sự kiện animationend
+
+-> interpolate-size: allow-keywords; quá mạnh, cho phép animate theo các giá trị auto, min-content, max-content, fit-content
+VD text dài thì min-content thì chỉ đủ kích thước 1 từ dài nhất, max-content là khi text trải dài hết ra
+=> Luôn để ở :root sẽ áp dụng với mọi thẻ
+Còn transition với display none có thể dùng allow-discrete trong transition-behavior
+
+-> Keyframe:
+Nếu bỏ from: nó sẽ animation từ thuộc tính hiện tại đến to
+Nếu bỏ to: nó sẽ animation từ from tới thuộc tính hiện tại. 
+Nếu có cả from và to mà thuộc tính k khớp sẽ nhảy
+
+--> Ứng dụng animate to dynamic value: https://www.joshwcomeau.com/animation/partial-keyframes/#animating-to-a-dynamic-value-3
+Kết hợp 2 animation sẽ chạy song song: 1 cái giá trị động, 1 cái chỉ có from sẽ combine đồ thị 2 cái khiến animation chạy từ from tới cái còn lại
+Tạo twinkle animation cho particle được
+
+-> Có nhiều animation giống nhau thì có thể kết hợp với css animation chứ k cần tạo animation riêng cho từng thẻ.
+VD: @keyframes oscillate {
+  from {
+    transform: translateX(calc(var(--amount) * -1));
+  }
+  to {
+    transform: translateX(var(--amount));
+  }
+}
+
+
+
+# Master animation với transform 
+1) Thứ tự transform có ảnh hưởng tới object di chuyển, rotateZ sẽ rotate cả trục tọa độ nên nếu rotateZ rồi translateX khác với translateX rồi rotateZ
+2) transform origin mặc định ở top left
+3) rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
+4) keyframe transform: rotateZ(-45deg) translateX(50px) rotateZ(45deg); => nó khiến object đi đường vòng cung và k bị xoay vì các animation thực hiện đồng thời. Nó sẽ rotateZ, đi trục x, rotateZ ngược lại. Tức là ở mỗi bước di chuyển, nó rotateZ và đi trục x đồng thời làm đường vòng cung. Sau đó rotateZ ngược lại khiến object quay về vị trí ban đầu. Quá trình cực nhanh ở mỗi bước. Nó k đi chéo luôn vì quá trình rotate và đi trục X đồng thời chứ kp rotate xong mới đi x, cuối cùng mới rotate ngược về
+5) Để animation 1 set thẻ, ta nhét vào 1 thẻ container và animation thẻ container là được
+6) Animation k tự chạy lại khi đã chạy xong đúng số lần, nếu muốn chạy lại, phải gán tiếp lại class có animation cho nó.
+7) Mỗi giai đoạn di chuyển khác nhau nên có 1 animation riêng. Khi đã có animation xuôi, k nên tái sử dụng animation ngược lại với direction reverse mà hãy tạo 1 keyframe mới vì nhiều lúc lỗi k hiểu tại sao.
+8) Nếu vị trí from của animation k trùng với vị trí ban đầu, vật sẽ nhảy sang state đó r animation tiếp rất xấu. State trước khi chạy animation cũng chính là from
+
+-> Multiple animation liên tiếp nhau sử dụng animation-delay và set phần trăm chuẩn trong @keyframes
+
+
+
+# Vấn đề trigger lại animation
+-> Playback 1 animation cũ: 
+1) Bth animation chạy 1 lần sẽ k trigger lại, nhưng nếu gán cho 1 animation khác r remove animation đó thì animation cũ sẽ trigger. Điều này chỉ được khi đổi animation-name.
+Nhờ v, có thể tạo 1 animation giống hệt nhau, rồi liên tục thêm bớt cái animation thứ 2 để animation trigger liên tục thực chất là 2 cái so le
+2) Đổi trạng thái animation từ nhanh sang chậm khi ấn nút, ta bao bằng 1 thẻ khác và animation ngược lại với cường độ nhỏ hơn, ấn thì đổi animation-play-state paused sang running
+
+-> Trong JS để tạo ra 1 animation, ta thêm 1 class animate vào thẻ đó, nhớ xoá đi khi k cần nữa.
+Mỗi lần xoá rồi thêm class sẽ chạy lại animation, nhưng VD nếu muốn animation thêm lần nữa theo đk của JS thì k được. Nếu remove rồi add lại class sẽ k chạy animation.
+Có nhièu cách fix:
+- Trigger reflow ép ở giữa sẽ khiến browser buộc render lại ngay:
+animatedElement.classList.remove('animate');
+void animatedElement.offsetWidth; // forces reflow
+animatedElement.classList.add('animate');
+
+- Dùng timeout cực ngắn: cách này k đảm bảo sẽ chạy animation ở mọi trường hợp 
+animatedElement.classList.remove('animate');
+setTimeout(() => {
+    animatedElement.classList.add('animate');
+}, 10); 
+=> Để 10ms là đủ khiến browser nhận ra và render lại.
+=> Có thể để là 0 thì chạy ngay event loop sau.
+
+-> Css only
+VD click 1 button thì trigger animation X chạy 1 lần (css only với flex box gán animation name), click lần nữa trigger tiếp sẽ k chạy
+
+Nếu k dùng css only, có giải pháp là đặt setTimeout cực ngắn ngay khi checked thì unchecked luôn. Cẩn thận toang khi ngừoi dùng ấn liên tục cực nhanh
+Néu dùng css only, cách duy nhất là đặt 2 animation giống nhau nhưng khác tên. Gán qua gán lại để đổi qua animation khác khi unchecked và checked là ok thôi
+=> Tức là animation css only sẽ k trigger lại, chỉ có cách đổi qua animation khác
+
+
+
+# Animate SVG
+stroke-dasharray: 5,3; tức là 5 pixel liền thì có 3 pixels đứt sau đó và cứ tiếp tục vẽ đến hết hình
+stroke-dashoffset xác định điểm bắt đầu vẽ của stroke-dasharray.
+
+Bản chất animate line svg là nó animate thuộc tính stroke-dashoffset thôi
+VD vẽ animation trên trang https://editor.method.ac/ rồi svg từng phần tử
+
+-> Animate svg khi hover: các tag svg dùng đc animation css như bth, dùng cho các thẻ path hay g bên trong để animate 1 phần của icon cũng được luôn
+Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, khi hover vào thì đổi lại thành running là ok
+
+
+
+# CSS sprite animation
+Nhét mọi frames vào chung 1 bức ảnh và animate bằng cách hiển thị từng frame
+animation-timing-function có hàm step(<số>); sẽ chia đều các khoảng được khai báo thành 1 lượng frame rồi nhảy từng frame
+VD: animation: play 1s steps(10) infinite;
+@keyframes play {
+  0% { background-position: 0 0; }
+  10% { background-position: 100px 100px; }
+  100% { background-position: 0 0; }
+}
+=> thì nó sẽ hiển thị background ở các vị trí khác nhau. Từ 0% đến 10% sẽ chia làm 10 frames và hiển thị lần lượt, từ 10% đến 100% lại chia 10 frames và hiển thị lần lượt
+
+Có thể convert gif or video sang sprite image với https://ezgif.com/gif-to-sprite
+Có thể lấy hàng loạt ảnh gif trên trang giphy.
+Search sprite basic trên trang: https://opengameart.org/
+APNG cũng là 1 loại ảnh png nhưng có animated
+
+-> Tại sao k dùng video hay gif mà dùng sprite css animation?
+Vì css sprite animation có thể custom play, pause, chạy khi hover or click, kiểm soát frame rate, kết hợp với animation timeline cho scroll animation 
+Có thể tạo animation phức tạp như trong game.
 
 
 
@@ -676,7 +1502,7 @@ Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
 1 cách khác là load image blur với base64, giảm chất lượng và chuyển sang base64 bằng tool khác, image thực thì để link url bth
 Web chuyển ảnh thành data uri dạng mờ không cần dùng thư viện blur hash: https://blurred.dev/
 - Cloudinary cung cấp url giúp tải ảnh blur nhẹ hơn của 1 image. 1 cách generate blur dynamic image.
-VD URL gốc: https://res.cloudinary.com/hieucuopbien123/image/upload/v1688738028/eokcgjfzuedo2oobnzzb.png
+VD URL gốc: https://res.cloudinary .com/hieucuopbien123/image/upload/v1688738028/eokcgjfzuedo2oobnzzb.png
 Làm mờ nhẹ hơn: https://res.cloudinary.com/hieucuopbien123/image/upload/e_blur:100/v1688738028/eokcgjfzuedo2oobnzzb.png
 Làm mờ kèm grayscale nhẹ hơn nữa: https://res.cloudinary.com/hieucuopbien123/image/upload/e_blur:1000,q_1,f_auto/v1688738028/eokcgjfzuedo2oobnzzb.png
 Full tut custom: https://cloudinary.com/blog/low_quality_image_placeholders_lqip_explained#the_javascript_options_for_generating_lqips
@@ -710,502 +1536,6 @@ img src="image-400.jpg"
 
 
 
-
-
-# Dùng scroll
-Cơ bản tạo scrollbar trong 1 box: cho box là inline-block, white-space nowrap, overflow-x auto, set width không được fit-content mà responsive màn hình, thẻ con bên trong phải set minWidth bằng kích thước của box.
-Tức chỉ cần cho container kích thước nhỏ hơn content và set overflow có scrollbar là được.
-=> refer tới "Projects / Tinkerbellgarden"
-
-overflow: clip; kết hợp với overflow-clip-margin: 30px; để kiểm soát overflow vẫn tràn ra ngoài mà k chiếm thêm kích thước
-
--> Custom style scrollbar: https://css-tricks.com/custom-scrollbars-in-webkit/
-URL: https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp
-K dùng kèm scrollbar-width thin được mà set trong shadow dom, k sẽ lỗi
-
--> Để nhảy đến 1 vị trí trên trang html: đặt id rồi tại thẻ nào ta dùng tag a href đến #đó là được
-scroll-behavior: smooth hay auto để trượt đến hay nhảy đến
-
--> overscroll-behavior: khi 2 scroll lồng nhau, cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
-
--> Có thể ẩn thanh scrollbar nhưng vẫn giữ nguyên chức năng
-
--> Dùng scroll-snap
-- scroll-snap-type: x mandatory; xác định hướng và kiểu scroll. proximity là scroll tới sát mép card mới tự scroll vào đúng vị trí card nếu k sẽ lơ lửng, mandatory là trình duyệt tự snap theo từng điểm scroll mọi lúc theo cách ta dùng scroll-snap-align 
-- scroll-snap-align là từng item sẽ có vị trí như nào với container bao nó. VD center là điểm giữa item trùng điểm giữa container, tương tự start và end. Điểm giữa của chiều nào tùy thuộc type dùng x hay y
-- scroll-snap-stop: là khi lướt quá nhanh sẽ luôn dừng ở từng element(always) hay cho lướt qua(normal)
-- Đôi khi ta k muốn chuẩn kiểu item hiển thị đúng ở 3 vị trí mà hiển thị ở hơi mé bên trái cách 1 vài pixel cơ thì:
-scroll-padding dùng ở container sẽ cho mọi item bên trong được quyền hiển thị cách mép 1 khoảng bnh
-scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào được phép hiển thị cách mép bnh
-=> dùng được 4 chiều left right top down. Thường để kích thước container chia hết cho kích thước card bên trong
-
--> Scrollbar nên tạo chuẩn 1 thẻ con chứ body và html nên để overflow hidden cho dễ customize về sau:
-- Khi scroll các thẻ liên quan, sẽ k ảnh hưởng đến scrollbar các thẻ khác, chứ scroll thẻ body sẽ ép mọi thẻ scroll
-- Style chuẩn trong 1 phạm vi nhất định
-
--> K thể tạo được scrollbar có background transparent, chỉ cố tạo tạo background theo màu thẻ body thôi.
-K nên dùng loading bar ngang: fetch API thì k nên vì mỗi component là loading độc lập; scroll thì phải đặt trong tag content và position fixed theo màn hình vì ta k scroll thẻ body; nếu chuyển page thì loading ngang thì k được vì MPA sẽ k thể tính được
-
-
-
-# Xử lý màu
-Tool sinh code gradient: https://angrytools.com/gradient/
-
--> Gradient css có 3 loại: linear kéo từ 1 phía sang 1 phía, radial kéo từ 1 điểm lan ra xung quanh, conic-gradient
---> Chú ý dùng background gradient thì truyền vào background chứ kp background-color
-VD: background: linear-gradient(direction, color1, color2, color3, color4, ...);
-VD: radial-gradient(circle closest-corner at 100px 100px, red 10%, yellow 20%, pink 10%); 
-shape là circle, elipse (default, bóp méo theo khung bên ngoài)
-size có thể là closest-side, farthest-side(default), closest-corner, farthest-corner at ... để set kích thước => tức màu cuối của radient chạm cạnh nào của box bao nó thì dừng
---> repeating-linear-gradient
-
--> Các cách lấy màu: rgba(255,0,0,0.5); rgb(255,0,0); hsl(0, 1005, 50%), hsla(0,100%,10%,0.3); #ffffff; dùng tên trực tiếp red, yellow
-hsl thì hue có giá trị từ 0 đến 360, 0 và 360 cùng là đỏ.
-color-mix giúp mix 2 màu trong không gian màu nào
-
--> mix-blend-mode: difference; => giúp đổi màu tương phản cực mạnh, nên dùng mọi lúc khi cần màu đổi ngay lập tức khi background đổi mà k sợ trùng màu bị ẩn đi
-backdrop-filter: blur(5px); => style cho area trong phạm vi element nhưng đằng sau element => tạo glass morphism
-
--> Còn có sự sai lệch về màu sắc khi dùng browser khác nhau, đặc biệt là Safari so với Webkit. 
-Ta k nên giả định 2 màu là giống nhau ở 1 thẻ so với 1 bức ảnh hay video. VD: video có màu nền là #f12312 vì ta dùng devtool để lấy màu => ta k thể dùng 1 thẻ cũng có màu #f12312 và giả định rằng 2 màu giống nhau được, đặt video bên cạnh thẻ kia sẽ thấy khác màu ở 1 số browser khác.
-
-Có những màu đẹp có sẵn được support chuẩn ở mọi browser nên dùng: https://www.w3schools.com/cssref/css_colors.php
-
--> gradient nhìn đẹp hơn khi dùng không gian màu oklch thêm vào đầu
-VD: linear-gradient(in oklch, red, blue);
-
--> Dùng relative color
-:root {
-  --clr-primary-rgb: 255 120 0;
-  --clr-primary: rgb(var(--clr-primary-rgb));
-
-  --clr-secondary-rgb: 0 255 25;
-  --clr-secondary: rgb(var(--clr-secondary-rgb));
-}
-Dùng đổi opacity:
-background: rgb(var(-clr-primary-rgb) / .5); => k chạy nhé, muốn tạo relative phải dùng from
-
---> Cách trên phức tạp, tạo 2 biến cho mỗi màu. Có thể dùng from tạo màu từ 1 màu khác và custom:
-hsl(from #ff0000 / 0.5); => giảm opacity đi 0.5
-hsl(from red h s calc(l - 20) / 0.5); => lấy màu đỏ và giảm light đi 20
-hsl(from var(--clr-primary) h s 20%); => đổi rgb sang hsl, sau đó map thông số h và s, còn light set là 20%
-rgb(from #ffff r g g / 0.5); => tương tự nhưng lấy màu green làm màu blue
-oklch(from red calc(l * .5) calc(c * .1) h / 0.5); => oklch() là hàm tạo màu như lch() nhưng màu sắc cân bằng hơn. lightness, chroma (như saturation), hue.
-
---> Dùng color-mix
-color: color-mix(in lab, black, currentColor); => currentColor sẽ lấy thuộc tính color của thẻ hiện tại và ở case này làm tối màu đó đi, k set sẽ lấy theo cha, rồi tạo ra màu này
-VD ở light background cần chữ màu tối hơn, dark background cần chữ màu sáng hơn. Dù ta đã set đen trắng cho text rồi nhưng cần text có màu khác. Ta dùng:
-color: color-mix(in lab, currentColor, red 70%); => giả sử chữ đỏ sẽ tự có màu đỏ đậm đỏ nhạt tuỳ bg cho đúng
-
-linear-gradient cũng dùng được currentColor, dùng được mọi nơi cho màu
-
-# Dùng conic gradient tạo hình zigzag 
-.loader {
-  height: 47px; /* control the size */
-  aspect-ratio: 5;
-  background:
-    conic-gradient(from 135deg at top,#000 90deg,#0000 0) top,
-    conic-gradient(from 135deg at top,#0000 90deg,#000 0) bottom;
-  background-size: 20% 50%;
-  background-repeat: repeat-x;
-}
-
-
-
-# Dùng zIndex
-Bản chất: Thẻ A có z-index là 1, thẻ B có z-index là 2 thì thẻ A luôn nằm dưới thẻ B, kể cả thẻ A có children z-index là 100 thì tất cả đều dưới thẻ B thôi
-Best practice là để tất cả cùng z-index thì cái sau đè cái trước. Đến khi cần TH cái sau nhỏ hơn cái trước mới phải specific. Thẻ có zIndex nên luôn set position relative để tránh lỗi
-
-K dùng opacity với z-index vì opacity làm giảm z-index của thẻ bên trong nó
-
-
-
-# Dùng position 
--> Position absolute sẽ xếp vị trí so với thẻ cha relative đầu tiên của nó, nếu k có thì sẽ là thẻ body, thẻ absolute cũng thành inline block.
-position absolute nếu ta set cả 4 giá trị thì nó bắt đầu ảnh hưởng đến kích thước của thẻ, tự kéo dãn cho vừa hcn đó đó là khi kích thước k set.
-Thường dùng kết hợp transform để dịch ra đâu theo vị trí cố định, rồi dịch tiếp theo kích thước relative của nó
-
--> Relative là thay đổi vị trí so với bình thường bao nhiêu, vẫn chiếm không gian
-
--> Sticky thì vật sẽ ở vị trí bth, nhưng khi scroll quá thì sẽ stick vào thẻ parent relative đầu tiên của nó, k thì sẽ theo màn hình. Nếu thẻ parent scroll hết thì k stick nữa
-
--> Fixed là cố định cũng là set các vị trí so với các cạnh của màn hình và fixed mãi ở đó luôn, thường dùng cho mobile menu.
-VD A chứa thẻ B, mà B có position fixed thì sẽ căn fixed theo window nhưng nếu thêm translateZ(0) cho thẻ A thì thẻ B sẽ fix theo thẻ A chứ k fix theo window nx.
-
-
-
-# Float => k dùng
-Float khiến 1 thẻ block thành inline không chiếm height và trôi sang 2 bên. Các thẻ khác vẫn hiện cùng dòng và né width nó ra.
-clear: both => khiến thẻ float chiếm height, các thẻ khác k thể ở cùng dòng với nó nữa
-
--> VD thẻ div chỉ có các thẻ float bên trong thì height thẻ div đó là 0 vì thẻ float k chiếm height của cha nó mà
-ClearFix trong CSS giúp thẻ cha mang kích thước của thẻ con kể cả dùng float, chỉ cần cho 1 thẻ con dưới float để kéo dài cha quá float là được.
-VD: .clearfix:after{
-  content: ".";
-  clear: both;
-  display: block;
-  width: 0px;
-  height: 0px;
-}
-
-
-
-
-
-
-# Dùng content-visibility
-Khi vào 1 page, mặc định browser tải resource, tạo DOM và layout, render paint cả page ra màn hình, dù viewport chỉ hiển thị 1 phần. Nó khiến page lớn load hiện lần đầu tiên bị lâu, và cũng lag khi resize.
-
-content-visibility visible là default
-
--> hidden
-display none ẩn hết khỏi DOM và a11y tree. hidden attribute của html tag y như display none.
-content-visibility hidden cũng ẩn hết, k thể tương tác hay search. Nhưng nó k xóa DOM, giữ state giúp ẩn và hiện lại rất nhanh.
-visibility hidden cũng ẩn, k thể tương tác và k xóa DOM. Nhưng nó lại vẫn chiếm diện tích
-opacity 0 dường như chỉ ẩn phần nhìn, vẫn tương tác đươc.
-
-visibility hidden kết hợp aria-hidden="false" k hoạt động, nó vẫn ưu tiên ẩn
-Thay vì kết hợp visibility hidden với position absolute để k chiếm diện tích, ta nên ưu tiên dùng content-visibility hidden cho tooltip các thứ ok hơn.
-
--> auto: thẻ sẽ k được paint lên màn hình cho đến khi xuất hiện gần viewport. Mặc định là nó paint cả page.
-Để browser paint content, nó phải calculate layout trước. Thẻ có auto sẽ k tính layout khi chưa vào viewport nên phải đi kèm contain-intrinsic-size: auto 600px; để dùng kích thước tạm trước khi thẻ được paint. Thường set contain-intrinsic-size width là auto tự scale full chứ k fix cứng để k bị tràn màn hình nhỏ.
-Khi scroll xuống và paint thẻ đó, kích thước thực tế sẽ bị thay vào gây jump scrollbar nhưng chấp nhận. K nên dùng khi kích thước thẻ ảnh hướng lớn đến layout thôi.
-K nên dùng auto cho các thẻ quá lớn để tránh scroll nhanh paint thẻ đó k kịp gây khoảng trắng, nên chia chunk nhỏ tốt hơn.
-
--> contain trong css xác định 1 thẻ có containment không, mặc định là none là k có giới hạn gì.
-contain: paint; => đảm bảo mọi thứ bên trong 1 thẻ k thể paint ra ngoài thẻ đó
-contain: size; => đảm bảo mọi thứ bên trong 1 thẻ sẽ k ảnh hưởng đến kích thước thẻ đó. Vì bth kích thước thẻ cha tự kéo dài theo kích thước con, nhưng ở đây thì không.
-contain: layout; => đảm bảo thẻ bên trong k ảnh hưởng đến layout các thẻ khác và ngược lại.
-Có thể kết hợp contain: layout paint size; 
-=> Dùng contain sẽ giảm tải cho browser khi tính toán layout hay paint ra màn hình.
-=> Thẻ có content-visibility auto sẽ tự có contain layout tức thẻ bên trong k thể break layout ra bên ngoài
-
-
-
-# Có thể custom cursor:
-C1: là cho cursor none rồi tự custom 1 thẻ ảnh khác cho transform theo mousemove. Có thể custom event mouse down thì phóng to ảnh, mouse up thì ảnh về bth
-=> Việc custom cursor như v k ổn k nên dùng vì text, input, button đôi khi cần các hình khác nhau thì custom sẽ phức tạp với từng thẻ
-C2: là dùng cursor: url(<base64>) 8 8, auto; // Tham số 2 là dự phòng nếu browser k hỗ trợ hình ảnh  
-Tự set cursor như nào ở các thẻ khác nhau, k custom gì khác được, chỉ thay đổi được cách hiển thị
-URL: https://css-tricks.com/next-level-css-styling-for-cursors/ => dùng C2 fallback cho C1 khi browser k hỗ trợ JS. Check touch screen và k enable js thì dùng cursor C2 thôi.
-URL: https://custom-cursor.com/ => lấy ảnh cursor free
-
-
-
-# Master border radius: outer radius = inner radius + distance giữa 2 border (border-width) => tự tạo nếu cần 1 thẻ có boder radius trong thẻ khác
-border-radius: https://9elements.github.io/fancy-border-radius/
-Dùng border-image
-Shorthand border-radius: 10% 30% 50% 70%;
-
-
-
-# Flexbox
-Chú ý dùng width fit-content kết hợp với flex thì vô dụng. Vi mục đích khi sử dụng flex là kích thước của thẻ cha lớn hơn các thẻ con và flex sẽ xếp con bên trong cha.
-Dùng kèm flex-grow và flex-shrink, order. Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. VD cha cho align-item center để mọi con ra giữa, nhưng có vài con mà muốn ở 2 bên vẫn dùng align-self chỉnh được
-
--> Nhanh: flex: 2 2 10%; // grow shrink basis 
-flex: 2 2; // grow shrink
-flex: 2 // = 2 1 0%
-=> flex shrink default 1, flex grow default 0, flex-basis 0% nên khi thu nhỏ nó tự k bị tràn vì có flex-shrink.
-flex-flow: row wrap;
-place-content: center space-between; /* align-content: center; justify-content: space-between; */
-place-items: center stretch; /* align-items: center; justify-items: stretch; */ => k có stretch
-place-self: start end; /* align-self: start; justify-self: end; */ => có thể stretch, trong phạm vi ô to
-=> align-items, jusitfy-content, align-content cho flex
-=> 1 điểm khác biệt lớn của place-items và place-self là place-items dùng cho container bao ngoài, place self là dùng cho từng phần tử được. place-self chỉ cần dùng cho grid
-
--> Dùng text-align và margin 0 auto để căn giữa nếu có thể. Còn có text-align justify cho text hiện đẹp
-
--> Dùng display flex thì thẻ có thuộc tính đó trở thành block chiếm cả dòng rồi ta set vị trí các con. Còn inline-flex thì thẻ cha thành thẻ inline thôi, xếp con bên trong.
-
--> flex-basis => ref tới "Responsive css"
-Flexbox gặp vấn đề là chỉnh size của cell dựa vào kích thước item bên trong, shrink hay grow cũng thế. Grid tốt hơn vì chỉnh size của cell dựa vào kích thước các cell bên ngoài set từ trước.
-VD https://www.youtube.com/watch?v=Ns12ALe8aqI&list=WL => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
-Để fix: phải dùng flex-basis khiến các thẻ content cố gắng đạt được 1 mốc width thì sẽ giống nhau. Các thẻ có thể shrink hay grow xác định chuẩn là xong
-=> Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex k xử lý trước trường hợp row cuối cùng k full
-
-Các phần tử trong flex sẽ mở rộng theo kích thước của chính các phần tử đó. Nhưng nếu mọi phần tử trong 1 flexbox đều được set flex-grow, thì kích thước từng cái sẽ chia theo tỷ lệ đó luôn (trong 1 hàng chứ các hàng khác nhau sẽ k tự dóng thẳng như grid) => Cách để chia tỉ lệ phần tử trong flexbox. Chú ý là tỉ lệ phần tử k tính padding, nếu item có padding sẽ to hơn bth.
-
--> Mở rộng thuộc tính display
-inline-flex, inline-grid
-
-Nhận 2 param thì 1 là style ngoài, 2 là style trong và các thẻ trong nó.
-inline-flex = inline flex
-flex = block flex
-block = block flow
-none = none
-inline-block = inline flow-root
-
-Param 2 có thể là flow-root tạo block formatting content k bị margin collapse, còn lại như default flow: https://www.youtube.com/watch?v=JY0FN71vCbw
-display contents dùng để khiến 1 thẻ như là biến mất khỏi DOM nhưng ta vẫn css selector từ nó để style cho thẻ con được => ít dùng
-display list-item khi muốn 1 thẻ hoạt động như 1 item trong list ul li dù k có. 
-Tương tự display table khi muốn hoạt động như table. VD display table-column sẽ k hiện nếu thẻ này k nằm trong 1 table => ít dùng
-
-
-
-# Dùng display grid
-CSS grid galaxy layout khá dễ: https://uxdesign.cc/css-grid-with-galaxy-layout-figma-886a935b9649
-Giống flexbox nhưng custom chia vị trí từng ô tốt hơn.
-Grid master: https://css-tricks.com/snippets/css/complete-guide-grid/?fbclid=IwAR0hXkP7RHqFTVbuRnF-Vau0VqkVig1dQn6gpfa80ig3bMo7mPzW0m6DdpM
-Playground: https://flexboxlabs.netlify.app/grid
-Grid làm container: https://ryanmulligan.dev/blog/layout-breakouts/
-
--> grid-gap: 10px; là kc giữa các ô. Có column-gap, row-gap
-gap/grid-gap: 1rem 3rem; => vertical 1rem, horizontal 3rem để ý khi dùng flex-wrap
-
--> grid-template-columns: 10% 10% 10%; là chia 3 thẻ bên trong làm 3 cột, một cột chiếm 10%. 
-grid-template-columns: 1fr 1fr 1fr; hoặc (auto auto auto) cx là 3 cột bằng nhau. Hoặc repeat(3, 1fr) viết lặp
-grid-template-rows: 300px 100px; => row1 cao 300px, row2 cao 100px, các row sau kích thước mặc định k fix
-grid-template-columns: repeat(3, minmax(200px, 1fr));
-
--> grid-column / grid-row là 1 phần tử chiếm bnh cột và hàng. Vd: grid-row: 1 / span 2; là item này bắt đầu từ row1 và kéo dài 2 row
-
--> grid-auto-rows sẽ set kích thước chiều cao mặc định cho row mói được thêm vào, nếu ta k set bằng grid-template-rows cho nó thì sẽ lấy cái này; Tương tự grid-auto-columns
-
--> grid-template-areas để sắp xếp các item vào grid theo label. Kết hợp grid-area khi responsive đổi vị trí area.
-
--> grid-area còn là short của grid column và grid row. VD:
-VD grid-area: 2 / 1 / span 2 / span 3; => thẻ ở row 2 column 1 kéo dài 2 rows 3 column
-VD grid-area: 1 / 2 / 3 / 4; => tương đương với grid-row-start: 1; grid-column-start: 2; grid-row-end: 3; grid-column-end: 4; => Kéo dài từ row1->row2, col2->col3
-
--> grid-auto-flow: column; ưu tiên xếp hết từng col trước. 
-grid-auto-flow: row dense; => vẫn xếp đầy row nhưng fill vào các chỗ trống trước đó nếu đủ, điều này làm mất thứ tự
-
--> grid có thể dùng cho 1D layout để tạo khi các cột đều bằng nhau => tốt hơn flexbox. Dùng flex box khi cần các item theo kích thước riêng của chúng
-Chỉ cần dùng {
-  grid-auto-flow: column; // để nó xếp trong 1 hàng
-  grid-auto-columns: 1fr; // để các phần tử mới thêm vào grid đều cùng kích thước nhau
-}
-- flexbox có thể dùng cho 2D layout, chỉ cần set flex wrap, khác với grid là có thể để các cột không cùng kích thước nhau, cứ có kích thước đúng của nó là được
- 
--> grid-template-columns có thể tự định nghĩa grid line names để dùng trong các trường khác
-Dùng grid là container được: browser -> Elements -> Layout -> show line names để thấy grid line names
-URL: https://www.youtube.com/watch?v=c13gpBrnGEw
-
--> Căn giữa phần tử cuối cùng của grid: 
-Dùng flex box căn giữa ok nhưng sẽ full width, nếu ta set max-width chứ k full width thì khi màn hình co chỉ còn 1 column muốn full lại k được nx. Nếu k muốn như vậy thì dùng grid
-Có thể tạo kim tự tháp card bằng grid bằng cách tương tự
-
--> Dùng grid-template-areas thay thế position absolute vì nó có thể tự chồng các element lên nhau và lấy kích thước của thẻ to nhất
-K dùng display none vì nó làm mất thẻ thì k tự lấy kích thước thẻ to nhất, k dùng opacity 0 vì nó gộp aria text các thẻ lại, dùng visibility hidden ok nhất vì vẫn chiếm k gian và có ẩn aria-text.
-Visibility hidden + position absolute = display none => sai vì visibility hidden vẫn chiếm chỗ trong layout
-visibility khi transition vẫn được, chỉ là hiện hay ẩn chứ k như opacity nhưng nó vẫn chờ đúng thời gian transition
-
--> Tạo masonry css với grid
-
-
-
-# Responsive chuẩn với grid layout + @container query
-Dùng grid layout hoặc flex để chia bố cục, dùng kèm @container query để style các items
-VD: 1 grid hiện nhiều cards. Khi 1 hàng hiện càng ít thẻ thì card có ảnh sẽ mang style thay đổi 
-.grid-auto-fit {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(min(30ch, 100%), 1fr));
-  container: grid-auto-fit / inline-size;
-}
-.card:has(> img) {
-  // Giả sử mỗi card dài 30ch
-  // Khi tăng lên 2 card 1 hàng, thẻ chứa ảnh chiếm cả 1 hàng
-  @container grid-auto-fit (inline-size > calc(30ch * 2 + 1rem)) { // Chú ý k dùng được css var
-    grid-column: span 2;
-
-    display: grid;
-    grid-template-columns: subgrid;
-    gap: 0;
-
-    > img {
-      grid-column: 2;
-      grid-row: 1 / 4;
-    }
-  }
-
-  // Khi tăng lên 4 card 1 hàng, thẻ chứa ảnh chiếm 2 hàng 2 cột
-  @container grid-auto-fit (inline-size > calc(30ch * 4 + 3rem)) {
-    grid-column: span 2;
-    grid-row: span 2;
-    > :not(img) {
-      grid-column: 1 / -1; => cách khéo léo để bảo chiếm tất cả, thay vì phải viết 1 số span cụ thể
-    }
-    > img {
-      grid-column: 1 / -1;
-      grid-row: 1;
-    }
-  }
-}
-
-
-
-# -> text-shadow và box-shadow: https://html-css-js.com/css/generator/box-shadow/ 
-drop-shadow theo hình dạng ảnh có nền transparent, nó cũng theo màu của hình nếu k xác định màu
-Dùng box-shadow lồng nhau trong 1 thẻ có thể gom nhiều thẻ trừu tượng thành 1: https://www.youtube.com/watch?v=20QiX8rmHnU
-
-box-shadow có thể tạo hình background phức tạp với animation bằng cách dùng inset lồng nhiều màu đè ở các vị trí khác nhau, màu sau sang trái đè lên màu trước đó.
-URL: https://frontendmasters.com/blog/expanding-css-shadow-effects/ 
-
-
-
-
-# Trick responsive flexbox grid
-Xếp flex-basis trước, nếu các thẻ flex-basis k đủ cho 1 dòng sẽ xuống dòng theo flex-wrap. Sau đó mới tính grow, shrink. Do đó có thể lợi dụng flex-basis để kiểm soát số cột
-
-VD grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); Tự xếp column fit vào ô với kích thước 200px nếu có thể. Có thể dãn lớn hơn 200px. Nhỏ hơn 200px thì xuống dòng.
-minmax nếu max nhỏ hơn min thì lấy min. minmax chỉ dùng trong cssgrid.
-1fr đơn vị phân số fraction chia tỉ lệ nhưng bản thân nó k theo kích thước bất cứ container nào cả, chỉ là tỉ lệ các item. Bth nó kiểu max 100% ấy. Nếu cố điền 1fr trong 1 đơn vị yêu cầu kích thước cụ thể sẽ hoạt động k như mong muốn, hay invalid property.
-repeat là hàm trong css có sẵn. Thường dùng là repeat(số/auto-fill/auto-fit, số); Tức là auto-fit và auto-fill là giá trị của repeat chứ klq gì đến grid. Mục số là điền số chứ đừng điền 1fr, có thể dùng minmax(200px,1fr) để full width mà max width.
-Nếu display grid, các item mà k set grid-column hay grid-row, nó sẽ mặc định 1 item là 1 ô. K set kích thước thì 1 ô chiếm cả row, tức chỉ có 1 cột
-Grid có điểm đặc biệt là theo grid. Dòng trên có cột width như nào thì dòng dưới phải có cột width như vậy. Nếu k muốn v thì dùng flex. Muốn height các cột bằng nhau thì set grid-template-rows 1fr hết
-
--> Kỹ thuật responsive:
-1) Tạo dương cực lớn hay âm cực lớn ở 1 mốc.
-Lấy 100% - absolute unit và so sánh với mốc mong muốn rồi *999 => kết hợp min max kiểu lớn hơn 200px thì lấy dương vô cực, nhỏ hơn thì lấy 200px
-2) Max số cột: Dựa vào tính chất xếp k đủ thì tự giảm cột xuống dòng rồi mới xét shrink hay grow. 
-Ta cố tình cho min-width 100% / 4 + 0.1% => kbh 1 row có 4 cột được vì k đủ width, buộc dùng 3 cột kéo dãn là max
-
-VD: grid-template-columns: repeat(auto-fill, minmax(<min-width 1 column>, 1fr));
-
-VD chỉ muốn bo góc ở màn hình lớn:
-.card {
-  border-radius: max(0px, min(8px, calc((100vw - 4px - 100%)*9999)));
-}
-=> 100vw là kích thước screen, 100% là kích thước container. Nếu kích thước container gần như bằng với kích thước screen sẽ thành max(0px,min(8px,âm vô cực)) = 0px. Nếu kích thước container không bằng với màn hình (vì màn hình lớn ta cho container nhỏ ra giữa thôi) thì thành max(0px,min(8px,dương vô cực)) = 8px
-Tức if(!mobile) borderRadius=0px else borderRadius=8px
-
-=>***Cứ tưởng tượng màn hình lớn và màn hình nhỏ thì min max width là gì là chơi dược thôi
-
-
-
-# Responsive css
-Test responsive phải chú ý cả TH VD điện thoại xoay ngang, width có thể gấp 3 lần height và height cực kỳ nhỏ.
-
--> Dùng @media:
-@media not|only mediatype and (mediafeature and|or|not mediafeature) { CSS-Code; }
-với mediatype là: all / print / screen
-media feature là: color, color-index, max-device-aspect-ratio, min-height, min-device-width, min-device-pixel-ratio, resolution, orientation (portrait/landscape)
-orientation portrait/landscape => vì điện thoại xoay ngang và điện thoại xoay khác nhau, k thể chỉ @media theo mỗi width. Mở rộng với min-aspect-ratio
-
-VD: @media (min-width: 100px) {} => tương đương @media all and (min-width: 100px) {}
-VD: @media (min-device-width: 100px) {} => thì kích thước tính cả thanh công cụ và thanh cuộn => k dùng
-VD: @media only screen and (max-width: 480px) and (min-width: 320px){ } => kích thước từ 320->480 của màn hình máy tính or smartphone
-VD: @media only print { } => chỉ cho máy in
-VD: @media (100px <= width <= 300px) {} => luôn dùng
-VD: @media only screen and (max-width: 100px) and (orientation: landscape), screen and (min-width: 100px) {} => Áp dụng cho các thiết bị màn hình có width nhỏ hơn 100px và chiều rộng lớn hơn chiều cao, k bao gồm thiết bị đọc màn hình hay in ấn, đồng thời áp dụng cho mọi loại thiết bị hiển thị bao gồm cả in ấn và thiết bị đọc màn hình nếu width lớn hơn 100px
-Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css">
-=> Các thuộc tính và responsive các kích thước cơ bản: https://freetuts.net/su-dung-media-css-tao-responsive-cho-website-660.html
-
---> @media (prefers-color-scheme: dark) { } là khi user setting dark mode trong phần mềm sử dụng or thay đổi user-agent (light/dark/no-references) => k cần thiết
---> @media (prefers-reduced-motion) {} là khi user setting giảm thiểu animation cho web. Setting này của browser để web ít animation cho đỡ lag.
-
---> K dùng được css var trong @media. VD @media screen and (max-width: --mobile-size){} => sai ngay
-Dùng sass thì vẫn được vì nó phân tích cú pháp và paste vào tại thời điểm compile. CSS thuần thì có package postcss-css-variables giúp làm điều đó.
-
--> Có thể responsive bằng JS với event resize, k sợ browser k hỗ trợ @media 
-Dùng @supports (display: grid) and (not (display: inline-grid)) { } để check browser có hỗ trợ thuộc tính nào không. VD dùng để check nếu k hỗ trợ thì in ra đoạn text "Browser not support this feature!" và display none phần nào sử dụng.
-
--> Container query: xử lý case đôi khi màn hình nhỏ dần mà kích thước container lại tăng
-URL: https://www.youtube.com/watch?v=rrLAg7xNERA
-container-type: size là lấy theo 2 chiều, inline-size là lấy theo 1 chiều ngang thôi. Kích thước container theo chiều được lấy defines kích thước của content.
-@container tự tìm container bao ngoài đúng là parent đầu tiên, dùng thêm container-name nếu muốn rõ ràng hơn.
-Dùng đơn vị 50cqw để set kích thước theo width của container, nếu k có container sẽ dùng như vw
-container: main / inline-size; => shorthands container-name / container-type
-=> Chốt: Dùng container-name chỉ cần set cho phần tử cha, tự dùng container gần nhất bao nó, 50cqw.
-
-->***Có thể responsive tương đối với grid, k cần biết con số cụ thể px để style thủ công nữa
-- flex-basis: set kích thước initial cho flex item và item tự điều chỉnh sau. Set là 0 thì item tự mang kích thước nhỏ nhất fit content. Nếu các item set là auto thì chia đều nhau. Nếu set quá container luôn thì item sẽ max có thể trong giới hạn container thôi. 
-VD: container 100px, item1 50px, item2 30px. Nếu set flexbasis item1 là 1000px thì nó chỉ tới 70 thôi, nếu set flexbasis item1 là 10px thì nó mang width là 50px để hiển thị đầy đủ item
-Các thẻ cố gắng mang kích thước đó, phần space thừa sẽ được chia ra. Các thẻ mở rộng tuỳ vào flex-grow. Nếu container nhỏ hơn thì lại co theo tỉ lệ dựa vào flex-shrink
-- clamp(min,value,max): browser set giá trị là value, nếu value nhỏ hơn min sẽ set là min, lớn hơn max sẽ set là max. Value ở giữa thường là relative.
-- auto-fit: grid sẽ cố gắng "điền đầy" không gian bằng cách dãn phần tử => nên dùng auto-fill hơn vì nó cố điền nhiều cột nhất có thể. Khi chỉ có 1 hàng sẽ thấy rõ.
-- minmax(min,max): container bao nó nhỏ hơn min, lấy min; container bao nó lớn hơn max, lấy max; container nằm giữa, lấy container; Tức nó set gom max-width, min-width thôi.
-=> Kết hợp hàm calc có thể kết hợp relative và absolute, điều này đủ mạnh để thay thế media query.
-
-VD: Chỉ cần grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); là đã tự responsive chia cột, nếu mỗi phần tử k thể lớn hơn 100px sẽ tự giảm 1 cột
-auto-fit hết container, cố gắng fit full width với các phần tử hiện tại khi chỉ có 1 row
-auto-fill những cột còn lại, thì sẽ lấy min width và cố gắng tưởng tượng còn nhiều cột khác xép vào
-VD: (200px - 100%)*999  là check nếu container lớn hơn 200px sẽ trả ra số âm cực bé, và ngược lại là dương cực lớn
-VD flexbox có 2 tag con, tag con sẽ tự hiện lên nếu mang kích thước đủ: https://www.youtube.com/watch?v=LEkFckg7sfw
-.with-sidebar {
-  --main-min-width: 45ch;
-  --sidebar-size: 250px;
-  --gap: 2rem;
-
-  display: flex;
-  gap: var(--gap);
-  flex-wrap: wrap;
-}
-.with-sidebar > * {
-  flex-grow: 1;
-}
-.with-sidebar > :first-child {
-  flex-grow: 999;
-  flex-basis: calc(
-    ((var(--main-min-width) - (100% - var(--sidebar-size) - var(--gap))) * 9999)
-  ); // Tức flex-basis xếp trước vào vị trí, k đủ sẽ đẩy thẻ xuống (flex-basis là NN xuống dòng), sau đó mới tính flex-grow, flex-shrink các thứ
-  // Nếu vừa có flex-basis, vừa có flex-grow, nó vẫn chỉ cố grow đến mức đạt được flex-basis thì thôi, chứ đạt r sẽ k grow quá nữa làm gì
-} 
-.with-sidebar > :last-child {
-  flex-basis: var(--sidebar-size);
-}
-VD code mẫu grid nhảy cột từ 1 tới 4:
-.columns {
-  /* user setting */
-  --min-column-size: 200px;
-  --column-count: 4;
-  --gap: 2rem;
-  
-  /* calculations */
-  --breakpoint: calc(var(--min-column-size) * var(--column-count) + (var(--gap) * (var(--column-count) - 1)) );
-  --column-size: calc((100% / var(--column-count)) - var(--gap));
-  
-  display: grid;
-  gap: var(--gap);
-  
-  grid-template-columns: repeat(
-    auto-fit, 
-    minmax(
-      min(max(var(--column-size), (100% - var(--breakpoint)) * -999 ), 100%), // tức màn > 4 thẻ thì column size bth, màn < 4 thẻ thì column size full width
-      1fr)
-    );
-}
-Có code mẫu tăng dần cột từ 1 tới 1 số chỉ định
-
--> Thêm max-width 100% cho ảnh vì website luôn tự responsive co các item lại rồi => css reset 
-Tư duy responsive: kích thước ta set k cố định mà để cho browser tự set vì nó tự co item khi nó co lại. Ta chỉ cần set, min max để giới hạn k được nhỏ hay lớn hơn bao nhiêu thôi
-Tối ưu @media query, vd muốn màn lớn thì 2 col, màn nhỏ thì 1 col. Mà mặc định grid là 1 col, nên ta để mặc định 1 col, @media min-width thì set 2 cols. Chứ mặc định set 2cols, sau màn nhỏ lại phải chỉnh thì phải sửa grid-template-columns 2 lần lận => thường thì media query toàn dùng min-width
-
-
-
-# Dùng attr trong css
-attr(data-name); mặc định là string chỉ dùng trong content
-Bh có thể dùng với mọi kiểu trừ image url, Vd dùng với color: attr(data-color type(<color>), gray);
-URL list các type: https://una.im/advanced-attr/
-
-Thường ta style cho 1 thẻ hoàn toàn từ css. Chỉ dùng data-attribute khi có các thuộc tính của thẻ hỗ trợ cho việc truy cập từ JS or CSS. 
-- Lúc trước có giải pháp chia sẻ biến giữa html, css, js là dùng custom property:
-<div style="--color: red"></div>
-element.style.setProperty("--color", "red")
-- data-attribute tương tự nhưng dễ thao tác hơn với JS, cũng tiện hơn nhiều TH:
-<div data-color-to-show="red"></div>
-element.dataset.colorToShow = "red"
-
-Check: 
-@supports (x: attr(x type(*))) {
-  .warning {
-    display: none;
-  }
-}
-
--> type(<custom-ident>) là 1 custom identifier có thể trỏ tới id 1 thẻ
-Nên dùng đặt tên cho view-transition-name nhanh chóng
-
--> Tạo tooltip: Dùng thuộc tính title của các thẻ p, div để hover có tooltip sẵn
-Dùng title tốt hơn dùng style css :after content: attr(data-image-to-show);
-
-Nếu phải dùng id, cũng nên thay bằng data-* hơn vì lỡ 1 thẻ muốn duplicate ra chỗ khác khi responsive sẽ bị trùng id chỉ dược ở 1 thẻ.
-
-# Tạo tooltip
---> Tự custom vd tooltip cho thẻ a: cho thẻ a relative bao thẻ b absolute có visibility là hidden -> style hover a thì visibility của b là visible
-visibility vẫn chiếm không gian nhưng k nhìn thấy hay tương tác, dùng với position absolute để thành k chiếm kg.
 
 
 
