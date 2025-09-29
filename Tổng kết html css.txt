@@ -149,9 +149,11 @@ a[href$=".abc" i] => tag a có href kết thúc bằng .abc case insensitive
 ::selection => text được bôi đen
 :visited X :link => :link là <a> chưa visit bao giờ
 p:empty => thẻ p k có text bên trong 
-:nth-last-of-type(2) => sibling cuối cùng thứ 2
+:nth-last-of-type(2) => sibling cuối cùng thứ 2. nth-of-type là cùng loại html tag thứ mấy
+:nth-of-type(2 of .green) => là thẻ thứ 2 có class green.
 p:lang(it) { } => thẻ p có lang là italia. VD: <p lang="it">Ciao bella!</p>
 .grid > :nth-child(4n) => con trực tiếp trong grid mà thứ tự chia hết cho 4
+:has(:nth-child(5):last-child) { } => nếu thẻ có đúng 5 con
 p:only-child { } => thẻ p là con duy nhất của 1 thẻ khác 
 ::initial-letter = ::first-letter => tạo chữ đầu tiên to đùng như đầu bài báo article
 X:before default ở top left, X:after default ở top right, nằm trong thẻ X
@@ -174,7 +176,7 @@ VD read more với CSS only: dùng 2 dùng label + checkbox + :checked để ẩ
 :where(.parent) .child {} thì child vẫn giư specifility của nó là 0:1:0
 VD: .example :is(h1, h2, .link) {} tương đương với .example h1, .example h2, .example .link {}
 - :focus là chính thẻ đó focus. Còn :focus-within là khi bất cứ 1 thành phần bên trong nào của thẻ này được focus, bao gồm ấn tab thì đổi style thẻ này. 
-:focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey
+:focus là chọn bởi chuột hoặc tabkey, :focus-visible là riêng TH chọn với tabkey vì nó visible trên UI
 VD combo button:hover,:active,:focus-visible => hover hoặc click bởi chuột, bàn phím, tabkey
 VD button show dropdown thì dùng :focus-within thay cho :focus để click vào item con thì button cũng k ẩn dropdown, chứ kp chỉ được ấn vào thẻ dropdown cha.
 VD click chuột vào 1 phần tử trong list thì đổi style đơn giản: từng item thêm tabIndex={index}, trong css bắt sự kiện thẻ đó :focus r chỉnh style thoải mái. 
@@ -665,6 +667,20 @@ const uploadData = new FormData();
 uploadData.append("image", imageSending);
 const response = await client.post("/api/v1/event", uploadData, config);
 
+-> Custom select => chưa support rộng
+Dùng selectedcontent sẽ hiện đủ trong option chứ mặc định chỉ hiện phần text k có style
+<select>
+  <button><selectedcontent></selectedcontent></button>
+  <option>
+    <img/>
+    <div>XXX</div>
+  </option>
+</select>
+select, ::picker(select) { appearance: base-select; } // hiện đủ tag trong option thay vì hiện mỗi text k có style
+selectedcontent, option { /* Style cho từng item */ }
+option::checkmark { display: none; } // mặc định có checkmark
+option:checked { /* style cho option trong dropdown khi được check */ }
+
 
 
 # Random trong css
@@ -743,14 +759,17 @@ letter-spacing và word-spacing
 
 # Dùng attr css
 -> attr css giúp lấy giá trị thuộc tính html vào css. 
-- VD lấy ra string:
+- attr mặc định lấy ra string và chỉ dùng được trong css content:
 <button class="btn" data-label="Bấm vào đây">Click</button>
 .btn::after {
-  content: " (" attr(data-label) ")"; 
+  content: " (" attr(data-label) ")"; // Diễn giải là " (" "Bấm vào đây" ")" mà css nối string k cần dấu cộng sẽ thành " (Bấm vào đây)"
 }
-- Dùng được với mọi kiểu trừ image url. URL all type: https://una.im/advanced-attr/
-VD dùng với color: attr(data-color type(<color>), gray);
-- type(<custom-ident>) là 1 custom identifier có thể trỏ tới id 1 thẻ. Có thể dùng đặt tên cho view-transition-name nhanh chóng
+- Cast sang kiểu khác ngoài string để dùng với style khác, trừ image url k cast được: https://una.im/advanced-attr/
+VD dùng với color: attr(data-color type(<color>), gray); có tham số 2 là default value
+- Cách khác là thêm đơn vị vào sau sẽ tự cast mà k cần viết rõ type.
+VD: width: attr(data-width px); or width: attr(data-width %);
+- Có type(<custom-ident>) là 1 custom identifier có thể trỏ tới id 1 thẻ. Có thể dùng đặt tên cho view-transition-name.
+VD: <div data-animation="pulse"> và animation: attr(data-animation type(<custom-ident>)) 1s linear; để convert string sang kiểu custom k còn "
 - Check support: 
 @supports (x: attr(x type(*))) {
   .warning {
@@ -799,6 +818,7 @@ contain: paint; => đảm bảo mọi thứ bên trong 1 thẻ k thể paint ra 
 contain: size; => đảm bảo mọi thứ bên trong 1 thẻ sẽ k ảnh hưởng đến kích thước thẻ đó. Vì bth kích thước thẻ cha tự kéo dài theo kích thước con, nhưng ở đây thì không.
 contain: layout; => đảm bảo thẻ bên trong k ảnh hưởng đến layout các thẻ khác và ngược lại.
 contain: layout paint size; => có thể kết hợp
+contain: style; => css counter hay content open quotes trong css sẽ k ảnh hưởng ra ngoài or vào trong thẻ này
 => Thẻ có content-visibility auto sẽ tự có contain layout tức thẻ bên trong k thể break layout ra bên ngoài
 
 -> Nhanh: 
@@ -931,12 +951,22 @@ scroll-margin dùng ở từng item sẽ cho phép cụ thể 1 item nào đư�
 Thường thì nên để kích thước container chia hết cho kích thước card bên trong
 - scroll-snap-stop: khi lướt quá nhanh sẽ luôn dừng ở từng element (always) hay cho lướt qua (normal)
 
+-> Usecase tạo carousel css only: https://css-tricks.com/css-carousels/ => chưa support rộng
+Dùng grid hiện list card và ::-webkit-scrollbar display none để ẩn scrollbar mặc định
+scroll-snap-type: x mandatory; thẻ cha và scroll-snap-align: center; thẻ con để ấn là dịch từng card ở đúng vị trí giữa
+::scroll-button(left) và ::scroll-button(right) hoặc ::scroll-button(*) để custom 2 button cho scroll
+Dùng anchor-name cho thẻ cha để custom vị trí scroll button trong thẻ cha với anchor position
+Dùng ::scroll-marker-group cho các button dịch chuyển tức thời. scroll-marker-group: after; chỉ định vị trí nó ở dưới carousel
+::scroll-marker thẻ con để custom từng button nhỏ. 
+::scroll-marker:target-current khi đang hiện, ::scroll-marker:hover, ::scroll-marker:focus-visible, ::scroll-marker:disabled khi scroll đến cuối bị disable
+
 -> Nhanh:
 overflow-clip-margin để giới hạn khoảng overflow, còn lại sẽ hidden
 overscroll-behavior: contain để cản scroll chaining
 scroll-behavior: smooth
 Custom style ::-webkit-scrollbar
 Dùng scroll-snap-type kiểm soát vị trí item so với container
+Css new feature carousel css only
 
 
 
@@ -1013,15 +1043,48 @@ Color shifting animation
 # Dark mode 
 Best practice là vào web lần đầu sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu setting mới vào localStorage đè setting browser.
 
--> Các cách tạo darkmode
-- Css có sẵn. VD html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
-Nó gợi ý trình duyệt là web hỗ trợ những mode nào. Nếu dùng "light dark" thì browser tự dùng theo seting. Nếu chỉ rõ color-scheme light hay dark sẽ dùng đúng mode đó.
-Các chỗ dùng màu thì light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào setting browser.
-- style trong @media (prefers-color-scheme: dark) { } được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => Bỏ k dùng
-Vì nếu browser set dark thật thì style bên trong k thể mất, éo đổi sang light được.
+-> Các cách tạo darkmode:
+- Luôn dùng JS: Check darkmode setting browser với window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; rồi dùng setting đó nếu localStorage k có
 - Mặc định Canvas là màu của background, CanvasText là màu của text, sẽ tự đổi tuỳ vào mode hiện tại => Bỏ k dùng
 VD để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
-- Luôn dùng JS: Check darkmode setting browser với window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; rồi lưu vào localStorage
+- style trong @media (prefers-color-scheme: dark) { } được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => Bỏ k dùng vì nếu browser set dark thật thì style bên trong k thể mất, éo đổi sang light được.
+- Css có sẵn. VD html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
+Nó gợi ý trình duyệt là web hỗ trợ những mode nào. Nếu dùng "light dark" thì browser tự dùng theo seting. Nếu chỉ rõ color-scheme light hay dark sẽ dùng đúng mode đó.
+Các chỗ dùng màu thì light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào trường color-scheme
+- Dùng css only chuẩn với if @function style query => k support rộng
+:root {
+  --root-scheme: light;
+  --scheme: light;
+  @media (prefers-color-scheme: dark) {
+    --root-scheme: dark;
+    --scheme: dark;
+  }
+}	
+@scope ([data-scheme]) {
+  :scope {
+    --scheme-from-attr: attr(data-scheme type());
+    --scheme: if(
+      style(--scheme-from-attr: system): var(--root-scheme);
+      else: var(--scheme-from-attr)
+    );
+    color-scheme: var(--scheme); /* Dùng được light-dark() */
+  }
+}
+@function --light-dark(--light, --dark) {
+  result: if(
+    style(--scheme: dark): var(--dark);
+    else: var(--light)
+  );
+}
+[data-scheme] {
+  color: light-dark(#333, #e4e4e4);
+  background-color: light-dark(aliceblue, #333);
+  border: 4px --light-dark(dashed, dotted) currentcolor;
+  font-weight: --light-dark(500, 300);
+  font-size: --light-dark(16px, 18px);
+}
+<body data-scheme="light"></body>
+=> Lần đầu vào thì data-scheme để system lấy system. Nếu đổi theme set vào local storage thì set tiếp vào data-scheme để dùng theme tương ứng. Dùng cả hàm light-dark và custom để dùng cho mọi style khác chứ k chỉ màu
 
 
 
@@ -1067,8 +1130,8 @@ Dùng align-self để chỉnh con ở start hay end so với cha là flexbox. V
 Flexbox chỉnh size của cell lệch dựa vào kích thước item bên trong, shrink hay grow cũng k ép về bằng nhau được. Grid chỉnh cell size dựa vào kích thước set cho container bao ngoài => Nếu cần chia chuẩn cột cho các hàng, nên dùng grid, còn chỉ cần xuống dòng bth thì dùng flex responsive. Flex cũng k xử lý được case row cuối k full.
 
 Bản chất các bước tính flex-basis là thẻ cố đạt kích thước xác định, nếu k đủ 1 dòng sẽ xuống dòng theo flex-wrap, r tính grow shrink. Nếu có space thừa sẽ grow theo flex-grow, nếu container nhỏ hơn sẽ shrink theo flex-shrink. flex-basis là NN xuống dòng, kp flex-grow hay flex-shrink.
-Nếu vừa có flex-basis, vừa có flex-grow, nó chỉ cố grow đến khi đạt được kích thước flex-basis thôi chứ kp cứ set 999 là chiếm cả. 
-Set flex-basis cho item là 0 thì item mang kích thước nhỏ nhất fit content, set auto thì chia đều nhau, set quá container thì item max trong giới hạn container. VD flex-basis là 0 và flex-grow 999, nó sẽ ưu tiên grow thẻ đó đạt được kích thước fit-content.
+Nếu vừa có flex-basis, vừa có flex-grow, nó chỉ cố grow đến khi đạt được kích thước flex-basis thôi chứ kp cứ set 999 là chiếm cả. Chú ý là nếu set flex-basis 100% tất cả các cột, k có shrink hay grow thì các cột sẽ luôn bằng nhau y như grid.
+Set flex-basis cho item là 0 thì item mang kích thước nhỏ nhất fit content, set auto or 100% thì chia đều nhau trong 1 hàng, set quá container thì item max trong giới hạn container. VD flex-basis là 0 và flex-grow 999, nó sẽ ưu tiên grow thẻ đó đạt được kích thước fit-content.
 VD: container 100px, item1 50px, item2 30px. Nếu flexbasis item1 là 1000px thì chỉ tới 70px thôi, nếu set là 10px thì nó mang width là 50px để hiển thị đủ item
 URL: https://www.youtube.com/watch?v=Ns12ALe8aqI => 2 flexbox có content bên trong khác nhau sẽ có tốc độ shrink content khác nhau. 
 Nếu muốn hoạt động giống grid, dùng flex-basis khiến các thẻ content cố đạt được 1 mốc width cố định sẽ giống nhau, còn khi shrink nhỏ hơn mốc đó thì chưa chắc.
@@ -1082,7 +1145,7 @@ inline-block => = inline flow-root
 
 Param 2 là flow-root tạo block formatting content k bị margin collapse, còn lại như default flow: https://www.youtube.com/watch?v=JY0FN71vCbw
 Còn có display list-item khi muốn 1 thẻ hoạt động như 1 item trong list ul li dù k có => k dùng
-Còn có display contents khiến 1 thẻ biến mất khỏi DOM nhưng ta vẫn css selector từ nó để style cho thẻ con được => k dùng
+Còn có display contents khiến 1 thẻ biến mất khỏi DOM nhưng ta vẫn css selector từ nó để style cho thẻ con được
 Còn có display table khi hoạt động như table, 1 thẻ dùng display table-column sẽ k hiện nếu thẻ này k nằm trong 1 table => k dùng
 
 -> Dùng min-width: fit-content; cho thẻ con để fix case muốn thẻ con ưu tiên xuống dòng mới thay vì wrap content ở màn hình nhỏ, chỉ wrap khi k thể xuống dòng mới được.
@@ -1107,6 +1170,7 @@ Có thể dùng tạo masonry grid
 grid-auto-rows => set kích thước chiều cao mặc định cho row mới được thêm vào, nếu ta k set bằng grid-template-rows cho nó thì sẽ lấy cái này
 
 grid-template-columns: 10% 10% 10%; hoặc repeat(3, 10%) => chia 3 thẻ bên trong làm 3 cột, một cột chiếm 10%. 
+grid-template-column: 1fr 14rem; thì cột 2 chiếm 14rem, cột 1 chiếm phần content còn lại => dùng fr thay % vì fr fill content còn lại, % có thể bị tràn nếu có gap chẳng hạn.
 grid-template-columns: repeat(3, minmax(200px, 1fr)); => có thể tự động responsive min item width 200px.
 Có thể tạo container với line names tự định nghĩa. Browser Elements -> Layout -> show line names để thấy grid line names
 
@@ -1244,7 +1308,7 @@ Còn có color-index là thiết bị màn hình dạng indexed color, hay min-a
 Có thể responsive từ thẻ link, kiểu chia mỗi màn 1 file css. VD <link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css"> => k dùng
 
 @media (prefers-color-scheme: dark) { } => setting dark mode cho browser
-@media (prefers-reduced-motion) { } => setting giảm animation được bật.
+@media (prefers-reduced-motion) { } => setting giảm animation được bật. Có thể bật chế đ
 
 -> Dùng @container: xử lý case screen nhỏ dần mà kích thước container lại tăng. 
 URL tut: https://www.youtube.com/watch?v=rrLAg7xNERA
@@ -1269,11 +1333,16 @@ translate tương tự như position relative và chỉnh vị trí với top ri
 
 -> Bản chất transform 3D: https://www.youtube.com/watch?v=niwUUtgn4-o
 Sample căn phòng 3d: https://codepen.io/ricardoolivaalonso/pen/mdPzrpe
-- Perspective chỉnh kc từ mắt đến vật. Mặc định nó nhìn từ rất xa, VD hình vuông nghiêng nhìn từ kc xa sẽ thành hcn chứ k thấy độ lệch.
+- Perspective chỉnh kc từ mắt đến vật. Mặc định nó nhìn từ rất xa, VD hình vuông nghiêng nhìn từ kc xa sẽ thành hcn chứ k thấy độ lệch, như flat plane.
+Perspective càng nhỏ không khiến vật lớn hơn vật ở gần mắt hơn khiến cho s3D space rõ ràng hơn, sự thay đổi trên trục z rõ hơn.
 Nếu perspective 1000px và 1 mp translateZ 500 sẽ nhìn tương tự perspective 100 và mp cách mắt 50, vì qtr là ratio như nhau. Nhưng nếu perspective là kc từ mp đến mắt nhỏ khi rotate sẽ bị nhìn gần quá, ảnh bị phóng to méo nên xấu, nên thường thấy perspective lớn.
 Luôn dùng perspective responsive theo vw giúp co nhỏ khi thu nhỏ màn hình mobile ok.
 - transform-style: A chứa B thì xoay A, B cũng xoay theo. transform-style: flat; mặc định khiến cho vị trí đó trở thành kích thước và vị trí mới của thẻ B luôn, nếu xoay B -60 độ thì nó xoay cái hình méo đó tiếp làm thẻ B nhỏ hơn nữa (xoay xong flat ra thành mp r xoay tiếp mp đó). 
 transform-style: preserve-3d; thì thẻ B tách rời với thẻ A và k bị flat nữa nên xoay -60 độ sẽ trở lại kích thước và vị trí ban đầu
+
+-> Usecase tạo 3D layer text: https://css-tricks.com/3d-layered-text-the-basics
+Cơ chế tạo chữ phồng lên là dùng nhiều layer đè nhau, cách nhau 1px trục z thôi. Animation trục z tạo hiệu ứng chữ nổi lên xẹp xuống.
+Cách dùng 3D cũng đỉnh
 
 
 
@@ -1281,24 +1350,44 @@ transform-style: preserve-3d; thì thẻ B tách rời với thẻ A và k bị 
 Search #topcsseffects trong youtube => ra animation đủ loại cả ngàn video css animation.
 
 -> transition: [transition-property] [transition-duration] [transition-delay] [transition-timing-function];
-transition-behavior: allow-discrete; cho phép animation vẫn chạy được khi có thuộc tính không phải số hoặc kiểu padding 0 -> unset, fontSize 0 -> unset
-transition-timing-function VD cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm
+transition-behavior: allow-discrete; cho phép animation vẫn chạy khi đổi các thuộc tính rời rạc kiểu display, visibility, content-visibility
+transition-timing-function VD cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm. URL: https://cubic-bezier.com
 transition-property k thể animation ảnh như background-image, animation màu thì nên dùng hue-rotate
 VD: transition: all 1s 0.5s ease-in;
 VD: transition: width 2s, height 2s, transform 2s;
 VD: react dùng style={appear ? {fontSize: "unset"} : {fontSize: 0, padding: 0, opacity: 0}} + transition + transition-behavior allow-discrete
 
+--> interpolate-size: allow-keywords; cho phép animate theo các giá trị auto, min-content, max-content, fit-content. VD padding 0 -> unset.
+Luôn để transition-behavior allow-discrete và interpolate-size allow-keywords ở :root để áp dụng với mọi thẻ
+
+--> JS có event "transitionend" và "animationend"
+VD muốn 1 thẻ faded rồi biến mất bằng JS thì dùng transition opacity + "transitionend" để gán display none là được.
+
 -> animation: [animation-name] [animation-duration] [animation-timing-function] [animation-delay] [animation-iteration-count] [animation-direction] [animation-fill-mode] [animation-play-state];
 animation-duration là thời gian từ lúc bắt đầu cho đến khi kết thúc
-animation-delay là thời gian chờ trước khi hiệu ứng bắt đầu chạy
+animation-delay là thời gian chờ trước khi hiệu ứng bắt đầu chạy. Có thể set số âm để bắt đầu nh animation lần lượt nhau ở giữa.
 animation-iteration-count dùng số or infinite, số float cho ra animation dừng giữa chừng
 animation-direction normal là đi về phía trước, reverse là về phía sau, alternate chạy xuôi rồi ngược lại, alternate-reverse chạy ngược rồi xuôi.
-animation-fill-mode là khi kết thúc animation, nếu none or k set gì thì mặc định jump về style ban đầu lúc chưa chạy animation, nếu set forwards sẽ dùng giá trị khung hình cuối, backwards dùng giá trị khung hình chính ở đầu animation (lúc 0%); both là hòa trộn forward và backwards; 
-animation-play-state: paused hay running
+animation-fill-mode là khi animation end, nếu none or k set gì thì default jump về style ban đầu lúc chưa chạy animation, nếu forwards sẽ dùng giá trị khung hình cuối, backwards dùng giá trị khung hình lúc 0%; both là trộn forward và backwards; Bản chất style thêm sau đè lên style thêm trước, forwards thêm style cuối của keyframe vào thẻ.
+animation-play-state: paused hay running. VD :hover mới chạy keyframe animation thì có thể dùng animation-play-state để tạo.
 VD animation: name(hello) duration(2s) timing(linear) delay(2s) inter-count(infinite) direction(alternate/normal) both running;
 
 URL full tut cả animation svg, 3d: https://viblo.asia/p/tap-tanh-tim-hieu-css-animation-bai-1-transition-4dbZNprL5YM
 VD https://www.youtube.com/watch?v=M1qPpwVcF64 => Khi hover mới có animation hover thì để animation-play-state paused, hover thì running để tránh chạy mãi ngốn CPU.
+
+- Nếu chỉ có to: nó sẽ animation từ thuộc tính hiện tại đến to
+- Nếu chỉ có from: nó sẽ animation từ from tới thuộc tính hiện tại. 
+- Nếu có cả from và to mà thuộc tính k khớp sẽ jump
+
+--> Nếu có nhiều animation giống nhau chỉ hơi khác thuộc tính 1 xíu với từng thẻ, có thể gom với css var.
+VD: @keyframes oscillate {
+  from { transform: translateX(calc(var(--amount) * -1)); }
+  to { transform: translateX(var(--amount)); }
+}
+
+--> Ứng dụng animate to dynamic value: https://www.joshwcomeau.com/animation/partial-keyframes/#animating-to-a-dynamic-value-3
+Animation có thể kết hợp multiple chạy tất cả song song, cộng 2 đồ thị. 
+1 animation dao động, 1 animation chỉ có from sẽ combine khiến animation chạy từ from tới cái còn lại. VD Tạo twinkle animation.
 
 -> Usecase hover button to ra: 
 - Nên cho button to sẵn và hover thì scale nhỏ lại về ban đầu.
@@ -1306,241 +1395,261 @@ VD https://www.youtube.com/watch?v=M1qPpwVcF64 => Khi hover mới có animation 
 will-change: transform; đưa gợi ý cho browser biết trước sẽ thay đổi như nào để optimize, có thể gây lag vì expensive cho browser nhưng fix mờ
 backface-visibility: hidden; chặn hiển thị mặt sau giúp giảm mờ.
 
-//!!!!!!!!
--> animation-timeline giúp control thuộc tính animation phụ thuộc vào hành động của user hoàn toàn bằng css. VD chỉ khi scroll thì animation mới chạy, tạo parallax
-view(), scroll(), scroll-timeline-name: --squareTimeline;
+-> Animation với transform 
+- rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
+- keyframe transform: rotateZ(-45deg) translateX(50px) rotateZ(45deg); thì thứ tự viết các hàm ảnh hưởng tới animation, vì hàm sau phụ thuộc vào hệ toạ độ biến đổi từ hàm trước đó. Sau cùng nó gom đồ thị thành 1 và chạy animation 1 cục luôn. Ở case này sẽ di chuyển đường vòng cung.
+VD rotateZ sẽ rotate cả trục tọa độ nên nếu rotateZ rồi translateX khác với translateX rồi rotateZ
+- Để animation 1 set thẻ, nên nhét tất cả vào 1 thẻ container và animation thẻ container là được
 
--> Hiểu nguyên tắc xếp chồng code css: style được thêm vào sau sẽ đè lên style được thêm vào trước đó. Ở mỗi thời điểm, ta chỉ cần hiểu nó có style gì là được. VD animation forwards thực tế là style cuối cùng được thêm vào thẻ và cố định như v luôn.
-transition sẽ luôn giúp thuộc tính css bị biến đổi từ từ nếu có sự thay đổi. 
-Nếu muốn khác đi, nên dùng animation keyframes. Mọi lúc animation có sự thay đổi khác biệt đều là 1 keyframes riêng. 
-VD: animation ẩn và hiện, néu dùng keyframes thì buộc lúc hiện và ẩn là 2 keyframes phải tạo ra.
-=> Tưởng tượng animation như các stack xếp chồng lên nhau khi set sẽ dễ hơn
+-> Playback 1 animation
+- Nếu muốn đổi animation từ nhanh sang chậm khi ấn nút, thì bao bằng 1 thẻ khác và animation ngược lại với cường độ nhỏ hơn, ấn thì đổi animation-play-state paused sang running
+- Nếu 1 animation k có infinite, sẽ chạy đúng số lần r dừng, thay đổi các thuộc tính animation k khiến nó trigger lại. Để trigger lại, phải đổi animation-name. VD tạo 1 animation giống hệt, rồi liên tục thêm bớt animation thứ 2 để trigger liên tục, thực chất là 2 cái so le
+Dùng css only có thể trigger animation liên tiếp mỗi khi click button bằng cách gán or remove 1 animaition y hệt nhưng khác name.
 
--> Trong js có event "transitionend" bắt khi quá trình transition kết thúc.
-VD: ta muốn 1 thẻ bị faded rồi biến mất. Nếu ta dùng keyframes với opacity sẽ k biến mất, nếu dùng display sẽ k có animation. Có thể dùng opacity rồi bắt sự kiện "transitionend" để gán display none là được.
-Cách khác là setTimeout đúng bằng thời gian transition rồi xoá thẻ.
-=> Tương tự có sự kiện animationend
-
--> interpolate-size: allow-keywords; quá mạnh, cho phép animate theo các giá trị auto, min-content, max-content, fit-content
-VD text dài thì min-content thì chỉ đủ kích thước 1 từ dài nhất, max-content là khi text trải dài hết ra
-=> Luôn để ở :root sẽ áp dụng với mọi thẻ
-Còn transition với display none có thể dùng allow-discrete trong transition-behavior
-
--> Keyframe:
-Nếu bỏ from: nó sẽ animation từ thuộc tính hiện tại đến to
-Nếu bỏ to: nó sẽ animation từ from tới thuộc tính hiện tại. 
-Nếu có cả from và to mà thuộc tính k khớp sẽ nhảy
-
---> Ứng dụng animate to dynamic value: https://www.joshwcomeau.com/animation/partial-keyframes/#animating-to-a-dynamic-value-3
-Kết hợp 2 animation sẽ chạy song song: 1 cái giá trị động, 1 cái chỉ có from sẽ combine đồ thị 2 cái khiến animation chạy từ from tới cái còn lại
-Tạo twinkle animation cho particle được
-
--> Có nhiều animation giống nhau thì có thể kết hợp với css animation chứ k cần tạo animation riêng cho từng thẻ.
-VD: @keyframes oscillate {
-  from {
-    transform: translateX(calc(var(--amount) * -1));
-  }
-  to {
-    transform: translateX(var(--amount));
-  }
-}
-
-# Master animation với transform 
-1) Thứ tự transform có ảnh hưởng tới object di chuyển, rotateZ sẽ rotate cả trục tọa độ nên nếu rotateZ rồi translateX khác với translateX rồi rotateZ
-2) transform origin mặc định ở top left
-3) rotate xoay các trục theo chiều kim đồng hồ khi các trục chỉ vào mặt mình
-4) keyframe transform: rotateZ(-45deg) translateX(50px) rotateZ(45deg); => nó khiến object đi đường vòng cung và k bị xoay vì các animation thực hiện đồng thời. Nó sẽ rotateZ, đi trục x, rotateZ ngược lại. Tức là ở mỗi bước di chuyển, nó rotateZ và đi trục x đồng thời làm đường vòng cung. Sau đó rotateZ ngược lại khiến object quay về vị trí ban đầu. Quá trình cực nhanh ở mỗi bước. Nó k đi chéo luôn vì quá trình rotate và đi trục X đồng thời chứ kp rotate xong mới đi x, cuối cùng mới rotate ngược về
-5) Để animation 1 set thẻ, ta nhét vào 1 thẻ container và animation thẻ container là được
-6) Animation k tự chạy lại khi đã chạy xong đúng số lần, nếu muốn chạy lại, phải gán tiếp lại class có animation cho nó.
-7) Mỗi giai đoạn di chuyển khác nhau nên có 1 animation riêng. Khi đã có animation xuôi, k nên tái sử dụng animation ngược lại với direction reverse mà hãy tạo 1 keyframe mới vì nhiều lúc lỗi k hiểu tại sao.
-8) Nếu vị trí from của animation k trùng với vị trí ban đầu, vật sẽ nhảy sang state đó r animation tiếp rất xấu. State trước khi chạy animation cũng chính là from
-
--> Multiple animation liên tiếp nhau sử dụng animation-delay và set phần trăm chuẩn trong @keyframes
-
-
-
-# Vấn đề trigger lại animation
--> Playback 1 animation cũ: 
-1) Bth animation chạy 1 lần sẽ k trigger lại, nhưng nếu gán cho 1 animation khác r remove animation đó thì animation cũ sẽ trigger. Điều này chỉ được khi đổi animation-name.
-Nhờ v, có thể tạo 1 animation giống hệt nhau, rồi liên tục thêm bớt cái animation thứ 2 để animation trigger liên tục thực chất là 2 cái so le
-2) Đổi trạng thái animation từ nhanh sang chậm khi ấn nút, ta bao bằng 1 thẻ khác và animation ngược lại với cường độ nhỏ hơn, ấn thì đổi animation-play-state paused sang running
-
--> Trong JS để tạo ra 1 animation, ta thêm 1 class animate vào thẻ đó, nhớ xoá đi khi k cần nữa.
-Mỗi lần xoá rồi thêm class sẽ chạy lại animation, nhưng VD nếu muốn animation thêm lần nữa theo đk của JS thì k được. Nếu remove rồi add lại class sẽ k chạy animation.
-Có nhièu cách fix:
-- Trigger reflow ép ở giữa sẽ khiến browser buộc render lại ngay:
+--> Playback animation bằng JS: xoá rồi thêm lại class sẽ trigger animation, nhưng làm bằng JS sẽ k chạy khi xoá r thêm lại class quá nhanh.
+Để fix:
+- Trigger reflow ép ở giữa khiến browser buộc render lại ngay:
 animatedElement.classList.remove('animate');
 void animatedElement.offsetWidth; // forces reflow
 animatedElement.classList.add('animate');
-
-- Dùng timeout cực ngắn: cách này k đảm bảo sẽ chạy animation ở mọi trường hợp 
+- Dùng timeout cực ngắn => k dùng, k đảm bảo sẽ chạy mọi trường hợp 
 animatedElement.classList.remove('animate');
 setTimeout(() => {
-    animatedElement.classList.add('animate');
-}, 10); 
-=> Để 10ms là đủ khiến browser nhận ra và render lại.
-=> Có thể để là 0 thì chạy ngay event loop sau.
+  animatedElement.classList.add('animate');
+}, 10);
+=> Để 10ms là đủ để browser nhận ra và render lại, để là 0 thì chạy ngay event loop sau.
 
--> Css only
-VD click 1 button thì trigger animation X chạy 1 lần (css only với flex box gán animation name), click lần nữa trigger tiếp sẽ k chạy
-
-Nếu k dùng css only, có giải pháp là đặt setTimeout cực ngắn ngay khi checked thì unchecked luôn. Cẩn thận toang khi ngừoi dùng ấn liên tục cực nhanh
-Néu dùng css only, cách duy nhất là đặt 2 animation giống nhau nhưng khác tên. Gán qua gán lại để đổi qua animation khác khi unchecked và checked là ok thôi
-=> Tức là animation css only sẽ k trigger lại, chỉ có cách đổi qua animation khác
-
-
-
-# Animate SVG
+-> Animate SVG:
+URL vẽ svg đơn giản: https://editor.method.ac/
+- SVG có thể có animation sẵn, hoặc tự style animation cho các thẻ g, path là 1 phần của svg icon được.
+- Animate line trong svg bản chất là animate thuộc tính stroke-dashoffset thôi
 stroke-dasharray: 5,3; tức là 5 pixel liền thì có 3 pixels đứt sau đó và cứ tiếp tục vẽ đến hết hình
-stroke-dashoffset xác định điểm bắt đầu vẽ của stroke-dasharray.
+stroke-dashoffset: 100; xác định điểm bắt đầu vẽ của stroke-dasharray.
 
-Bản chất animate line svg là nó animate thuộc tính stroke-dashoffset thôi
-VD vẽ animation trên trang https://editor.method.ac/ rồi svg từng phần tử
+-> CSS sprite animation: có thể custom play, pause, chạy khi hover or click phức tạp, kiểm soát frame rate, kết hợp animation timeline cho scroll mà video hay gif k làm được.
+https://ezgif.com/gif-to-sprite => convert ảnh động gif, apng or video sang sprite image với. Kết hợp hàng loạt ảnh gif trên trang giphy.
+https://opengameart.org/ => search sprite có sẵn
 
--> Animate svg khi hover: các tag svg dùng đc animation css như bth, dùng cho các thẻ path hay g bên trong để animate 1 phần của icon cũng được luôn
-Khi đó ta gán id cho nó, set animation-play-state là paused mặc đinh, khi hover vào thì đổi lại thành running là ok
-
-
-
-# CSS sprite animation
-Nhét mọi frames vào chung 1 bức ảnh và animate bằng cách hiển thị từng frame
-animation-timing-function có hàm step(<số>); sẽ chia đều các khoảng được khai báo thành 1 lượng frame rồi nhảy từng frame
-VD: animation: play 1s steps(10) infinite;
-@keyframes play {
+Nhét mọi animation frames vào chung 1 bức ảnh và show nhanh từng frame trong ảnh để animate.
+animation-timing-function: step(<số>); sẽ chia đều các khoảng được khai báo trong keyframes là từng frame rồi nhảy nhanh qua từng frame.
+VD: @keyframes play {
   0% { background-position: 0 0; }
   10% { background-position: 100px 100px; }
   100% { background-position: 0 0; }
 }
-=> thì nó sẽ hiển thị background ở các vị trí khác nhau. Từ 0% đến 10% sẽ chia làm 10 frames và hiển thị lần lượt, từ 10% đến 100% lại chia 10 frames và hiển thị lần lượt
+animation: play 1s steps(10) infinite; => Từ 0% đến 10% sẽ chia làm 10 frames và hiển thị lần lượt, từ 10% đến 100% lại chia 10 frames và hiển thị lần lượt, trong 1s.
 
-Có thể convert gif or video sang sprite image với https://ezgif.com/gif-to-sprite
-Có thể lấy hàng loạt ảnh gif trên trang giphy.
-Search sprite basic trên trang: https://opengameart.org/
-APNG cũng là 1 loại ảnh png nhưng có animated
+-> Nhanh:
+transition và animation
+Playback 1 animation với css và js
+Animate svg
+CSS sprite animation
 
--> Tại sao k dùng video hay gif mà dùng sprite css animation?
-Vì css sprite animation có thể custom play, pause, chạy khi hover or click, kiểm soát frame rate, kết hợp với animation timeline cho scroll animation 
-Có thể tạo animation phức tạp như trong game.
 
+
+# Animation advance parallax
+-> Tạo parallax với JS: object chuyển động dị dạng, font chữ và box to nhỏ.
+- Để làm các thẻ đè lên nhau, dùng position absolute or fixed hoặc grid-template-areas mọi thẻ cùng 1 grid-area, để di chuyển dùng transform như bth.
+- Để style theo scroll, dùng JS thay đổi css var --scroll và style css theo biến đó.là được.
+URL: https://css-tricks.com/books/greatest-css-tricks/scroll-animation/ => 1 công thức duy nhất: window.addEventListener('scroll', () => { document.body.style.setProperty('--scroll', window.pageYOffset / (document.body.offsetHeight - window.innerHeight)) }, false);
+VD scroll thẻ đi ngang, đến 1 mốc thì đi như bth: cho thẻ position fixed ở cuối màn hình, scroll thì translateX thẻ đó đi ngang và 1 thẻ trống có height cao để scroll
+- Kết hợp công thức hoán đổi khoảng css var từ phạm vi scroll sang phạm vi animation của thẻ: (scrollVar - oldMin) * newRange / oldRange + newMin 
+VD: calc(-1% * (max(var(--scroll), 25) - 25) * 100 / 75)
+Để convert 1 giá trị sang 1 đơn vị khác, ta dùng phép nhân. VD 1vw*var(--value) là ta đang convert sang đơn vị vw 
+
+-> Usecase parallax hover chuột thì card chuyển động nghiêng theo
+Cơ chế là xđ vị trí chuột clientX clientY bằng JS để thay đổi css var. CSS thì :hover thẻ nào sẽ nghiêng thẻ đó với rotateX, rotateY, scale3d, rotate3d theo css var.
+
+-> Tạo scroll parallax css only:
+- Check browser hỗ trợ không. VD: @supports not (animation-timeline: scroll()) { }
+Check browser có reduced motion không, no-preference là khi không reduce motion: @media (prefers-reduced-motion: no-preference) { }
+- animation-timeline: scroll(<axis> <scroller>); chạy animation khi scroll cả page top tới bottom.
+axis: x / inline / y / block (default)
+scroller: nearest (default) / root / self 
+nearest là check thẻ gần nó nhất bị scroll thì chạy animation, để chỉ chạy effect với scroll ngoài cùng thì dùng scroll(root);
+VD tạo thanh loading ngang khi scroll bằng css thuần với animation-timeline scroll(block):
+- animation-timeline: view(<axis> <inset>); chạy animation khi thẻ đi từ vị trí nào đến vị trí nào của viewport
+axis: x / inline / y / block (default)
+inset: auto / số% => có thể là 1 or 2 giá trị
+animation-timeline: view(x 200px auto); => animation theo chiều ngang tính bắt đầu từ cách mép viewport 200px, điểm kết thúc là auto để browser tự tính.
+Hoặc dùng animation-range kiểm soát điểm start và end của timeline, default thì animation bắt đầu khi mới vào viewport và kết thúc khi hiện đầy đủ trong viewport.
+VD scroll animation với text: https://www.youtube.com/watch?v=d10GaL6F-lA
+- animation-timeline: --squareTimeline; => animate theo scroll của thẻ có scroll-timeline-name: --squareTimeline; 
+
+-> Usecase full project parallax với photoshop: https://www.youtube.com/watch?v=Yo3j_Dx4u7c
+Cơ chế để move chuột thì các thẻ di chuyển full màn thì ảnh phải to hơn màn hình 1 chút, body overflow hidden, khi di chuột thì transform các layer ảnh với tốc độ khác nhau.
+Để khiến nó realistic hơn, ta cần move nó cả trục z và thêm rotateY 1 chút, phải dùng kèm perspective.
+VD: transform: translateX(...) translateY(...) perspective(2300px) translateZ(1000px);
+Dùng kèm @media check case heigth lớn hơn width vì khi đó ảnh nên to ra theo height thay vì theo width. Check xóa hết width về initial, set kích thước theo height là đươc.
+Khi vào page lần đầu cần có animation reveal, hiện page loading đảm bảo tải hết tài nguyên, sau đó set vị trí start và apply chạy reveal animation 1 lần tới vị trí bth. Cần đảm bảo khi load lần đầu và reveal animation thì mọi actions đều k thực hiện được như click mouse k tác dụng.
+
+-> Usecase stack card dính ở top khi scroll: cho các thẻ position sticky và set top-padding cho từng card chênh nhau 1 khoảng theo index là xong.
+
+
+
+# Usecase responsive marquee css only
+-> URL simple: https://www.youtube.com/watch?v=iLmBy-HKIAw
+Giải pháp là double các thẻ html và align animation hoàn hảo cho lần jump ở giữa với translate calc(50% - gap/2)
+
+-> URL: https://frontendmasters.com/blog/infinite-marquee-animation-using-modern-css/ => chưa support rộng
+offset: path() giúp định nghĩa 1 đường đi, kèm offset-path sẽ chỉ định vị trí trên path đó theo %, kèm offset-distance để di chuyển object theo path.
+Dùng shape thay cho path vì shape tương tự nhưng có thể kết hợp với css function phức tạp. VD: path("M100 100 h200"); tương đương với shape(from 100px 100px, hline by 200px);
+sibling-count() là hàm đếm có bao nhiêu sibling là các thẻ cùng là con trực tiếp của thẻ cha của hiện tại, k fix cứng gì cả.
+VD offset: shape(from calc(var(--image-size)/-2) 50%, hline by calc(sibling-count() * var(--image-size))); => bắt đầu từ sát bên trái ngoài màn hình, 1 đường ngang dài bằng kích thước số lượng element
 
 
 
 # Xử lý image
+Hạn chế dùng ảnh gif vì nó nặng hơn video rất nhiều, dùng APNG hơn.
+
+-> clip-path:
 URL: https://bennettfeely.com/clippy/ => kích thước vẫn thế nhưng hiển thị cut ảnh clip-path
 URL: https://www.youtube.com/watch?v=oWXm5n-Zi38 => thực sự học master clip-path
-URL: https://css-generators.com/svg-to-css/ => convert hàm path thành hàm shape dùng cho clip-path trong css. Shape y hệt nhưng friendly hơn thôi.
-URL: https://yqnn.github.io/svg-path-editor/ => linh động hơn
+URL: https://css-generators.com/svg-to-css/ => convert hàm path thành hàm shape dùng cho clip-path trong css vì shape tốt hơn.
+URL: https://www.youtube.com/watch?v=A5GXdjEOvos => ứng dụng clip-paths tạo diamond grid
 
-=> Ứng dụng tạo diamond grid: https://www.youtube.com/watch?v=A5GXdjEOvos&list=WL&index=98
-
--> Vì để phòng khi ta dùng ảnh low res load trong background-image. Nên kết hợp với: 
-<link rel="preload" as=image href="./lowresimage.png" fetchpriority=high>
-Thẻ <img> nên luôn set width height ngay trong nó để tránh layout shift, kèm với background-image low res.
-
--> Có multiple background image. background-size background-image background-repeat background-color (dùng kèm background image được sẽ nằm ở dưới)
-background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center hay 0 0 là tâm ảnh trùng tâm khung hay 0,0 của ảnh trùng 0,0 của khung. background-image hiện trong phạm vi content, nếu dịch tràn ra ngoài sẽ k dịch chuyển trừ khi cho repeat hoặc background-size lớn 
-
-background: <background-color> <background-image> <background-position> / <background-size> <background-repeat> <background-attachment> <background-origin> <background-clip>;
-VD: background: red url('image.jpg') center / cover no-repeat fixed padding-box content-box;
-
-background-origin xác định vị trí của background image theo content. 
-background-clip text => sẽ lồng background image vào trong text, buộc phải bỏ màu của text mới hiển thị ảnh, color or -webkit-text-fill-color: transparent; => giải quyết vđ k set gradient color cho text color đc
-background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
-background-attachment: scroll mặc định là trôi theo page scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax
-
-background-repeat space tương tự repeat nhưng repeat bị cắt khi ra ngoài phạm vi vì kích thước content k thể luôn chia hết cho kích thước background được. Còn space sẽ xếp mà k bị cắt, khoảng trống thừa ra sẽ chia đều giữa các ảnh
-
-VD: background-origin apply cho cả background-color và background-image, k thể chỉnh riêng hay chia từng image
-
--> Các thuộc tính image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters
-
--> Layer mask: mask là shorthand của mọi thuộc tính mask-* trong css
-Dùng style cho 1 thẻ để tạo 1 lớp hiệu ứng bên trên thẻ đó. VD hiển thị bức ảnh theo phần ảnh của 1 bức ảnh khác, ta cho bức ảnh khác đó lên 1 lớp bên trên.
-VD mask-image: linear-gradient(black, transparent);
-VD mask: url(masks.svg#star) 0 0/50px 50px no-repeat; => đặt mask tại vị trí 0 0 từ top left và width height mask là 50px 50px, lấy thẻ có id là star trong hình svg
-VD mask: url(masks.svg#star) left / 16px repeat-y; => element là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
-VD Mask mờ 2 bên thẻ:
-mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0, 0, 0, 0) 100%);
--webkit-mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0, 0, 0, 0) 100%);
-Còn có mask composite
-
--> Setup image:
-Setup ảnh object-fit contain, object-position center center, min-width width aspect-ratio, border-radius, overflow hidden
-
---> Dùng onError check ảnh lỗi thì hiển thị ảnh lỗi mặc định chứ k show hình lỗi xấu.
-HTML có thẻ object show mọi loại media, nếu bị lỗi sẽ tự show thẻ con của thẻ object rất hay => ít dùng vì kp chuyên cho ảnh.
-onLoad check ảnh tải xong => có thể dùng ẩn spinner nếu dùng 1 thẻ spinner riêng hay lấy kích thước ảnh sau khi tải xong.
-
-VD: <img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/defaultiamge';" >
-Việc dùng this.onerror=null chống lỗi infinity loop. Lỗi này xảy ra ở 1 số trình duyệt khi chính ảnh để ta fix lại bị lỗi xong lại chạy onerror lại lỗi và cứ lặp vô tận
-Nếu sợ lỗi infinite loop, thì có thể set 1 bức ảnh backup onerror local đảm bảo luôn tồn tại là được => ***nếu sợ lỗi mạng, dùng base64 cho blur image đảm bảo ảnh đó sẽ luôn exist.
-
---> Dùng lib: Khi làm với react thì onError k hỗ trợ mọi browser nên thư viện react-lazy-load-image-component sẽ lo điều đó với mọi browser
-Thuộc tính PlaceholderSrc của LazyLoadImage nhận 1 ảnh kích thước nhỏ để hiển thị ra trước khi ảnh lớn được load. Ta có thể giảm độ phân giải ảnh bằng các công cụ chỉnh sửa để thế vào, thêm effect="blur" để làm mờ ảnh placeholder được
-Lib react-progressive-graceful-image rất phù hợp dùng được thay thế cho tag object của html hiển thị ảnh placeholder, nếu ảnh lỗi thì chỉ hiển thị placeholder mặc định
-
---> Lazy loading ảnh: thuộc tính loading="lazy"/"eager" có sẵn của html
-
---> Ảnh nên nhét vào 1 container có aspect ratio và width responsive: có thể set contain và hiện trong khung, hoặc cover theo 1 trong 2 chiều, hiện ở tâm
-Luôn set min-width min-height cho ảnh giảm layoutshift khi load xong
-
--> Ưu tiên dùng ảnh SVG để tránh bị mờ khi zoom lớn: svg dùng đồ họa vector có animation. Có thể tách file html riêng và cho vào <img>, or nhúng trực tiếp néu cần style.
-SVG Sprites là pp gom các ảnh từng phần vào 1 file duy nhất và chỉnh vị trí cho chuẩn. Thay vì server nhận nhiều request từng tấm ảnh nhỏ thì chỉ cần 1 bức SVG là được
+URL: https://yqnn.github.io/svg-path-editor/ => vẽ ảnh svg cực mạnh, có thể dùng cho clip-path
+Ưu tiên dùng SVG nếu có thể để tránh mờ khi zoom lớn: có thể tách file riêng or nhúng trực tiếp html hay sửa style tuỳ ý. SVG sprites là pp gom các ảnh svg từng phần vào 1 file duy nhất và chỉnh vị trí, FE k cần query từng phần svg 1 mà 1 cục luôn.
 Có nhiều tool giúp vẽ tay SVG: https://topdev.vn/blog/svg-la-gi/
 
--> Các pp tạo ảnh mờ làm placeholder thay vì 1 màu xám hoặc 1 ảnh default hoặc skeleton loading:
-- Tạo ảnh mờ mà ta có sẵn thì thu nhỏ r phóng to là xong
-- Ảnh người dùng nhập có thể dùng BlurHash - lib giúp tạo ảnh mờ từ 1 ảnh khác, paste ảnh vào và lấy ra hash làm mờ.
-- Data URL là 1 cách load ảnh bằng code với base64. Khi nhúng ảnh base64 vào code, tốc độ transfer ảnh tới client sẽ nhanh hơn nhưng trên mobile lại chậm hơn vì ngốn CPU render ảnh. Khi nhúng src http thì web phải fetch lần nữa tới src đó nên có thể lâu hơn nhưng k bị ngu trên mobile
-1 cách khác là load image blur với base64, giảm chất lượng và chuyển sang base64 bằng tool khác, image thực thì để link url bth
-Web chuyển ảnh thành data uri dạng mờ không cần dùng thư viện blur hash: https://blurred.dev/
-- Cloudinary cung cấp url giúp tải ảnh blur nhẹ hơn của 1 image. 1 cách generate blur dynamic image.
-VD URL gốc: https://res.cloudinary .com/hieucuopbien123/image/upload/v1688738028/eokcgjfzuedo2oobnzzb.png
-Làm mờ nhẹ hơn: https://res.cloudinary.com/hieucuopbien123/image/upload/e_blur:100/v1688738028/eokcgjfzuedo2oobnzzb.png
-Làm mờ kèm grayscale nhẹ hơn nữa: https://res.cloudinary.com/hieucuopbien123/image/upload/e_blur:1000,q_1,f_auto/v1688738028/eokcgjfzuedo2oobnzzb.png
-Full tut custom: https://cloudinary.com/blog/low_quality_image_placeholders_lqip_explained#the_javascript_options_for_generating_lqips
-Cloudinary cũng có cách giảm kích thước ảnh tối đa mà k mất chất lượng: https://cloudinary.com/blog/adaptive_browser_based_image_format_delivery
+-> background: <background-color> <background-image> <background-position> / <background-size> <background-repeat> <background-attachment> <background-origin> <background-clip>;
+VD: background: red url('image.jpg') center / cover no-repeat fixed padding-box content-box;
+background-repeat space tương tự repeat nhưng repeat cắt background image khi ra ngoài phạm vi vì kích thước content k thể luôn chia hết cho kích thước background được. Còn space sẽ xếp mà k bị cắt, khoảng trống thừa ra sẽ chia đều giữa các ảnh
+background-image có thể set multiple image, nó chỉ hiện trong phạm vi content, set background-repeat hoặc background-size lớn để tránh image nhỏ hơn content
+background-color có thể dùng kèm background-image được và sẽ nằm ở dưới
+background-clip: text; => sẽ lồng background image vào trong text, phải bỏ màu của text mới hiển thị ảnh với color or -webkit-text-fill-color: transparent;
+background-attachment: scroll mặc định là trôi theo page scroll bar; local là trôi theo scrollbar của content; fixed là background fix k trôi, tạo parallax.
+background-position kiểu vị trí x,y của ảnh trùng với vị trí x,y nào của khung. VD center center là tâm ảnh trùng tâm khung.
+background-origin xác định vị trí hiện background image từ padding, border hay đúng phần content, ốp cho cả background-color và background-image.
+background-blend-mode chỉ có tác dụng khi có màu chồng lên nhau: https://www.w3schools.com/cssref/playdemo.php?filename=playcss_background-blend-mode
 
--> Tối ưu nén ảnh:
-Các bức ảnh tĩnh đều nên cho qua tinyPNG / imagemin để giảm tải kích thước trước r mới lưu vào server.
-Dùng định dạng WebP or AVIF sẽ giảm kích thước 30% so với jpg
-Hoặc dùng cloudinary hay thư viện browser-image-compression để compress ảnh khi người dùng upload trước r mới lưu vào server.
-Các framework như NextJS cung sẵn khi ta cho optimized true trong file config, nó còn optimize theo kích thước màn hình
-Có thể tự chuẩn bị sẵn các bức ảnh khác nhau thủ công và cho load theo kích thước màn hình => có thư viện react giúp
+-> Layer mask: tạo 1 lớp hiệu ứng lên trên thẻ đó. VD hiển thị bức ảnh theo phần ảnh của 1 bức ảnh png khác, ta cho bức ảnh khác đó như 1 lớp bên trên.
+Dùng mask là shorthand của mọi thuộc tính mask-* trong css
+VD mask-image: linear-gradient(black, transparent);
+VD mask: url(masks.svg#star) 0 0 / 50px 50px no-repeat; => lấy thẻ có id là star trong ảnh svg làm mask, tại vị trí 0 0 từ top left và width height mask là 50px 50px.
+VD mask: url(masks.svg#star) left / 16px repeat-y; => thẻ là mask ở phía bên trái với width 16px. Mask position phải xác định 2 giá trị như left top, mặc định nếu chỉ set 1 giá trị thì giá trị còn lại sẽ là center
+VD mask mờ 2 bên thẻ: mask: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 20%, black 80%, rgba(0, 0, 0, 0) 100%); => thêm -webkit-mask nữa cho chắc
+Còn có mask-composite giúp lồng nhiều lớp mask với nhau là intersect hay gì
 
--> Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css hay js. <source> chỉ cung url, còn lại vẫn dùng tag image để chèn ảnh vào
+-> Hiện ảnh responsive => 2 cách đều được
+- Dùng <picture> tự đổi ảnh tùy vào kích thước màn hình mà k cần css js. <source> chỉ cung url, còn lại vẫn dùng tag image để chèn ảnh vào
 VD: <picture class="image_container">
   <source media="(min-width:650px)" srcset="https://www.w3schools.com/tags/img_pink_flowers.jpg" type="image/jpg">
   <img src="" alt="" onerror="this.onerror=null;this.src='base64image';" loading="lazy">
 </picture>
+- <img> có sẵn srcset.
+VD: <img src="image-400.jpg" srcset="image-400.jpg 400w, image-800.jpg 800w, image-1200.jpg 1200w" sizes="(max-width: 600px) 400px, (max-width: 900px) 800px, 1200px">
 
--> K dùng ảnh gif bị nặng hơn video rất nhiều. Dùng với các ảnh nhỏ muốn lặp vô hạn mà k cần media player thì ok => éo bh cần
-K thì nên dùng APNG hơn
+-> Style cho tag <img>: html cũng có <object> show mọi loại media, bị lỗi sẽ tự show thẻ con của <object> rất hay => với ảnh dùng <img> hơn
+Dùng image filter: https://www.w3schools.com/css/tryit.asp?filename=trycss_ex_images_filters => có thể keyframe animation
+Dùng attribute loading="lazy"/"eager" có sẵn của html <img>
+Luôn set min-width min-height cho <img> giảm layoutshift khi load xong
+object-fit: contain; => nên set contain trong khung, hoặc cover 1 chiều và hiện ở tâm
+object-position: center center;
+aspect-ratio: 1 / 1;
+
+--> onload check ảnh tải xong => có thể hiện spinner mặc định và ẩn đi khi ảnh tải xong, lấy được kích thước ảnh sau khi tải.
+onerror check ảnh lỗi thì hiển thị ảnh fallback => luôn dùng
+VD: <img src="invalid_link" onerror="this.onerror=null;this.src='https://placeimg.com/200/300/defaultiamge';"> => Dùng this.onerror=null chống lỗi infinity loop, xảy ra ở 1 số browser khi fallback image trong onerror lại bị lỗi khiến lặp vô tận.
+Dùng ảnh low-res ở local làm bg image đảm bảo luôn có và ưu tiên load: <link rel="preload" as=image href="./lowresimage.png" fetchpriority=high>. Để đảm bảo ảnh luôn có kể cả lỗi mạng, dùng base64 cho blur image là được => luôn dùng base64 cho default image
+
+--> Cách tạo ảnh mờ làm placeholder thay cho màu xám, ảnh default fix, skeleton loading:
+- Ảnh người dùng nhập thì dùng BlurHash - lib giúp tạo ảnh mờ từ 1 ảnh khác, paste ảnh vào và lấy ra hash làm mờ.
+- Ảnh có sẵn thì thu nhỏ rồi phóng to là xong
+Có thể chuyển sang base64. Khi nhúng ảnh base64 vào code, tốc độ transfer ảnh tới client sẽ nhanh hơn nhưng mobile lại chậm hơn vì ngốn CPU render ảnh. 
+Web chuyển ảnh thành data uri base64 dạng mờ không cần dùng thư viện blur hash: https://blurred.dev/
+- Cloudinary nhận image cung ra url là blur image nhẹ hơn, có thể generate blur dynamic image.
+VD URL gốc: https://res.cloudinary.com/hieucuopbien123/image/upload/v1688738028/eokcgjfzuedo2oobnzzb.png
+Làm mờ nhẹ hơn: https://res.cloudinary.com/hieucuopbien123/image/upload/e_blur:100/v1688738028/eokcgjfzuedo2oobnzzb.png
+Làm mờ kèm grayscale nhẹ hơn nữa: https://res.cloudinary.com/hieucuopbien123/image/upload/e_blur:1000,q_1,f_auto/v1688738028/eokcgjfzuedo2oobnzzb.png
+Full tut custom: https://cloudinary.com/blog/low_quality_image_placeholders_lqip_explained#the_javascript_options_for_generating_lqips
+
+-> Tối ưu nén ảnh:
+- Dùng cloudinary có thể giảm kích thước ảnh tối đa mà k mất chất lượng: https://cloudinary.com/blog/adaptive_browser_based_image_format_delivery
+- Dùng tinyPNG hay imagemin để giảm tải kích thước cho ảnh tĩnh trước r mới lưu vào server.
+- Ưu tiên định dạng WebP or AVIF giảm kích thước 30% so với jpg
+- Các framework như NextJS cung sẵn option tự optimize image theo kích thước màn. ReactJS có lib nén ngay tại browser.
+- Có thể tự chuẩn bị sẵn các bức ảnh kích thước khác nhau và cho load theo kích thước màn hình
+
+-> Nhanh:
+Dùng clip-path
+background
+Dùng layer mask
+Đổi ảnh theo kích thước responsive
+Dùng <img> và lazy loading
+Dùng onload onerror khi ảnh lỗi
+Tạo ảnh placeholder
+Tối ưu nén ảnh
 
 
-img src="image-400.jpg"
-     srcset="image-400.jpg 400w, 
-             image-800.jpg 800w, 
-             image-1200.jpg 1200w"
-     sizes="(max-width: 600px) 400px, 
-            (max-width: 900px) 800px, 
-            1200px"
-     alt="Mô tả ảnh">
 
+# if else và style query và function trong css => k support rộng
+-> Style query: style cho 1 tag con nếu tag cha có style gì, có thể dùng nested selector tương tự
+VD: @container style (--bg: red) { } => dùng như này trong 1 thẻ thì nếu thẻ cha có style tương ứng, sẽ áp dụng style cho thẻ hiện tại
+VD: @container style (--bg: var(--accent)) { }
+VD: @container style (--overflow-scroll: on) and (width < 900px) { }
+=> Có thể mix @media đổi custom properties + @container style query + if else tạo ra case phức tạp
 
+-> VD lấy html attribute data-status vào custom property --status và gán giá trị cho grid-columns tuỳ vào giá trị của --status:
+.card {
+  --status: attr(data-status type(<custom-ident>));
+  grid-columns: if(
+    style(--status: pending) 1;
+    style(--status: complete) 2; // if check từ trên xuống, lấy cái đầu tiên thoả mãn
+    else 3
+  );
+}
+=> Lưu ý đổi grid-columns bằng css if khiến cho thứ tự card hiện ra không đồng nhất với thứ tự định nghĩa trong html, gây nhầm lẫn cho screen reader. Phải dùng thêm reading-flow: grid-columns; ở thẻ cha để chỉ định cho screen reader đọc theo từng grid-columns
 
+-> VD function chỉnh opacity cho màu: 
+@function --opacity(--color, --opacity) { result: rgb(from var(--color) r g b / var(--opacity)); }
+:root { --brandBlue: skyblue; --brandBlue-a20: --opacity(var(--brandBlue), 20%) }
 
+-> VD tạo font-size responsive nhưng header sẽ scale font manh hơn các vùng khác.
+@function --fluid-type(--font-min, --font-max, --type: 'header') {
+  --scalar: if(style(--type: 'header'): 4vw; 
+               style(--type: 'copy'): 0.5vw);
+  result: clamp(var(--font-min), var(--scalar) + var(--font-min), var(--font-max));
+}
+h1 { font-size: --fluid-type(24px, 36px); }
+p { --copy-min: 16px; --copy-max: 24px; font-size: --fluid-type(var(--copy-min), var(--copy-max), 'copy'); }
 
+-> VD gom responsive chung 1 hàm:
+@function --layout-sidebar(--sidebar-width: 20ch) {
+  result: 1fr;
+  @media (width > 640px) { result: var(--sidebar-width) auto; }
+}
+.layout { grid-template-columns: --layout-sidebar(); }
 
-# Tạo responsive marquee css only
-URL: https://frontendmasters.com/blog/infinite-marquee-animation-using-modern-css/
+-> VD dùng if với media query: 
+:root {
+  --bp: if(
+    media(width <= 600px): "sm";
+    media(width <= 800px): "md";
+    else: "lg";
+  );
+}
+.box {
+  background-color: if(
+    style(--bg: "sm"): green;
+    else: blue;
+  );
+}
 
-- offset: path() giúp định nghĩa 1 đường đi, và offset-path sẽ chỉ định vị trí trên path đó theo %. Dùng offset để di chuyển object theo 1 path với offset-distance.
-- Dùng shape thay cho path vì shape có thể kết hợp với css function phức tạp
-VD: path("M100 100 h200"); tương đương với shape(from 100px 100px, hline by 200px);
-- sibling-count() là hàm đếm có bao nhiêu sibling là các thẻ cùng là con trực tiếp của thẻ cha của hiện tại.
-- VD offset: shape(from calc(var(--image-size)/-2) 50%, hline by calc(sibling-count() * var(--image-size))); 
-=> bắt đầu từ sát bên trái ngoài màn hình, 1 đường ngang dài bằng kích thước số lượng element
-- Để ảnh start lần lượt nhau, ta cho animation delay số âm
-
-
+-> VD dùng style query với media query:
+:root {
+  --bp: "xl";
+}
+@media (width <= 1000px) {
+  :root {
+    --bp: "md";
+  }
+}
+@media (width <= 500px) {
+  :root {
+    --bp: "sm";
+  }
+}
+@container style (--bp: "sm") {
+  /* Style cho "sm", khi đổi số "sm" chỉ cần đổi 1 nơi */
+}

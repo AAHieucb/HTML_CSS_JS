@@ -52,6 +52,7 @@ Show line names để thấy grid line names
 Nút brush tool để trigger prefers-color-scheme
 - DOM breakpoint:
 Chuột phải vào thẻ -> Break on -> Node removed sẽ dừng code khi thẻ này được xoá khỏi DOM / subtree modification khi thẻ con trong tag này được add or remove
+- CTRL+P -> Show Changes để hiện tab Changes trong Elements hiện những thay đổi style đã làm trên browser
 
 -> Tab rendering:
 Emulate hàng loạt prefers-color-scheme, prefers-reduced-motion, prefers-contrast, print screen, prefers-reduced-transparency, blurred vision.
@@ -147,11 +148,17 @@ margin-inline: auto; thay cho margin: 0 auto; để căn giữa
 inert là attribute sẽ vô hiệu hóa mọi tương tác của người dùng với tag đó.
 *width: fill-available; width: -webkit-fill-available; => kéo dài hết phần mà nó có thể kéo. Cách khác là bao flexBox và dùng flexGrow cho nó
 *field-sizing: content; => dùng cho mọi loại input/textarea tự mở rộng dần khi content đổi. Dùng min-height cho progressive enhancement.
+list-style: inside; => Custom dấu bullet trong list nằm trong hay ngoài khối nội dung, defautl là ngoài
+inset: <top> <right> <bottom> <left>; muốn ignore phần nào thì auto phần đó thôi
 
+-> isolation: isolate; => option giúp các thẻ con của thẻ này có z-index như nào cũng k thoát khỏi thẻ này. VD thẻ con dùng z-index -1 chỉ xuống cuối của thẻ này.
+
+-> content: open-quote; hiện " trong :before :after, nếu open phải có close hoặc dùng content: no-closse-quote; nếu k lần sau open sẽ chỉ còn ' vì tưởng " chưa đóng => kbh dùng
 -> min/max/fit-content => bỏ
 min-content: kích thước nhỏ nhất mà vẫn chứa content, sẽ khiến content co nhỏ nhất có thể
 max-content: kích thước lớn nhất mà vẫn chứa content, sẽ khiến content duỗi dài nhất có thể, gây overflow.
 fit-content: kích thước luôn vừa với content, khi màn hình nhỏ khiến content co nhỏ lại thì nó chiếm fullwidth, như width auto.
+-> counter-increment => bỏ
 
 
 
@@ -178,4 +185,10 @@ Video mới mà có lượt view tăng bất thường sẽ bị đóng băng vi
 -> Dùng CSS JS tính năng mới luôn phải có fallback, k hỗ trợ sẽ để mặc định: CSS có @support. JS check bth.
 VD check polyfill browser cũ: if (!Array.prototype.includes) Array.prototype.includes = function includes(searchElement) { return this.indexOf(searchElement) !== -1 }
 
+-> Dừng: 
+css houdini can thiệp sâu vào animation, rendering, view-timeline-axis, view-timeline-direction mà trước đây k thể làm dược với css
+https://glow-cards.webflow.io/ => hover chuột thì card glowing border, sáng card đó và tối cả container, nghiêng card, vật thể to lên tràn ra ngoài card. 
+https://css-tricks.com/positioning-text-around-elements-with-css-offset/ => tạo text di chuyển xung quanh element với offset
+https://www.youtube.com/watch?v=Fu4Pl5k-3yQ => dùng mix-blend-mode để đè các layer ảnh, animation ảnh như đang chuyển động, tạo layer và animation với layer bằng clip-path
+https://css-tricks.com/worlds-collide-keyframe-collision-detection-using-style-queries/ => css thuần detect collision, animation với thẻ input range của html, @container theo style, tạo game thuần bằng css, @property
 

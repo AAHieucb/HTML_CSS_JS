@@ -87,7 +87,7 @@ event input
 
 # Load file JS với async và defer
 Browser load nếu thấy file js or script, sẽ dừng vc parse HTML để lý xử JS, gọi là Parse Blocking => default
-<script>: async sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy bth; defer chỉ chạy khi html parse xong.
+<script async> sẽ tải script bất đồng bộ trên 1 thread khác và tiếp tục parse trang, tải xong JS sẽ chạy bth; defer chỉ chạy khi html parse xong.
 VD: Đang parse HTML CSS thì gặp 1 script async -> tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì vẫn chạy script luôn
 VD: Đang parse HTML CSS thì gặp 1 script defer -> Tiếp tục parse HTML CSS trong khi tải script -> Parse HTML chưa xong nhưng tải xong script thì script k được exec -> parse HTML xong mới exec script 
 => Best practice là đặt script ở đầu và dùng defer để đảm bảo exec sau khi DOM load.
@@ -177,7 +177,7 @@ Nếu tham số 2 lơn hơn 2147483647 hoặc nhỏ hơn 1 thì sẽ tự độn
 });
 => Thực hiện bất đồng bộ hàm sau 0s, thực tế nó k thực hiện ngay sau 0s mà phải chờ thực hiện Ct hiện tại đến khi stack trống để đẩy event vào và thực hiện callback event đó. Event Loop chỉ nhặt event từ queue vào stack khi stack trống.
 - process.nextTick(<function>); => chỉ có trong NodeJS
-=> Chỉ cần dùng setImmediate
+=> Chỉ cần dùng setImmediate, lưu ý nó k chạy tuần tự như gọi trực tiếp luôn mà vẫn để vào queue
 
 
 
@@ -258,10 +258,29 @@ cors: Khi yêu cầu cross origin và server đã cấu hình CORS để cho ph�
 
 -> Có thể dùng AbortController custom timeout cho fetch với setTimeout gọi cùng với hàm fetch truyền vào signal
 
+# Custom timeout cho fetch k hỗ trợ sẵn
+const timeout = (ms, promise) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => { reject(new Error("Request timed out")) }, ms);
+    promise.then(resolve, reject);
+  })
+}
+const response = await timeout(1000, fetch("<url>"));
+=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh => nên thêm abort controller
+# Custom timeout cho fetch k hỗ trợ sẵn
+const timeout = (ms, promise) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => { reject(new Error("Request timed out")) }, ms);
+    promise.then(resolve, reject);
+  })
+}
+const response = await timeout(1000, fetch("<url>"));
+=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh => nên thêm abort controller
+
 
 
 # FormData và URLSearchParams, URL
--> FormData có thể upload multiple files lên server => refer tới "Projects / Tinkerbellgarden"
+-> FormData có thể upload multiple files lên server
 VD: var formData = new FormData();
 var photos = document.querySelector("input[type='file'][multiple]");
 formData.append('title', 'My Vegas Vacation');
@@ -271,7 +290,6 @@ fetch('https://example.com/posts', {
   body: formData
 })
 .then(response => response.json())
-.then(response => console.log('Success:', JSON.stringify(response)))
 .catch(error => console.error('Error:', error));
 
 -> const myURL = new URL('https://example.com/path?name=chatgpt&age=25');
@@ -289,9 +307,13 @@ params.getAll("lang");
 
 
 
--> Highlight API rất mạnh giúp tô màu xuyên tag 
+//!!!!!!!!!!
+# Highlight API rất mạnh giúp tô màu xuyên tag 
 
--> Web worker giúp chạy multi thread trên browser
+
+
+# Web worker giúp chạy multi thread trên browser
+
 
 
 # Navigation
@@ -323,6 +345,17 @@ Thay vì window addEventListener resize để bắt khi window đổi kích thư
 
 # Drag Animation với JS
 
+# Animation Draggable
+-> draggable attribute có sẵn trong html tag, có thểm làm với html css js thuần
+
+-> Thư viện react draggable: dnd-kit/core => best lib => ref tới trava lending pool
+react-beautiful-dnd => lib đơn giản hơn
+react-grid-layout
+framer-motion => basic
+
+
+
+
 
 
 # Thao tác với string
@@ -346,6 +379,9 @@ VD lọc mail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const str = "Hello, World!";
 const regex = /Hello/i; // Biểu thức chính quy để kiểm tra "Hello"
 const isMatch = regex.test(str); // Kiểm tra
+
+->*** Security bypass input validation trong JS (duck-typing):
+Khi check userInput.length <= 100, cần check typeof(userInput) == "string" vì nếu user input 1 object { input: <vô hạn length>, length: 100 } thì sẽ bypass và BE sẽ hash object lớn đó để lưu vào server. Hash là hàm rất nặng nếu hash 1 triệu data, server dễ collapse.
 
 
 

@@ -147,7 +147,7 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
 
 
 
--> Css reset
+-> Css reset => nhét tất cả vào @layer reset để đầu tiên
 html {
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
@@ -161,7 +161,13 @@ html {
   font-display: swap;
   overflow-y: hidden;
   text-rendering: optimizeSpeed;
-
+  color-scheme: light dark;
+  tab-size: 2; // Ký tự \t sẽ là 2 space thay vì mặc định là 8
+  hanging-punctuation: first allow-end last; // Cho phép dấu câu đầu và cuối thò ra lề 2 bên
+  word-break: break-word; // Có thể có hoặc không
+  &:focus-within {
+    scroll-behavior: smooth; // => để trong @media (prefers-reduced-motion: no-preference) 
+  }
   -moz-text-size-adjust: none;
   -webkit-text-size-adjust: none;
   text-size-adjust: none; // Prevent font-size inflation ở 1 số browser trên di động
@@ -189,14 +195,14 @@ body{
   background-color: var(--color-background);
   font-size: var(--font-medium); // font-size để ở body, chứ để ở html khéo lib đè lên mất
 }
-* {
+*, *::before, *::after {
   box-sizing: border-box;
 }
 *:not(dialog, [popover]) {
   margin: 0;
   padding: 0;
 }
-img {
+img, video {
   max-width: 100%;
   vertical-align: middle; // Chặn lỗi các thẻ trước và sau bị cách 1 khoảng do k cùng baseline
   font-style: italic; // alt text khi hiện nghiêng để phân biệt
@@ -205,8 +211,8 @@ img {
   shape-margin: 1rem; // Đề phòng dùng shape-outside + floating cho image thì có sẵn 1 kc 
   user-select: none; // Cản người dùng bôi đen, dùng với img và canvas
   -webkit-user-drag: none;
-  verticalAlign: "bottom", // Chặn lỗi thừa pixel dọc của thẻ image
-  boxSizing: "border-box", // Chặn lỗi thừa pixel ngang của thẻ image
+  vertical-align: bottom; // Chặn lỗi thừa pixel dọc của thẻ image
+  box-sizing: border-box; // Chặn lỗi thừa pixel ngang của thẻ image
 }
 a {
   text-decoration: none;
@@ -222,7 +228,7 @@ button:disabled {
 p {
   cursor: text;
 }
-@view-transition {
+@view-transition { // Nên wrap trong @media (prefers-reduced-motion: no-preference)
   navigation: auto;
 }
 ::view-transition-group(root) {
@@ -238,8 +244,16 @@ p {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+textarea {
+  field-sizing: content;
+  min-block-size: 5lh; // lh là dựa trên line-height hiện tại
+  max-inline-size: 100%;
+}
 h1,h2,h3,h4,h5,h6 { text-wrap: balance; } => để các mục header có text balance khi bị break nhiều dòng trông đẹp hơn
-p { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn. Tính toán bị expensive.
+p, li, dd { text-wrap: pretty; } => để dòng cuối cùng kbh lẻ loi 1 chữ khi dùng paragraph trông đẹp hơn. Tính toán bị expensive.
+:target {
+  scroll-margin: 3rlh; // Khi thẻ được target bởi #id, sẽ cuộn tới và cách viewport 3 root line height để tránh thẻ quá sát mép trên có thể bị che mất
+}
 
 
 
@@ -326,16 +340,6 @@ window.addEventListener('scroll', () => {
     <button id="closeButton" aria-label="Close dialog" aria-controls="dialogX">Close dialog</button>
   </div>
 </dialog>
-
-
-
--> input:valid {} // style khi input có valid data
-input:invalid {} // style khi input có invalid data
-input:user-valid {} // style khi input có data, và data đó valid
-input:user-invalid {} // style khi input có data, và data đó invalid
-input:not(:placeholder-shown):valid {} 
-input:not(:placeholder-shown):invalid {}
-input:focus:invalid { } // style khi input có invalid data và ngừoi dùng đang nhập dở
 
 
 
