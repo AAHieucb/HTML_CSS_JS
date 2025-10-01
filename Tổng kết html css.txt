@@ -933,8 +933,11 @@ VD box inline-block, white-space nowrap, overflow-x auto, set width k fit-conten
 - overflow: clip; kết hợp overflow-clip-margin: 30px; để overflow tràn ra ngoài 1 lượng tối đa là bao nhiêu, còn lại sẽ hidden
 - overscroll-behavior: khi 2 scroll lồng nhau, auto thì cục bên trong scroll tới đích mà vẫn lăn tiếp chuột ở cục trong thì cục ngoài sẽ scroll (scroll chaining), contain để cản. Trên điện thoại tự có bounce effect, none để cản thêm bounce effect.
 
--> Nhảy đến 1 vị trí trên trang html: đặt id cho thẻ và dùng tag a href đến #đó là được
+-> Scroll tới 1 vị trí cụ thể:
+- Nhảy đến 1 vị trí trên trang html: đặt id cho thẻ và dùng tag a href đến #đó là được
 scroll-behavior: smooth hay auto để trượt đến hay nhảy đến
+- JS window.scrollTo({ top: 500, left: 0, behavior: "smooth" }); => scroll tới 1 vị trí 500px dọc
+- JS tag.scrollIntoView({ behavior: "smooth", block: "start" }) => scroll 1 phần tử lên đầu vùng nhìn, có thể để là "nearest"
 
 -> Custom style scrollbar
 URL: https://css-tricks.com/custom-scrollbars-in-webkit/
@@ -1098,8 +1101,8 @@ Custom cho slideslidein fadeslideout: https://www.youtube.com/watch?v=aTGwrErX9A
 Tạo morphing button: https://www.youtube.com/watch?v=N2BKAKwGP6M 
 
 -> Set cùng 1 view-transition-name cho thẻ trước và sau animation để browser tự animate thẻ nào biến đổi dần thành thẻ nào
-Customize animation với ::view-transition-old(<name>) là style thẻ trước animation, và ::view-transition-new(<name>) là style thẻ sau animation.
-Animation mặc định là fade or dịch chuyển, có thể customize.
+Customize animation với ::view-transition-old(<name>) là style thẻ trước animation, và ::view-transition-new(<name>) là style thẻ sau animation. VD cho old fadeout, new fadein
+Có thể customize animation, mặc định là fade. VD dùng ::view-transition-old(root) thì root là cả page, muốn riêng thì dùng <name> là view-transition-name của tag
 Đổi DOM thì wrap trong startViewTransition. SSR cross docs animation thì dùng @view-transition { navigation: auto; }
 Custom animation time với ::view-transition-group(root) { animation-duration: 0.5s; }
 

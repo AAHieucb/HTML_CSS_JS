@@ -248,34 +248,23 @@ Chạy event ở capture phase và bubbling phase. Khi stopPropagation nữa.
 
 
 # Fetch API
-Không còn dùng XMLHttpRequest nữa mà dùng fetch có sẵn của browser.
-Dùng top-level statement fetch api được.
+Dùng fetch có sẵn của browser thay cho XMLHttpRequest, dùng ở top-level statement cũng được.
 
 -> Các response.type: 
-basic: khi gửi request cho server cùng origin, k có giới hạn vc xem thông tin trên response. Hoặc request mode "no-cors" và phản hồi là 1 simple origin
-cors: Khi yêu cầu cross origin và server đã cấu hình CORS để cho phép truy cập.
-"opaqueredirect" hoặc "opaque": éo xem được response, chỉ xem được vài header cơ bản. Khi cross-origin request mà server k cấu hình cors hợp lệ
+basic: khi gửi request cho server cùng origin hoặc request mode "no-cors" và phản hồi là 1 simple origin. K có giới hạn vc xem thông tin trên response.
+cors: khi yêu cầu cross origin và server đã cấu hình CORS để cho phép truy cập.
+"opaqueredirect" hoặc "opaque": khi cross-origin request mà server k cấu hình cors hợp lệ. K xem được response, chỉ xem được vài header cơ bản.
 
--> Có thể dùng AbortController custom timeout cho fetch với setTimeout gọi cùng với hàm fetch truyền vào signal
-
-# Custom timeout cho fetch k hỗ trợ sẵn
-const timeout = (ms, promise) => {
+-> Custom timeout cho fetch k hỗ trợ sẵn
+VD: const timeout = (ms, promise) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => { reject(new Error("Request timed out")) }, ms);
     promise.then(resolve, reject);
   })
 }
 const response = await timeout(1000, fetch("<url>"));
-=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh => nên thêm abort controller
-# Custom timeout cho fetch k hỗ trợ sẵn
-const timeout = (ms, promise) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => { reject(new Error("Request timed out")) }, ms);
-    promise.then(resolve, reject);
-  })
-}
-const response = await timeout(1000, fetch("<url>"));
-=> Thực tế các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch luôn cho nhanh => nên thêm abort controller
+=> Các api cần xác thực nên dùng axios, còn các api allow anonymous thì dùng fetch cho nhanh
+=> Nên dùng AbortController truyền signal vào fetch để dừng ok hơn.
 
 
 
@@ -306,62 +295,10 @@ params.getAll("lang");
 
 
 
-
-//!!!!!!!!!!
-# Highlight API rất mạnh giúp tô màu xuyên tag 
-
-
-
-# Web worker giúp chạy multi thread trên browser
-
-
-
-# Navigation
-HTML navigate bằng <a>
-JS đổi window.location
-
--> Đổi url k chuyển trang: history.pushState(null, "", url); 
-Tốt hơn là dùng replaceState hơn pushState để nó replace url hiện tại chứ không lưu vào lịch sử.
-VD: window.history.replaceState(null, "", document.querySelector("link[rel=canonical]").getAttribute("href")); => Mẹo là gọi hàm này mỗi khi load xong chính khiến cho url luôn là canonical rất gọn dù thực tế nó có params các thứ. Còn muốn preserve state trên url thì lưu vào localstorage.
-
--> Navigation trong dự án MPA:
-Khi chuyển page MPA thì global state bị reset, có thể lưu vào sessionStorage, localStorage, indexed db, url params để lấy lại state cũ khi chuyển pages.
-Các file js, css, html k cần lo tải lại vì browser có cache để chỉ tải 1 lần.
-
-
-
-# IntersectionObserver
-1 biến IntersectionObserver có thể lắng nghe 1 thẻ có giao với viewport không thì chạy 1 hàm tương ứng. Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
-
-Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
-
-
-
-# ResizeObserver
-Thay vì window addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi nào kích thước của các objects nào bị thay đổi thì làm gì chẳng hạn.
-
-
-
-# Drag Animation với JS
-
-# Animation Draggable
--> draggable attribute có sẵn trong html tag, có thểm làm với html css js thuần
-
--> Thư viện react draggable: dnd-kit/core => best lib => ref tới trava lending pool
-react-beautiful-dnd => lib đơn giản hơn
-react-grid-layout
-framer-motion => basic
-
-
-
-
-
-
 # Thao tác với string
--> VD string find 1 string khác: 
-str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
+-> VD check include string: str1.trim().replaceAll(",","").replaceAll(".","").toLowerCase().includes(str2.trim().replaceAll(",","").replaceAll(".","").toLowerCase());
 Thay vì dùng str1 + str2, nên dùng `${str1}${str2}`
+Hàng loạt hàm slice, padEnd, padStart
 
 -> Regexp: 
 .: Khớp với bất kỳ ký tự nào (trừ newline).
@@ -374,50 +311,41 @@ $: Khớp với cuối chuỗi.
 []: Khớp với bất kỳ ký tự nào trong dấu ngoặc vuông.
 |: Hoặc (OR).
 VD lọc mail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+VD: Check string có thoả mãn 1 regexp hay không: const str = "Hello, World!"; const regex = /Hello/i; const isMatch = regex.test(str);
 
---> Check string có thoả mãn 1 regexp hay không: 
-const str = "Hello, World!";
-const regex = /Hello/i; // Biểu thức chính quy để kiểm tra "Hello"
-const isMatch = regex.test(str); // Kiểm tra
+->*** Security bypass input validation (duck-typing):
+Khi check userInput.length <= 100, cần check typeof(userInput) == "string" vì nếu user input 1 object { input: <rất dài>, length: 100 } sẽ bypass.
+Giả sử BE check rồi hash password lưu vào server, sẽ hash nhầm object lớn đó để lưu vào server. Hash là hàm nặng nếu hash 1 triệu data, server sẽ collapse.
 
-->*** Security bypass input validation trong JS (duck-typing):
-Khi check userInput.length <= 100, cần check typeof(userInput) == "string" vì nếu user input 1 object { input: <vô hạn length>, length: 100 } thì sẽ bypass và BE sẽ hash object lớn đó để lưu vào server. Hash là hàm rất nặng nếu hash 1 triệu data, server dễ collapse.
-
+-> FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau bị XSS.
 
 
-# Dùng mảng và object và hàm 
-Chuyển từ string sang array: [..."Hello"];
-Cách khác lấy params của function ít dùng là dùng for(var x of arguments) {<>}
-Các hàm biến hóa mạnh: splice, copyWithin, flat
 
--> Tạo array:
+# Dùng mảng object hàm 
+-> Array:
+- Remove duplicate [...new Set(<array>)]
+- Lấy params function với for(var x of arguments) {<>}
+- Có slice, splice, copyWithin, flat(Infinity)
+- Tạo array:
 Array(10).fill(undefined)
 Array.from({ length: 10 });
-VD: const numbers = [1, 2, 3];
-const squares = Array.from(numbers, x => x * x);
-console.log(squares); // [1, 4, 9]
-
-Có thể ss 2 array chấp cả nested với: JSON.stringify(a1) == JSON.stringify(a2) => trừ TH undefined và null se coi là giống nhau
-
--> Sort array giảm dần: arr.sort(function(a, b){return b-a});
-Cách nhớ: trả true thì giữ thứ tự(a, b) tức a < b, trả false thì đổi b < a
-
--> Cách shuffle 1 array
-Lodash có hàm shuffle
-Dùng 0.5 - Math.random() k hoàn toàn random nhưng có thể dùng nếu k yêu cầu khắt khe
+Array.from(<array>, x => x * x);
+- So sánh 2 array kể cả nested: JSON.stringify(a1) == JSON.stringify(a2) => trừ TH undefined và null sẽ coi là = nhau
+- Sort array giảm dần: arr.sort(function(a, b){return b-a}); => Cách nhớ: trả true thì giữ thứ tự (a, b) tức a < b, trả false thì đổi (b, a)
+- Cách shuffle 1 array: 
+Dùng lodash
+Dùng 0.5 - Math.random() k hoàn toàn random nhưng có thể dùng nếu k yêu cầu khắt khe, or Date.now() + Math.random()
 Dùng Fisher-Yates alg, cơ chế là sinh số random nguyên để hoán đổi vị trí các phần tử trong array
+- Hàm map: tạo ra mảng mới và k thay đổi trên mảng cũ nên phải gán bằng. 
+Tham số 1 là function(currentValue, index, array), 2 thisValue là giá trị pass vào function để dùng this. Để dùng được 2 thì 1 k được dùng arrow function => kbh dùng
 
--> Vòng for of chỉ dùng với các biến iterable. Vd k dùng được với object vì object không iterable, phải dùng hàm Object.entries.
-Vòng for in dùng được với biến và mảng bình thường nhưng 1 số kiểu IterableIterator như entries, values của Map hay Set lại k dùng được
+-> Dùng for loop:
+for of chỉ dùng với các biến iterable. Vd k dùng được với object vì object không iterable, phải dùng hàm Object.entries.
+for in dùng được với biến và mảng bình thường chứ 1 số kiểu IterableIterator như entries, values của Map hay Set lại k dùng được
 forEach chỉ dùng cho mảng vì nó thuộc Array.prototype
+for await (const value of promises) { console.log(value); } => chờ lần lượt từng promies thực hiện xong
 
---> for await (const value of promises) { console.log(value); } => chờ lần lượt từng promies thực hiện xong
-
--> Hàm map tạo ra 1 mảng mới và k thay đổi trên mảng cũ nên phải gán bằng. 
-2 tham số: 1 là function(currentValue, index, array), 2 là thisValue là giá trị pass vào function để dùng từ khóa this. Tuy nhiên để dùng được đối số 2 thì đối số 1 k được dùng arrow function, nếu k this sẽ luôn là cái bao ngoài hàm. 
-VD: var object = { id: 1 }; const item = [1,2,3].map(function(currentVal, index, arr){ return currentVal + this.id + arr[index]; }, object); // [3, 5, 7]
-
--> Dùng tagged template
+-> Dùng tagged template gọi hàm:
 function tag(strings, ...values) {
   console.log("Chuỗi tĩnh:", strings);
   console.log("Giá trị nội suy:", values);
@@ -431,6 +359,125 @@ console.log(result);
 // Chuỗi tĩnh: [ 'Xin chào ', ', bạn ', ' tuổi.' ]
 // Giá trị nội suy: [ 'Minh', 25 ]
 // Kết quả được tùy chỉnh!
+
+
+
+# Cơ chế WeakMap dọn rác
+Các biến k thể truy cập sẽ tự bị GC dọn. VD: user = { name: "John" }; user = null; thì object {name: "John"} k còn được ref bởi biến nào khác sẽ tự giải phóng vùng nhớ
+GC tự được scheduled và dọn rác vào lúc rảnh.
+
+-> WeakMap và WeakSet: Do cơ chế dọn rác, nếu mảng có 1 phần tử là 1 object chẳng hạn thì dù object mất reference nhưng mảng vẫn còn phần tử đó thì object vẫn k bị giải phóng vì vẫn refer được với array[index]. Điều này là đúng nhưng trong TH dùng Map và set, có thể ta muốn nó tự động bị xóa với WeakMap, WeakSet
+- WeakMap thì key buộc là object và khi reference đến object bởi 1 biến khác k còn thì sẽ tự bị xóa.
+Do GC k rõ thời gian chạy nên k thể truy cập vào số lượng phần tử hay duyệt các phần tử của WeakMap. Chỉ có has delete get set. 
+- WeakSet giống Set nhưng chỉ nhận object, tự bị xóa khi k còn reference từ ngoài, cũng k hỗ trợ size keys hay các kiểu duyệt.
+Nếu dùng Set bth phải xóa thủ công hoặc chờ biến set giải phóng => chỉ dùng khi cần dùng Map với Set nhưng k cần length hay duyệt, mất reference ngoài sẽ tự xóa tối ưu bộ nhớ.
+
+
+
+# Dùng Map thay if else và switch case
+if else là cấu trúc bậc thang
+switch case nhanh hơn if else đáng kể khi số lượng điều kiện lớn. Mỗi điều kiện k phụ thuộc vào điều kiện trước đó nên thực hiện như mạch logic sẽ nhanh hơn.
+=> Tuy nhiên trong JS khi muốn search theo key nên dùng new Map là nhanh nhất. Map là 1 instanceof Object nhưng sinh ra để search nhanh hơn, luôn dùng
+
+
+
+# Navigation
+- HTML navigate bằng <a>
+- JS đổi window.location
+- Đổi url k chuyển trang với history.pushState(null, "", url); 
+Dùng replaceState tốt hơn pushState để nó replace url hiện tại chứ không lưu vào lịch sử.
+VD: window.history.replaceState(null, "", document.querySelector("link[rel=canonical]").getAttribute("href")); => có thể gọi hàm này mỗi khi load xong khiến cho url luôn là canonical dù thực tế nó có params, còn state trên url thì lưu vào localstorage.
+
+-> Navigation trong dự án MPA: global state bị reset, có thể lưu vào sessionStorage, localStorage, indexed db, url params để lấy lại state cũ khi chuyển pages.
+Browser tự cache các file js css html là static để k tải lại nh lần.
+
+
+
+# Cookie string
+document.cookie = "username=John; path=/; max-age=3600"; => set ở FE sẽ đặt các tham số HttpOnly, SameSite, Secure là default value
+document.cookie = "username=John; Secure;" => set thêm option Secure là true chỉ https
+Lưu ý càng nhiều cookie, request càng nặng.
+
+
+
+# Thao tác UI basic
+- Trạng thái load của document:
+window.addEventListener("DOMContentLoaded", () => {
+  console.log("Tải xong JS::", document.readyState);
+});
+window.onload = () => {
+  console.log("Tải xong ảnh::", document.readyState);
+}
+
+- Tình trạng pin
+navigator.getBattery().then(battery => {
+  battery.addEventListener("levelchange", () => { console.log(battery.level); });
+  battery.addEventListener("chargingchange", () => { console.log(battery.charging); });
+})
+
+- Tốc độ internet:
+window.addEventListener("offline", () => {});
+window.addEventListener("online", () => {});
+
+- Handle global error:
+window.onerror = (message, source, lineno, colno, error) => {
+  console.log("Thông điệp lỗi: " + message);
+  console.log("Nguồn: " + source);
+  console.log("Dòng: " + lineno);
+  console.log("Cột: " + colno);
+  console.log("Đối tượng lỗi: ", error);
+}
+
+- Check chuyển tab
+document.addEventListener("visibilitychange", () => {
+  console.log(document.visibilityState);
+})
+window.addEventListener("blur", () => {});
+window.addEventListener("focus", () => {});
+
+- Trigger gì khi bật devtool: k check đóng
+Cơ chế là console.log 1 class Error, nó sẽ gọi hàm message của class chỉ khi devtool được bật, chưa bật sẽ chờ tới khi bật.
+class DevToolsChecker extends Error {
+  toString(){ }
+  get message () {
+    // Làm gì khi devtool bật
+    setTimeout(console.clear.bind(console));
+  }
+}
+console.log(new DevToolsChecker());
+
+- Highlight API giúp highlight xuyên tag
+
+
+
+//!!!!!!!!!!
+# Drag Animation với JS
+
+# Animation Draggable
+-> draggable attribute có sẵn trong html tag, có thểm làm với html css js thuần
+
+-> Thư viện react draggable: dnd-kit/core => best lib => ref tới trava lending pool
+react-beautiful-dnd => lib đơn giản hơn
+react-grid-layout
+framer-motion => basic
+
+
+
+
+# Web worker giúp chạy multi thread trên browser
+
+
+
+# IntersectionObserver
+1 biến IntersectionObserver có thể lắng nghe 1 thẻ có giao với viewport không thì chạy 1 hàm tương ứng. Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
+
+Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
+VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
+
+
+
+# ResizeObserver
+Thay vì window addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi nào kích thước của các objects nào bị thay đổi thì làm gì chẳng hạn.
 
 
 
@@ -449,34 +496,12 @@ window.parent giúp lấy trang gốc chứa iframe hiện tại
 
 
 
-# Dùng Map thay if else và switch case:
-if else là cấu trúc bậc thang
-switch case nhanh hơn if else đáng kể khi số lượng điều kiện lớn. Mỗi điều kiện k phụ thuộc vào điều kiện trước đó nên thực hiện như mạch logic sẽ nhanh hơn.
-=> Tuy nhiên trong Js khi muốn search theo key nên dùng new Map là nhanh nhất. Map là 1 instanceof Object nhưng sinh ra để search nhanh hơn, nên dùng thay thế
-
-
-
-# Cơ chế WeakMap dọn rác
-Các biến k thể truy cập được sẽ tự bị GC dọn. VD: user = { name: "John" }; user = null; thì object {name: "John"} k còn được ref bởi biến nào khác sẽ tự giải phóng vùng nhớ
-GC sẽ tự được scheduled và dọn rác vào lúc rảnh.
-
--> WeakMap và WeakSet
-Do cơ chế dọn rác, nếu mảng có 1 phần tử là 1 object chẳng hạn thì dù object mất reference nhưng mảng vẫn còn phần tử đó thì object vẫn k bị giải phóng vì vẫn refer được với array[index]. Điều này là đúng nhưng trong TH dùng map với set, có thể ta muốn nó tự động bị xóa với WeakMap, WeakSet
-- WeakMap thì key buộc là object và khi reference đến object bởi 1 biến khác k còn thì sẽ tự bị xóa.
-Do GC k rõ thời gian chạy nên k thể truy cập vào số lượng phần tử hay duyệt các phần tử của WeakMap. Chỉ có has delete get set. 
-- WeakSet giống set nhưng chỉ nhận object, tự bị xóa khi k còn reference từ ngoài, cũng k hỗ trợ size keys hay các kiểu duyệt
-VD 1 biến WeakMap lưu thông tin của người dùng, khi người dùng leave thì tự xóa, nếu dùng map bth phải xóa thủ công hoặc chờ biến map giải phóng. Tức là ta dùng khi cần dùng map với set, mà k cần dùng length hay duyệt, mất reference bên ngoài là tự xóa tối ưu bộ nhớ.
-
-
-
 # Dùng yield
 Dùng yield chạy 1 hàm * nhiều lần thì chạy liên tiếp, còn k có * thì yield trả lấy được gì.
 Nếu function* có return thì nó sẽ kết thúc luôn nên có thể dùng return để dừng hàm * vĩnh viễn khi thỏa mãn đk gì nhưng giá trị return về sẽ k được lấy ra.
 function* gọi là generator function
 yield* dùng được với mọi type iterative
 Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp mà k cần gọi next. Đây cũng là cơ chế của redux-saga, k cần gọi next mà đưa vào loop duyệt liên tiếp
-
-
 
 
 
@@ -497,8 +522,6 @@ Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Serv
 
 
 # Other
-- FE kbh dùng window.name, vì nó sẽ share giữa các website với nhau bị XSS.
 - Có thể lưu function vào file json với function constructor
 - Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error] để wrap hàm async. Hiện custom error, lỗi lạ thì hiện message slice ngắn đi.
-- Tạo random nhanh có thể dùng Date.now() + Math.random() cho seed phụ thuộc vào thời gian, xác suất bị trùng cực thấp.
 
