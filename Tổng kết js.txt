@@ -447,37 +447,7 @@ class DevToolsChecker extends Error {
 console.log(new DevToolsChecker());
 
 - Highlight API giúp highlight xuyên tag
-
-
-
-//!!!!!!!!!!
-# Drag Animation với JS
-
-# Animation Draggable
--> draggable attribute có sẵn trong html tag, có thểm làm với html css js thuần
-
--> Thư viện react draggable: dnd-kit/core => best lib => ref tới trava lending pool
-react-beautiful-dnd => lib đơn giản hơn
-react-grid-layout
-framer-motion => basic
-
-
-
-
-# Web worker giúp chạy multi thread trên browser
-
-
-
-# IntersectionObserver
-1 biến IntersectionObserver có thể lắng nghe 1 thẻ có giao với viewport không thì chạy 1 hàm tương ứng. Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
-
-Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
-
-
-
-# ResizeObserver
-Thay vì window addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi nào kích thước của các objects nào bị thay đổi thì làm gì chẳng hạn.
+- Drag animation với JS
 
 
 
@@ -493,6 +463,23 @@ Bên nhận: window.addEventListener("message", function (event) {
 window.opener giúp lấy trang gốc mở ra cửa sổ hiện tại
 window.parent giúp lấy trang gốc chứa iframe hiện tại
 => Nhưng truy cập DOM phải cùng host vì browser có same site policy cản cả API và tương tác DOM. Muốn giao tiếp phải dùng postMessage
+
+
+
+# IntersectionObserver
+1 biến IntersectionObserver có thể lắng nghe 1 thẻ có giao với viewport không thì chạy 1 hàm tương ứng. Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
+
+Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
+VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
+
+# ResizeObserver
+Thay vì window addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi nào kích thước của các objects nào bị thay đổi thì làm gì chẳng hạn.
+
+
+
+
+# Web worker giúp chạy multi thread trên browser
+
 
 
 
