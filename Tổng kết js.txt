@@ -452,29 +452,47 @@ console.log(new DevToolsChecker());
 
 
 # Dùng postMessage
-Là API có sẵn giúp truyền message giữa trang web gốc với iframe dùng bên trong nó, hoặc mở 1 popup hay tab của web khác và truyền message giữa popup và web gốc khác host.
+API có sẵn giúp truyền message giữa web gốc với iframe bên trong nó, hoặc mở 1 popup hay tab web khác và truyền message giữa popup và web gốc khác host.
 
 Bên gửi: targetWindow.postMessage(message, targetOrigin);
 Bên nhận: window.addEventListener("message", function (event) {
   if (event.origin !== "http://localhost:8001/window-1") return;        
   alert(event.data);
 });
-
-window.opener giúp lấy trang gốc mở ra cửa sổ hiện tại
-window.parent giúp lấy trang gốc chứa iframe hiện tại
-=> Nhưng truy cập DOM phải cùng host vì browser có same site policy cản cả API và tương tác DOM. Muốn giao tiếp phải dùng postMessage
+window.opener lấy trang gốc mở ra cửa sổ hiện tại
+window.parent lấy trang gốc chứa iframe hiện tại
 
 
 
-# IntersectionObserver
-1 biến IntersectionObserver có thể lắng nghe 1 thẻ có giao với viewport không thì chạy 1 hàm tương ứng. Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
+# IntersectionObserver ResizeObserver
+-> IntersectionObserver:
+- 1 biến IntersectionObserver có thể lắng nghe 1 thẻ giao với viewport hay k thì chạy 1 hàm tương ứng. Nó cũng gọi callback ngay lúc đầu mới tạo dù k giao gì cả
+- Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
+VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k dùng IntersectionObserver
+- Dùng tag.getBoundingClientRect(); lấy toạ độ, kích thước, vị trí trên viewport
 
-Bản chất nó chỉ tính phần hiển thị trên màn so với height của nó, tức VD thẻ lớn hơn màn hình thì không bao giờ đạt threshold 100% được.
-VD usecase có 1 element cực dài và muốn làm kiểu scroll element xuống bao xa thì chạy hàm buộc phải làm thủ công window.onscroll, k thể dùng IntersectionObserver
+-> ResizeObserver:
+Thay vì window.addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi kích thước của các objects nào thay đổi thì làm gì.
 
-# ResizeObserver
-Thay vì window addEventListener resize để bắt khi window đổi kích thước, ta dùng ResizeObserver để bắt khi nào kích thước của các objects nào bị thay đổi thì làm gì chẳng hạn.
 
+
+
+
+
+# Service worker và web worker
+-> Service worker
+Dùng lưu cache offline, tắt browser bật lại vẫn có data, thậm chí là offline.
+- Bắt sự kiện fetch, nếu request có trong cache thì lấy từ cache
+- Bắt sự kiện install, lưu files nào vào cache.
+- Bắt sự kiện activate xoá các cache không liên quan, chỉ để lại cache hiện tại. Ta cũng có thể update worker service bằng cách tạo 1 key mới và xoá cache key cũ.
+
+Khi reload lại pages, sẽ k trigger lại event install và activate để setup lại worker, trừ khi file service-worker bị thay đổi. 
+Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web lần đầu, đều setup lại service worker. Nói chung là file này cứ đổi là tự áp dụng nên k cần lo cũ.
+
+ Push notification: 
+App request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. Thông báo có cả trên máy tính hoặc mobile. Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
+Nếu chỉ FE, ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
+Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ ý trigger notification cho user từ server. Client có mạng sẽ tự nhận được thông báo.
 
 
 
@@ -490,21 +508,6 @@ function* gọi là generator function
 yield* dùng được với mọi type iterative
 Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp mà k cần gọi next. Đây cũng là cơ chế của redux-saga, k cần gọi next mà đưa vào loop duyệt liên tiếp
 
-
-
-# Dùng service worker
--> Dùng lưu cache offline, tắt browser bật lại vẫn có data, thậm chí là offline.
-- Bắt sự kiện fetch, nếu request có trong cache thì lấy từ cache
-- Bắt sự kiện install, lưu files nào vào cache.
-- Bắt sự kiện activate xoá các cache không liên quan, chỉ để lại cache hiện tại. Ta cũng có thể update worker service bằng cách tạo 1 key mới và xoá cache key cũ.
-
-Khi reload lại pages, sẽ k trigger lại event install và activate để setup lại worker, trừ khi file service-worker bị thay đổi. 
-Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web lần đầu, đều setup lại service worker. Nói chung là file này cứ đổi là tự áp dụng nên k cần lo cũ.
-
--> Push notification: 
-App request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. Thông báo có cả trên máy tính hoặc mobile. Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
-Nếu chỉ FE, ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
-Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ ý trigger notification cho user từ server. Client có mạng sẽ tự nhận được thông báo.
 
 
 

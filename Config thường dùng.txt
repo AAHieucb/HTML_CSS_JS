@@ -119,6 +119,17 @@ None: Gửi kèm trong mọi yêu cầu => phải dùng kèm với Secure để 
   rootMargin: "+100px", // tăng kích thước view port, vào cách 100px là tính rồi
   root: document.querySelector('body') // đổi thẻ root, default null là view port. Phần tử chỉ được kiểm tra intersect với view port nếu nó nằm trong vùng của thẻ root
 });
+observer.observe(tag);
+observer.unobserve(tag);
+observer.disconnect(); // xoá, giải phóng tài nguyên
+
+const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
+  entries.forEach(entry => {
+    // entry.target: phần tử đang được quan sát
+    // entry.contentRect: kích thước mới của phần tử (width, height, x, y)
+    // entry.borderBoxSize / contentBoxSize / devicePixelContentBoxSize: thông tin chi tiết hơn về kích thước
+  });
+});
 
 
 

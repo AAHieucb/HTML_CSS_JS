@@ -1044,13 +1044,16 @@ Color shifting animation
 
 
 # Dark mode 
-Best practice là vào web lần đầu sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu setting mới vào localStorage đè setting browser.
+Có thể làm là vào web lần đầu sẽ theo setting của browser. Khi ấn đổi mode sẽ lưu setting mới vào localStorage đè setting browser.
+Có thể cho 3 options: light, dark, system và mặc định system sẽ theo setting browser.
 
 -> Các cách tạo darkmode:
-- Luôn dùng JS: Check darkmode setting browser với window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; rồi dùng setting đó nếu localStorage k có
 - Mặc định Canvas là màu của background, CanvasText là màu của text, sẽ tự đổi tuỳ vào mode hiện tại => Bỏ k dùng
 VD để thêm sáng tối cho màu có thể dùng color-mix(in oklab, Canvas 75%, RebeccaPurple);
-- style trong @media (prefers-color-scheme: dark) { } được áp dụng khi settings của browser là dark hoặc color-scheme trên là dark => Bỏ k dùng vì nếu browser set dark thật thì style bên trong k thể mất, éo đổi sang light được.
+- JS implement: Khi đổi mode thì lưu vào localStorage. LocalStorage có thì dùng, k có thì check darkmode setting browser với window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; để dùng theme light hay dark tương ứng.
+- Dùng style query chuẩn nhất với 3 options light dark system:
+Để --theme set mặc định theo @media(prefers-color-scheme: dark) hoặc @media(prefers-color-scheme: light). Nếu user đổi mode thì set đè --theme thôi, đổi sang mode system thì theme k set giá trị sẽ quay về default
+Dùng style query dựa vào --theme để set css color variables.
 - Css có sẵn. VD html { color-scheme: light dark; } tương đương với <meta name="color-scheme" content="light dark"> => Bỏ k dùng
 Nó gợi ý trình duyệt là web hỗ trợ những mode nào. Nếu dùng "light dark" thì browser tự dùng theo seting. Nếu chỉ rõ color-scheme light hay dark sẽ dùng đúng mode đó.
 Các chỗ dùng màu thì light-dark(màu light, màu dark); sẽ trả về màu tương ứng tuỳ vào trường color-scheme
@@ -1089,6 +1092,10 @@ Các chỗ dùng màu thì light-dark(màu light, màu dark); sẽ trả về m�
 <body data-scheme="light"></body>
 => Lần đầu vào thì data-scheme để system lấy system. Nếu đổi theme set vào local storage thì set tiếp vào data-scheme để dùng theme tương ứng. Dùng cả hàm light-dark và custom để dùng cho mọi style khác chứ k chỉ màu
 
+-> Transition animation khi đổi mode: https://www.youtube.com/watch?v=f_aqzyIDudI
+Dùng JS đổi theme mode và wrap trong startViewTransition, phải check if(!document.startViewTransition). Đổi mode thì gán cho css variables --theme ở :root
+Custom view transition với cả page ::view-transition-group(root) { } ::view-transition-old(root) ::view-transition-new(root). Nó sẽ dùng khi có style đổi ở html (root), tức khi navigate tới page hoặc startViewTransition đổi var ở html root sẽ dùng. Nên wrap trong @media(prefers-reduced-motion: no-preference) { }
+
 
 
 # View transition API
@@ -1103,8 +1110,10 @@ Tạo morphing button: https://www.youtube.com/watch?v=N2BKAKwGP6M
 -> Set cùng 1 view-transition-name cho thẻ trước và sau animation để browser tự animate thẻ nào biến đổi dần thành thẻ nào
 Customize animation với ::view-transition-old(<name>) là style thẻ trước animation, và ::view-transition-new(<name>) là style thẻ sau animation. VD cho old fadeout, new fadein
 Có thể customize animation, mặc định là fade. VD dùng ::view-transition-old(root) thì root là cả page, muốn riêng thì dùng <name> là view-transition-name của tag
-Đổi DOM thì wrap trong startViewTransition. SSR cross docs animation thì dùng @view-transition { navigation: auto; }
+SSR cross docs animation thì dùng @view-transition { navigation: auto; }
 Custom animation time với ::view-transition-group(root) { animation-duration: 0.5s; }
+
+Đổi DOM với JS thì wrap trong startViewTransition. Phải check if(!document.startViewTransition) thì jump như bth.
 
 Code hack html thuần nếu k chạy: đặt trong head <script src="ignored" type="module" blocking="render"></script> 
 VD dòng text ở trang này bé, ở trang sau vẫn là dòng text đó nhưng to hơn, thì ta gán view-transition-name cho 2 tag ở 2 page cùng 1 giá trị là ok
@@ -1354,7 +1363,7 @@ Search #topcsseffects trong youtube => ra animation đủ loại cả ngàn vide
 
 -> transition: [transition-property] [transition-duration] [transition-delay] [transition-timing-function];
 transition-behavior: allow-discrete; cho phép animation vẫn chạy khi đổi các thuộc tính rời rạc kiểu display, visibility, content-visibility
-transition-timing-function VD cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm. URL: https://cubic-bezier.com
+transition-timing-function VD cubic-bezier custom, ease/ease-in-out châm nhanh châm, ease-in chậm nhanh, ease-out nhanh châm. URL: https://easingwizard.com/
 transition-property k thể animation ảnh như background-image, animation màu thì nên dùng hue-rotate
 VD: transition: all 1s 0.5s ease-in;
 VD: transition: width 2s, height 2s, transform 2s;
