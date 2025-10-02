@@ -1583,6 +1583,13 @@ Full tut custom: https://cloudinary.com/blog/low_quality_image_placeholders_lqip
 - Các framework như NextJS cung sẵn option tự optimize image theo kích thước màn. ReactJS có lib nén ngay tại browser.
 - Có thể tự chuẩn bị sẵn các bức ảnh kích thước khác nhau và cho load theo kích thước màn hình
 
+-> TK best practice:
+Image có css reset
+Image custom thì phải nén tối đa, image người dùng input thì nén trước khi lưu. Nếu buộc hiện ảnh nặng thì nén ở FE cũng được.
+Image đặt trong khung với border-radius
+Image có background xám và default loading, nếu error sẽ hiện image error base64.
+image có lazy loading và responsive 
+
 -> Nhanh:
 Dùng clip-path
 background
