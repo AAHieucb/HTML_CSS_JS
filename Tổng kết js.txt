@@ -360,6 +360,8 @@ console.log(result);
 // Giá trị nội suy: [ 'Minh', 25 ]
 // Kết quả được tùy chỉnh!
 
+-> Có thể lưu function vào file json với function constructor
+
 
 
 # Cơ chế WeakMap dọn rác
@@ -476,42 +478,28 @@ Thay vì window.addEventListener resize để bắt khi window đổi kích thư
 
 
 
-
-
-
 # Service worker và web worker
 -> Service worker
-Dùng lưu cache offline, tắt browser bật lại vẫn có data, thậm chí là offline.
-- Bắt sự kiện fetch, nếu request có trong cache thì lấy từ cache
-- Bắt sự kiện install, lưu files nào vào cache.
-- Bắt sự kiện activate xoá các cache không liên quan, chỉ để lại cache hiện tại. Ta cũng có thể update worker service bằng cách tạo 1 key mới và xoá cache key cũ.
+- Dùng lưu cache offline, tắt browser bật lại vẫn có data dù offline
+Bắt sự kiện fetch, nếu offline và request có trong cache thì lấy từ cache. 
+Bắt sự kiện install, lưu files nào vào cache.
+Bắt sự kiện activate xoá các cache không liên quan, chỉ để lại cache hiện tại, hoặc update worker service bằng cách tạo 1 key mới và xoá cache key cũ.
 
 Khi reload lại pages, sẽ k trigger lại event install và activate để setup lại worker, trừ khi file service-worker bị thay đổi. 
-Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web lần đầu, đều setup lại service worker. Nói chung là file này cứ đổi là tự áp dụng nên k cần lo cũ.
+Tắt đi bật lại thì luôn setup lại worker, tức mỗi lần vào web lần đầu, đều setup lại service worker. Nói chung là file này cứ đổi là tự áp dụng nên k cần lo bị stale.
 
- Push notification: 
+- Push notification
 App request permission cho phép hiện thông báo, rồi bắt sự kiện push là khi có thông báo đến thì service worker show ra. Thông báo có cả trên máy tính hoặc mobile. Trên macos yêu cầu người dùng phải biến web thành ứng dụng ở homescreen r cấp quyền mới được.
-Nếu chỉ FE, ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
-Thực tế dùng server, có thể gửi thông báo bất cứ lúc nào. Server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ ý trigger notification cho user từ server. Client có mạng sẽ tự nhận được thông báo.
+Nếu chỉ làm phía FE, ấn nút hay làm gì thì gọi registration.showNotification để phát sự kiện push thôi.
+Thường sẽ dùng server có thể gửi thông báo bất cứ lúc nào. Server gửi thông báo đến PushService của trình duyệt (VD: Firebase Cloud Messaging cho Chrome), đăng ký API key. Rồi tuỳ ý trigger notification cho user từ server. Client có mạng sẽ tự nhận được thông báo.
 
-
-
-# Web worker giúp chạy multi thread trên browser
-
+-> Web worker giúp chạy multi thread trên browser
 
 
 
 # Dùng yield
-Dùng yield chạy 1 hàm * nhiều lần thì chạy liên tiếp, còn k có * thì yield trả lấy được gì.
-Nếu function* có return thì nó sẽ kết thúc luôn nên có thể dùng return để dừng hàm * vĩnh viễn khi thỏa mãn đk gì nhưng giá trị return về sẽ k được lấy ra.
-function* gọi là generator function
-yield* dùng được với mọi type iterative
-Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp mà k cần gọi next. Đây cũng là cơ chế của redux-saga, k cần gọi next mà đưa vào loop duyệt liên tiếp
+Dùng yield chạy 1 function* (generator function) nhiều lần thì chạy liên tiếp, còn k có * thì yield trả lấy được gì. yield* dùng được với mọi type iterative
+Nếu function* có return thì nó sẽ kết thúc luôn nên có thể dùng return để dừng function* vĩnh viễn khi thỏa mãn đk gì nhưng giá trị return về sẽ k được lấy ra.
+Có thể dùng vòng for để duyệt yield function sẽ chạy liên tiếp mà k cần gọi next. Đây cũng là cơ chế của redux-saga, k gọi next mà đưa vào loop duyệt liên tiếp
 
-
-
-
-# Other
-- Có thể lưu function vào file json với function constructor
-- Thay vì viết try catch ở từng hàm async, ta nên viết 1 hàm trả ra [result, error] để wrap hàm async. Hiện custom error, lỗi lạ thì hiện message slice ngắn đi.
 
